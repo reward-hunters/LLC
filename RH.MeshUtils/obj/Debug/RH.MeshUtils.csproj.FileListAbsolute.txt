@@ -1,0 +1,5 @@
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.MeshUtils\obj\Debug\RH.MeshUtils.csprojResolveAssemblyReference.cache
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\AbaloneLLC\Libraries\RH.MeshUtils.dll
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\AbaloneLLC\Libraries\RH.MeshUtils.pdb
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.MeshUtils\obj\Debug\RH.MeshUtils.dll
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.MeshUtils\obj\Debug\RH.MeshUtils.pdb
