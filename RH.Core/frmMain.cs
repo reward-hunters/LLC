@@ -35,7 +35,8 @@ namespace RH.Core
 
         public frmMaterials frmMaterial;
         public frmAccessories frmAccessories;
-        public frmStages frmStages;
+        public frmPrint frmPrint;
+        public frmStages frmStages;     // пока не используется!
         public frmParts frmParts;
         public frmStyles frmStyles;
         public frmFreeHand frmFreeHand;
@@ -147,6 +148,10 @@ namespace RH.Core
 
                     exportToolStripMenuItem.Visible = exportToolStripMenuItem1.Visible = exportToolStripMenuItem2.Visible = exportToolStripMenuItem3.Visible = false;       // запрет экспорта 
                     saveToolStripMenuItem5.Visible = saveToolStripMenuItem6.Visible = saveToolStripMenuItem8.Visible = toolStripMenuItem1.Visible = false;
+
+                    exportToolStripMenuItem.Visible = exportToolStripMenuItem1.Visible = exportToolStripMenuItem2.Visible = exportToolStripMenuItem3.Visible = false;       // запрет экспорта 
+                    saveToolStripMenuItem5.Visible = saveToolStripMenuItem6.Visible = saveToolStripMenuItem8.Visible = toolStripMenuItem1.Visible = false;
+                    panelMenuAccessories.Visible = accessoryTabToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem1.Visible = materialtabToolStripMenuItem.Visible = false;
 
                     break;
                 case ProgramCore.ProgramMode.HeadShop:
@@ -293,11 +298,23 @@ namespace RH.Core
             frmAccessories = new frmAccessories();
             frmAccessories.VisibleChanged += frmAccessories_VisibleChanged;
 
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                    {
+                        frmStages = new frmStages();
+                        frmStages.VisibleChanged += frmStages_VisibleChanged;
+                    }
+                    break;
+                default:
+                    frmPrint = new frmPrint();
+                    frmPrint.VisibleChanged += frmStages_VisibleChanged;
+                    break;
+            }
+
+
             frmStyles = new frmStyles();
             frmStyles.VisibleChanged += frmStyles_VisibleChanged;
-
-            frmStages = new frmStages();
-            frmStages.VisibleChanged += frmStages_VisibleChanged;
 
             frmParts = new frmParts();
             frmParts.UpdateList();
@@ -450,7 +467,7 @@ namespace RH.Core
             frmMaterial = null;
             frmAccessories = null;
             frmStyles = null;
-            frmStages = null;
+            frmPrint = null;
             e.Cancel = false;
         }
 
@@ -628,7 +645,7 @@ namespace RH.Core
         }
         private void frmStages_VisibleChanged(object sender, EventArgs e)
         {
-            if (frmStages.Visible)
+            if (frmPrint.Visible)
                 panelStages.ShowControl();
             else
                 panelStages.HideControl();
@@ -671,13 +688,13 @@ namespace RH.Core
         }
         private void stagesLibraryOnOpen_Click(object sender, EventArgs e)
         {
-            if (frmStages.Visible)
-                frmStages.Hide();
+            if (frmPrint.Visible)
+                frmPrint.Hide();
             else
             {
                 panelMenuStage_Click(this, EventArgs.Empty);
                 ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.Clear();
-                frmStages.Show(this);
+                frmPrint.Show(this);
             }
         }
         private void partsLibraryOnOpen_Click(object sender, EventArgs e)
@@ -1694,7 +1711,7 @@ namespace RH.Core
                     ctrlRenderControl.camera.ResetCamera(true);
             }
 
-            if (frmStages != null)
+            if (frmPrint != null || frmStages != null)
             {
                 ctrlRenderControl.StagesActivate(false);     // for recalc
                 ctrlRenderControl.StagesDeactivate(0);
@@ -2035,14 +2052,32 @@ namespace RH.Core
 
             var fiName = string.Empty;
             var stlName = string.Empty;
-            using (var ofd = new FolderDialogEx())
-            {
-                if (ofd.ShowDialog(Handle) != DialogResult.OK)
-                    return;
-                stlName = Path.Combine(ofd.SelectedFolder[0], ProgramCore.Project.ProjectName + ".stl");
-                fiName = Path.Combine(ofd.SelectedFolder[0], ProgramCore.Project.ProjectName + ".obj");
-            }
 
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    {
+                        var ctrl = new ctrlPrintAheadExport(Handle);
+                        if (ProgramCore.ShowDialog(ctrl, "STL print", MessageBoxButtons.OKCancel, false) != DialogResult.OK)
+                            return;
+
+                        stlName = Path.Combine(ctrl.Path, ctrl.ModelName + ".stl");
+                        fiName = Path.Combine(ctrl.Path, ctrl.ModelName + ".obj");
+                    }
+                    break;
+                default:
+                    {
+                        using (var ofd = new FolderDialogEx())
+                        {
+                            if (ofd.ShowDialog(Handle) != DialogResult.OK)
+                                return;
+                            stlName = Path.Combine(ofd.SelectedFolder[0], ProgramCore.Project.ProjectName + ".stl");
+                            fiName = Path.Combine(ofd.SelectedFolder[0], ProgramCore.Project.ProjectName + ".obj");
+                        }
+                    }
+                    break;
+            }
 
             if (ProgramCore.Project != null)
             {
@@ -2074,22 +2109,49 @@ namespace RH.Core
             var fiName = string.Empty;
             var daeName = string.Empty;
             var newDirectory = string.Empty;
-            using (var ofd = new FolderDialogEx())
+            var modelName = string.Empty;
+
+            switch (ProgramCore.CurrentProgram)
             {
-                if (ofd.ShowDialog(Handle) != DialogResult.OK)
-                    return;
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    {
+                        var ctrl = new ctrlPrintAheadExport(Handle);
+                        if (ProgramCore.ShowDialog(ctrl, "DAE print", MessageBoxButtons.OKCancel, false) != DialogResult.OK)
+                            return;
 
-                if (ofd.SelectedFolder[0] == ProgramCore.Project.ProjectPath)
-                {
-                    MessageBox.Show("Can't export file to project directory.", "Warning");
-                    return;
-                }
+                        modelName = ctrl.ModelName;
 
-                newDirectory = Path.Combine(ofd.SelectedFolder[0], "SmoothedModelTextures");
-                FolderEx.CreateDirectory(newDirectory);
+                        newDirectory = Path.Combine(ctrl.Path, "SmoothedModelTextures");
+                        FolderEx.CreateDirectory(newDirectory);
 
-                daeName = Path.Combine(newDirectory, ProgramCore.Project.ProjectName + ".dae");
-                fiName = Path.Combine(newDirectory, ProgramCore.Project.ProjectName + ".obj");
+                        daeName = Path.Combine(newDirectory, modelName + ".dae");
+                        fiName = Path.Combine(newDirectory, modelName + ".obj");
+                    }
+                    break;
+                default:
+                    {
+                        using (var ofd = new FolderDialogEx())
+                        {
+                            if (ofd.ShowDialog(Handle) != DialogResult.OK)
+                                return;
+
+                            if (ofd.SelectedFolder[0] == ProgramCore.Project.ProjectPath)
+                            {
+                                MessageBox.Show("Can't export file to project directory.", "Warning");
+                                return;
+                            }
+
+                            modelName = ProgramCore.Project.ProjectName;
+
+                            newDirectory = Path.Combine(ofd.SelectedFolder[0], "SmoothedModelTextures");
+                            FolderEx.CreateDirectory(newDirectory);
+
+                            daeName = Path.Combine(newDirectory, modelName + ".dae");
+                            fiName = Path.Combine(newDirectory, modelName + ".obj");
+                        }
+                    }
+                    break;
             }
 
             //var tempScale = 5f;
@@ -2143,7 +2205,7 @@ namespace RH.Core
                 ProgramCore.Project.ProfileImage.Save(Path.Combine(newDirectory, "ProfileImage.jpg"));
 
             File.Delete(fiName);
-            var mtlName = Path.Combine(newDirectory, ProgramCore.Project.ProjectName + ".mtl");
+            var mtlName = Path.Combine(newDirectory, modelName + ".mtl");
             if (File.Exists(mtlName))
                 File.Delete(mtlName);
 
@@ -2161,8 +2223,34 @@ namespace RH.Core
                     }
                 }
 
-                zip.Save(Path.Combine(newDirectory, ProgramCore.Project.ProjectName + ".zip"));
+                zip.Save(Path.Combine(newDirectory, modelName + ".zip"));
             }
+
+            #region Удаление всего, кроме архива
+
+            foreach (var file in Directory.GetFiles(newDirectory))
+            {
+                if (Path.GetExtension(file) == ".zip")
+                    continue;
+
+                if (File.Exists(file))
+                    File.Delete(file);
+            }
+
+            foreach (var dir in Directory.GetDirectories(newDirectory))
+            {
+                var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories);
+                foreach (var file in files)
+                {
+                    if (Path.GetExtension(file) == ".zip")
+                        continue;
+
+                    if (File.Exists(file))
+                        File.Delete(file);
+                }
+            }
+
+            #endregion
 
             //if (ProgramCore.PluginMode)
             //    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale = tempScale;

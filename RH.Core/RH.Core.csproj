@@ -145,6 +145,12 @@
     <Compile Include="Controls\frmNewProject4HeadShop.designer.cs">
       <DependentUpon>frmNewProject4HeadShop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlPrintAheadExport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ctrlPrintAheadExport.designer.cs">
+      <DependentUpon>ctrlPrintAheadExport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\frmNewProject4PrintAhead.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -180,6 +186,12 @@
     </Compile>
     <Compile Include="Controls\Libraries\frmParts.Designer.cs">
       <DependentUpon>frmParts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Libraries\frmPrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Libraries\frmPrint.Designer.cs">
+      <DependentUpon>frmPrint.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Libraries\frmStages.cs">
       <SubType>Form</SubType>
@@ -416,11 +428,15 @@
     <Compile Include="Render\ctrlRenderControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Render\ctrlRenderControl.designer.cs" />
+    <Compile Include="Render\ctrlRenderControl.designer.cs">
+      <DependentUpon>ctrlRenderControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Render\ctrlTemplateImage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Render\ctrlTemplateImage.Designer.cs" />
+    <Compile Include="Render\ctrlTemplateImage.Designer.cs">
+      <DependentUpon>ctrlTemplateImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Render\Helpers\BezierCurve.cs" />
     <Compile Include="Render\Helpers\Camera.cs" />
     <Compile Include="Render\Helpers\collada.cs" />
@@ -463,6 +479,9 @@
     <EmbeddedResource Include="Controls\frmNewProject4HeadShop.resx">
       <DependentUpon>frmNewProject4HeadShop.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ctrlPrintAheadExport.resx">
+      <DependentUpon>ctrlPrintAheadExport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\frmNewProject4PrintAhead.resx">
       <DependentUpon>frmNewProject4PrintAhead.cs</DependentUpon>
     </EmbeddedResource>
@@ -480,6 +499,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Libraries\frmParts.resx">
       <DependentUpon>frmParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Libraries\frmPrint.resx">
+      <DependentUpon>frmPrint.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Libraries\frmStages.resx">
       <DependentUpon>frmStages.cs</DependentUpon>
@@ -566,8 +588,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Render\ctrlRenderControl.resx" />
-    <EmbeddedResource Include="Render\ctrlTemplateImage.resx" />
+    <EmbeddedResource Include="Render\ctrlRenderControl.resx">
+      <DependentUpon>ctrlRenderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Render\ctrlTemplateImage.resx">
+      <DependentUpon>ctrlTemplateImage.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RH.MeshUtils\RH.MeshUtils.csproj">
@@ -988,6 +1014,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Logo_PrintAheadPayPal.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBlackWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnColor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_BW.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_Color.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -29,10 +29,19 @@ namespace RH.Core.Controls.Libraries
             {
                 transforms.Clear();
                 if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.Count == 0)
+                {
                     trackBarSize.Value = 1;
+                    trackBarXSize.Value = 1;
+                    trackBarYSize.Value = 1;
+                    trackBarZSize.Value = 1;
+                }
                 else
                 {
-                    trackBarSize.Value = (int)(ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].MeshSize * 50);
+                    var selectedMesh = ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0];
+                    trackBarSize.Value = (int)(selectedMesh.MeshSize * 50);
+                    trackBarXSize.Value = (int)(selectedMesh.MeshXSize * 50);
+                    trackBarYSize.Value = (int)(selectedMesh.MeshYSize * 50);
+                    trackBarZSize.Value = (int)(selectedMesh.MeshZSize * 50);
 
                     foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes)
                         transforms.Add(mesh, new Tuple<Matrix4, float>(mesh.Transform, mesh.MeshSize));
@@ -54,7 +63,7 @@ namespace RH.Core.Controls.Libraries
                 {
                     var node = new TreeNode(element.Key)
                     {
-                        Checked = element.Value[0].IsVisible,
+                        Checked = element.Value.Count == 0 ? false : element.Value[0].IsVisible,
                         Tag = element.Value
                     };
                     tlParts.Nodes.Add(node);
@@ -191,6 +200,75 @@ namespace RH.Core.Controls.Libraries
                 }
 
                 UpdateList();
+            }
+        }
+
+        private void trackBarXSize_Scroll(object sender, EventArgs e)
+        {
+            if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes == null)
+                return;
+
+            var size = trackBarXSize.Value / 50f;
+            foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes)
+            {
+                mesh.MeshXSize = size;
+
+                mesh.Transform = transforms[mesh].Item1;
+                mesh.Transform[3, 0] -= mesh.Position.X;
+                mesh.Transform[3, 1] -= mesh.Position.Y;
+                mesh.Transform[3, 2] -= mesh.Position.Z;
+                mesh.Transform *= Matrix4.CreateScale(size / transforms[mesh].Item2, 0, 0);
+                mesh.Transform[3, 0] += mesh.Position.X;
+                mesh.Transform[3, 1] += mesh.Position.Y;
+                mesh.Transform[3, 2] += mesh.Position.Z;
+
+                mesh.IsChanged = true;
+            }
+        }
+
+        private void trackBarYSize_Scroll(object sender, EventArgs e)
+        {
+            if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes == null)
+                return;
+
+            var size = trackBarYSize.Value / 50f;
+            foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes)
+            {
+                mesh.MeshYSize = size;
+
+                mesh.Transform = transforms[mesh].Item1;
+                mesh.Transform[3, 0] -= mesh.Position.X;
+                mesh.Transform[3, 1] -= mesh.Position.Y;
+                mesh.Transform[3, 2] -= mesh.Position.Z;
+                mesh.Transform *= Matrix4.CreateScale(0, size / transforms[mesh].Item2, 0);
+                mesh.Transform[3, 0] += mesh.Position.X;
+                mesh.Transform[3, 1] += mesh.Position.Y;
+                mesh.Transform[3, 2] += mesh.Position.Z;
+
+                mesh.IsChanged = true;
+            }
+        }
+
+        private void trackBarZSize_Scroll(object sender, EventArgs e)
+        {
+            if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes == null)
+                return;
+
+            var size = trackBarZSize.Value / 50f;
+            foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes)
+            {
+                mesh.MeshZSize = size;
+
+                mesh.Transform = transforms[mesh].Item1;
+                mesh.Transform[3, 0] -= mesh.Position.X;
+                mesh.Transform[3, 1] -= mesh.Position.Y;
+                mesh.Transform[3, 2] -= mesh.Position.Z;
+                mesh.Transform *= Matrix4.CreateScale(0, 0, size / transforms[mesh].Item2);
+                mesh.Transform[3, 0] += mesh.Position.X;
+                mesh.Transform[3, 1] += mesh.Position.Y;
+                mesh.Transform[3, 2] += mesh.Position.Z;
+
+                mesh.IsChanged = true;
             }
         }
     }

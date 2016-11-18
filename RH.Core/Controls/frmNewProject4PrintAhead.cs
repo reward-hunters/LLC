@@ -634,7 +634,10 @@ namespace RH.Core.Controls
             {
                 ofd.Multiselect = false;
                 if (ofd.ShowDialog() != DialogResult.OK)
+                {
+                    btnApply.Enabled = false;
                     return;
+                }
 
                 labelHelp.Visible = false;
                 textTemplateImage.Text = ofd.FileName;
@@ -682,7 +685,7 @@ namespace RH.Core.Controls
                     else
                         MessageBox.Show("Daz model not found.", "HeadShop", MessageBoxButtons.OK);
                 }
-
+                btnApply.Enabled = true;
             }
         }
 

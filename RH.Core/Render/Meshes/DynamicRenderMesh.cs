@@ -14,6 +14,11 @@ namespace RH.Core.Render.Meshes
         #region Var
 
         public float MeshSize = 1;
+
+        public float MeshXSize = 1;
+        public float MeshYSize = 1;
+        public float MeshZSize = 1;
+
         public float MeshAngle = 0;
 
         public bool IsChanged;

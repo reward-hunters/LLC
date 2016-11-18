@@ -736,6 +736,23 @@ namespace RH.Core.Render
             pickingController.AccesoryMeshes.Clear();
             PartsLibraryMeshes.Clear();
         }
+        public void CleanHairMeshes()
+        {
+            pickingController.SelectedMeshes.Clear();
+            pickingController.HairMeshes.Clear();
+
+            for (var i = PartsLibraryMeshes.Count - 1; i >= 0; i--)
+            {
+                var k = PartsLibraryMeshes.Values.ElementAt(i);
+                var item = k.FirstOrDefault();
+                if (item != null && item.meshType == MeshType.Hair)
+                {
+                    var key = PartsLibraryMeshes.Keys.ElementAt(i);
+                    PartsLibraryMeshes.Remove(key);
+                }
+            }
+        }
+
 
         #endregion
 
@@ -1279,9 +1296,6 @@ namespace RH.Core.Render
                 }
             }
         }
-
-
-
         private void glControl_MouseMove(object sender, MouseEventArgs e)
         {
             if (startMousePoint == Point.Empty)
@@ -1791,7 +1805,7 @@ namespace RH.Core.Render
 
             var meshType = fi.FullName.Contains("Style") ? MeshType.Hair : MeshType.Accessory;
             if (meshType == MeshType.Hair)                          // only one hair in time
-                CleanProjectMeshes();
+                CleanHairMeshes();
 
             if (!PartsLibraryMeshes.ContainsKey(ctrl.Title))
                 PartsLibraryMeshes.Add(ctrl.Title, new DynamicRenderMeshes());
@@ -1801,7 +1815,7 @@ namespace RH.Core.Render
 
             var meshSize = float.NaN;
             var meshPosition = Vector3.Zero;
-            if (meshes.Count >= 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
+            if (meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
             {
                 var mesh = meshes[0];
                 meshSize = StringConverter.ToFloat(UserConfig.ByName("Parts")[mesh.Path, "Size"]);
@@ -2967,6 +2981,15 @@ namespace RH.Core.Render
         {
             GL.Disable(EnableCap.Blend);
             GL.DepthMask(true);
+        }
+
+        private void btnColorMode_Click(object sender, EventArgs e)
+        {
+            UseTexture = true;
+        }
+        private void panelBlackWhiteMode_Click(object sender, EventArgs e)
+        {
+            UseTexture = false;
         }
 
         private int backgroundTexture;

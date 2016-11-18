@@ -11,6 +11,7 @@ using RH.ImageListView;
 
 namespace RH.Core.Controls.Libraries
 {
+    [Obsolete]
     public partial class frmStages : FormEx
     {
         private string currentPose = string.Empty;
@@ -337,7 +338,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAheadPayPal:
                     if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;

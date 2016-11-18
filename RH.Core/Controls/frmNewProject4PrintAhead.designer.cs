@@ -32,7 +32,7 @@ namespace RH.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewProject4PrintAhead));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewProject4PrintAhead));
             this.label1 = new System.Windows.Forms.Label();
             this.btnApply = new System.Windows.Forms.Button();
             this.textTemplateImage = new System.Windows.Forms.TextBox();
@@ -83,6 +83,7 @@ namespace RH.Core.Controls
             // 
             // btnApply
             // 
+            this.btnApply.Enabled = false;
             this.btnApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnApply.Location = new System.Drawing.Point(661, 58);
             this.btnApply.Name = "btnApply";
@@ -144,7 +145,7 @@ namespace RH.Core.Controls
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image =  global::RH.Core.Properties.Resources.lol;
+            this.pictureBox1.Image = global::RH.Core.Properties.Resources.lol;
             this.pictureBox1.Location = new System.Drawing.Point(9, 75);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(421, 106);
@@ -154,7 +155,7 @@ namespace RH.Core.Controls
             // 
             // panel1
             // 
-            this.panel1.BackgroundImage =  global::RH.Core.Properties.Resources.bgWizard2;
+            this.panel1.BackgroundImage = global::RH.Core.Properties.Resources.bgWizard2;
             this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.rbImportObj);
             this.panel1.Controls.Add(this.btnChild);
@@ -202,7 +203,7 @@ namespace RH.Core.Controls
             // 
             // btnChild
             // 
-            this.btnChild.Image =  global::RH.Core.Properties.Resources.btnChildGray;
+            this.btnChild.Image = global::RH.Core.Properties.Resources.btnChildGray;
             this.btnChild.Location = new System.Drawing.Point(417, 29);
             this.btnChild.Name = "btnChild";
             this.btnChild.Size = new System.Drawing.Size(59, 59);
@@ -214,7 +215,7 @@ namespace RH.Core.Controls
             // 
             // btnFemale
             // 
-            this.btnFemale.Image =  global::RH.Core.Properties.Resources.btnFemaleGray;
+            this.btnFemale.Image = global::RH.Core.Properties.Resources.btnFemaleGray;
             this.btnFemale.Location = new System.Drawing.Point(312, 29);
             this.btnFemale.Name = "btnFemale";
             this.btnFemale.Size = new System.Drawing.Size(59, 59);
@@ -226,7 +227,7 @@ namespace RH.Core.Controls
             // 
             // btnMale
             // 
-            this.btnMale.Image =  global::RH.Core.Properties.Resources.btnMaleNormal;
+            this.btnMale.Image = global::RH.Core.Properties.Resources.btnMaleNormal;
             this.btnMale.Location = new System.Drawing.Point(211, 29);
             this.btnMale.Name = "btnMale";
             this.btnMale.Size = new System.Drawing.Size(59, 59);
@@ -238,7 +239,7 @@ namespace RH.Core.Controls
             // 
             // btnInfo
             // 
-            this.btnInfo.Image =  global::RH.Core.Properties.Resources.btnInfoNormal;
+            this.btnInfo.Image = global::RH.Core.Properties.Resources.btnInfoNormal;
             this.btnInfo.Location = new System.Drawing.Point(731, 11);
             this.btnInfo.Name = "btnInfo";
             this.btnInfo.Size = new System.Drawing.Size(34, 34);
@@ -249,7 +250,7 @@ namespace RH.Core.Controls
             // 
             // btnPlay
             // 
-            this.btnPlay.Image =  global::RH.Core.Properties.Resources.btnPlayNormal;
+            this.btnPlay.Image = global::RH.Core.Properties.Resources.btnPlayNormal;
             this.btnPlay.Location = new System.Drawing.Point(682, 11);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(34, 34);
@@ -260,7 +261,7 @@ namespace RH.Core.Controls
             // 
             // btnQuestion
             // 
-            this.btnQuestion.Image =  global::RH.Core.Properties.Resources.btnQuestionNormal;
+            this.btnQuestion.Image = global::RH.Core.Properties.Resources.btnQuestionNormal;
             this.btnQuestion.Location = new System.Drawing.Point(633, 11);
             this.btnQuestion.Name = "btnQuestion";
             this.btnQuestion.Size = new System.Drawing.Size(34, 34);
@@ -272,7 +273,7 @@ namespace RH.Core.Controls
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Image =  global::RH.Core.Properties.Resources.splitter;
+            this.pictureBox2.Image = global::RH.Core.Properties.Resources.splitter;
             this.pictureBox2.Location = new System.Drawing.Point(607, -4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(10, 97);
@@ -282,7 +283,7 @@ namespace RH.Core.Controls
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox3.Image =  global::RH.Core.Properties.Resources.splitter;
+            this.pictureBox3.Image = global::RH.Core.Properties.Resources.splitter;
             this.pictureBox3.Location = new System.Drawing.Point(184, -4);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(10, 97);
