@@ -2044,7 +2044,7 @@ namespace RH.Core
         /// <summary> Формат stl 5$</summary>
         public void Export3DPrint()
         {
-            if (!MakePayment("5", "Payment for PrintAhead stl print"))
+            if (!ProgramCore.IsFreeVersion && !MakePayment("5", "Payment for PrintAhead stl print"))
             {
                 MessageBox.Show("Payment was failed!");
                 return;
@@ -2100,7 +2100,7 @@ namespace RH.Core
         /// <summary> Формат dae. (collada) </summary>
         public void ExportCollada()
         {
-            if (!MakePayment("8", "Payment for PrintAhead collada print"))
+            if (!ProgramCore.IsFreeVersion && !MakePayment("8", "Payment for PrintAhead collada print"))
             {
                 MessageBox.Show("Payment was failed!");
                 return;

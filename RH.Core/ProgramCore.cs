@@ -42,6 +42,7 @@ namespace RH.Core
         public const bool Debug = false;
         public static bool PluginMode;      // запускаем ли прогу из DAZ или просто
 
+        public static bool IsFreeVersion;       // бесплатная версия PrintAhead для пожертвований в школы.
 
         public static ProgramMode CurrentProgram = ProgramMode.PrintAheadPayPal;
         public enum ProgramMode

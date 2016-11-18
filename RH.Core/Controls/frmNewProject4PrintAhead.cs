@@ -98,8 +98,18 @@ namespace RH.Core.Controls
 
             ShowInTaskbar = atStartup;
 
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick)
-                rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = false;
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShopOneClick:
+                    rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = false;
+                    break;
+                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    labelNotes.Visible = labelNotes1.Visible = !ProgramCore.IsFreeVersion;
+                    break;
+                default:
+                    labelNotes.Visible = labelNotes1.Visible = false;
+                    break;
+            }
         }
 
         #region Form's event

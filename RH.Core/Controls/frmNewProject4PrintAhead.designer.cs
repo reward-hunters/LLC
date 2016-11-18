@@ -57,6 +57,8 @@ namespace RH.Core.Controls
             this.RenderTimer = new System.Windows.Forms.Timer(this.components);
             this.CheekTimer = new System.Windows.Forms.Timer(this.components);
             this.labelHelp = new System.Windows.Forms.Label();
+            this.labelNotes = new System.Windows.Forms.Label();
+            this.labelNotes1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureTemplate)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -131,6 +133,8 @@ namespace RH.Core.Controls
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.labelNotes1);
+            this.groupBox1.Controls.Add(this.labelNotes);
             this.groupBox1.Controls.Add(this.pictureBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textTemplateImage);
@@ -345,6 +349,27 @@ namespace RH.Core.Controls
             this.labelHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelHelp.Click += new System.EventHandler(this.pictureTemplate_Click);
             // 
+            // labelNotes
+            // 
+            this.labelNotes.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNotes.Location = new System.Drawing.Point(6, 220);
+            this.labelNotes.Name = "labelNotes";
+            this.labelNotes.Size = new System.Drawing.Size(433, 63);
+            this.labelNotes.TabIndex = 14;
+            this.labelNotes.Text = "Use of PrintAhead 2.0 is free. Build a statue using the Front, Style, Color and P" +
+    "rint tabs. If you are satisfied with your statue, you may use the print buttons " +
+    "to generate a printready file.";
+            // 
+            // labelNotes1
+            // 
+            this.labelNotes1.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNotes1.Location = new System.Drawing.Point(6, 283);
+            this.labelNotes1.Name = "labelNotes1";
+            this.labelNotes1.Size = new System.Drawing.Size(433, 63);
+            this.labelNotes1.TabIndex = 15;
+            this.labelNotes1.Text = "For B/W files (STL) there will be a $5 charge per save, for full color prints $8." +
+    "";
+            // 
             // frmNewProject4PrintAhead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -410,5 +435,7 @@ namespace RH.Core.Controls
         private RadioButton rbImportObj;
         private Label label11;
         private Label labelHelp;
+        private Label labelNotes1;
+        private Label labelNotes;
     }
 }
