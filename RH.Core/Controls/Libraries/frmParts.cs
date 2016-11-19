@@ -12,7 +12,7 @@ namespace RH.Core.Controls.Libraries
 {
     public partial class frmParts : FormEx
     {
-        private Dictionary<DynamicRenderMesh, Tuple<Matrix4, float>> transforms = new Dictionary<DynamicRenderMesh, Tuple<Matrix4, float>>();   // matrix transformation, and meshSize require for changing angle and size of selected accessory
+        private Dictionary<DynamicRenderMesh, Tuple<Matrix4, TransformSize>> transforms = new Dictionary<DynamicRenderMesh, Tuple<Matrix4, TransformSize>>();   // matrix transformation, and meshSize require for changing angle and size of selected accessory
 
         public frmParts()
         {
@@ -39,16 +39,15 @@ namespace RH.Core.Controls.Libraries
                 {
                     var selectedMesh = ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0];
                     trackBarSize.Value = (int)(selectedMesh.MeshSize * 50);
-                    //     trackBarXSize.Value = (int)(selectedMesh.MeshXSize * 50);
-                    //    trackBarYSize.Value = (int)(selectedMesh.MeshYSize * 50);
-                    //   trackBarZSize.Value = (int)(selectedMesh.MeshZSize * 50);
-
-                    trackBarXSize.Value = 50;
-                    trackBarYSize.Value = 50;
-                    trackBarZSize.Value =50;
+                         trackBarXSize.Value = (int)(selectedMesh.MeshXSize * 50);
+                        trackBarYSize.Value = (int)(selectedMesh.MeshYSize * 50);
+                       trackBarZSize.Value = (int)(selectedMesh.MeshZSize * 50);
 
                     foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes)
-                        transforms.Add(mesh, new Tuple<Matrix4, float>(mesh.Transform, mesh.MeshSize));
+                    {
+                        var sizes = new TransformSize(mesh.MeshSize, mesh.MeshXSize, mesh.MeshYSize, mesh.MeshZSize);
+                        transforms.Add(mesh, new Tuple<Matrix4, TransformSize>(mesh.Transform, sizes));
+                    }
                 }
             }
             finally
@@ -127,7 +126,10 @@ namespace RH.Core.Controls.Libraries
 
             transforms.Clear();
             foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes)
-                transforms.Add(mesh, new Tuple<Matrix4, float>(mesh.Transform, mesh.MeshSize));
+            {
+                var sizes = new TransformSize(mesh.MeshSize, mesh.MeshXSize, mesh.MeshYSize, mesh.MeshZSize);
+                transforms.Add(mesh, new Tuple<Matrix4, TransformSize>(mesh.Transform, sizes));
+            }
         }
         private void trackBarSize_MouseDown(object sender, MouseEventArgs e)
         {
@@ -150,7 +152,7 @@ namespace RH.Core.Controls.Libraries
                 mesh.Transform[3, 0] -= mesh.Position.X;
                 mesh.Transform[3, 1] -= mesh.Position.Y;
                 mesh.Transform[3, 2] -= mesh.Position.Z;
-                mesh.Transform *= Matrix4.CreateScale(size / transforms[mesh].Item2);
+                mesh.Transform *= Matrix4.CreateScale(size / transforms[mesh].Item2.TotalSize);
                 mesh.Transform[3, 0] += mesh.Position.X;
                 mesh.Transform[3, 1] += mesh.Position.Y;
                 mesh.Transform[3, 2] += mesh.Position.Z;
@@ -221,7 +223,7 @@ namespace RH.Core.Controls.Libraries
                 mesh.Transform[3, 0] -= mesh.Position.X;
                 mesh.Transform[3, 1] -= mesh.Position.Y;
                 mesh.Transform[3, 2] -= mesh.Position.Z;
-                mesh.Transform *= Matrix4.CreateScale(size / transforms[mesh].Item2, 1, 1);
+                mesh.Transform *= Matrix4.CreateScale(size / transforms[mesh].Item2.SizeX, 1, 1);
                 mesh.Transform[3, 0] += mesh.Position.X;
                 mesh.Transform[3, 1] += mesh.Position.Y;
                 mesh.Transform[3, 2] += mesh.Position.Z;
@@ -244,7 +246,7 @@ namespace RH.Core.Controls.Libraries
                 mesh.Transform[3, 0] -= mesh.Position.X;
                 mesh.Transform[3, 1] -= mesh.Position.Y;
                 mesh.Transform[3, 2] -= mesh.Position.Z;
-                mesh.Transform *= Matrix4.CreateScale(1, size / transforms[mesh].Item2, 1);
+                mesh.Transform *= Matrix4.CreateScale(1, size / transforms[mesh].Item2.SizeY, 1);
                 mesh.Transform[3, 0] += mesh.Position.X;
                 mesh.Transform[3, 1] += mesh.Position.Y;
                 mesh.Transform[3, 2] += mesh.Position.Z;
@@ -267,7 +269,7 @@ namespace RH.Core.Controls.Libraries
                 mesh.Transform[3, 0] -= mesh.Position.X;
                 mesh.Transform[3, 1] -= mesh.Position.Y;
                 mesh.Transform[3, 2] -= mesh.Position.Z;
-                mesh.Transform *= Matrix4.CreateScale(1, 1, size / transforms[mesh].Item2);
+                mesh.Transform *= Matrix4.CreateScale(1, 1, size / transforms[mesh].Item2.SizeZ);
                 mesh.Transform[3, 0] += mesh.Position.X;
                 mesh.Transform[3, 1] += mesh.Position.Y;
                 mesh.Transform[3, 2] += mesh.Position.Z;
@@ -275,5 +277,22 @@ namespace RH.Core.Controls.Libraries
                 mesh.IsChanged = true;
             }
         }
+
+        private struct TransformSize
+        {
+            public float TotalSize;
+            public float SizeX;
+            public float SizeY;
+            public float SizeZ;
+
+            public TransformSize(float size, float sizex, float sizey, float sizez)
+            {
+                TotalSize = size;
+                SizeX = sizex;
+                SizeY = sizey;
+                SizeZ = sizez;
+            }
+        }
+
     }
 }
