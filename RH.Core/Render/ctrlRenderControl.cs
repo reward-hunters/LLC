@@ -539,7 +539,7 @@ namespace RH.Core.Render
                     SpecialLipsPointsUpdate(points, ProgramCore.Project.MouthCenter);
                     SpecialNosePointsUpdate(points);
 
-                    SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[4]);
+                    SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3]);
                     SpecialBottomPointsUpdate(points);
                     SpecialTopHaedWidth(points);
                     //autodotsShapeHelper.TransformRects();
@@ -579,7 +579,7 @@ namespace RH.Core.Render
 
         private void SpecialNosePointsUpdate(List<HeadPoint> points)
         {
-            var bottomNosePoints = new int[] { 19, 2, 41, 52 };
+            var bottomNosePoints = new int[] { 19, 41, 52 };
 
             for (var i = 0; i < bottomNosePoints.Length; ++i)
             {

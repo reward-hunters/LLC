@@ -700,7 +700,7 @@ namespace RH.Core.Render.Controllers
             {
                 new HeadPoint(0f, 11.67331f),                               //0        // центр лба
                 new HeadPoint(0f, -7.552899f),                              //1        // Рот
-                new HeadPoint(0f, -4.508208f),                              //2        // Центр носа
+                new HeadPoint(0f, -4.508208f) {Visible = false },                              //2        // Центр носа
                 new HeadPoint(-2.786755f, 11.16117f),                       //3        // Левые верхние точки головы
                 new HeadPoint(-5.709689f, 9.299875f),                       //4        // Левые верхние точки головы
                 new HeadPoint(-6.909634f, 7.514232f),                       //5        // Левые верхние точки головы    
@@ -772,6 +772,8 @@ namespace RH.Core.Render.Controllers
             newPoints[29].LinkedPoints.Add(49);
             newPoints[30].LinkedPoints.Add(50);
 
+            newPoints[52].LinkedPoints.Add(2);
+
             return newPoints;
         }
         private static HeadPoints<HeadPoint> GetMaleDots()
@@ -780,7 +782,7 @@ namespace RH.Core.Render.Controllers
             {
                 new HeadPoint(0f, 12.13549f),                               //0        // центр лба
                 new HeadPoint(0f, -6.953846f),                              //1        // Рот
-                new HeadPoint(0f, -3.985388f),                              //2        // Центр носа
+                new HeadPoint(0f, -3.985388f) {Visible = false },                              //2        // Центр носа
                 new HeadPoint(-2.735909f, 11.61245f),                       //3        // Левые верхние точки головы
                 new HeadPoint(-5.541705f, 9.890492f),                       //4        // Левые верхние точки головы
                 new HeadPoint(-6.81637f, 8.060863f),                        //5        // Левые верхние точки головы
@@ -849,6 +851,8 @@ namespace RH.Core.Render.Controllers
             newPoints[29].LinkedPoints.Add(49);
             newPoints[30].LinkedPoints.Add(50);
 
+            newPoints[52].LinkedPoints.Add(2);
+
             return newPoints;
         }
         private static HeadPoints<HeadPoint> GetChildDots()
@@ -857,7 +861,7 @@ namespace RH.Core.Render.Controllers
             {
                new HeadPoint(0f, 9.876677f),                                    //0        // центр лба
                new HeadPoint(0f, -6.956298f),                                   //1        // Рот
-               new HeadPoint(0f, -4.286997f),                                   //2        // Центр носа
+               new HeadPoint(0f, -4.286997f) {Visible = false },                                   //2        // Центр носа
                new HeadPoint(-2.436944f, 9.44833f),                             //3        // Левые верхние точки головы
                new HeadPoint(-5.149078f, 7.737719f),                            //4        // Левые верхние точки головы
                new HeadPoint(-6.353214f, 5.951503f),                            //5        // Левые верхние точки головы
@@ -926,6 +930,8 @@ namespace RH.Core.Render.Controllers
             newPoints[8].LinkedPoints.Add(48);
             newPoints[29].LinkedPoints.Add(49);
             newPoints[30].LinkedPoints.Add(50);
+
+            newPoints[52].LinkedPoints.Add(2);
 
             return newPoints;
         }

@@ -259,7 +259,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[61]);
 
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[45]);           // точки носа
-            ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[49]);
+            //ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[49]);
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[46]);
             ProgramCore.Project.DetectedNosePoints.Add(new Vector2(fcr.FacialFeatures[2].X, fcr.FacialFeatures[48].Y));
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[22]);

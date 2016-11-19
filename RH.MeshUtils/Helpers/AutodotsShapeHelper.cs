@@ -2031,6 +2031,7 @@ namespace RH.MeshUtils.Helpers
             result[34].Visible = false;
             result[35].Visible = false;
             result[36].Visible = false;
+            result[2].Visible = false;
 
             result[10].LinkedPoints.Add(12);
             result[33].LinkedPoints.Add(35);
@@ -2046,6 +2047,8 @@ namespace RH.MeshUtils.Helpers
             result[8].LinkedPoints.Add(48);
             result[29].LinkedPoints.Add(49);
             result[30].LinkedPoints.Add(50);
+
+            result[52].LinkedPoints.Add(2);
 
             return result.ToList();
         }
