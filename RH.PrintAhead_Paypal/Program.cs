@@ -24,9 +24,10 @@ namespace RH.OneClick
                 currentDomain.AssemblyResolve += LoadSubLibs;
 
                 ProgramCore.CurrentProgram = ProgramCore.ProgramMode.PrintAheadPayPal;
+                ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
-                ProgramCore.MainForm = new frmMain_PrintAhead(args.Length == 0 ? string.Empty : args[0]);
+                ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);
             }
             catch (Exception e)

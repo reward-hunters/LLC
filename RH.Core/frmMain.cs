@@ -142,6 +142,7 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.PrintAheadPayPal:
                     Text = "PrintAhead 2.0";
                     aboutHeadShopProToolStripMenuItem.Text = "About PrintAhead 2.0";
+                    ProgramCore.paypalHelper.InitializeCef();
                     panelMenuStage.Image = Resources.btnMenuPrintNormal;
                     openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
@@ -215,6 +216,12 @@ namespace RH.Core
                     openProjectPath = fn;
             }
         }
+        ~frmMain()
+        {
+            if (ProgramCore.paypalHelper != null)
+                ProgramCore.paypalHelper.ShutdownCef();
+        }
+
         private void exitBtn_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -2036,20 +2043,52 @@ namespace RH.Core
             ctrlRenderControl.Cursor = cursor;
         }
 
-        public virtual bool MakePayment(string price, string description)
+        public enum PrintType
         {
-            return ProgramCore.CurrentProgram != ProgramCore.ProgramMode.PrintAheadPayPal;
+            STL,            //5$
+            Collada         // zip archive 8$
+        }
+
+        public void CloseSubForm(FormEx form)
+        {
+            if (form != null)
+            {
+                try
+                {
+                    form.Invoke((MethodInvoker)delegate
+                    {
+                        // close the form on the forms thread
+                        form.Close();
+                    });
+                }
+                catch
+                { }
+            }
+        }
+        public void SuccessPay(FormEx parent, PrintType printType)
+        {
+            CloseSubForm(parent);
+
+            switch (printType)
+            {
+                case PrintType.STL:
+                    ExportSTL();
+                    break;
+                case PrintType.Collada:
+                    ExportDAE();
+                    break;
+            }
+        }
+        public void BadPay(FormEx parent)
+        {
+            CloseSubForm(parent);
+
+            MessageBox.Show("Payment was failed!");
         }
 
         /// <summary> Формат stl 5$</summary>
-        public void Export3DPrint()
+        public void ExportSTL()
         {
-            if (!ProgramCore.IsFreeVersion && !MakePayment("5", "Payment for PrintAhead stl print"))
-            {
-                MessageBox.Show("Payment was failed!");
-                return;
-            }
-
             var fiName = string.Empty;
             var stlName = string.Empty;
 
@@ -2058,7 +2097,7 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAheadPayPal:
                     {
-                        var ctrl = new ctrlPrintAheadExport(Handle);
+                        var ctrl = new ctrlPrintAheadExport(IntPtr.Zero);
                         if (ProgramCore.ShowDialog(ctrl, "STL print", MessageBoxButtons.OKCancel, false) != DialogResult.OK)
                             return;
 
@@ -2096,16 +2135,9 @@ namespace RH.Core
             var importer = new AssimpImporter();
             importer.ConvertFromFileToFile(fiName, stlName, "stl");
         }
-
         /// <summary> Формат dae. (collada) </summary>
-        public void ExportCollada()
+        public void ExportDAE()
         {
-            if (!ProgramCore.IsFreeVersion && !MakePayment("8", "Payment for PrintAhead collada print"))
-            {
-                MessageBox.Show("Payment was failed!");
-                return;
-            }
-
             var fiName = string.Empty;
             var daeName = string.Empty;
             var newDirectory = string.Empty;

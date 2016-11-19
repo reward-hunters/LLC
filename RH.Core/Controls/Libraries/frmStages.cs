@@ -344,7 +344,7 @@ namespace RH.Core.Controls.Libraries
                     break;
             }
 
-            ProgramCore.MainForm.Export3DPrint();       //stl - 5 $
+            ProgramCore.MainForm.ExportSTL();       //stl - 5 $
         }
         private void btnColor3DPrint_Click(object sender, EventArgs e)
         {
@@ -358,7 +358,7 @@ namespace RH.Core.Controls.Libraries
                     break;
             }
 
-            ProgramCore.MainForm.ExportCollada();       // color 8$
+            ProgramCore.MainForm.ExportDAE();       // color 8$
         }
 
         #endregion

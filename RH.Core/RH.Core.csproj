@@ -399,6 +399,7 @@
     </Compile>
     <Compile Include="Helpers\HeadAutodots.cs" />
     <Compile Include="Helpers\MRUManager.cs" />
+    <Compile Include="Helpers\PaypalHelper.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\StringConverter.cs" />
     <Compile Include="Helpers\UserControlEx.cs">

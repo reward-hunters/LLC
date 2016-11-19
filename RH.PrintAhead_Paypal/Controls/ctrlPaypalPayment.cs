@@ -7,15 +7,23 @@ using CefSharp;
 using CefSharp.WinForms;
 using PayPal;
 using PayPal.Api;
+using RH.Core.Helpers;
+using RH.Core;
+using static RH.Core.frmMain;
 
 namespace RH.PrintAhead_Paypal.Controls
 {
-    public partial class ctrlPaypalPayment : UserControl
+    public partial class ctrlPaypalPayment : FormEx
     {
         private ChromiumWebBrowser chromeBrowser;
-        public ctrlPaypalPayment()
+        private PrintType printType;
+
+        public ctrlPaypalPayment(PrintType printType)
         {
             InitializeComponent();
+            Sizeble = false;
+            this.printType = printType;
+
             // Start the browser after initialize global component
             InitializeChromium();
         }
@@ -58,13 +66,15 @@ namespace RH.PrintAhead_Paypal.Controls
 
                     createdPayment.Execute(apiContext, new PaymentExecution() { payer_id = payerId, transactions = createdPayment.transactions });
                     IsSuccess = true;
-                    ((Form)TopLevelControl).Close();
+
+                    ProgramCore.MainForm.SuccessPay(this, printType);
                 }
             }
             catch
             {
                 IsSuccess = false;
-                ((Form)TopLevelControl).Close();
+
+                ProgramCore.MainForm.BadPay(this);
             }
         }
 
@@ -176,6 +186,5 @@ namespace RH.PrintAhead_Paypal.Controls
             }
             return true;
         }
-      
     }
 }

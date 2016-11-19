@@ -71,6 +71,25 @@ namespace RH.Core
                 return "Abalone LLC";
             }
         }
+        public static string ProgramFolderCaption
+        {
+            get
+            {
+                switch (CurrentProgram)
+                {
+                    case ProgramMode.HeadShop:
+                    case ProgramMode.HeadShopOneClick:
+                        return "HeadShop";
+                    case ProgramMode.PrintAhead:
+                    case ProgramMode.PrintAheadPayPal:
+                        return "PrintAhead";
+
+                }
+                return "Abalone LLC";
+            }
+        }
+
+        public static PaypalHelper paypalHelper;
 
         #endregion
 

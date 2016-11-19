@@ -828,7 +828,7 @@ namespace RH.Core.Render
             switch (e.KeyData)
             {
                 case Keys.X:
-                    ProgramCore.MainForm.ExportCollada();
+                    ProgramCore.MainForm.ExportDAE();
                     break;
                 case Keys.T:
                     showTriangles = !showTriangles;
