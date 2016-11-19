@@ -185,7 +185,7 @@ namespace RH.Core
 
             #region активация охуенной распознавалки
 
-            if (FSDK.FSDKE_OK != FSDK.ActivateLibrary("eJd0lDVIedRyi6Rpdd3X7ydAufndPO9U8gjDVMPK5i0sfnKQQGHP56yHVHt11CJTup04oP27M7489SmGl6Qwtm2qHEy5E+be3ZgQ+4EgUEvbblceZkMLd6ICwNxBHXOYc4qw8zdv7u2mEEFy59o8UD6RDS0hWDPO+TtjtJBTW9w="))
+            if (FSDK.FSDKE_OK != FSDK.ActivateLibrary("DWysHuomlBcczVM2MQfiz/3WraXb7r+fM0th71X5A9z+gsHn2kpGOgWrVh9D/9sQWlPXO00CFmGMvetl9A+VEr9Y5GVBIccyV32uaZutZjKYH5KB2k87NJAAw6NPkzK0DSQ5b5W7EO0yg2+x4HxpWzPogGyIIYcAHIYY11/YGsU="))
             {
                 MessageBox.Show("Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
