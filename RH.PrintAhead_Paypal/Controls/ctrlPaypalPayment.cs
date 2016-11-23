@@ -67,14 +67,14 @@ namespace RH.PrintAhead_Paypal.Controls
                     createdPayment.Execute(apiContext, new PaymentExecution() { payer_id = payerId, transactions = createdPayment.transactions });
                     IsSuccess = true;
 
-                    ProgramCore.MainForm.SuccessPay(this, printType);
+                    ProgramCore.paypalHelper.SuccessPay(this, printType);
                 }
             }
             catch
             {
                 IsSuccess = false;
 
-                ProgramCore.MainForm.BadPay(this);
+                ProgramCore.paypalHelper.BadPay(this);
             }
         }
 

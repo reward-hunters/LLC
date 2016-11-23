@@ -1,1 +1,5 @@
 [1119/081208:WARNING:spdy_session.cc(2682)] Received WINDOW_UPDATE for invalid stream 3
+[1119/211915:ERROR:gles2_cmd_decoder.cc(14664)] [.RenderWorker-069A8400]GL ERROR :GL_INVALID_VALUE : glCopySubTextureCHROMIUM: source texture has no level 0
+[1119/211915:ERROR:gles2_cmd_decoder.cc(14664)] [.RenderWorker-069A8400]GL ERROR :GL_INVALID_VALUE : glCopySubTextureCHROMIUM: source texture has no level 0
+[1119/211915:ERROR:gles2_cmd_decoder.cc(14664)] [.RenderWorker-069A8400]GL ERROR :GL_INVALID_VALUE : glCopySubTextureCHROMIUM: source texture has no level 0
+[1119/211915:ERROR:gles2_cmd_decoder.cc(14664)] [.RenderWorker-069A8400]GL ERROR :GL_INVALID_VALUE : glCopySubTextureCHROMIUM: source texture has no level 0

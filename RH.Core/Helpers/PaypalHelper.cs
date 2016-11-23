@@ -21,5 +21,13 @@ namespace RH.Core.Helpers
         {
 
         }
+
+        public  virtual void SuccessPay(FormEx parent, PrintType printType)
+        {
+
+        }
+        public virtual void BadPay(FormEx parent)
+        {
+        }
     }
 }

@@ -2049,26 +2049,24 @@ namespace RH.Core
             Collada         // zip archive 8$
         }
 
-        public void CloseSubForm(FormEx form)
+        public void ExecuteSubExport(PrintType printType)
         {
-            if (form != null)
-            {
-                try
+            if (ProgramCore.paypalHelper != null)
+                switch (printType)
                 {
-                    form.Invoke((MethodInvoker)delegate
-                    {
-                        // close the form on the forms thread
-                        form.Close();
-                    });
+                    case PrintType.STL:
+                        ProgramCore.paypalHelper.MakePayment("5", "Payment for PrintAhead stl print", frmMain.PrintType.STL);
+                        break;
+                    case PrintType.Collada:
+                        ProgramCore.paypalHelper.MakePayment("8", "Payment for PrintAhead collada print", frmMain.PrintType.Collada);
+                        break;
                 }
-                catch
-                { }
-            }
+                
+            else
+                SubExport(printType);
         }
-        public void SuccessPay(FormEx parent, PrintType printType)
+        public void SubExport(PrintType printType)
         {
-            CloseSubForm(parent);
-
             switch (printType)
             {
                 case PrintType.STL:
@@ -2078,12 +2076,6 @@ namespace RH.Core
                     ExportDAE();
                     break;
             }
-        }
-        public void BadPay(FormEx parent)
-        {
-            CloseSubForm(parent);
-
-            MessageBox.Show("Payment was failed!");
         }
 
         /// <summary> Формат stl 5$</summary>

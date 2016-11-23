@@ -95,9 +95,7 @@ namespace RH.Core.Controls.Libraries
                     break;
             }
 
-            if (ProgramCore.paypalHelper == null)
-                ProgramCore.MainForm.ExportSTL();
-            else ProgramCore.paypalHelper.MakePayment("5", "Payment for PrintAhead stl print", frmMain.PrintType.STL);
+            ProgramCore.MainForm.ExecuteSubExport(frmMain.PrintType.STL);
         }
         private void btnColor3DPrint_Click(object sender, EventArgs e)
         {
@@ -111,9 +109,7 @@ namespace RH.Core.Controls.Libraries
                     break;
             }
 
-            if (ProgramCore.paypalHelper == null)
-                ProgramCore.MainForm.ExportDAE();
-            else ProgramCore.paypalHelper.MakePayment("8", "Payment for PrintAhead collada print", frmMain.PrintType.Collada);
+            ProgramCore.MainForm.ExecuteSubExport(frmMain.PrintType.Collada);
         }
 
         #endregion

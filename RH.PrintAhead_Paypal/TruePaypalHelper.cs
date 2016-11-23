@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using RH.Core;
 using RH.PrintAhead_Paypal.Controls;
 using System.Windows.Forms;
+using static RH.Core.frmMain;
 
 namespace RH.PrintAhead_Paypal
 {
-    public class TruePaypalHelper:PaypalHelper
+    public class TruePaypalHelper : PaypalHelper
     {
         public override void InitializeCef()
         {
@@ -28,7 +29,7 @@ namespace RH.PrintAhead_Paypal
         {
             if (ProgramCore.IsFreeVersion)
             {
-              ProgramCore.MainForm.SuccessPay(null, printType);      // бесплатная версия
+                ProgramCore.MainForm.SubExport(printType);
                 return;
             }
 
@@ -41,7 +42,40 @@ namespace RH.PrintAhead_Paypal
 
             ctrl.ShowDialog();
         }
-    
+
+        public override void SuccessPay(FormEx parent, PrintType printType)
+        {
+            CloseSubForm(parent);
+
+            ProgramCore.MainForm.Invoke((MethodInvoker)delegate
+            {
+                ProgramCore.MainForm.SubExport(printType);
+                }
+            );
+        }
+        public override void BadPay(FormEx parent)
+        {
+            CloseSubForm(parent);
+
+            MessageBox.Show("Payment was failed!");
+        }
+        public void CloseSubForm(FormEx form)
+        {
+            if (form != null)
+            {
+                try
+                {
+                    form.Invoke((MethodInvoker)delegate
+                    {
+                        // close the form on the forms thread
+                        form.Close();
+                    });
+                }
+                catch
+                { }
+            }
+        }
+
     }
 
 
