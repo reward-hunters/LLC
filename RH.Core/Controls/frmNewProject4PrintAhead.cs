@@ -49,7 +49,7 @@ namespace RH.Core.Controls
 
         public int SelectedSize
         {
-            get { return 1024; }
+            get { return ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick ? 2048 : 1024; }
         }
         private Pen edgePen;
         private Pen arrowPen;
