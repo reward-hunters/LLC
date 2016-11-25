@@ -49,7 +49,16 @@ namespace RH.Core.Controls
 
         public int SelectedSize
         {
-            get { return 1024; }
+            get
+            {
+                switch (ProgramCore.CurrentProgram)
+                {
+                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                        return 2048;
+                    default:
+                        return 1024;
+                }
+            }
         }
         private Pen edgePen;
         private Pen arrowPen;
