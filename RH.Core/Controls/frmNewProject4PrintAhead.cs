@@ -101,7 +101,7 @@ namespace RH.Core.Controls
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShopOneClick:
-                    rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = false;
+                    rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = labelNotes.Visible = labelNotes1.Visible =  false;
                     break;
                 case ProgramCore.ProgramMode.PrintAheadPayPal:
                     labelNotes.Visible = labelNotes1.Visible = !ProgramCore.IsFreeVersion;
