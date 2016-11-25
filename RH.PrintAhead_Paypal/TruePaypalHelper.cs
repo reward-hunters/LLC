@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace RH.PrintAhead_Paypal
 {
-    public class TruePaypalHelper:PaypalHelper
+    public class TruePaypalHelper : PaypalHelper
     {
         public override void InitializeCef()
         {
@@ -28,7 +28,7 @@ namespace RH.PrintAhead_Paypal
         {
             if (ProgramCore.IsFreeVersion)
             {
-              ProgramCore.MainForm.SuccessPay(null, printType);      // бесплатная версия
+                ProgramCore.MainForm.SuccessPay(printType);      // бесплатная версия
                 return;
             }
 
@@ -39,9 +39,12 @@ namespace RH.PrintAhead_Paypal
                 return;
             }
 
-            ctrl.ShowDialog();
+            ProgramCore.ShowDialog(ProgramCore.MainForm, ctrl, "Please pay for export!", MessageBoxButtons.OK, 0, false, false);
+            if (ctrl.IsSuccess)
+                ProgramCore.MainForm.SuccessPay(printType);
+            else ProgramCore.MainForm.BadPay();
         }
-    
+
     }
 
 

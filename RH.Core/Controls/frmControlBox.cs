@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace RH.Core.Controls
 {
-    partial class frmControlBox : Form
+    public partial class frmControlBox : Form
     {
         public frmControlBox()
         {

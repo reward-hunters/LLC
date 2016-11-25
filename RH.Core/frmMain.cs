@@ -2049,26 +2049,8 @@ namespace RH.Core
             Collada         // zip archive 8$
         }
 
-        public void CloseSubForm(FormEx form)
+        public void SuccessPay(PrintType printType)
         {
-            if (form != null)
-            {
-                try
-                {
-                    form.Invoke((MethodInvoker)delegate
-                    {
-                        // close the form on the forms thread
-                        form.Close();
-                    });
-                }
-                catch
-                { }
-            }
-        }
-        public void SuccessPay(FormEx parent, PrintType printType)
-        {
-            CloseSubForm(parent);
-
             switch (printType)
             {
                 case PrintType.STL:
@@ -2079,9 +2061,8 @@ namespace RH.Core
                     break;
             }
         }
-        public void BadPay(FormEx parent)
+        public void BadPay()
         {
-            CloseSubForm(parent);
 
             MessageBox.Show("Payment was failed!");
         }
