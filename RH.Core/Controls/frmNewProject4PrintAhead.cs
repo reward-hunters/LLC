@@ -49,16 +49,7 @@ namespace RH.Core.Controls
 
         public int SelectedSize
         {
-            get
-            {
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
-                        return 2048;
-                    default:
-                        return 1024;
-                }
-            }
+            get { return ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick ? 2048 : 1024; }
         }
         private Pen edgePen;
         private Pen arrowPen;
@@ -111,7 +102,6 @@ namespace RH.Core.Controls
             {
                 case ProgramCore.ProgramMode.HeadShopOneClick:
                     rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = false;
-                    labelNotes.Visible = labelNotes1.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.PrintAheadPayPal:
                     labelNotes.Visible = labelNotes1.Visible = !ProgramCore.IsFreeVersion;

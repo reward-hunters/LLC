@@ -9,11 +9,12 @@ using PayPal;
 using PayPal.Api;
 using RH.Core.Helpers;
 using RH.Core;
+using RH.Core.Controls;
 using static RH.Core.frmMain;
 
 namespace RH.PrintAhead_Paypal.Controls
 {
-    public partial class ctrlPaypalPayment : FormEx
+    public partial class ctrlPaypalPayment : UserControlEx
     {
         private ChromiumWebBrowser chromeBrowser;
         private PrintType printType;
@@ -21,7 +22,6 @@ namespace RH.PrintAhead_Paypal.Controls
         public ctrlPaypalPayment(PrintType printType)
         {
             InitializeComponent();
-            Sizeble = false;
             this.printType = printType;
 
             // Start the browser after initialize global component
@@ -63,18 +63,16 @@ namespace RH.PrintAhead_Paypal.Controls
                         IsSuccess = false;
                         throw new Exception();
                     }
-
                     createdPayment.Execute(apiContext, new PaymentExecution() { payer_id = payerId, transactions = createdPayment.transactions });
                     IsSuccess = true;
 
-                    ProgramCore.paypalHelper.SuccessPay(this, printType);
+                    (Parent as frmControlBox).Invoke((MethodInvoker)delegate () { (this.Parent as frmControlBox).Close(); });
                 }
             }
             catch
             {
                 IsSuccess = false;
-
-                ProgramCore.paypalHelper.BadPay(this);
+                (Parent as frmControlBox).Invoke((MethodInvoker)delegate () { (this.Parent as frmControlBox).Close(); });
             }
         }
 

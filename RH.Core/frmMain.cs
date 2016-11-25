@@ -2049,23 +2049,7 @@ namespace RH.Core
             Collada         // zip archive 8$
         }
 
-        public void ExecuteSubExport(PrintType printType)
-        {
-            if (ProgramCore.paypalHelper != null)
-                switch (printType)
-                {
-                    case PrintType.STL:
-                        ProgramCore.paypalHelper.MakePayment("5", "Payment for PrintAhead stl print", frmMain.PrintType.STL);
-                        break;
-                    case PrintType.Collada:
-                        ProgramCore.paypalHelper.MakePayment("8", "Payment for PrintAhead collada print", frmMain.PrintType.Collada);
-                        break;
-                }
-                
-            else
-                SubExport(printType);
-        }
-        public void SubExport(PrintType printType)
+        public void SuccessPay(PrintType printType)
         {
             switch (printType)
             {
@@ -2076,6 +2060,11 @@ namespace RH.Core
                     ExportDAE();
                     break;
             }
+        }
+        public void BadPay()
+        {
+
+            MessageBox.Show("Payment was failed!");
         }
 
         /// <summary> Формат stl 5$</summary>
@@ -2282,8 +2271,8 @@ namespace RH.Core
             MessageBox.Show("Color 3D export finished!", "Done");
         }
 
-        /// <summary> Экспорт для 3Д печати </summary>
-        /// <param name="exportColor3DPrint">Добавляет фото профиля и анфаса. Пакует получившуюся папку в зип</param>
+        /// <summary> Экспорт на кнопки плюс экспорт ПЛАГИНА! </summary>
+        /// <param name="exportColor3DPrint">Добавляет фото профиля и анфаса.</param>
         public void Export()
         {
             var fiName = string.Empty;
@@ -2341,7 +2330,6 @@ namespace RH.Core
 
                 var iTexture = -1;
 
-
                 foreach (var part in ctrlRenderControl.headMeshesController.RenderMesh.Parts)
                 {
                     if (ProgramCore.MainForm.PluginUvGroups.Contains(part.Name.ToLower().Trim()))
@@ -2363,20 +2351,71 @@ namespace RH.Core
                 }
 
                 var mapPath = ctrlRenderControl.GetTexturePath(iTexture);
-                if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(iTexture))            // применяем результаты кисточки
+                switch (ProgramCore.CurrentProgram)
                 {
-                    var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[iTexture];
-                    using (var bitmap = new Bitmap(mapPath))
-                    {
-                        using (var grfx = Graphics.FromImage(bitmap))
-                            grfx.DrawImage(brushTexture.TextureData, 0, 0);
-                        bitmap.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
-                    }
-                }
-                else
-                {
-                    using (var ms = new Bitmap(mapPath)) // Don't use using!!
-                        ms.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                    case ProgramCore.ProgramMode.HeadShopOneClick:      // для этой программы должна быть выгрузка текстур с размерами 2048
+                        {
+                            if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(iTexture))            // применяем результаты кисточки
+                            {
+                                var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[iTexture];
+                                using (var bitmap = new Bitmap(mapPath))
+                                {
+                                    var max = (float)Math.Max(bitmap.Width, bitmap.Height);
+                                    if (max != 2048)
+                                    {
+                                        var k = 2048 / max;
+                                        var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
+
+                                        using (var grfx = Graphics.FromImage(newImg))
+                                            grfx.DrawImage(brushTexture.TextureData, 0, 0, newImg.Width, newImg.Height);
+
+                                        newImg.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                                    }
+                                    else
+                                    {
+                                        using (var grfx = Graphics.FromImage(bitmap))
+                                            grfx.DrawImage(brushTexture.TextureData, 0, 0);
+
+                                        bitmap.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                using (var img = new Bitmap(mapPath)) // Don't use using!!
+                                {
+                                    var max = (float)Math.Max(img.Width, img.Height);
+                                    if (max != 2048)
+                                    {
+                                        var k = 2048 / max;
+                                        var newImg = ImageEx.ResizeImage(img, new Size((int)(img.Width * k), (int)(img.Height * k)));
+                                        newImg.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                                    }
+                                    else
+                                        img.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        {
+                            if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(iTexture))            // применяем результаты кисточки
+                            {
+                                var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[iTexture];
+                                using (var bitmap = new Bitmap(mapPath))
+                                {
+                                    using (var grfx = Graphics.FromImage(bitmap))
+                                        grfx.DrawImage(brushTexture.TextureData, 0, 0);
+                                    bitmap.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                                }
+                            }
+                            else
+                            {
+                                using (var ms = new Bitmap(mapPath)) // Don't use using!!
+                                    ms.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                            }
+                        }
+                        break;
                 }
 
                 var di = new DirectoryInfo(acDirPath);
@@ -2388,45 +2427,7 @@ namespace RH.Core
                     file.LastWriteTime = now;
                 }
 
-
-                if (ProgramCore.PluginMode)
-                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale = tempScale;
-
-                #region костыль
-
-                /*   var appDataPath1 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                var diApp = new DirectoryInfo(appDataPath1);
-                var head = string.Empty;
-                foreach (var folder in diApp.GetDirectories())
-                {
-                    if (folder.Name == "DAZ 3D") // хз от чего зависит. у ласло другой путь почему то
-                    {
-                        head = Path.Combine(appDataPath1, @"DAZ 3D\Studio\My Library\Runtime\FaceShop\fs\");
-                        break;
-                    }
-                    if (folder.Name == "My DAZ 3D Library")
-                    {
-                        head = Path.Combine(appDataPath1, @"My DAZ 3D Library\Runtime\FaceShop\fs\");
-                        break;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(head))
-                {
-                    FolderEx.CreateDirectory(head);
-
-                    SaveHead(Path.Combine(head, "fs.obj"));
-                    di = new DirectoryInfo(Path.GetDirectoryName(head));
-                    foreach (var file in di.GetFiles())
-                    {
-                        var now = DateTime.Now;
-                        file.CreationTime = now;
-                        file.LastAccessTime = now;
-                        file.LastWriteTime = now;
-                    }
-                }*/
-
-                #endregion
+                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale = tempScale;
             }
 
             MessageBox.Show(ProgramCore.ProgramCaption + " project successfully exported!", "Done", MessageBoxButtons.OK);

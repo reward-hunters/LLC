@@ -68,7 +68,7 @@ namespace RH.Core
         public Vector2 ProfileMouthLocation = Vector2.Zero;
 
         /// <summary> Размер текстур, выбранный при создании проекта </summary>
-        public int TextureSize = 1024;
+        public int TextureSize;
 
         #region Все нужное, для работы с моделью головы
 
@@ -500,7 +500,7 @@ namespace RH.Core
                 var textureFlip = (FlipType)br.ReadInt32();
                 var shapeFlip = (FlipType)br.ReadInt32();
 
-                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, 1024);
+                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick ? 2048 : 1024);
                 result.TextureFlip = textureFlip;
                 result.ShapeFlip = shapeFlip;
 

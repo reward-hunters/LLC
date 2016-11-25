@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using RH.Core;
 using RH.PrintAhead_Paypal.Controls;
 using System.Windows.Forms;
-using static RH.Core.frmMain;
 
 namespace RH.PrintAhead_Paypal
 {
@@ -29,7 +28,7 @@ namespace RH.PrintAhead_Paypal
         {
             if (ProgramCore.IsFreeVersion)
             {
-                ProgramCore.MainForm.SubExport(printType);
+                ProgramCore.MainForm.SuccessPay(printType);      // бесплатная версия
                 return;
             }
 
@@ -40,40 +39,10 @@ namespace RH.PrintAhead_Paypal
                 return;
             }
 
-            ctrl.ShowDialog();
-        }
-
-        public override void SuccessPay(FormEx parent, PrintType printType)
-        {
-            CloseSubForm(parent);
-
-            ProgramCore.MainForm.Invoke((MethodInvoker)delegate
-            {
-                ProgramCore.MainForm.SubExport(printType);
-                }
-            );
-        }
-        public override void BadPay(FormEx parent)
-        {
-            CloseSubForm(parent);
-
-            MessageBox.Show("Payment was failed!");
-        }
-        public void CloseSubForm(FormEx form)
-        {
-            if (form != null)
-            {
-                try
-                {
-                    form.Invoke((MethodInvoker)delegate
-                    {
-                        // close the form on the forms thread
-                        form.Close();
-                    });
-                }
-                catch
-                { }
-            }
+            ProgramCore.ShowDialog(ProgramCore.MainForm, ctrl, "Please pay for export!", MessageBoxButtons.OK, 0, false, false);
+            if (ctrl.IsSuccess)
+                ProgramCore.MainForm.SuccessPay(printType);
+            else ProgramCore.MainForm.BadPay();
         }
 
     }
