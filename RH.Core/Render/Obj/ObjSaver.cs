@@ -251,7 +251,8 @@ namespace RH.Core.Render.Obj
                     else
                         groupTitle = meshInfo.Title;
 
-                    materials.Add(groupTitle, meshInfo.Material);
+                    if (!materials.ContainsKey(groupTitle))
+                        materials.Add(groupTitle, meshInfo.Material);
 
                     sw.WriteLine("g " + groupTitle);
                     sw.WriteLine("usemtl " + groupTitle);
@@ -288,7 +289,7 @@ namespace RH.Core.Render.Obj
         private static void TransformForPluginMode(DynamicRenderMesh mesh, MeshInfo meshInfo)
         {
             if (!ProgramCore.PluginMode)
-                return;            
+                return;
 
             var scaleCoef = 1f;
             if (mesh.meshType == MeshType.Accessory)
@@ -320,7 +321,7 @@ namespace RH.Core.Render.Obj
         /// <param name="morphScale"></param>
         /// <param name="saveBrushesToTexture">При экспорте в ДАЗ или в колладу - нужно сохранять то что поправили кисточкой в туже текстуру </param>
         /// <param name="isCollada">Если коллада - то текстуры должны лежать в той же папке. Заказ старикана</param>
-        public static void ExportMergedModel(string filePath, DynamicRenderMeshes HairMeshes, DynamicRenderMeshes AccesoryMeshes, 
+        public static void ExportMergedModel(string filePath, DynamicRenderMeshes HairMeshes, DynamicRenderMeshes AccesoryMeshes,
             List<MeshInfo> faceParts, float morphScale, bool saveBrushesToTexture = false, bool isCollada = false)
         {
             //if (meshInfos.Count == 0)
@@ -368,7 +369,7 @@ namespace RH.Core.Render.Obj
                 }
 
                 if (meshInfos.Count > 0)
-                {                    
+                {
                     var scale = ProgramCore.PluginMode ? 1.0f : PickingController.GetHairScale(ProgramCore.Project.ManType);
                     ProgramCore.EchoToLog(String.Format("На это умножаем волосы или аксесуары при экспорте ObjSaver::ExportMergedModel(): {0}", scale), EchoMessageType.Information);
                     var transformMatrix = Matrix4.CreateScale(scale);
@@ -533,7 +534,7 @@ namespace RH.Core.Render.Obj
         {
             foreach (var meshInfo in meshInfos)
             {
-                for(var i = 0; i<meshInfo.Positions.Count; ++i)
+                for (var i = 0; i < meshInfo.Positions.Count; ++i)
                 {
                     var v = meshInfo.Positions[i];
                     if (transformMatrix != Matrix4.Zero)

@@ -364,5 +364,14 @@ namespace RH.Core.Controls.Libraries
 
             complex.Show(sender as PictureBox);
         }
+
+        private void btnUseAsBackgroundColor_Click(object sender, EventArgs e)
+        {
+            ProgramCore.Project.FaceColor = new Vector4(panelColor.BackColor.R / 255f, panelColor.BackColor.G / 255f, panelColor.BackColor.B / 255f, StringConverter.ToFloat(teAlpha.Text, 255) / 255f);
+            ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
+
+            foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes)
+                mesh.Material.DiffuseColor = ProgramCore.Project.FaceColor;
+        }
     }
 }

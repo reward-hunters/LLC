@@ -850,7 +850,7 @@ namespace RH.Core.Render
         //    return result;
         //}
 
-        private void AddBase()
+        public void AddBase()
         {
             string baseName = String.Empty;
             var position = Vector3.Zero;
@@ -884,7 +884,7 @@ namespace RH.Core.Render
 
             var directoryName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Accessory");
             var objPath = Path.Combine(directoryName, baseName + ".obj");
-            
+
             var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
 
 
@@ -903,7 +903,7 @@ namespace RH.Core.Render
 
                 var size = mesh.MeshSize;
                 mesh.MeshSize = scale;
-                
+
                 mesh.Transform[3, 0] -= mesh.Position.X;
                 mesh.Transform[3, 1] -= mesh.Position.Y;
                 mesh.Transform[3, 2] -= mesh.Position.Z;
@@ -922,7 +922,7 @@ namespace RH.Core.Render
         }
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
-        {            
+        {
             shiftPressed = e.Shift;
             switch (e.KeyData)
             {
@@ -1747,6 +1747,8 @@ namespace RH.Core.Render
 
                     switch (Mode)
                     {
+                        case Mode.ColorPicker:
+                            break;
                         case Mode.AccessoryRotateSetCircle:
                             {
                                 Mode = Mode.AccessoryRotate;
@@ -2037,7 +2039,7 @@ namespace RH.Core.Render
             var shader = idleShader;
             GL.Enable(EnableCap.DepthTest);
             DrawMeshes(pickingController.HairMeshes, ref shader, false);
-            DrawMeshes(pickingController.AccesoryMeshes, ref shader, false);            
+            DrawMeshes(pickingController.AccesoryMeshes, ref shader, false);
 
             EnableTransparent();
             DrawMeshes(pickingController.HairMeshes, ref shader, true);
@@ -2490,7 +2492,7 @@ namespace RH.Core.Render
                 shader.UpdateUniform("u_World", worldMatrix);
                 shader.UpdateUniform("u_WorldView", worldMatrix * camera.ViewMatrix);
                 shader.UpdateUniform("u_ViewProjection", camera.ViewMatrix * camera.ProjectMatrix);
-                mesh.Draw(shader);                
+                mesh.Draw(shader);
             }
         }
 

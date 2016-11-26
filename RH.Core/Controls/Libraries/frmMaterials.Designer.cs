@@ -41,23 +41,24 @@ namespace RH.Core.Controls.Libraries
             this.teAngle = new System.Windows.Forms.TextBox();
             this.teAlpha = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.ctrlAngle = new ctrlAngleSelector();
+            this.ctrlAngle = new RH.Core.Controls.ctrlAngleSelector();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.trackBarSize = new System.Windows.Forms.TrackBar();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pbBrush = new System.Windows.Forms.PictureBox();
+            this.btnColorPicker = new System.Windows.Forms.PictureBox();
             this.panelColor = new System.Windows.Forms.Panel();
             this.btnPickColor = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.imageListView = new RH.ImageListView.ImageListViewEx();
-            this.pbBrush = new System.Windows.Forms.PictureBox();
-            this.btnColorPicker = new System.Windows.Forms.PictureBox();
+            this.btnUseAsBackgroundColor = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSize)).BeginInit();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBrush)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnColorPicker)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -136,11 +137,11 @@ namespace RH.Core.Controls.Libraries
             // 
             this.ctrlAngle.Angle = 0;
             this.ctrlAngle.Location = new System.Drawing.Point(13, 191);
-            this.ctrlAngle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ctrlAngle.Margin = new System.Windows.Forms.Padding(4);
             this.ctrlAngle.Name = "ctrlAngle";
             this.ctrlAngle.Size = new System.Drawing.Size(47, 47);
             this.ctrlAngle.TabIndex = 3;
-            this.ctrlAngle.OnAngleChanged += new ctrlAngleSelector.AngleChangedDelegate(this.ctrlAngle_AngleChanged);
+            this.ctrlAngle.OnAngleChanged += new RH.Core.Controls.ctrlAngleSelector.AngleChangedDelegate(this.ctrlAngle_AngleChanged);
             // 
             // label2
             // 
@@ -177,6 +178,7 @@ namespace RH.Core.Controls.Libraries
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnUseAsBackgroundColor);
             this.panel2.Controls.Add(this.pbBrush);
             this.panel2.Controls.Add(this.btnColorPicker);
             this.panel2.Controls.Add(this.panelColor);
@@ -186,6 +188,32 @@ namespace RH.Core.Controls.Libraries
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(288, 93);
             this.panel2.TabIndex = 1;
+            // 
+            // pbBrush
+            // 
+            this.pbBrush.Image = global::RH.Core.Properties.Resources.brush;
+            this.pbBrush.Location = new System.Drawing.Point(127, 44);
+            this.pbBrush.Margin = new System.Windows.Forms.Padding(2);
+            this.pbBrush.Name = "pbBrush";
+            this.pbBrush.Size = new System.Drawing.Size(21, 24);
+            this.pbBrush.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbBrush.TabIndex = 3;
+            this.pbBrush.TabStop = false;
+            this.pbBrush.Tag = "2";
+            this.pbBrush.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbBrush_MouseDown);
+            // 
+            // btnColorPicker
+            // 
+            this.btnColorPicker.Image = global::RH.Core.Properties.Resources.color_picker;
+            this.btnColorPicker.Location = new System.Drawing.Point(127, 11);
+            this.btnColorPicker.Margin = new System.Windows.Forms.Padding(2);
+            this.btnColorPicker.Name = "btnColorPicker";
+            this.btnColorPicker.Size = new System.Drawing.Size(21, 24);
+            this.btnColorPicker.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnColorPicker.TabIndex = 2;
+            this.btnColorPicker.TabStop = false;
+            this.btnColorPicker.Tag = "2";
+            this.btnColorPicker.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnColorPicker_MouseDown);
             // 
             // panelColor
             // 
@@ -198,10 +226,10 @@ namespace RH.Core.Controls.Libraries
             // 
             // btnPickColor
             // 
-            this.btnPickColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnPickColor.Location = new System.Drawing.Point(153, 16);
+            this.btnPickColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnPickColor.Location = new System.Drawing.Point(153, 9);
             this.btnPickColor.Name = "btnPickColor";
-            this.btnPickColor.Size = new System.Drawing.Size(129, 49);
+            this.btnPickColor.Size = new System.Drawing.Size(129, 31);
             this.btnPickColor.TabIndex = 0;
             this.btnPickColor.Text = "Pick Solid Color";
             this.btnPickColor.UseVisualStyleBackColor = true;
@@ -225,31 +253,16 @@ namespace RH.Core.Controls.Libraries
             this.imageListView.TabIndex = 2;
             this.imageListView.DoubleClick += new System.EventHandler(this.imageListView_DoubleClick);
             // 
-            // pbBrush
+            // btnUseAsBackgroundColor
             // 
-            this.pbBrush.Image =  global::RH.Core.Properties.Resources.brush;
-            this.pbBrush.Location = new System.Drawing.Point(127, 44);
-            this.pbBrush.Margin = new System.Windows.Forms.Padding(2);
-            this.pbBrush.Name = "pbBrush";
-            this.pbBrush.Size = new System.Drawing.Size(21, 24);
-            this.pbBrush.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbBrush.TabIndex = 3;
-            this.pbBrush.TabStop = false;
-            this.pbBrush.Tag = "2";
-            this.pbBrush.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbBrush_MouseDown);
-            // 
-            // btnColorPicker
-            // 
-            this.btnColorPicker.Image =  global::RH.Core.Properties.Resources.color_picker;
-            this.btnColorPicker.Location = new System.Drawing.Point(127, 11);
-            this.btnColorPicker.Margin = new System.Windows.Forms.Padding(2);
-            this.btnColorPicker.Name = "btnColorPicker";
-            this.btnColorPicker.Size = new System.Drawing.Size(21, 24);
-            this.btnColorPicker.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnColorPicker.TabIndex = 2;
-            this.btnColorPicker.TabStop = false;
-            this.btnColorPicker.Tag = "2";
-            this.btnColorPicker.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnColorPicker_MouseDown);
+            this.btnUseAsBackgroundColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnUseAsBackgroundColor.Location = new System.Drawing.Point(153, 46);
+            this.btnUseAsBackgroundColor.Name = "btnUseAsBackgroundColor";
+            this.btnUseAsBackgroundColor.Size = new System.Drawing.Size(129, 31);
+            this.btnUseAsBackgroundColor.TabIndex = 4;
+            this.btnUseAsBackgroundColor.Text = "Use as background";
+            this.btnUseAsBackgroundColor.UseVisualStyleBackColor = true;
+            this.btnUseAsBackgroundColor.Click += new System.EventHandler(this.btnUseAsBackgroundColor_Click);
             // 
             // frmMaterials
             // 
@@ -275,9 +288,9 @@ namespace RH.Core.Controls.Libraries
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSize)).EndInit();
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBrush)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnColorPicker)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -301,5 +314,6 @@ namespace RH.Core.Controls.Libraries
         private Button btnDelete;
         private PictureBox btnColorPicker;
         private PictureBox pbBrush;
+        private Button btnUseAsBackgroundColor;
     }
 }

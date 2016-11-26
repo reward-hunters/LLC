@@ -1016,9 +1016,15 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
+                        if (UserConfig.ByName("Options")["Tutorials", "Stage", "1"] == "1")
+                            frmTutStage.ShowDialog(this);
+                        break;
                     case ProgramCore.ProgramMode.PrintAhead:
                         if (UserConfig.ByName("Options")["Tutorials", "Stage", "1"] == "1")
                             frmTutStage.ShowDialog(this);
+                        break;
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                        ctrlRenderControl.AddBase();
                         break;
                 }
             }

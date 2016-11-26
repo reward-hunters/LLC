@@ -63,7 +63,7 @@ namespace RH.PrintAhead_Paypal.Controls
                         IsSuccess = false;
                         throw new Exception();
                     }
-                    createdPayment.Execute(apiContext, new PaymentExecution() { payer_id = payerId, transactions = createdPayment.transactions });
+                 //   createdPayment.Execute(apiContext, new PaymentExecution() { payer_id = payerId, transactions = createdPayment.transactions });
                     IsSuccess = true;
 
                     (Parent as frmControlBox).Invoke((MethodInvoker)delegate () { (this.Parent as frmControlBox).Close(); });
