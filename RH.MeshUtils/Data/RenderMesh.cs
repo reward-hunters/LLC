@@ -25,13 +25,13 @@ namespace RH.MeshUtils.Data
         private static float MORPH_SCALE = 10.0f;
         private static float MORPH_SCALE_MAX = 0.7f;
         private static float MORPH_SCALE_MIN = 0.15f;
-        public float MorphScale = 5.0f;
+        public float MorphScale = 1.0f;
 
         public float RealScale
         {
             get
             {
-                return MORPH_SCALE_MIN + (MORPH_SCALE_MAX - MORPH_SCALE_MIN) * MorphScale / MORPH_SCALE;
+                return MorphScale / 1.4f;//MORPH_SCALE_MIN + (MORPH_SCALE_MAX - MORPH_SCALE_MIN) * MorphScale / MORPH_SCALE;
             }
         }
 

@@ -822,8 +822,89 @@ namespace RH.Core.Render
                     break;
             }
         }
-        private void glControl_KeyDown(object sender, KeyEventArgs e)
+
+        //private float FindHeight()
+        //{
+        //    float result = 0.0f;
+        //    float minY = 99999.0f;
+        //    float maxY = -minY;
+        //    foreach(var mesh in pickingController.AccesoryMeshes)
+        //    {
+        //        foreach(var v in pickingController.AccesoryMeshes[0].GetVertices())
+        //        {
+        //            var y = Vector3.Transform(v, mesh.Transform).Y;
+        //            minY = Math.Min(y, minY);
+        //            maxY = Math.Max(y, maxY);
+        //        }
+        //    }
+        //    foreach (var part in headMeshesController.RenderMesh.Parts)
+        //    {
+        //        foreach (var p in part.Points)
+        //        {
+        //            var y = p.Position.Y;
+        //            minY = Math.Min(y, minY);
+        //            maxY = Math.Max(y, maxY);
+        //        }
+        //    }
+        //    result = maxY - minY;
+        //    return result;
+        //}
+
+        private void AddBase()
         {
+            string baseName = String.Empty;
+            var position = Vector3.Zero;
+            switch (ProgramCore.Project.ManType)
+            {
+                case ManType.Male:
+                    baseName = "Male3";
+                    position = new Vector3(-0.03462255f, -168.5737f, 0.07745743f);
+                    break;
+                case ManType.Female:
+                    baseName = "newbasef_0";
+                    position = new Vector3(-0.006643593f, -169.04f, 0.3562396f);
+                    break;
+            }
+            if (baseName == String.Empty)
+                return;
+            foreach (var mesh in pickingController.AccesoryMeshes)
+                if (mesh.Path.Contains(baseName))
+                    return;
+
+            var meshType = MeshType.Accessory;
+
+            if (!PartsLibraryMeshes.ContainsKey(baseName))
+                PartsLibraryMeshes.Add(baseName, new DynamicRenderMeshes());
+
+            var directoryName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Accessory");
+            var objPath = Path.Combine(directoryName, baseName + ".obj");
+            
+            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
+
+
+            for (var i = 0; i < meshes.Count; i++)
+            {
+                var mesh = meshes[i];
+                if (mesh == null || mesh.vertexArray.Length == 0) //ТУТ!
+                    continue;
+
+                mesh.Position = position - new Vector3(mesh.Transform[3, 0], mesh.Transform[3, 1], mesh.Transform[3, 2]);
+
+                mesh.Transform[3, 0] = position[0];
+                mesh.Transform[3, 1] = position[1];
+                mesh.Transform[3, 2] = position[2];
+               
+                if (meshType == MeshType.Accessory)
+                    mesh.Material.DiffuseColor = ProgramCore.Project.FaceColor;
+
+                mesh.Title = baseName + "_" + i;
+                PartsLibraryMeshes[baseName].Add(mesh);
+            }
+            ProgramCore.MainForm.frmParts.UpdateList();
+        }
+
+        private void glControl_KeyDown(object sender, KeyEventArgs e)
+        {            
             shiftPressed = e.Shift;
             switch (e.KeyData)
             {
@@ -1935,7 +2016,7 @@ namespace RH.Core.Render
             var shader = idleShader;
             GL.Enable(EnableCap.DepthTest);
             DrawMeshes(pickingController.HairMeshes, ref shader, false);
-            DrawMeshes(pickingController.AccesoryMeshes, ref shader, false);
+            DrawMeshes(pickingController.AccesoryMeshes, ref shader, false);            
 
             EnableTransparent();
             DrawMeshes(pickingController.HairMeshes, ref shader, true);
@@ -2388,9 +2469,11 @@ namespace RH.Core.Render
                 shader.UpdateUniform("u_World", worldMatrix);
                 shader.UpdateUniform("u_WorldView", worldMatrix * camera.ViewMatrix);
                 shader.UpdateUniform("u_ViewProjection", camera.ViewMatrix * camera.ProjectMatrix);
-                mesh.Draw(shader);
+                mesh.Draw(shader);                
             }
         }
+
+        private float minY, maxY;
 
         static public void DrawAxis()
         {
