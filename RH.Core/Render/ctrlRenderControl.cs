@@ -854,6 +854,7 @@ namespace RH.Core.Render
         {
             string baseName = String.Empty;
             var position = Vector3.Zero;
+            var scale = 1.0f;
             switch (ProgramCore.Project.ManType)
             {
                 case ManType.Male:
@@ -863,6 +864,11 @@ namespace RH.Core.Render
                 case ManType.Female:
                     baseName = "newbasef_0";
                     position = new Vector3(-0.006643593f, -169.04f, 0.3562396f);
+                    break;
+                case ManType.Child:
+                    baseName = "newbasef_0";
+                    position = new Vector3(0.05320958f, -167.8705f, 1.824222f);
+                    scale = 0.86f;
                     break;
             }
             if (baseName == String.Empty)
@@ -889,11 +895,23 @@ namespace RH.Core.Render
                     continue;
 
                 mesh.Position = position - new Vector3(mesh.Transform[3, 0], mesh.Transform[3, 1], mesh.Transform[3, 2]);
+                var v = new Vector3(mesh.Transform[3, 0], mesh.Transform[3, 1], mesh.Transform[3, 2]) + new Vector3(0.08048876f, -6.172961f, -0.7955008f);
 
                 mesh.Transform[3, 0] = position[0];
                 mesh.Transform[3, 1] = position[1];
                 mesh.Transform[3, 2] = position[2];
-               
+
+                var size = mesh.MeshSize;
+                mesh.MeshSize = scale;
+                
+                mesh.Transform[3, 0] -= mesh.Position.X;
+                mesh.Transform[3, 1] -= mesh.Position.Y;
+                mesh.Transform[3, 2] -= mesh.Position.Z;
+                mesh.Transform *= Matrix4.CreateScale(scale / size);
+                mesh.Transform[3, 0] += mesh.Position.X;
+                mesh.Transform[3, 1] += mesh.Position.Y;
+                mesh.Transform[3, 2] += mesh.Position.Z;
+
                 if (meshType == MeshType.Accessory)
                     mesh.Material.DiffuseColor = ProgramCore.Project.FaceColor;
 
@@ -910,6 +928,9 @@ namespace RH.Core.Render
             {
                 case Keys.X:
                     ProgramCore.MainForm.ExportDAE();
+                    break;
+                case Keys.Z:
+                    AddBase();
                     break;
                 case Keys.T:
                     showTriangles = !showTriangles;
