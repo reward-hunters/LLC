@@ -31,7 +31,7 @@ namespace RH.MeshUtils.Data
         {
             get
             {
-                return MorphScale / 1.4f;//MORPH_SCALE_MIN + (MORPH_SCALE_MAX - MORPH_SCALE_MIN) * MorphScale / MORPH_SCALE;
+                return MorphScale / 4.2f;//MORPH_SCALE_MIN + (MORPH_SCALE_MAX - MORPH_SCALE_MIN) * MorphScale / MORPH_SCALE;
             }
         }
 

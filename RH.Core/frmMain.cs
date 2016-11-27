@@ -1025,6 +1025,9 @@ namespace RH.Core
                         break;
                     case ProgramCore.ProgramMode.PrintAheadPayPal:
                         ctrlRenderControl.AddBase();
+                        var backPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Stages", "Backgrounds", "fire1.jpg");
+                        if (File.Exists(backPath))
+                            ProgramCore.MainForm.ctrlRenderControl.BackgroundTexture = backPath;
                         break;
                 }
             }

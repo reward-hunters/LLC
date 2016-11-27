@@ -871,7 +871,7 @@ namespace RH.Core.Render
                     scale = 0.86f;
                     break;
             }
-            if (baseName == String.Empty)
+            if (baseName == String.Empty || ProgramCore.MainForm.ctrlRenderControl.PartsLibraryMeshes.ContainsKey(baseName))
                 return;
             foreach (var mesh in pickingController.AccesoryMeshes)
                 if (mesh.Path.Contains(baseName))
