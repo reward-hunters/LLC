@@ -1,0 +1,3 @@
+Список всех распознаваемых точек:
+
+http://luxand.com/facesdk/documentation/detectedfeatures.php

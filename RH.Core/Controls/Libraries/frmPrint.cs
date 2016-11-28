@@ -115,7 +115,7 @@ namespace RH.Core.Controls.Libraries
             if (ProgramCore.paypalHelper == null)
                 ProgramCore.MainForm.ExportDAE();
             else
-                ProgramCore.paypalHelper.MakePayment("8", "DAE export", frmMain.PrintType.STL);
+                ProgramCore.paypalHelper.MakePayment("8", "DAE export", frmMain.PrintType.Collada);
         }
 
         #endregion
