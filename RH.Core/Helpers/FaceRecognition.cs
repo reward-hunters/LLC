@@ -76,144 +76,141 @@ namespace RH.Core.Helpers
             var facePosition = image.DetectFace();
             if (0 == facePosition.w)
             {
-                faceRectangle = new Rectangle(0, 0, image.Width, image.Height);
                 MessageBox.Show("No faces detected", "Face Detection");
                 return false;
             }
-            else
+
+            pointFeature = image.DetectFacialFeaturesInRegion(ref facePosition);
+
+            String AttributeValues;         // определение пола
+            FSDK.DetectFacialAttributeUsingFeatures(image.ImageHandle, ref pointFeature, "Gender", out AttributeValues, 1024);
+            var ConfidenceMale = 0.0f;
+            var ConfidenceFemale = 0.0f;
+            FSDK.GetValueConfidence(AttributeValues, "Male", ref ConfidenceMale);
+            FSDK.GetValueConfidence(AttributeValues, "Female", ref ConfidenceFemale);
+            IsMale = ConfidenceMale > ConfidenceFemale;
+
+
+            var left = facePosition.xc - (int)(facePosition.w * 0.6f);
+            left = left < 0 ? 0 : left;
+            //   int top = facePosition.yc - (int)(facePosition.w * 0.5f);             // верхушку определяет неправильлно. поэтому просто не будем обрезать :)
+            BottomFace = new Vector2(pointFeature[11].x, pointFeature[11].y);
+
+            var distance = pointFeature[2].y - pointFeature[11].y;
+            var top = pointFeature[16].y + distance - 15;          // определение высоты по алгоритму старикана
+            top = top < 0 ? 0 : top;
+
+            var newWidth = (int)(facePosition.w * 1.2);
+            newWidth = newWidth > image.Width || newWidth == 0 ? image.Width : newWidth;
+
+            faceRectangle = new Rectangle(left, top, newWidth, BottomFace.Y + 15 < image.Height ? (int)(BottomFace.Y + 15) - top : image.Height - top - 1);
+            if (needCrop)       // если это создание проекта - то нужно обрезать фотку и оставить только голову
             {
-                pointFeature = image.DetectFacialFeaturesInRegion(ref facePosition);
+                var forehead = new PointF(pointFeature[22].x, pointFeature[16].y + (pointFeature[16].y - top) * 0.5f);
 
-                String AttributeValues;         // определение пола
-                FSDK.DetectFacialAttributeUsingFeatures(image.ImageHandle, ref pointFeature, "Gender", out AttributeValues, 1024);
-                var ConfidenceMale = 0.0f;
-                var ConfidenceFemale = 0.0f;
-                FSDK.GetValueConfidence(AttributeValues, "Male", ref ConfidenceMale);
-                FSDK.GetValueConfidence(AttributeValues, "Female", ref ConfidenceFemale);
-                IsMale = ConfidenceMale > ConfidenceFemale;
+                var bmpImage = new Bitmap(path);
+                var color = bmpImage.GetPixel((int)forehead.X, (int)forehead.Y);
+                FaceColor = new Vector4((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, 1.0f);
 
-
-                var left = facePosition.xc - (int)(facePosition.w * 0.6f);
-                left = left < 0 ? 0 : left;
-                //   int top = facePosition.yc - (int)(facePosition.w * 0.5f);             // верхушку определяет неправильлно. поэтому просто не будем обрезать :)
-                BottomFace = new Vector2(pointFeature[11].x, pointFeature[11].y);
-
-                var distance = pointFeature[2].y - pointFeature[11].y;
-                var top = pointFeature[16].y + distance - 15;          // определение высоты по алгоритму старикана
-                top = top < 0 ? 0 : top;
-
-                var newWidth = (int)(facePosition.w * 1.2);
-                newWidth = newWidth > image.Width ? image.Width : newWidth;
-
-                faceRectangle = new Rectangle(left, top, newWidth, BottomFace.Y + 15 < image.Height ? (int)(BottomFace.Y + 15) - top : image.Height - top - 1);
-                if (needCrop)       // если это создание проекта - то нужно обрезать фотку и оставить только голову
+                using (var croppedImage = ImageEx.Crop(bmpImage, faceRectangle))
                 {
-                    var forehead = new PointF(pointFeature[22].x, pointFeature[16].y + (pointFeature[16].y - top) * 0.5f);
-
-                    var bmpImage = new Bitmap(path);
-                    var color = bmpImage.GetPixel((int)forehead.X, (int)forehead.Y);
-                    FaceColor = new Vector4((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, 1.0f);
-
-                    using (var croppedImage = ImageEx.Crop(bmpImage, faceRectangle))
-                    {
-                        path = UserConfig.AppDataDir;
-                        FolderEx.CreateDirectory(path);
-                        path = Path.Combine(path, "tempHaarImage.jpg");
-                        croppedImage.Save(path, ImageFormat.Jpeg);
-
-                        return Recognize(ref path, false);
-
-                    }
-                }
-
-                LeftEyeCenter = new Vector2(pointFeature[0].x, pointFeature[0].y);
-                RightEyeCenter = new Vector2(pointFeature[1].x, pointFeature[1].y);
-
-                LeftMouth = new Vector2(pointFeature[3].x, pointFeature[3].y);
-                RightMouth = new Vector2(pointFeature[4].x, pointFeature[4].y);
-
-                LeftNose = new Vector2(pointFeature[45].x, pointFeature[45].y);
-                RightNose = new Vector2(pointFeature[46].x, pointFeature[46].y);
-
-                TopFace = new Vector2(pointFeature[66].x, pointFeature[66].y);
-                MiddleFace1 = new Vector2(pointFeature[66].x, pointFeature[66].y);
-                MiddleFace2 = new Vector2(pointFeature[5].x, pointFeature[5].y);
-
-
-                RightMiddleFace1 = new Vector2(pointFeature[67].x, pointFeature[67].y);
-                RightMiddleFace2 = new Vector2(pointFeature[6].x, pointFeature[6].y);
-
-                #region Поворот фотки по глазам!
-
-                var v = new Vector2(LeftEyeCenter.X - RightEyeCenter.X, LeftEyeCenter.Y - RightEyeCenter.Y);
-                v.Normalize();      // ПД !
-                var xVector = new Vector2(1, 0);
-
-                var xDiff = xVector.X - v.X;
-                var yDiff = xVector.Y - v.Y;
-                var angle = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
-
-                if (Math.Abs(angle) > 1 && angleCount <= 5)                // поворачиваем наклоненные головы
-                {
-                    ++angleCount;
-
-                    using (var ms = new MemoryStream(File.ReadAllBytes(path))) // Don't use using!!
-                    {
-                        var originalImg = (Bitmap)Image.FromStream(ms);
-
-                        path = UserConfig.AppDataDir;
-                        FolderEx.CreateDirectory(path);
-                        path = Path.Combine(path, "tempHaarImage.jpg");
-
-                        using (var ii = ImageEx.RotateImage(new Bitmap(originalImg), (float)-angle))
-                            ii.Save(path, ImageFormat.Jpeg);
-                    }
+                    path = UserConfig.AppDataDir;
+                    FolderEx.CreateDirectory(path);
+                    path = Path.Combine(path, "tempHaarImage.jpg");
+                    croppedImage.Save(path, ImageFormat.Jpeg);
 
                     return Recognize(ref path, false);
+
+                }
+            }
+
+            LeftEyeCenter = new Vector2(pointFeature[0].x, pointFeature[0].y);
+            RightEyeCenter = new Vector2(pointFeature[1].x, pointFeature[1].y);
+
+            LeftMouth = new Vector2(pointFeature[3].x, pointFeature[3].y);
+            RightMouth = new Vector2(pointFeature[4].x, pointFeature[4].y);
+
+            LeftNose = new Vector2(pointFeature[45].x, pointFeature[45].y);
+            RightNose = new Vector2(pointFeature[46].x, pointFeature[46].y);
+
+            TopFace = new Vector2(pointFeature[66].x, pointFeature[66].y);
+            MiddleFace1 = new Vector2(pointFeature[66].x, pointFeature[66].y);
+            MiddleFace2 = new Vector2(pointFeature[5].x, pointFeature[5].y);
+
+
+            RightMiddleFace1 = new Vector2(pointFeature[67].x, pointFeature[67].y);
+            RightMiddleFace2 = new Vector2(pointFeature[6].x, pointFeature[6].y);
+
+            #region Поворот фотки по глазам!
+
+            var v = new Vector2(LeftEyeCenter.X - RightEyeCenter.X, LeftEyeCenter.Y - RightEyeCenter.Y);
+            v.Normalize();      // ПД !
+            var xVector = new Vector2(1, 0);
+
+            var xDiff = xVector.X - v.X;
+            var yDiff = xVector.Y - v.Y;
+            var angle = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
+
+            if (Math.Abs(angle) > 1 && angleCount <= 5)                // поворачиваем наклоненные головы
+            {
+                ++angleCount;
+
+                using (var ms = new MemoryStream(File.ReadAllBytes(path))) // Don't use using!!
+                {
+                    var originalImg = (Bitmap)Image.FromStream(ms);
+
+                    path = UserConfig.AppDataDir;
+                    FolderEx.CreateDirectory(path);
+                    path = Path.Combine(path, "tempHaarImage.jpg");
+
+                    using (var ii = ImageEx.RotateImage(new Bitmap(originalImg), (float)-angle))
+                        ii.Save(path, ImageFormat.Jpeg);
                 }
 
-                #endregion
-
-                #region Переводим в относительные координаты
-
-                LeftMouth = new Vector2(LeftMouth.X / (image.Width * 1f), LeftMouth.Y / (image.Height * 1f));
-                RightMouth = new Vector2(RightMouth.X / (image.Width * 1f), RightMouth.Y / (image.Height * 1f));
-
-                LeftEyeCenter = new Vector2(LeftEyeCenter.X / (image.Width * 1f), LeftEyeCenter.Y / (image.Height * 1f));
-                RightEyeCenter = new Vector2(RightEyeCenter.X / (image.Width * 1f), RightEyeCenter.Y / (image.Height * 1f));
-
-                LeftNose = new Vector2(LeftNose.X / (image.Width * 1f), LeftNose.Y / (image.Height * 1f));
-                RightNose = new Vector2(RightNose.X / (image.Width * 1f), RightNose.Y / (image.Height * 1f));
-
-                TopFace = new Vector2(TopFace.X / (image.Width * 1f), TopFace.Y / (image.Height * 1f));
-                MiddleFace1 = new Vector2(MiddleFace1.X / (image.Width * 1f), MiddleFace1.Y / (image.Height * 1f));
-                MiddleFace2 = new Vector2(MiddleFace2.X / (image.Width * 1f), MiddleFace2.Y / (image.Height * 1f));
-                BottomFace = new Vector2(BottomFace.X / (image.Width * 1f), BottomFace.Y / (image.Height * 1f));
-
-                RightMiddleFace1 = new Vector2(RightMiddleFace1.X / (image.Width * 1f), RightMiddleFace1.Y / (image.Height * 1f));
-                RightMiddleFace2 = new Vector2(RightMiddleFace2.X / (image.Width * 1f), RightMiddleFace2.Y / (image.Height * 1f));
-
-                FacialFeatures = new List<Vector2>();
-                foreach (var point in pointFeature)
-                    FacialFeatures.Add(new Vector2(point.x / (image.Width * 1f), point.y / (image.Height * 1f)));
-
-                /*     int left = facePosition.xc - (int)(facePosition.w * 0.6f);
-                     int top = facePosition.yc - (int)(facePosition.w * 0.5f);
-                     var lRelative = 
-
-                     faceRectangle = new Rectangle(left, top, (int)(facePosition.w * 1.2), (int)(facePosition.w * 1.2));
-                     FaceRectRelative = 
-                     */
-
-
-                //      var leftTop = new Vector2(LeftEyeCenter.X, Math.Max(LeftEyeCenter.Y, RightEyeCenter.Y));
-                //     var rightBottom = new Vector2(RightEyeCenter.X, LeftMouth.Y);
-                // FaceRectRelative = new RectangleF(leftTop.X, leftTop.Y, rightBottom.X - leftTop.X, rightBottom.Y - leftTop.Y);
-
-                #endregion
-
-                return true;
+                return Recognize(ref path, false);
             }
+
+            #endregion
+
+            #region Переводим в относительные координаты
+
+            LeftMouth = new Vector2(LeftMouth.X / (image.Width * 1f), LeftMouth.Y / (image.Height * 1f));
+            RightMouth = new Vector2(RightMouth.X / (image.Width * 1f), RightMouth.Y / (image.Height * 1f));
+
+            LeftEyeCenter = new Vector2(LeftEyeCenter.X / (image.Width * 1f), LeftEyeCenter.Y / (image.Height * 1f));
+            RightEyeCenter = new Vector2(RightEyeCenter.X / (image.Width * 1f), RightEyeCenter.Y / (image.Height * 1f));
+
+            LeftNose = new Vector2(LeftNose.X / (image.Width * 1f), LeftNose.Y / (image.Height * 1f));
+            RightNose = new Vector2(RightNose.X / (image.Width * 1f), RightNose.Y / (image.Height * 1f));
+
+            TopFace = new Vector2(TopFace.X / (image.Width * 1f), TopFace.Y / (image.Height * 1f));
+            MiddleFace1 = new Vector2(MiddleFace1.X / (image.Width * 1f), MiddleFace1.Y / (image.Height * 1f));
+            MiddleFace2 = new Vector2(MiddleFace2.X / (image.Width * 1f), MiddleFace2.Y / (image.Height * 1f));
+            BottomFace = new Vector2(BottomFace.X / (image.Width * 1f), BottomFace.Y / (image.Height * 1f));
+
+            RightMiddleFace1 = new Vector2(RightMiddleFace1.X / (image.Width * 1f), RightMiddleFace1.Y / (image.Height * 1f));
+            RightMiddleFace2 = new Vector2(RightMiddleFace2.X / (image.Width * 1f), RightMiddleFace2.Y / (image.Height * 1f));
+
+            FacialFeatures = new List<Vector2>();
+            foreach (var point in pointFeature)
+                FacialFeatures.Add(new Vector2(point.x / (image.Width * 1f), point.y / (image.Height * 1f)));
+
+            /*     int left = facePosition.xc - (int)(facePosition.w * 0.6f);
+                 int top = facePosition.yc - (int)(facePosition.w * 0.5f);
+                 var lRelative = 
+
+                 faceRectangle = new Rectangle(left, top, (int)(facePosition.w * 1.2), (int)(facePosition.w * 1.2));
+                 FaceRectRelative = 
+                 */
+
+
+            //      var leftTop = new Vector2(LeftEyeCenter.X, Math.Max(LeftEyeCenter.Y, RightEyeCenter.Y));
+            //     var rightBottom = new Vector2(RightEyeCenter.X, LeftMouth.Y);
+            // FaceRectRelative = new RectangleF(leftTop.X, leftTop.Y, rightBottom.X - leftTop.X, rightBottom.Y - leftTop.Y);
+
+            #endregion
+
+            return true;
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using OpenTK;
 using RH.Core.Helpers;
@@ -324,9 +325,12 @@ namespace RH.Core
                     var partsLibraryPath = Path.Combine(ProjectPath, "Parts Library");
                     FolderEx.CreateDirectory(partsLibraryPath);
 
-                    bw.Write(ProgramCore.MainForm.ctrlRenderControl.PartsLibraryMeshes.Count); // save list of meshes to part's library
+                    bw.Write(ProgramCore.MainForm.ctrlRenderControl.PartsLibraryMeshes.Count(x => x.Value.Count > 0)); // save list of meshes to part's library
                     foreach (var part in ProgramCore.MainForm.ctrlRenderControl.PartsLibraryMeshes)
                     {
+                        if (part.Value.Count == 0)
+                            continue;
+
                         bw.Write(part.Key);
                         bw.Write(part.Value[0].meshType == MeshType.Accessory);
                         bw.Write(part.Value[0].IsVisible);
