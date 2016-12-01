@@ -4077,7 +4077,6 @@ namespace RH.Core.Render
 
             var leftRect = new Rectangle((int)(faceCenter - width), 0, (int)width, originalImg.Height);
             var rightRect = new Rectangle((int)faceCenter, 0, (int)width, originalImg.Height);
-
             var leftCroppedImage = ImageEx.Crop(originalImg, leftRect);            // получаем левый и правый кусочки изображений
             var rightCroppedImage = ImageEx.Crop(originalImg, rightRect);
 

@@ -197,6 +197,18 @@ namespace RH.Core
 
             #endregion
 
+            var path = UserConfig.AppDataDir;
+            path = Path.Combine(path, "TempProject");
+            if (Directory.Exists(path))
+                try
+                {
+                    Directory.Delete(path,true);
+                }
+                catch
+                {
+
+                }
+
             if (!string.IsNullOrEmpty(fn))
             {
                 if (fn.StartsWith("fs"))
@@ -450,6 +462,7 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.PrintAheadPayPal:
                 case ProgramCore.ProgramMode.HeadShopOneClick:
                     {
+                        ProgramCore.MainForm.HeadFront = true;
                         ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
                         ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
                     }
