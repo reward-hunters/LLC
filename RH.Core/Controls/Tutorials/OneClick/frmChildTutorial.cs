@@ -14,12 +14,13 @@ namespace RH.Core.Controls.Tutorials.OneClick
             InitializeComponent();
             linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Profile", "http://youtu.be/Olc7oeQUmWk"];
             Text = ProgramCore.ProgramCaption;
+            linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
             var directoryPath = Path.Combine(Application.StartupPath, "Tutorials");
             var filePath = Path.Combine(directoryPath, "TutChild_OneClick.jpg");
 
             if (File.Exists(filePath))
-                BackgroundImage = Image.FromFile(filePath);
+                pictureBox1.ImageLocation = filePath;
         }
 
         private void frmProfileTutorial_FormClosing(object sender, FormClosingEventArgs e)

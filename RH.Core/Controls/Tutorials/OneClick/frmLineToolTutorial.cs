@@ -4,21 +4,23 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using RH.Core.IO;
+using RH.Core.Helpers;
 
 namespace RH.Core.Controls.Tutorials.OneClick
 {
-    public partial class frmLineToolTutorial : Form
+    public partial class frmLineToolTutorial : FormEx
     {
         public frmLineToolTutorial()
         {
             InitializeComponent();
             linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "LineTool", "https://www.youtube.com/watch?v=c7YbRsm8m9I"];
             Text = ProgramCore.ProgramCaption;
+            linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
             var directoryPath = Path.Combine(Application.StartupPath, "Tutorials");
             var filePath = Path.Combine(directoryPath, "TutLineTool.jpg");
             if (File.Exists(filePath))
-                BackgroundImage = Image.FromFile(filePath);
+                pictureBox1.ImageLocation = filePath;
         }
 
         private void frmStartTutorial_FormClosing(object sender, FormClosingEventArgs e)

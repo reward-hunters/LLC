@@ -15,11 +15,12 @@ namespace RH.Core.Controls.Tutorials.OneClick
             InitializeComponent();
             linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Mirror", "http://youtu.be/JC5z64YP1xA"];
             Text = ProgramCore.ProgramCaption;
+            linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
             var directoryPath = Path.Combine(Application.StartupPath, "Tutorials");
             var filePath = Path.Combine(directoryPath, "TutMirror.jpg");
             if (File.Exists(filePath))
-                BackgroundImage = Image.FromFile(filePath);
+                pictureBox1.ImageLocation = filePath;
         }
 
         private void frmMirrorTutorial_FormClosing(object sender, FormClosingEventArgs e)

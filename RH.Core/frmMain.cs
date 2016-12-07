@@ -202,7 +202,7 @@ namespace RH.Core
             if (Directory.Exists(path))
                 try
                 {
-                    Directory.Delete(path,true);
+                    Directory.Delete(path, true);
                 }
                 catch
                 {

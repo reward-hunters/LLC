@@ -31,9 +31,11 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
         /// </summary>
         private void InitializeComponent()
         {
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(frmStageTutorial));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmStageTutorial));
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.cbShow = new System.Windows.Forms.CheckBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // linkLabel1
@@ -61,14 +63,23 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
             this.cbShow.UseVisualStyleBackColor = false;
             this.cbShow.CheckedChanged += new System.EventHandler(this.cbShow_CheckedChanged);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(722, 572);
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
             // frmStageTutorial
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage =  global::RH.Core.Properties.Resources.TutStage;
             this.ClientSize = new System.Drawing.Size(722, 572);
             this.Controls.Add(this.cbShow);
             this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -77,6 +88,7 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HeadShop";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmStageTutorial_FormClosing);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -86,5 +98,6 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
 
         private LinkLabel linkLabel1;
         private CheckBox cbShow;
+        private PictureBox pictureBox1;
     }
 }

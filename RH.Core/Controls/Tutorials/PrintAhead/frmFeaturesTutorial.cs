@@ -15,11 +15,12 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
             InitializeComponent();
             linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Features", "https://youtu.be/_hADE739X9w"];
             Text = ProgramCore.ProgramCaption;
+            linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
             var directoryPath = Path.Combine(Application.StartupPath, "Tutorials");
             var filePath = Path.Combine(directoryPath, "TutFeatures.jpg");
             if (File.Exists(filePath))
-                BackgroundImage = Image.FromFile(filePath);
+                pictureBox1.ImageLocation = filePath;
         }
 
         private void frmStartTutorial_FormClosing(object sender, FormClosingEventArgs e)
