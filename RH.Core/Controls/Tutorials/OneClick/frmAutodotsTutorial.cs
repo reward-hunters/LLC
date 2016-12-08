@@ -22,14 +22,14 @@ namespace RH.Core.Controls.Tutorials.OneClick
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShopOneClick:
-                    filePath = Path.Combine(directoryPath, "TutAutodots_OneClick.jpg");
+                    filePath = FolderEx.GetTutorialImagePath("TutAutodots_OneClick");
                     break;
                 default:
-                    filePath = Path.Combine(directoryPath, "TutAutodots.jpg");
+                    filePath = FolderEx.GetTutorialImagePath("TutAutodots");
                     break;
             }
 
-            if (File.Exists(filePath))
+            if (!string.IsNullOrEmpty(filePath))
                 pictureBox1.ImageLocation = filePath;
         }
 

@@ -17,9 +17,8 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
             Text = ProgramCore.ProgramCaption;
             linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
-            var directoryPath = Path.Combine(Application.StartupPath, "Tutorials");
-            var filePath = Path.Combine(directoryPath, "CutTutorial.jpg");
-            if (File.Exists(filePath))
+            var filePath = FolderEx.GetTutorialImagePath("CutTutorial");
+            if (!string.IsNullOrEmpty(filePath))
                 pictureBox1.ImageLocation = filePath;
         }
 

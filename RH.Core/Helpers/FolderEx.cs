@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using RH.Core.IO;
+using System.Windows.Forms;
 
 namespace RH.Core.Helpers
 {
@@ -84,6 +85,21 @@ namespace RH.Core.Helpers
             }
             catch
             { }
+        }
+
+        public static string GetTutorialImagePath(string tutorialName)
+        {
+            var directoryPath = Path.Combine(Application.StartupPath, "Tutorials");
+            var filePath = Path.Combine(directoryPath, tutorialName + ".gif");
+            if (File.Exists(filePath))
+                return filePath;
+            filePath = Path.Combine(directoryPath, tutorialName + ".jpg");
+            if (File.Exists(filePath))
+                return filePath;
+            filePath = Path.Combine(directoryPath, tutorialName + ".png");
+            if (File.Exists(filePath))
+                return filePath;
+            return string.Empty;
         }
     }
 }
