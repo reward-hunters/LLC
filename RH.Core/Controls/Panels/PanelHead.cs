@@ -573,16 +573,16 @@ namespace RH.Core.Controls.Panels
         public readonly frmLineToolTutorial frmTutLineTool = new frmLineToolTutorial();
         public void btnPolyLine_Click(object sender, EventArgs e)
         {
-            if (UserConfig.ByName("Options")["Tutorials", "LineTool", "1"] == "1")
-                frmTutLineTool.ShowDialog(this);
-
             if (btnPolyLine.Tag.ToString() == "2")
             {
-                if (ProgramCore.MainForm.HeadProfile && ProgramCore.MainForm.ctrlTemplateImage.ControlPointsMode != ProfileControlPointsMode.None)
+                                if (ProgramCore.MainForm.HeadProfile && ProgramCore.MainForm.ctrlTemplateImage.ControlPointsMode != ProfileControlPointsMode.None)
                 {
                     MessageBox.Show("Set Control Points !", "HeadShop", MessageBoxButtons.OK);
                     return; // значит загрузили картинку, но не назначили ей опорные точки. нельзя ниче делатЬ!
                 }
+
+                if (UserConfig.ByName("Options")["Tutorials", "LineTool", "1"] == "1")
+                    frmTutLineTool.ShowDialog(this);
 
                 ++ProgramCore.MainForm.ctrlRenderControl.historyController.currentGroup;
                 btnPolyLine.Tag = "1";
@@ -876,8 +876,8 @@ namespace RH.Core.Controls.Panels
                 ProgramCore.MainForm.EnableRotating();
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
 
-                if (UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")
-                    ProgramCore.MainForm.frmTutAutodots.ShowDialog(this);
+          //      if (UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")
+        //            ProgramCore.MainForm.frmTutAutodots.ShowDialog(this);
             }
 
             ReInitializeControl(frontTab);

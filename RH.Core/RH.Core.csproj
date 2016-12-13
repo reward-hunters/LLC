@@ -276,6 +276,12 @@
     <Compile Include="Controls\Tutorials\frmRecognizeTutorial.designer.cs">
       <DependentUpon>frmRecognizeTutorial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Tutorials\frmRetouchTutorial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Tutorials\frmRetouchTutorial.designer.cs">
+      <DependentUpon>frmRetouchTutorial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Tutorials\frmStartTutorial.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -527,6 +533,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Tutorials\frmRecognizeTutorial.resx">
       <DependentUpon>frmRecognizeTutorial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Tutorials\frmRetouchTutorial.resx">
+      <DependentUpon>frmRetouchTutorial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Tutorials\frmStartTutorial.resx">
       <DependentUpon>frmStartTutorial.cs</DependentUpon>

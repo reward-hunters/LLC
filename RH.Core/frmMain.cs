@@ -58,6 +58,7 @@ namespace RH.Core
         public readonly frmRecognizeTutorial frmTutRecognize = new frmRecognizeTutorial();
         public readonly frmChildTutorial frmTutChild = new frmChildTutorial();
 
+        public readonly frmRetouchTutorial frmTutRetouch = new frmRetouchTutorial();
         private readonly frmAccessoryTutorial frmTutAccessory = new frmAccessoryTutorial();
         private readonly frmCutTutorial frmTutCut = new frmCutTutorial();
         private readonly frmMaterialTutorial frmTutMaterial = new frmMaterialTutorial();
@@ -149,11 +150,11 @@ namespace RH.Core
 
                     exportToolStripMenuItem.Visible = exportToolStripMenuItem1.Visible = exportToolStripMenuItem2.Visible = exportToolStripMenuItem3.Visible = false;       // запрет экспорта 
                     saveToolStripMenuItem5.Visible = saveToolStripMenuItem6.Visible = saveToolStripMenuItem8.Visible = toolStripMenuItem1.Visible = false;
+                    showManualToolStripMenuItem.Visible = false;
 
                     exportToolStripMenuItem.Visible = exportToolStripMenuItem1.Visible = exportToolStripMenuItem2.Visible = exportToolStripMenuItem3.Visible = false;       // запрет экспорта 
                     saveToolStripMenuItem5.Visible = saveToolStripMenuItem6.Visible = saveToolStripMenuItem8.Visible = toolStripMenuItem1.Visible = false;
-                    panelMenuAccessories.Visible = accessoryTabToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem1.Visible = materialtabToolStripMenuItem.Visible = false;
-
+                    panelMenuAccessories.Visible = accessoryTabToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem1.Visible = materialHelpToolStripMenuItem.Visible = materialtabToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop:
                     Text = "HeadShop 10";
@@ -172,7 +173,7 @@ namespace RH.Core
                     startHelpToolStripMenuItem.Visible = freehandHelpToolStripMenuItem.Visible = mirrorHelpToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem.Visible =
                     colorHelpToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem1.Visible = styleHelpToolStripMenuItem.Visible = materialHelpToolStripMenuItem.Visible = stageHelpToolStripMenuItem.Visible =
                     videoTutorialPart2ToolStripMenuItem.Visible = showManualToolStripMenuItem.Visible = false;          // все хелпные кнопки
-                    toolStripMenuItem9.Visible = toolStripMenuItem10.Visible = toolStripMenuItem5.Visible = false;
+                    toolStripMenuItem5.Visible = false;
                     childHelpToolStripMenuItem.Visible = true;
                     break;
             }
@@ -778,7 +779,7 @@ namespace RH.Core
                 panelMenuControl.Controls.Clear();
                 panelMenuControl.Controls.Add(panelCut);
 
-                panelMenuStyle.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = "2";
+                panelMenuStyle.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = panelMenuFeatures.Tag = "2";
                 panelMenuStyle.Image = Resources.btnMenuStyleNormal;
                 panelMenuShape.Image = Resources.btnMenuShapeNormal;
                 panelMenuAccessories.Image = Resources.btnMenuAccessoriesNormal;
@@ -791,6 +792,7 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -809,14 +811,8 @@ namespace RH.Core
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
                 ResetModeTools();
 
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.PrintAhead:
-                        if (UserConfig.ByName("Options")["Tutorials", "Cut", "1"] == "1")
-                            frmTutCut.ShowDialog(this);
-                        break;
-                }
+                if (UserConfig.ByName("Options")["Tutorials", "Cut", "1"] == "1")
+                    frmTutCut.ShowDialog(this);
             }
         }
         public void panelMenuShape_Click(object sender, EventArgs e)
@@ -832,7 +828,7 @@ namespace RH.Core
                 panelMenuControl.Controls.Clear();
                 panelMenuControl.Controls.Add(panelShape);
 
-                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = "2";
+                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = panelMenuFeatures.Tag = "2";
                 panelMenuStyle.Image = Resources.btnMenuStyleNormal;
                 panelMenuCut.Image = Resources.btnMenuCutNormal;
                 panelMenuAccessories.Image = Resources.btnMenuAccessoriesNormal;
@@ -844,6 +840,7 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -862,14 +859,8 @@ namespace RH.Core
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
                 ResetModeTools();
 
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.PrintAhead:
-                        if (UserConfig.ByName("Options")["Tutorials", "Shape", "1"] == "1")
-                            frmTutShape.ShowDialog(this);
-                        break;
-                }
+                if (UserConfig.ByName("Options")["Tutorials", "Shape", "1"] == "1")
+                    frmTutShape.ShowDialog(this);
             }
         }
         public void panelMenuAccessories_Click(object sender, EventArgs e)
@@ -885,7 +876,7 @@ namespace RH.Core
                 panelMenuControl.Controls.Clear();
                 panelMenuControl.Controls.Add(panelAccessories);
 
-                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = "2";
+                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = panelMenuFeatures.Tag = "2";
                 panelMenuStyle.Image = Resources.btnMenuStyleNormal;
                 panelMenuCut.Image = Resources.btnMenuCutNormal;
                 panelMenuShape.Image = Resources.btnMenuShapeNormal;
@@ -897,6 +888,7 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -914,14 +906,8 @@ namespace RH.Core
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
 
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.PrintAhead:
-                        if (UserConfig.ByName("Options")["Tutorials", "Accessory", "1"] == "1")
-                            frmTutAccessory.ShowDialog(this);
-                        break;
-                }
+                if (UserConfig.ByName("Options")["Tutorials", "Accessory", "1"] == "1")
+                    frmTutAccessory.ShowDialog(this);
             }
         }
         public void panelMenuMaterials_Click(object sender, EventArgs e)
@@ -937,7 +923,7 @@ namespace RH.Core
                 panelMenuControl.Controls.Clear();
                 panelMenuControl.Controls.Add(panelMaterials);
 
-                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuStage.Tag = "2";
+                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuStage.Tag = panelMenuFeatures.Tag = "2";
                 panelMenuStyle.Image = Resources.btnMenuStyleNormal;
                 panelMenuCut.Image = Resources.btnMenuCutNormal;
                 panelMenuShape.Image = Resources.btnMenuShapeNormal;
@@ -949,6 +935,7 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -966,14 +953,8 @@ namespace RH.Core
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
 
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.PrintAhead:
-                        if (UserConfig.ByName("Options")["Tutorials", "Material", "1"] == "1")
-                            frmTutMaterial.ShowDialog(this);
-                        break;
-                }
+                if (UserConfig.ByName("Options")["Tutorials", "Material", "1"] == "1")
+                    frmTutMaterial.ShowDialog(this);
             }
         }
         public void panelMenuStage_Click(object sender, EventArgs e)
@@ -992,13 +973,14 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStagePressed;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintPressed;
                         break;
                 }
                 panelMenuControl.Controls.Clear();
                 panelMenuControl.Controls.Add(panelStages);
 
-                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = "2";
+                panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuFeatures.Tag = "2";
                 panelMenuStyle.Image = Resources.btnMenuStyleNormal;
                 panelMenuCut.Image = Resources.btnMenuCutNormal;
                 panelMenuShape.Image = Resources.btnMenuShapeNormal;
@@ -1028,14 +1010,6 @@ namespace RH.Core
 
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
-                        if (UserConfig.ByName("Options")["Tutorials", "Stage", "1"] == "1")
-                            frmTutStage.ShowDialog(this);
-                        break;
-                    case ProgramCore.ProgramMode.PrintAhead:
-                        if (UserConfig.ByName("Options")["Tutorials", "Stage", "1"] == "1")
-                            frmTutStage.ShowDialog(this);
-                        break;
                     case ProgramCore.ProgramMode.PrintAheadPayPal:
                         ctrlRenderControl.AddBase();
                         var backPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Stages", "Backgrounds", "fire1.jpg");
@@ -1043,6 +1017,8 @@ namespace RH.Core
                             ProgramCore.MainForm.ctrlRenderControl.BackgroundTexture = backPath;
                         break;
                 }
+                if (UserConfig.ByName("Options")["Tutorials", "Stage", "1"] == "1")
+                    frmTutStage.ShowDialog(this);
             }
         }
         public void panelMenuStyle_Click(object sender, EventArgs e)
@@ -1070,7 +1046,7 @@ namespace RH.Core
                 panelMenuControl.Controls.Clear();
                 panelMenuControl.Controls.Add(panelStyles);
 
-                panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = "2";
+                panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuStage.Tag = panelMenuFeatures.Tag = "2";
                 panelMenuCut.Image = Resources.btnMenuCutNormal;
                 panelMenuShape.Image = Resources.btnMenuShapeNormal;
                 panelMenuAccessories.Image = Resources.btnMenuAccessoriesNormal;
@@ -1082,6 +1058,7 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -1100,17 +1077,11 @@ namespace RH.Core
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
                 ResetModeTools();
 
-                if (frmStyles != null && !frmStyles.Visible)
-                    styleLibraryOnOpen_Click(null, EventArgs.Empty);
+   //             if (frmStyles != null && !frmStyles.Visible)
+   //                 styleLibraryOnOpen_Click(null, EventArgs.Empty);
 
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.PrintAhead:
-                        if (UserConfig.ByName("Options")["Tutorials", "Style", "1"] == "1")
-                            frmTutStyle.ShowDialog(this);
-                        break;
-                }
+                if (UserConfig.ByName("Options")["Tutorials", "Style", "1"] == "1")
+                    frmTutStyle.ShowDialog(this);
             }
         }
 
@@ -1127,7 +1098,7 @@ namespace RH.Core
                 panelMenuControl.Controls.Clear();
                 panelMenuControl.Controls.Add(panelFront);
 
-                panelMenuStage.Tag = panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = "2";
+                panelMenuStage.Tag = panelMenuStyle.Tag = panelMenuCut.Tag = panelMenuShape.Tag = panelMenuAccessories.Tag = panelMenuMaterials.Tag = panelMenuFeatures.Tag = "2";
                 panelMenuStyle.Image = Resources.btnMenuStyleNormal;
                 panelMenuCut.Image = Resources.btnMenuCutNormal;
                 panelMenuShape.Image = Resources.btnMenuShapeNormal;
@@ -1140,6 +1111,7 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -1160,8 +1132,8 @@ namespace RH.Core
                 EnableRotating();
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
 
-                if (UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")
-                    frmTutAutodots.ShowDialog(this);
+                //         if (UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")            // хз зачем тут. есть же кнопка автодотс. устаревшее похоже
+                //             frmTutAutodots.ShowDialog(this);
             }
         }
         public void panelMenuFeatures_Click(object sender, EventArgs e)
@@ -1199,6 +1171,7 @@ namespace RH.Core
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
+                    case ProgramCore.ProgramMode.PrintAheadPayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -1217,14 +1190,8 @@ namespace RH.Core
                 EnableRotating();
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
 
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.PrintAhead:
-                        if (UserConfig.ByName("Options")["Tutorials", "Features", "1"] == "1")
-                            frmTutFeatures.ShowDialog(this);
-                        break;
-                }
+                if (UserConfig.ByName("Options")["Tutorials", "Features", "1"] == "1")
+                    frmTutFeatures.ShowDialog(this);
             }
         }
 
@@ -2489,6 +2456,11 @@ namespace RH.Core
                     frmTutChild.ShowDialog(this);
                     break;
             }
+        }
+
+        private void retouchHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmTutRetouch.ShowDialog(this);
         }
     }
 }

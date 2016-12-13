@@ -32,11 +32,9 @@ namespace RH.Core
         /// </summary>
         private void InitializeComponent()
         {
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.panelRender = new System.Windows.Forms.Panel();
-            this.ctrlRenderControl = new ctrlRenderControl();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.ctrlTemplateImage = new ctrlTemplateImage();
             this.panelMenuItems = new System.Windows.Forms.Panel();
             this.panelMenuControl = new System.Windows.Forms.Panel();
             this.panelNavigation = new System.Windows.Forms.Panel();
@@ -126,15 +124,14 @@ namespace RH.Core
             this.ortoBackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
             this.autodotsHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.profileHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.freehandHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mirrorHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
             this.accessoriesHelpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.colorHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accessoriesHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.childHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.styleHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stageHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,7 +141,9 @@ namespace RH.Core
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.showManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutHeadShopProToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.childHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctrlTemplateImage = new RH.Core.Render.ctrlTemplateImage();
+            this.ctrlRenderControl = new RH.Core.Render.ctrlRenderControl();
+            this.retouchHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelRender.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -178,20 +177,6 @@ namespace RH.Core
             this.panelRender.Size = new System.Drawing.Size(668, 563);
             this.panelRender.TabIndex = 4;
             // 
-            // ctrlRenderControl
-            // 
-            this.ctrlRenderControl.BackgroundTexture = null;
-            this.ctrlRenderControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlRenderControl.InStageMode = false;
-            this.ctrlRenderControl.IsFullPointsInfo = true;
-            this.ctrlRenderControl.Location = new System.Drawing.Point(0, 0);
-            this.ctrlRenderControl.Mode = Mode.None;
-            this.ctrlRenderControl.Name = "ctrlRenderControl";
-            this.ctrlRenderControl.PlayAnimation = true;
-            this.ctrlRenderControl.Size = new System.Drawing.Size(668, 563);
-            this.ctrlRenderControl.TabIndex = 0;
-            this.ctrlRenderControl.ToolMirrored = false;
-            // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -211,17 +196,9 @@ namespace RH.Core
             this.splitContainer.SplitterWidth = 1;
             this.splitContainer.TabIndex = 5;
             // 
-            // ctrlTemplateImage
-            // 
-            this.ctrlTemplateImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlTemplateImage.Location = new System.Drawing.Point(0, 0);
-            this.ctrlTemplateImage.Name = "ctrlTemplateImage";
-            this.ctrlTemplateImage.Size = new System.Drawing.Size(668, 563);
-            this.ctrlTemplateImage.TabIndex = 0;
-            // 
             // panelMenuItems
             // 
-            this.panelMenuItems.BackgroundImage =  global::RH.Core.Properties.Resources.menuBackground;
+            this.panelMenuItems.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
             this.panelMenuItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelMenuItems.Controls.Add(this.panelMenuControl);
             this.panelMenuItems.Controls.Add(this.panelNavigation);
@@ -234,7 +211,7 @@ namespace RH.Core
             // panelMenuControl
             // 
             this.panelMenuControl.BackColor = System.Drawing.SystemColors.Control;
-            this.panelMenuControl.BackgroundImage =  global::RH.Core.Properties.Resources.menuBackground;
+            this.panelMenuControl.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
             this.panelMenuControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelMenuControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMenuControl.Location = new System.Drawing.Point(0, 0);
@@ -245,7 +222,7 @@ namespace RH.Core
             // panelNavigation
             // 
             this.panelNavigation.BackColor = System.Drawing.SystemColors.Control;
-            this.panelNavigation.BackgroundImage =  global::RH.Core.Properties.Resources.menuBackground;
+            this.panelNavigation.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
             this.panelNavigation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelNavigation.Controls.Add(this.btnUnscale);
             this.panelNavigation.Controls.Add(this.checkZoom);
@@ -260,9 +237,9 @@ namespace RH.Core
             // btnUnscale
             // 
             this.btnUnscale.BackColor = System.Drawing.SystemColors.Control;
-            this.btnUnscale.BackgroundImage =  global::RH.Core.Properties.Resources.menuBackground;
+            this.btnUnscale.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
             this.btnUnscale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnUnscale.Image =  global::RH.Core.Properties.Resources.btnUnscaleNormal;
+            this.btnUnscale.Image = global::RH.Core.Properties.Resources.btnUnscaleNormal;
             this.btnUnscale.Location = new System.Drawing.Point(132, 6);
             this.btnUnscale.Name = "btnUnscale";
             this.btnUnscale.Size = new System.Drawing.Size(36, 36);
@@ -276,7 +253,7 @@ namespace RH.Core
             this.checkZoom.BackColor = System.Drawing.SystemColors.Control;
             this.checkZoom.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkZoom.BackgroundImage")));
             this.checkZoom.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkZoom.Image =  global::RH.Core.Properties.Resources.btnZoomNormal;
+            this.checkZoom.Image = global::RH.Core.Properties.Resources.btnZoomNormal;
             this.checkZoom.Location = new System.Drawing.Point(90, 6);
             this.checkZoom.Name = "checkZoom";
             this.checkZoom.Size = new System.Drawing.Size(36, 36);
@@ -290,7 +267,7 @@ namespace RH.Core
             this.checkArrow.BackColor = System.Drawing.SystemColors.Control;
             this.checkArrow.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkArrow.BackgroundImage")));
             this.checkArrow.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkArrow.Image =  global::RH.Core.Properties.Resources.btnArrowNormal;
+            this.checkArrow.Image = global::RH.Core.Properties.Resources.btnArrowNormal;
             this.checkArrow.Location = new System.Drawing.Point(48, 6);
             this.checkArrow.Name = "checkArrow";
             this.checkArrow.Size = new System.Drawing.Size(36, 36);
@@ -304,7 +281,7 @@ namespace RH.Core
             this.checkHand.BackColor = System.Drawing.SystemColors.Control;
             this.checkHand.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkHand.BackgroundImage")));
             this.checkHand.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkHand.Image =  global::RH.Core.Properties.Resources.btnHandNormal;
+            this.checkHand.Image = global::RH.Core.Properties.Resources.btnHandNormal;
             this.checkHand.Location = new System.Drawing.Point(6, 6);
             this.checkHand.Name = "checkHand";
             this.checkHand.Size = new System.Drawing.Size(36, 36);
@@ -315,7 +292,7 @@ namespace RH.Core
             // 
             // panelMenu
             // 
-            this.panelMenu.BackgroundImage =  global::RH.Core.Properties.Resources.bgHighMenu;
+            this.panelMenu.BackgroundImage = global::RH.Core.Properties.Resources.bgHighMenu;
             this.panelMenu.Controls.Add(this.panelMenuStage);
             this.panelMenu.Controls.Add(this.panelMenuMaterials);
             this.panelMenu.Controls.Add(this.panelMenuAccessories);
@@ -333,7 +310,7 @@ namespace RH.Core
             // panelMenuStage
             // 
             this.panelMenuStage.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelMenuStage.Image =  global::RH.Core.Properties.Resources.btnMenuStageNormal;
+            this.panelMenuStage.Image = global::RH.Core.Properties.Resources.btnMenuStageNormal;
             this.panelMenuStage.Location = new System.Drawing.Point(736, 0);
             this.panelMenuStage.Name = "panelMenuStage";
             this.panelMenuStage.Size = new System.Drawing.Size(143, 42);
@@ -346,7 +323,7 @@ namespace RH.Core
             // panelMenuMaterials
             // 
             this.panelMenuMaterials.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelMenuMaterials.Image =  global::RH.Core.Properties.Resources.btnMenuColorNormal;
+            this.panelMenuMaterials.Image = global::RH.Core.Properties.Resources.btnMenuColorNormal;
             this.panelMenuMaterials.Location = new System.Drawing.Point(593, 0);
             this.panelMenuMaterials.Name = "panelMenuMaterials";
             this.panelMenuMaterials.Size = new System.Drawing.Size(143, 42);
@@ -359,7 +336,7 @@ namespace RH.Core
             // panelMenuAccessories
             // 
             this.panelMenuAccessories.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelMenuAccessories.Image =  global::RH.Core.Properties.Resources.btnMenuAccessoriesNormal;
+            this.panelMenuAccessories.Image = global::RH.Core.Properties.Resources.btnMenuAccessoriesNormal;
             this.panelMenuAccessories.Location = new System.Drawing.Point(450, 0);
             this.panelMenuAccessories.Name = "panelMenuAccessories";
             this.panelMenuAccessories.Size = new System.Drawing.Size(143, 42);
@@ -373,7 +350,7 @@ namespace RH.Core
             // 
             this.panelMenuShape.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelMenuShape.Enabled = false;
-            this.panelMenuShape.Image =  global::RH.Core.Properties.Resources.btnMenuShapeNormal;
+            this.panelMenuShape.Image = global::RH.Core.Properties.Resources.btnMenuShapeNormal;
             this.panelMenuShape.Location = new System.Drawing.Point(450, 0);
             this.panelMenuShape.Name = "panelMenuShape";
             this.panelMenuShape.Size = new System.Drawing.Size(0, 42);
@@ -387,7 +364,7 @@ namespace RH.Core
             // 
             this.panelMenuCut.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelMenuCut.Enabled = false;
-            this.panelMenuCut.Image =  global::RH.Core.Properties.Resources.btnMenuCutNormal;
+            this.panelMenuCut.Image = global::RH.Core.Properties.Resources.btnMenuCutNormal;
             this.panelMenuCut.Location = new System.Drawing.Point(450, 0);
             this.panelMenuCut.Name = "panelMenuCut";
             this.panelMenuCut.Size = new System.Drawing.Size(0, 42);
@@ -400,7 +377,7 @@ namespace RH.Core
             // panelMenuStyle
             // 
             this.panelMenuStyle.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelMenuStyle.Image =  global::RH.Core.Properties.Resources.btnMenuStylePressed;
+            this.panelMenuStyle.Image = global::RH.Core.Properties.Resources.btnMenuStylePressed;
             this.panelMenuStyle.Location = new System.Drawing.Point(307, 0);
             this.panelMenuStyle.Name = "panelMenuStyle";
             this.panelMenuStyle.Size = new System.Drawing.Size(143, 42);
@@ -412,7 +389,7 @@ namespace RH.Core
             // 
             // panel1
             // 
-            this.panel1.BackgroundImage =  global::RH.Core.Properties.Resources.bgHighMenu;
+            this.panel1.BackgroundImage = global::RH.Core.Properties.Resources.bgHighMenu;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(288, 0);
             this.panel1.Name = "panel1";
@@ -421,7 +398,7 @@ namespace RH.Core
             // 
             // panel3
             // 
-            this.panel3.BackgroundImage =  global::RH.Core.Properties.Resources.bgHighMenuHead;
+            this.panel3.BackgroundImage = global::RH.Core.Properties.Resources.bgHighMenuHead;
             this.panel3.Controls.Add(this.panelMenuFeatures);
             this.panel3.Controls.Add(this.panelMenuFront);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
@@ -433,7 +410,7 @@ namespace RH.Core
             // panelMenuFeatures
             // 
             this.panelMenuFeatures.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelMenuFeatures.Image =  global::RH.Core.Properties.Resources.btnMenuFeaturesNormal;
+            this.panelMenuFeatures.Image = global::RH.Core.Properties.Resources.btnMenuFeaturesNormal;
             this.panelMenuFeatures.Location = new System.Drawing.Point(143, 0);
             this.panelMenuFeatures.Name = "panelMenuFeatures";
             this.panelMenuFeatures.Size = new System.Drawing.Size(143, 42);
@@ -446,7 +423,7 @@ namespace RH.Core
             // panelMenuFront
             // 
             this.panelMenuFront.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelMenuFront.Image =  global::RH.Core.Properties.Resources.btnMenuFrontNormal;
+            this.panelMenuFront.Image = global::RH.Core.Properties.Resources.btnMenuFrontNormal;
             this.panelMenuFront.Location = new System.Drawing.Point(0, 0);
             this.panelMenuFront.Name = "panelMenuFront";
             this.panelMenuFront.Size = new System.Drawing.Size(143, 42);
@@ -459,7 +436,7 @@ namespace RH.Core
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
-            this.menuStrip1.BackgroundImage =  global::RH.Core.Properties.Resources.BgGradient;
+            this.menuStrip1.BackgroundImage = global::RH.Core.Properties.Resources.BgGradient;
             this.menuStrip1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -1021,18 +998,17 @@ namespace RH.Core
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startHelpToolStripMenuItem,
-            this.toolStripMenuItem9,
             this.autodotsHelpToolStripMenuItem,
-            this.profileHelpToolStripMenuItem,
-            this.freehandHelpToolStripMenuItem,
             this.mirrorHelpToolStripMenuItem,
-            this.toolStripMenuItem10,
-            this.accessoriesHelpToolStripMenuItem1,
-            this.colorHelpToolStripMenuItem,
+            this.freehandHelpToolStripMenuItem,
+            this.profileHelpToolStripMenuItem,
             this.accessoriesHelpToolStripMenuItem,
-            this.childHelpToolStripMenuItem,
             this.styleHelpToolStripMenuItem,
+            this.colorHelpToolStripMenuItem,
+            this.accessoriesHelpToolStripMenuItem1,
+            this.childHelpToolStripMenuItem,
             this.materialHelpToolStripMenuItem,
+            this.retouchHelpToolStripMenuItem,
             this.stageHelpToolStripMenuItem,
             this.toolStripMenuItem5,
             this.videoTutorialPart1CutAndShapeToolStripMenuItem,
@@ -1050,11 +1026,6 @@ namespace RH.Core
             this.startHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.startHelpToolStripMenuItem.Text = "Setup help";
             this.startHelpToolStripMenuItem.Click += new System.EventHandler(this.startHelpToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem9
-            // 
-            this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            this.toolStripMenuItem9.Size = new System.Drawing.Size(216, 6);
             // 
             // autodotsHelpToolStripMenuItem
             // 
@@ -1084,11 +1055,6 @@ namespace RH.Core
             this.mirrorHelpToolStripMenuItem.Text = "LineTool Help";
             this.mirrorHelpToolStripMenuItem.Click += new System.EventHandler(this.mirrorHelpToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem10
-            // 
-            this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-            this.toolStripMenuItem10.Size = new System.Drawing.Size(216, 6);
-            // 
             // accessoriesHelpToolStripMenuItem1
             // 
             this.accessoriesHelpToolStripMenuItem1.Name = "accessoriesHelpToolStripMenuItem1";
@@ -1110,6 +1076,13 @@ namespace RH.Core
             this.accessoriesHelpToolStripMenuItem.Text = "Features Help";
             this.accessoriesHelpToolStripMenuItem.Click += new System.EventHandler(this.accessoriesHelpToolStripMenuItem_Click);
             // 
+            // childHelpToolStripMenuItem
+            // 
+            this.childHelpToolStripMenuItem.Name = "childHelpToolStripMenuItem";
+            this.childHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.childHelpToolStripMenuItem.Text = "Child Help";
+            this.childHelpToolStripMenuItem.Click += new System.EventHandler(this.childHelpToolStripMenuItem_Click);
+            // 
             // styleHelpToolStripMenuItem
             // 
             this.styleHelpToolStripMenuItem.Name = "styleHelpToolStripMenuItem";
@@ -1128,7 +1101,7 @@ namespace RH.Core
             // 
             this.stageHelpToolStripMenuItem.Name = "stageHelpToolStripMenuItem";
             this.stageHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.stageHelpToolStripMenuItem.Text = "3D-Printing Help";
+            this.stageHelpToolStripMenuItem.Text = "Print Help";
             this.stageHelpToolStripMenuItem.Click += new System.EventHandler(this.stageHelpToolStripMenuItem_Click);
             // 
             // toolStripMenuItem5
@@ -1169,12 +1142,34 @@ namespace RH.Core
             this.aboutHeadShopProToolStripMenuItem.Text = "About PrintAhead";
             this.aboutHeadShopProToolStripMenuItem.Click += new System.EventHandler(this.aboutHeadShopProToolStripMenuItem_Click);
             // 
-            // childHelpToolStripMenuItem
+            // ctrlTemplateImage
             // 
-            this.childHelpToolStripMenuItem.Name = "childHelpToolStripMenuItem";
-            this.childHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.childHelpToolStripMenuItem.Text = "Child Help";
-            this.childHelpToolStripMenuItem.Click += new System.EventHandler(this.childHelpToolStripMenuItem_Click);
+            this.ctrlTemplateImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlTemplateImage.Location = new System.Drawing.Point(0, 0);
+            this.ctrlTemplateImage.Name = "ctrlTemplateImage";
+            this.ctrlTemplateImage.Size = new System.Drawing.Size(668, 563);
+            this.ctrlTemplateImage.TabIndex = 0;
+            // 
+            // ctrlRenderControl
+            // 
+            this.ctrlRenderControl.BackgroundTexture = null;
+            this.ctrlRenderControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlRenderControl.InStageMode = false;
+            this.ctrlRenderControl.IsFullPointsInfo = true;
+            this.ctrlRenderControl.Location = new System.Drawing.Point(0, 0);
+            this.ctrlRenderControl.Mode = RH.Core.Render.Mode.None;
+            this.ctrlRenderControl.Name = "ctrlRenderControl";
+            this.ctrlRenderControl.PlayAnimation = true;
+            this.ctrlRenderControl.Size = new System.Drawing.Size(668, 563);
+            this.ctrlRenderControl.TabIndex = 0;
+            this.ctrlRenderControl.ToolMirrored = false;
+            // 
+            // retouchHelpToolStripMenuItem
+            // 
+            this.retouchHelpToolStripMenuItem.Name = "retouchHelpToolStripMenuItem";
+            this.retouchHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.retouchHelpToolStripMenuItem.Text = "Retouch Help";
+            this.retouchHelpToolStripMenuItem.Click += new System.EventHandler(this.retouchHelpToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -1318,12 +1313,10 @@ namespace RH.Core
         private SplitContainer splitContainer;
         public ctrlTemplateImage ctrlTemplateImage;
         private ToolStripMenuItem exportToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem9;
         private ToolStripMenuItem autodotsHelpToolStripMenuItem;
         private ToolStripMenuItem mirrorHelpToolStripMenuItem;
         private ToolStripMenuItem freehandHelpToolStripMenuItem;
         private ToolStripMenuItem profileHelpToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem10;
         private ToolStripMenuItem exportToolStripMenuItem2;
         private ToolStripMenuItem exportToolStripMenuItem1;
         private ToolStripMenuItem styleTabToolStripMenuItem;
@@ -1336,6 +1329,7 @@ namespace RH.Core
         private ToolStripMenuItem accessoriesHelpToolStripMenuItem1;
         private ToolStripMenuItem colorHelpToolStripMenuItem;
         private ToolStripMenuItem childHelpToolStripMenuItem;
+        private ToolStripMenuItem retouchHelpToolStripMenuItem;
     }
 }
 
