@@ -6,3 +6,8 @@ D:\Projects\Фриланс\Laslo\LLC\AbaloneLLC\Libraries\RH.MeshUtils.dll
 D:\Projects\Фриланс\Laslo\LLC\AbaloneLLC\Libraries\RH.MeshUtils.pdb
 D:\Projects\Фриланс\Laslo\LLC\RH.MeshUtils\obj\x86\Debug\RH.MeshUtils.dll
 D:\Projects\Фриланс\Laslo\LLC\RH.MeshUtils\obj\x86\Debug\RH.MeshUtils.pdb
+D:\Develop\Фриланс\Laslo\LLC\AbaloneLLC\Libraries\RH.MeshUtils.dll
+D:\Develop\Фриланс\Laslo\LLC\AbaloneLLC\Libraries\RH.MeshUtils.pdb
+D:\Develop\Фриланс\Laslo\LLC\RH.MeshUtils\obj\x86\Debug\RH.MeshUtils.csprojResolveAssemblyReference.cache
+D:\Develop\Фриланс\Laslo\LLC\RH.MeshUtils\obj\x86\Debug\RH.MeshUtils.dll
+D:\Develop\Фриланс\Laslo\LLC\RH.MeshUtils\obj\x86\Debug\RH.MeshUtils.pdb
