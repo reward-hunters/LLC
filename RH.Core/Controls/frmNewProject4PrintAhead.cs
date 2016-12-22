@@ -259,10 +259,19 @@ namespace RH.Core.Controls
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[61]);
 
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[45]);           // точки носа
-            //ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[49]);
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[46]);
-            ProgramCore.Project.DetectedNosePoints.Add(new Vector2(fcr.FacialFeatures[2].X, fcr.FacialFeatures[48].Y));
+            ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[2]);
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[22]);
+
+            ProgramCore.Project.DetectedLeftEyePoints.Add(fcr.FacialFeatures[23]); //Точки левого глаза
+            ProgramCore.Project.DetectedLeftEyePoints.Add(fcr.FacialFeatures[28]);
+            ProgramCore.Project.DetectedLeftEyePoints.Add(fcr.FacialFeatures[24]);
+            ProgramCore.Project.DetectedLeftEyePoints.Add(fcr.FacialFeatures[27]);
+
+            ProgramCore.Project.DetectedRightEyePoints.Add(fcr.FacialFeatures[25]); //Точки правого глаза
+            ProgramCore.Project.DetectedRightEyePoints.Add(fcr.FacialFeatures[32]);
+            ProgramCore.Project.DetectedRightEyePoints.Add(fcr.FacialFeatures[26]);
+            ProgramCore.Project.DetectedRightEyePoints.Add(fcr.FacialFeatures[31]);
 
             ProgramCore.Project.DetectedBottomPoints.Add(fcr.FacialFeatures[5]); //точки нижней части лица
             ProgramCore.Project.DetectedBottomPoints.Add(fcr.FacialFeatures[7]);// * 0.75f + fcr.FacialFeatures[9] * 0.25f);

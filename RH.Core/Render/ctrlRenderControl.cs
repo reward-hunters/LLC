@@ -519,31 +519,20 @@ namespace RH.Core.Render
                     var scaleX = UpdateMeshProportions(aabb);
                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);
 
-                    //headMeshesController.InitializeTexturing(autodotsShapeHelper.GetBaseDots(), HeadController.GetIndices());
-                    //autodotsShapeHelper.Transform(headMeshesController.TexturingInfo.Points.ToArray());
-
                     autodotsShapeHelper.TransformRects();
                     autodotsShapeHelper.InitializeShaping();
 
                     var points = autodotsShapeHelper.GetBaseDots();
 
-                    SpecialCenterUpdate(points, headController.GetLeftEyeIndexes(), ProgramCore.Project.LeftEyeCenter);
-                    SpecialCenterUpdate(points, headController.GetRightEyeIndexes(), ProgramCore.Project.RightEyeCenter);
+                    SpecialEyePointsUpdate(points, true);
+                    SpecialEyePointsUpdate(points, false);
 
-
-                    //SpecialMouthEyesUpdate(points, headController.GetMouthIndexes(), ProgramCore.Project.MouthCenter, 
-                    //    new List<Vector2> { ProgramCore.Project.DetectedPoints[0], ProgramCore.Project.DetectedPoints[1] });
-                    //var noseBottomPoint = new Vector2(ProgramCore.Project.MouthCenter.X, ((eyesDiff.Y - ProgramCore.Project.MouthUserCenter.Y) * 0.4f) + ProgramCore.Project.MouthUserCenter.Y);
-                    //SpecialMouthEyesUpdate(points, headController.GetNoseBottomIndexes(), noseBottomPoint,
-                    //    new List<Vector2> { ProgramCore.Project.DetectedPoints[2], ProgramCore.Project.DetectedPoints[3] });
                     SpecialLipsPointsUpdate(points, ProgramCore.Project.MouthCenter);
                     SpecialNosePointsUpdate(points);
 
                     SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3]);
                     SpecialBottomPointsUpdate(points);
                     SpecialTopHaedWidth(points);
-                    //autodotsShapeHelper.TransformRects();
-                    //headMeshesController.UpdateBuffers();
                 }
                 else
                 {
@@ -577,6 +566,28 @@ namespace RH.Core.Render
             }
         }
 
+        private void SpecialEyePointsUpdate(List<HeadPoint> points, bool isLeft)
+        {
+            var eyePoints = isLeft ? new[] { 21, 22, 23, 24 } : new[] { 45, 44, 43, 46 };
+
+            for (var i = 0; i < eyePoints.Length; ++i)
+            {
+                var point = points[eyePoints[i]];
+                var delta =
+                    MirroredHeadPoint.GetFrontWorldPoint(isLeft
+                        ? ProgramCore.Project.DetectedLeftEyePoints[i]
+                        : ProgramCore.Project.DetectedRightEyePoints[i]) - point.Value;
+                point.Value += delta;
+                foreach (var l in point.LinkedPoints)
+                {
+                    var p = points[l];
+                    p.Value += delta;
+                    autodotsShapeHelper.Transform(p.Value, l);
+                }
+                autodotsShapeHelper.Transform(point.Value, eyePoints[i]);
+            }
+        }
+
         private void SpecialNosePointsUpdate(List<HeadPoint> points)
         {
             var bottomNosePoints = new int[] { 19, 41, 52 };
@@ -585,7 +596,7 @@ namespace RH.Core.Render
             {
                 var point = points[bottomNosePoints[i]];
                 var delta = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[i]) - point.Value;
-                if (i != 52)
+                if (bottomNosePoints[i] != 52)
                     delta.Y -= 0.2f;
                 //delta = new Vector2(point.Value.X + delta.X, point.Value.Y) - point.Value;
                 point.Value += delta;
