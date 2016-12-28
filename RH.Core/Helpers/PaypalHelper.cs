@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static RH.Core.frmMain;
+﻿using static RH.Core.frmMain;
 
 namespace RH.Core.Helpers
 {

@@ -231,8 +231,6 @@ namespace RH.Core
         }
         ~frmMain()
         {
-            if (ProgramCore.paypalHelper != null)
-                ProgramCore.paypalHelper.ShutdownCef();
         }
 
         private void exitBtn_Click(object sender, EventArgs e)
@@ -1077,8 +1075,8 @@ namespace RH.Core
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
                 ResetModeTools();
 
-   //             if (frmStyles != null && !frmStyles.Visible)
-   //                 styleLibraryOnOpen_Click(null, EventArgs.Empty);
+                //             if (frmStyles != null && !frmStyles.Visible)
+                //                 styleLibraryOnOpen_Click(null, EventArgs.Empty);
 
                 if (UserConfig.ByName("Options")["Tutorials", "Style", "1"] == "1")
                     frmTutStyle.ShowDialog(this);
@@ -2461,6 +2459,11 @@ namespace RH.Core
         private void retouchHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmTutRetouch.ShowDialog(this);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

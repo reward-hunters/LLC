@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 using RH.Core.Controls.TrackBar;
-using RH.ImageListView;
 
 namespace RH.Core.Controls.Libraries
 {

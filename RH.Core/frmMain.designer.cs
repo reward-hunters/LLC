@@ -34,7 +34,9 @@ namespace RH.Core
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.panelRender = new System.Windows.Forms.Panel();
+            this.ctrlRenderControl = new RH.Core.Render.ctrlRenderControl();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.ctrlTemplateImage = new RH.Core.Render.ctrlTemplateImage();
             this.panelMenuItems = new System.Windows.Forms.Panel();
             this.panelMenuControl = new System.Windows.Forms.Panel();
             this.panelNavigation = new System.Windows.Forms.Panel();
@@ -125,15 +127,16 @@ namespace RH.Core
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autodotsHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.profileHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.freehandHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mirrorHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.accessoriesHelpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.colorHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.freehandHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.profileHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accessoriesHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.childHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.styleHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.accessoriesHelpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.childHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.retouchHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stageHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.videoTutorialPart1CutAndShapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,9 +144,7 @@ namespace RH.Core
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.showManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutHeadShopProToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctrlTemplateImage = new RH.Core.Render.ctrlTemplateImage();
-            this.ctrlRenderControl = new RH.Core.Render.ctrlRenderControl();
-            this.retouchHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelRender.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -177,6 +178,20 @@ namespace RH.Core
             this.panelRender.Size = new System.Drawing.Size(668, 563);
             this.panelRender.TabIndex = 4;
             // 
+            // ctrlRenderControl
+            // 
+            this.ctrlRenderControl.BackgroundTexture = null;
+            this.ctrlRenderControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlRenderControl.InStageMode = false;
+            this.ctrlRenderControl.IsFullPointsInfo = true;
+            this.ctrlRenderControl.Location = new System.Drawing.Point(0, 0);
+            this.ctrlRenderControl.Mode = RH.Core.Render.Mode.None;
+            this.ctrlRenderControl.Name = "ctrlRenderControl";
+            this.ctrlRenderControl.PlayAnimation = true;
+            this.ctrlRenderControl.Size = new System.Drawing.Size(668, 563);
+            this.ctrlRenderControl.TabIndex = 0;
+            this.ctrlRenderControl.ToolMirrored = false;
+            // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -195,6 +210,14 @@ namespace RH.Core
             this.splitContainer.SplitterDistance = 668;
             this.splitContainer.SplitterWidth = 1;
             this.splitContainer.TabIndex = 5;
+            // 
+            // ctrlTemplateImage
+            // 
+            this.ctrlTemplateImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ctrlTemplateImage.Location = new System.Drawing.Point(0, 0);
+            this.ctrlTemplateImage.Name = "ctrlTemplateImage";
+            this.ctrlTemplateImage.Size = new System.Drawing.Size(668, 563);
+            this.ctrlTemplateImage.TabIndex = 0;
             // 
             // panelMenuItems
             // 
@@ -465,7 +488,8 @@ namespace RH.Core
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.toolStripMenuItem1,
-            this.exportToolStripMenuItem});
+            this.exportToolStripMenuItem,
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -474,7 +498,7 @@ namespace RH.Core
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -482,7 +506,7 @@ namespace RH.Core
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -490,26 +514,26 @@ namespace RH.Core
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveAsToolStripMenuItem.Text = "Save as...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
@@ -1034,12 +1058,12 @@ namespace RH.Core
             this.autodotsHelpToolStripMenuItem.Text = "Autodots Help";
             this.autodotsHelpToolStripMenuItem.Click += new System.EventHandler(this.autodotsHelpToolStripMenuItem_Click);
             // 
-            // profileHelpToolStripMenuItem
+            // mirrorHelpToolStripMenuItem
             // 
-            this.profileHelpToolStripMenuItem.Name = "profileHelpToolStripMenuItem";
-            this.profileHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.profileHelpToolStripMenuItem.Text = "Profile Help";
-            this.profileHelpToolStripMenuItem.Click += new System.EventHandler(this.profileHelpToolStripMenuItem_Click);
+            this.mirrorHelpToolStripMenuItem.Name = "mirrorHelpToolStripMenuItem";
+            this.mirrorHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.mirrorHelpToolStripMenuItem.Text = "LineTool Help";
+            this.mirrorHelpToolStripMenuItem.Click += new System.EventHandler(this.mirrorHelpToolStripMenuItem_Click);
             // 
             // freehandHelpToolStripMenuItem
             // 
@@ -1048,26 +1072,12 @@ namespace RH.Core
             this.freehandHelpToolStripMenuItem.Text = "Freehand Help";
             this.freehandHelpToolStripMenuItem.Click += new System.EventHandler(this.freehandHelpToolStripMenuItem_Click);
             // 
-            // mirrorHelpToolStripMenuItem
+            // profileHelpToolStripMenuItem
             // 
-            this.mirrorHelpToolStripMenuItem.Name = "mirrorHelpToolStripMenuItem";
-            this.mirrorHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.mirrorHelpToolStripMenuItem.Text = "LineTool Help";
-            this.mirrorHelpToolStripMenuItem.Click += new System.EventHandler(this.mirrorHelpToolStripMenuItem_Click);
-            // 
-            // accessoriesHelpToolStripMenuItem1
-            // 
-            this.accessoriesHelpToolStripMenuItem1.Name = "accessoriesHelpToolStripMenuItem1";
-            this.accessoriesHelpToolStripMenuItem1.Size = new System.Drawing.Size(219, 22);
-            this.accessoriesHelpToolStripMenuItem1.Text = "Accessories Help";
-            this.accessoriesHelpToolStripMenuItem1.Click += new System.EventHandler(this.accessoriesHelpToolStripMenuItem1_Click);
-            // 
-            // colorHelpToolStripMenuItem
-            // 
-            this.colorHelpToolStripMenuItem.Name = "colorHelpToolStripMenuItem";
-            this.colorHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.colorHelpToolStripMenuItem.Text = "Color Help";
-            this.colorHelpToolStripMenuItem.Click += new System.EventHandler(this.colorHelpToolStripMenuItem_Click);
+            this.profileHelpToolStripMenuItem.Name = "profileHelpToolStripMenuItem";
+            this.profileHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.profileHelpToolStripMenuItem.Text = "Profile Help";
+            this.profileHelpToolStripMenuItem.Click += new System.EventHandler(this.profileHelpToolStripMenuItem_Click);
             // 
             // accessoriesHelpToolStripMenuItem
             // 
@@ -1076,13 +1086,6 @@ namespace RH.Core
             this.accessoriesHelpToolStripMenuItem.Text = "Features Help";
             this.accessoriesHelpToolStripMenuItem.Click += new System.EventHandler(this.accessoriesHelpToolStripMenuItem_Click);
             // 
-            // childHelpToolStripMenuItem
-            // 
-            this.childHelpToolStripMenuItem.Name = "childHelpToolStripMenuItem";
-            this.childHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.childHelpToolStripMenuItem.Text = "Child Help";
-            this.childHelpToolStripMenuItem.Click += new System.EventHandler(this.childHelpToolStripMenuItem_Click);
-            // 
             // styleHelpToolStripMenuItem
             // 
             this.styleHelpToolStripMenuItem.Name = "styleHelpToolStripMenuItem";
@@ -1090,12 +1093,40 @@ namespace RH.Core
             this.styleHelpToolStripMenuItem.Text = "Style Help";
             this.styleHelpToolStripMenuItem.Click += new System.EventHandler(this.styleHelpToolStripMenuItem_Click);
             // 
+            // colorHelpToolStripMenuItem
+            // 
+            this.colorHelpToolStripMenuItem.Name = "colorHelpToolStripMenuItem";
+            this.colorHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.colorHelpToolStripMenuItem.Text = "Color Help";
+            this.colorHelpToolStripMenuItem.Click += new System.EventHandler(this.colorHelpToolStripMenuItem_Click);
+            // 
+            // accessoriesHelpToolStripMenuItem1
+            // 
+            this.accessoriesHelpToolStripMenuItem1.Name = "accessoriesHelpToolStripMenuItem1";
+            this.accessoriesHelpToolStripMenuItem1.Size = new System.Drawing.Size(219, 22);
+            this.accessoriesHelpToolStripMenuItem1.Text = "Accessories Help";
+            this.accessoriesHelpToolStripMenuItem1.Click += new System.EventHandler(this.accessoriesHelpToolStripMenuItem1_Click);
+            // 
+            // childHelpToolStripMenuItem
+            // 
+            this.childHelpToolStripMenuItem.Name = "childHelpToolStripMenuItem";
+            this.childHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.childHelpToolStripMenuItem.Text = "Child Help";
+            this.childHelpToolStripMenuItem.Click += new System.EventHandler(this.childHelpToolStripMenuItem_Click);
+            // 
             // materialHelpToolStripMenuItem
             // 
             this.materialHelpToolStripMenuItem.Name = "materialHelpToolStripMenuItem";
             this.materialHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.materialHelpToolStripMenuItem.Text = "Export Help";
             this.materialHelpToolStripMenuItem.Click += new System.EventHandler(this.materialHelpToolStripMenuItem_Click);
+            // 
+            // retouchHelpToolStripMenuItem
+            // 
+            this.retouchHelpToolStripMenuItem.Name = "retouchHelpToolStripMenuItem";
+            this.retouchHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.retouchHelpToolStripMenuItem.Text = "Retouch Help";
+            this.retouchHelpToolStripMenuItem.Click += new System.EventHandler(this.retouchHelpToolStripMenuItem_Click);
             // 
             // stageHelpToolStripMenuItem
             // 
@@ -1142,34 +1173,12 @@ namespace RH.Core
             this.aboutHeadShopProToolStripMenuItem.Text = "About PrintAhead";
             this.aboutHeadShopProToolStripMenuItem.Click += new System.EventHandler(this.aboutHeadShopProToolStripMenuItem_Click);
             // 
-            // ctrlTemplateImage
+            // exitToolStripMenuItem
             // 
-            this.ctrlTemplateImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlTemplateImage.Location = new System.Drawing.Point(0, 0);
-            this.ctrlTemplateImage.Name = "ctrlTemplateImage";
-            this.ctrlTemplateImage.Size = new System.Drawing.Size(668, 563);
-            this.ctrlTemplateImage.TabIndex = 0;
-            // 
-            // ctrlRenderControl
-            // 
-            this.ctrlRenderControl.BackgroundTexture = null;
-            this.ctrlRenderControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ctrlRenderControl.InStageMode = false;
-            this.ctrlRenderControl.IsFullPointsInfo = true;
-            this.ctrlRenderControl.Location = new System.Drawing.Point(0, 0);
-            this.ctrlRenderControl.Mode = RH.Core.Render.Mode.None;
-            this.ctrlRenderControl.Name = "ctrlRenderControl";
-            this.ctrlRenderControl.PlayAnimation = true;
-            this.ctrlRenderControl.Size = new System.Drawing.Size(668, 563);
-            this.ctrlRenderControl.TabIndex = 0;
-            this.ctrlRenderControl.ToolMirrored = false;
-            // 
-            // retouchHelpToolStripMenuItem
-            // 
-            this.retouchHelpToolStripMenuItem.Name = "retouchHelpToolStripMenuItem";
-            this.retouchHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.retouchHelpToolStripMenuItem.Text = "Retouch Help";
-            this.retouchHelpToolStripMenuItem.Click += new System.EventHandler(this.retouchHelpToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -1330,6 +1339,7 @@ namespace RH.Core
         private ToolStripMenuItem colorHelpToolStripMenuItem;
         private ToolStripMenuItem childHelpToolStripMenuItem;
         private ToolStripMenuItem retouchHelpToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

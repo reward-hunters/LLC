@@ -1,13 +1,8 @@
-﻿using CefSharp;
-using RH.Core.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Forms;
+using CefSharp;
 using RH.Core;
+using RH.Core.Helpers;
 using RH.PrintAhead_Paypal.Controls;
-using System.Windows.Forms;
 
 namespace RH.PrintAhead_Paypal
 {
@@ -18,7 +13,14 @@ namespace RH.PrintAhead_Paypal
             var settings = new CefSettings();           // инициализация хромимума. браузер для показа paypal
                                                         // Initialize cef with the provided settings
             Cef.Initialize(settings);
+            Application.ApplicationExit += Application_ApplicationExit;
         }
+
+        private void Application_ApplicationExit(object sender, System.EventArgs e)
+        {
+            ShutdownCef();
+        }
+
         public override void ShutdownCef()
         {
             Cef.Shutdown();     // хромиум пускаем по пизде
