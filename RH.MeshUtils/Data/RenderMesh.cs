@@ -19,9 +19,29 @@ namespace RH.MeshUtils.Data
             get;
             set;
         }
+
+        //Угол поворота головы
+        public float HeadAngle
+        {
+            get;
+            set;
+        }
+
+        public float FaceCenterX
+        {
+            get;
+            set;
+        }
+
+        public float NoseDepth
+        {
+            get;
+            set;
+        }        
+
         public RectangleAABB AABB = new RectangleAABB();
         public Vector2 Scale = Vector2.One;
-        public Vector2 Center = Vector2.Zero;
+        public Vector2 Center = Vector2.Zero;        
         private static float MORPH_SCALE = 10.0f;
         private static float MORPH_SCALE_MAX = 0.7f;
         private static float MORPH_SCALE_MIN = 0.15f;

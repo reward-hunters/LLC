@@ -46,7 +46,7 @@ namespace RH.Core.Render.Helpers
             InitCamera();
         }
 
-        public void ResetCamera(bool updateScale)
+        public void ResetCamera(bool updateScale, float da = 0.0f)
         {
             if (updateScale)
             {
@@ -55,7 +55,7 @@ namespace RH.Core.Render.Helpers
                 Wheel(0);
             }
 
-            InitCamera(1.5707f, 500);
+            InitCamera(1.5707f + da, 500);
         }
 
         private void InitCamera()            // default initialize

@@ -783,6 +783,7 @@ namespace RH.MeshUtils.Helpers
 
         public void Transform(Vector2 newPosition, int index, bool needShape = true)
         {
+            //return;
             var rects = Rects.Where(r => r.A.Equals(index) || r.B.Equals(index)).ToList();
             if (rects.Count == 0)
                 return;

@@ -1304,8 +1304,32 @@ namespace RH.Core.Render.Controllers
 
             result.X = v.X * ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.X + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.A.X;
             result.Y = v.Y * (-ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.Y) + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.B.Y;
+
+            var centerX = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.FaceCenterX;
+            var angle = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.HeadAngle;
+            var noseDepth = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.NoseDepth;
+            result.X = ((result.X - centerX) + (float)Math.Sin(angle) * 0.0f * noseDepth) / (float)Math.Cos(angle);
+
+            /*
+                FaceCenterX - центр лица по X (вокруг него все будем вращать)
+                NoseDepth - глубина носа
+                ProjectedPointX - X-координата точки спроецированная слева направо
+                PointDepth - глубина точки в процентах от глубины носа
+
+                v(x, y) - точка до поворота
+                v1(x, y) - точка после поворота
+
+                v.y = PointDepth * NoseDepth;
+                v1.x = ProjectedPointX - FaceCenterX;
+
+                v1.x = cos(a) * v.x - sin(a) * v.y;
+                v.x = (v1.x + sin(a) * v.y) / cos(a);
+                v.x = ((ProjectedPointX - FaceCenterX) + sin(a) * PointDepth * NoseDepth) / cos(a);
+             */
+
             return result;
         }
+
         public static Vector2 UpdateWorldPoint(Vector2 valueMirrored)
         {
             var result = new Vector2();

@@ -262,6 +262,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[46]);
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[2]);
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[22]);
+            ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[49]);
 
             ProgramCore.Project.DetectedLeftEyePoints.Add(fcr.FacialFeatures[23]); //Точки левого глаза
             ProgramCore.Project.DetectedLeftEyePoints.Add(fcr.FacialFeatures[28]);

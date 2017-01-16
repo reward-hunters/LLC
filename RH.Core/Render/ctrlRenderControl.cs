@@ -516,11 +516,13 @@ namespace RH.Core.Render
             {
                 if (ProgramCore.Project.ManType != ManType.Custom)
                 {
-                    var scaleX = UpdateMeshProportions(aabb);
+                    var scaleX = UpdateMeshProportions(aabb);                    
                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);
 
                     autodotsShapeHelper.TransformRects();
                     autodotsShapeHelper.InitializeShaping();
+
+                    DetectFaceRotation();
 
                     var points = autodotsShapeHelper.GetBaseDots();
 
@@ -532,7 +534,7 @@ namespace RH.Core.Render
 
                     SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3]);
                     SpecialBottomPointsUpdate(points);
-                    SpecialTopHaedWidth(points);
+                    SpecialTopHaedWidth(points);                    
                 }
                 else
                 {
@@ -546,6 +548,41 @@ namespace RH.Core.Render
             }
 
             RenderTimer.Start();
+        }
+
+        private Vector2 GetCenterPoint(List<Vector2> points)
+        {
+            var min = new Vector2(float.MaxValue, float.MaxValue);
+            var max = new Vector2(float.MinValue, float.MinValue);
+
+            foreach (var point in points)
+            {
+                var p = MirroredHeadPoint.GetFrontWorldPoint(point);
+                min.X = Math.Min(min.X, p.X);
+                max.X = Math.Max(max.X, p.X);
+                min.Y = Math.Min(min.Y, p.Y);
+                max.Y = Math.Max(max.Y, p.Y);
+            }
+            return (max + min) * 0.5f;
+        }
+
+        private void DetectFaceRotation()
+        {
+            var noseTip = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2]);
+
+            //var eyeLeftTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedLeftEyePoints[1]);
+            //var eyeRightTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedRightEyePoints[1]);
+            //var eyeLeftCenter = GetCenterPoint(ProgramCore.Project.DetectedLeftEyePoints);
+            //var eyeRightCenter = GetCenterPoint(ProgramCore.Project.DetectedRightEyePoints);
+
+            var noseTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[3]);
+            var noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[4]);
+            var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
+            var angle = (float)Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
+
+            headMeshesController.RenderMesh.HeadAngle = noseTip.X > noseTop.X ? angle : -angle;
+            headMeshesController.RenderMesh.NoseDepth = noseLength;
+            headMeshesController.RenderMesh.FaceCenterX = noseTop.X;
         }
 
         private void SpecialTopHaedWidth(List<HeadPoint> points)
@@ -3192,7 +3229,7 @@ namespace RH.Core.Render
 
         public void OrtoTop()
         {
-            camera.ResetCamera(false);
+            camera.ResetCamera(false, headMeshesController.RenderMesh.HeadAngle);
         }
         public void OrtoBack()
         {
