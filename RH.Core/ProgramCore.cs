@@ -44,14 +44,14 @@ namespace RH.Core
 
         public static bool IsFreeVersion;       // бесплатная версия PrintAhead для пожертвований в школы.
 
-        public static ProgramMode CurrentProgram = ProgramMode.PrintAheadPayPal;
+        public static ProgramMode CurrentProgram = ProgramMode.PrintAhead_PayPal;
         public enum ProgramMode
         {
             PrintAhead,                 // обычный PrintAhead
-            PrintAheadPayPal,           // PrintAhead с интеграцией PayPal. Нет возможности сохранения, экспорта. Только печать за деньги
+            PrintAhead_PayPal,           // PrintAhead с интеграцией PayPal. Нет возможности сохранения, экспорта. Только печать за деньги
             HeadShop,
-            HeadShopOneClick            // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
-
+            HeadShop_OneClick,            // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
+            HeadShop_Rotator             // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях.
         }
         public static string ProgramCaption
         {
@@ -63,9 +63,9 @@ namespace RH.Core
                         return "HeadShop 10";
                     case ProgramMode.PrintAhead:
                         return "PrintAhead";
-                    case ProgramMode.PrintAheadPayPal:
+                    case ProgramMode.PrintAhead_PayPal:
                         return "PrintAhead 2.0";
-                    case ProgramMode.HeadShopOneClick:
+                    case ProgramMode.HeadShop_OneClick:
                         return "HeadShop OneClick";
                 }
                 return "Abalone LLC";
@@ -78,10 +78,10 @@ namespace RH.Core
                 switch (CurrentProgram)
                 {
                     case ProgramMode.HeadShop:
-                    case ProgramMode.HeadShopOneClick:
+                    case ProgramMode.HeadShop_OneClick:
                         return "HeadShop";
                     case ProgramMode.PrintAhead:
-                    case ProgramMode.PrintAheadPayPal:
+                    case ProgramMode.PrintAhead_PayPal:
                         return "PrintAhead";
 
                 }

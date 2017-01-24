@@ -22,7 +22,7 @@ namespace RH.Core.Controls.Panels
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     btnExport.Visible = false;
                     break;
                 default:

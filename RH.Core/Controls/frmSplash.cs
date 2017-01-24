@@ -22,13 +22,13 @@ namespace RH.Core.Controls
                 case ProgramCore.ProgramMode.PrintAhead:
                     image = Resources.Logo_PrintAhead;
                     break;
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     image = Resources.Logo_PrintAheadPayPal;
                     break;
                 case ProgramCore.ProgramMode.HeadShop:
                     image = Resources.logo_HeadShop;
                     break;
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                     image = Resources.logo_HeadShop_OneClick;
                     break;
             }

@@ -30,6 +30,13 @@ namespace RH.Core.Controls.Libraries
 
             Sizeble = false;
             ProgramCore.MainForm.ctrlRenderControl.pickingController.OnSelectedMeshChanged += pickingController_OnSelectedMeshChanged;
+
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                    groupBox_Change.Visible = false;
+                    break;
+            }
         }
 
         void pickingController_OnSelectedMeshChanged()
@@ -75,7 +82,7 @@ namespace RH.Core.Controls.Libraries
             try
             {
 
-                var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Accessory");
+                var directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory");
                 var di = new DirectoryInfo(directoryPath);
                 if (!di.Exists)
                     return;

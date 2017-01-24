@@ -506,7 +506,7 @@ namespace RH.Core
                 var textureFlip = (FlipType)br.ReadInt32();
                 var shapeFlip = (FlipType)br.ReadInt32();
 
-                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick ? 2048 : 1024);
+                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick ? 2048 : 1024);
                 result.TextureFlip = textureFlip;
                 result.ShapeFlip = shapeFlip;
 

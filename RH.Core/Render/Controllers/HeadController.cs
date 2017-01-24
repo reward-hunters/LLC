@@ -1288,7 +1288,38 @@ namespace RH.Core.Render.Controllers
             Value = UpdateWorldPoint(ValueMirrored);
         }
 
-        public static Vector2 GetFrontWorldPoint(Vector2 valueMirrored)
+        public static Vector2 GetFrontWorldPoint(Vector2 valueMirrored, ProgramCore.ProgramMode program)
+        {
+            switch (program)
+            {
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    return GetFrontWorldPoint_ForHeadShop_Rotator(valueMirrored);
+                default:
+                    return GetFrontWorldPoint_Base(valueMirrored);
+            }
+        }
+
+        /// <summary> Базовая функция  для остальных программ</summary>
+        private static Vector2 GetFrontWorldPoint_Base(Vector2 valueMirrored)
+        {
+            Vector2 v;
+            var result = new Vector2();
+
+            var width = ProgramCore.Project.FaceRectRelative.Width * ProgramCore.Project.FrontImage.Width;
+            var height = ProgramCore.Project.FaceRectRelative.Height * ProgramCore.Project.FrontImage.Height;
+
+            var x = ProgramCore.Project.FaceRectRelative.X * ProgramCore.Project.FrontImage.Width;
+            var y = ProgramCore.Project.FaceRectRelative.Y * ProgramCore.Project.FrontImage.Height;
+
+            v.X = ((valueMirrored.X * ProgramCore.Project.FrontImage.Width) - x) / width;
+            v.Y = ((valueMirrored.Y * ProgramCore.Project.FrontImage.Height) - y) / height;
+
+            result.X = v.X * ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.X + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.A.X;
+            result.Y = v.Y * (-ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.Y) + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.B.Y;
+            return result;
+        }
+        /// <summary> Функция только для версии HeadShop 11 Rotator (для работы с повернутыми головами на фото) </summary>
+        private static Vector2 GetFrontWorldPoint_ForHeadShop_Rotator(Vector2 valueMirrored)
         {
             Vector2 v;
             var result = new Vector2();
@@ -1334,7 +1365,9 @@ namespace RH.Core.Render.Controllers
         {
             var result = new Vector2();
             if (ProgramCore.MainForm.HeadFront)
-                result = GetFrontWorldPoint(valueMirrored);
+            {
+                result = GetFrontWorldPoint_ForHeadShop_Rotator(valueMirrored);
+            }
             else if (ProgramCore.MainForm.HeadProfile)
             {
                 Vector2 v;

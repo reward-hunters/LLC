@@ -21,7 +21,7 @@ namespace RH.Core.Controls.Tutorials.OneClick
             var filePath = string.Empty;
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                     filePath = FolderEx.GetTutorialImagePath("TutProfile_OneClick");
                     break;
                 default:

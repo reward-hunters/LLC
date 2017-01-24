@@ -120,15 +120,7 @@ d 1
 Kd 1 1 1
 map_Kd /Maps/V5BreeLimbsM.jpg
 
-newmtl Eyelashes
-d 1
-Ns 0.75
-Ni 1.3
-Ka 0 0 0
-Kd 0.168627 0.156863 0.133333
-Ks 1 1 1
-Km 0.02
-map_D /Maps/RyBelle_lashes.jpg
+
 
 newmtl Tongue
 d 1

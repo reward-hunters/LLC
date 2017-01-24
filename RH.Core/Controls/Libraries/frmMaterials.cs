@@ -128,7 +128,7 @@ namespace RH.Core.Controls.Libraries
             imageListView.SuspendLayout();
             try
             {
-                var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Materials");
+                var directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Materials");
                 var di = new DirectoryInfo(directoryPath);
                 if (!di.Exists)
                     return;

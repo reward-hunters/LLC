@@ -49,7 +49,7 @@ namespace RH.Core.Controls
 
         public int SelectedSize
         {
-            get { return ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick ? 2048 : 1024; }
+            get { return ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick ? 2048 : 1024; }
         }
         private Pen edgePen;
         private Pen arrowPen;
@@ -100,10 +100,10 @@ namespace RH.Core.Controls
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                     rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = labelNotes.Visible = labelNotes1.Visible =  false;
                     break;
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     labelNotes.Visible = labelNotes1.Visible = !ProgramCore.IsFreeVersion;
                     break;
                 default:
@@ -697,7 +697,7 @@ namespace RH.Core.Controls
                     var dazPath = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\", "fs3d.obj");
                     if (File.Exists(dazPath))
                     {
-                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShopOneClick)
+                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick)
                             rbImportObj.Checked = true;
 
                         CustomModelPath = dazPath;

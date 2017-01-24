@@ -44,7 +44,7 @@ namespace RH.Core.Controls.Libraries
             imageListBackgrounds.SuspendLayout();
             try
             {
-                var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Stages", "Backgrounds");
+                var directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Backgrounds");
                 var di = new DirectoryInfo(directoryPath);
                 if (!di.Exists)
                     return;
@@ -75,7 +75,7 @@ namespace RH.Core.Controls.Libraries
             try
             {
                 var exts = new List<string> { ".jpg", ".png" };
-                var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Stages", "Poses", ProgramCore.Project.ManType.GetCaption());
+                var directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Poses", ProgramCore.Project.ManType.GetCaption());
                 var di = new DirectoryInfo(directoryPath);
                 if (di.Exists)
                 {
@@ -338,7 +338,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;
@@ -352,7 +352,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     if (UserConfig.ByName("Options")["Tutorials", "Export", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;

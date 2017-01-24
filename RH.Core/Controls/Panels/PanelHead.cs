@@ -36,7 +36,7 @@ namespace RH.Core.Controls.Panels
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     btnSave.Visible = false;
                     break;
                 default:
@@ -52,7 +52,7 @@ namespace RH.Core.Controls.Panels
                 btnFlipRight.Visible = false;
             }*/
 
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick)
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnShapeTool.Visible = btnPolyLine.Visible = false;
 
             if (ProgramCore.Project != null)
@@ -65,7 +65,7 @@ namespace RH.Core.Controls.Panels
         {
             btnAutodots.Visible = isFrontTab;
 
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShopOneClick)
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnPolyLine.Visible = !isFrontTab;
 
 
@@ -423,7 +423,7 @@ namespace RH.Core.Controls.Panels
                 {
                     case ProgramCore.ProgramMode.HeadShop:
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         if (frontTab && UserConfig.ByName("Options")["Tutorials", "Freehand", "1"] == "1")
                             ProgramCore.MainForm.frmTutFreehand.ShowDialog(this);
                         break;

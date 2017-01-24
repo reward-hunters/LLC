@@ -89,7 +89,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;
@@ -106,7 +106,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;

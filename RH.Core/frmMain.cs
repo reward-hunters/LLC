@@ -140,7 +140,7 @@ namespace RH.Core
                     openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
                     break;
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     Text = "PrintAhead 2.0";
                     aboutHeadShopProToolStripMenuItem.Text = "About PrintAhead 2.0";
                     ProgramCore.paypalHelper.InitializeCef();
@@ -152,9 +152,10 @@ namespace RH.Core
                     saveToolStripMenuItem5.Visible = saveToolStripMenuItem6.Visible = saveToolStripMenuItem8.Visible = toolStripMenuItem1.Visible = false;
                     showManualToolStripMenuItem.Visible = false;
 
+                    panelMenuAccessories.Visible = accessoryTabToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem1.Visible = true;        // ТЗ PrintAhead 3.0 PRD - вернуть обратно аксессуары
                     exportToolStripMenuItem.Visible = exportToolStripMenuItem1.Visible = exportToolStripMenuItem2.Visible = exportToolStripMenuItem3.Visible = false;       // запрет экспорта 
                     saveToolStripMenuItem5.Visible = saveToolStripMenuItem6.Visible = saveToolStripMenuItem8.Visible = toolStripMenuItem1.Visible = false;
-                    panelMenuAccessories.Visible = accessoryTabToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem1.Visible = materialHelpToolStripMenuItem.Visible = materialtabToolStripMenuItem.Visible = false;
+                    materialHelpToolStripMenuItem.Visible = materialtabToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop:
                     Text = "HeadShop 10";
@@ -162,7 +163,7 @@ namespace RH.Core
                     panelMenuStage.Image = Resources.btnMenuStageNormal;
                     childHelpToolStripMenuItem.Visible = false;
                     break;
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                     Text = "HeadShop OneClick";
                     aboutHeadShopProToolStripMenuItem.Text = "About HeadShop OneClick";
 
@@ -246,7 +247,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     if (UserConfig.ByName("Options")["Tutorials", "Start", "1"] == "1")
                         frmTutStart.ShowDialog(this);
                     break;
@@ -284,8 +285,8 @@ namespace RH.Core
                         }
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         {
                             #region проект для PrintAhead
 
@@ -458,8 +459,8 @@ namespace RH.Core
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                     {
                         ProgramCore.MainForm.HeadFront = true;
                         ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
@@ -475,7 +476,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     if (ProgramCore.Project.ManType == ManType.Custom && UserConfig.ByName("Options")["Tutorials", "CustomHeads", "1"] == "1")
                         frmTutCustomHeads.ShowDialog(this);
                     break;
@@ -596,7 +597,7 @@ namespace RH.Core
                     UserConfig.ByName("Tutorials")["Links", "QuickStart"] = "https://youtu.be/8cejdijABQY";
                     break;
                 case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                     UserConfig.ByName("Tutorials")["Links", "Start"] = "https://www.youtube.com/watch?v=0baUErHwngA";
                     UserConfig.ByName("Tutorials")["Links", "Recognize"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
                     UserConfig.ByName("Tutorials")["Links", "Shapedots"] = "http://youtu.be/pIlrJUByJj8";
@@ -786,11 +787,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -834,11 +835,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -882,11 +883,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -929,11 +930,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -967,11 +968,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStagePressed;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintPressed;
                         break;
                 }
@@ -1008,7 +1009,7 @@ namespace RH.Core
 
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         ctrlRenderControl.AddBase();
                         var backPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Stages", "Backgrounds", "fire1.jpg");
                         if (File.Exists(backPath))
@@ -1052,11 +1053,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -1105,11 +1106,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -1165,11 +1166,11 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
-                    case ProgramCore.ProgramMode.HeadShopOneClick:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
                         break;
                     case ProgramCore.ProgramMode.PrintAhead:
-                    case ProgramCore.ProgramMode.PrintAheadPayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_PayPal:
                         panelMenuStage.Image = Resources.btnMenuPrintNormal;
                         break;
                 }
@@ -1551,7 +1552,7 @@ namespace RH.Core
                         frm.CreateProject();
                     }
                     break;
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                 case ProgramCore.ProgramMode.PrintAhead:
                     {
                         var frm = new frmNewProject4PrintAhead(false);
@@ -1784,7 +1785,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutStart.ShowDialog(this);
                     break;
             }
@@ -1796,7 +1797,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutCut.ShowDialog(this);
                     break;
             }
@@ -1807,7 +1808,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutShape.ShowDialog(this);
                     break;
             }
@@ -1818,7 +1819,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutFeatures.ShowDialog(this);
                     break;
             }
@@ -1829,7 +1830,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutExport.ShowDialog(this);
                     break;
             }
@@ -1840,7 +1841,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTut3dPrint.ShowDialog(this);
                     break;
             }
@@ -1851,7 +1852,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutStyle.ShowDialog(this);
                     break;
             }
@@ -1867,7 +1868,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutShapedots.ShowDialog(this);
                     break;
             }
@@ -1878,7 +1879,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutLineTool.ShowDialog(this);
                     break;
             }
@@ -1889,7 +1890,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutFreehand.ShowDialog(this);
                     break;
             }
@@ -2063,7 +2064,7 @@ namespace RH.Core
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     {
                         var ctrl = new ctrlPrintAheadExport(IntPtr.Zero);
                         if (ProgramCore.ShowDialog(ctrl, "STL print", MessageBoxButtons.OKCancel, false) != DialogResult.OK)
@@ -2114,7 +2115,7 @@ namespace RH.Core
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     {
                         var ctrl = new ctrlPrintAheadExport(Handle);
                         if (ProgramCore.ShowDialog(ctrl, "DAE print", MessageBoxButtons.OKCancel, false) != DialogResult.OK)
@@ -2340,7 +2341,7 @@ namespace RH.Core
                 var mapPath = ctrlRenderControl.GetTexturePath(iTexture);
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShopOneClick:      // для этой программы должна быть выгрузка текстур с размерами 2048
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:      // для этой программы должна быть выгрузка текстур с размерами 2048
                         {
                             if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(iTexture))            // применяем результаты кисточки
                             {
@@ -2428,7 +2429,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutAccessory.ShowDialog(this);
                     break;
             }
@@ -2440,7 +2441,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAheadPayPal:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     frmTutMaterial.ShowDialog(this);
                     break;
             }
@@ -2450,7 +2451,7 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShopOneClick:
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
                     frmTutChild.ShowDialog(this);
                     break;
             }

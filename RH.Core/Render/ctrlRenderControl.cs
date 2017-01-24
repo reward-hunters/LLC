@@ -522,7 +522,13 @@ namespace RH.Core.Render
                     autodotsShapeHelper.TransformRects();
                     autodotsShapeHelper.InitializeShaping();
 
-                    DetectFaceRotation();
+                    switch (ProgramCore.CurrentProgram)
+                    {
+                        case ProgramCore.ProgramMode.HeadShop_Rotator:
+                            DetectFaceRotation();
+                            break;
+                    }
+                    
 
                     var points = autodotsShapeHelper.GetBaseDots();
 
@@ -557,7 +563,7 @@ namespace RH.Core.Render
 
             foreach (var point in points)
             {
-                var p = MirroredHeadPoint.GetFrontWorldPoint(point);
+                var p = MirroredHeadPoint.GetFrontWorldPoint(point, ProgramCore.CurrentProgram);
                 min.X = Math.Min(min.X, p.X);
                 max.X = Math.Max(max.X, p.X);
                 min.Y = Math.Min(min.Y, p.Y);
@@ -568,15 +574,15 @@ namespace RH.Core.Render
 
         private void DetectFaceRotation()
         {
-            var noseTip = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2]);
+            var noseTip = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
 
-            //var eyeLeftTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedLeftEyePoints[1]);
-            //var eyeRightTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedRightEyePoints[1]);
+            //var eyeLeftTop = MirroredHeadPoint.GetFrontWorldPoint_ForHeadShop_Rotator(ProgramCore.Project.DetectedLeftEyePoints[1]);
+            //var eyeRightTop = MirroredHeadPoint.GetFrontWorldPoint_ForHeadShop_Rotator(ProgramCore.Project.DetectedRightEyePoints[1]);
             //var eyeLeftCenter = GetCenterPoint(ProgramCore.Project.DetectedLeftEyePoints);
             //var eyeRightCenter = GetCenterPoint(ProgramCore.Project.DetectedRightEyePoints);
 
-            var noseTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[3]);
-            var noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[4]);
+            var noseTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[3], ProgramCore.CurrentProgram);
+            var noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[4], ProgramCore.CurrentProgram);
             var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
             var angle = (float)Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
 
@@ -588,8 +594,8 @@ namespace RH.Core.Render
         private void SpecialTopHaedWidth(List<HeadPoint> points)
         {
             var topHeadIndices = new int[] { 6, 5, 4, 3, 0, 25, 26, 27, 28 };
-            var a = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedTopPoints[0]);
-            var b = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedTopPoints[1]);
+            var a = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedTopPoints[0], ProgramCore.CurrentProgram);
+            var b = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedTopPoints[1], ProgramCore.CurrentProgram);
             var width = b.X - a.X;
             var invOldWidth = 1.0f / (points[28].Value.X - points[6].Value.X);
             var minX = points[6].Value.X;
@@ -611,9 +617,7 @@ namespace RH.Core.Render
             {
                 var point = points[eyePoints[i]];
                 var delta =
-                    MirroredHeadPoint.GetFrontWorldPoint(isLeft
-                        ? ProgramCore.Project.DetectedLeftEyePoints[i]
-                        : ProgramCore.Project.DetectedRightEyePoints[i]) - point.Value;
+                    MirroredHeadPoint.GetFrontWorldPoint(isLeft? ProgramCore.Project.DetectedLeftEyePoints[i] : ProgramCore.Project.DetectedRightEyePoints[i], ProgramCore.CurrentProgram) - point.Value;
                 point.Value += delta;
                 foreach (var l in point.LinkedPoints)
                 {
@@ -632,7 +636,7 @@ namespace RH.Core.Render
             for (var i = 0; i < bottomNosePoints.Length; ++i)
             {
                 var point = points[bottomNosePoints[i]];
-                var delta = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[i]) - point.Value;
+                var delta = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[i], ProgramCore.CurrentProgram) - point.Value;
                 if (bottomNosePoints[i] != 52)
                     delta.Y -= 0.2f;
                 //delta = new Vector2(point.Value.X + delta.X, point.Value.Y) - point.Value;
@@ -655,11 +659,11 @@ namespace RH.Core.Render
 
             float maxX, minX;
             var center = GetCenter(points, mouthIndices, out minX, out maxX);
-            var rightPosUserSelected = MirroredHeadPoint.GetFrontWorldPoint(targetPoint);          // перенояем координаты с левой картинки в правой
+            var rightPosUserSelected = MirroredHeadPoint.GetFrontWorldPoint(targetPoint, ProgramCore.CurrentProgram);          // перенояем координаты с левой картинки в правой
             var delta2 = rightPosUserSelected - center;
 
-            var leftBorder = MirroredHeadPoint.GetFrontWorldPoint(borders[0]) - rightPosUserSelected;
-            var rightBorder = MirroredHeadPoint.GetFrontWorldPoint(borders[1]) - rightPosUserSelected;
+            var leftBorder = MirroredHeadPoint.GetFrontWorldPoint(borders[0], ProgramCore.CurrentProgram) - rightPosUserSelected;
+            var rightBorder = MirroredHeadPoint.GetFrontWorldPoint(borders[1], ProgramCore.CurrentProgram) - rightPosUserSelected;
 
             minX = minX - center.X;
             maxX = maxX - center.X;
@@ -678,7 +682,7 @@ namespace RH.Core.Render
             foreach (var index in indices)
             {
                 var p = points[index];
-                p.Value = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedLipsPoints[i++]);
+                p.Value = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedLipsPoints[i++], ProgramCore.CurrentProgram);
             }
 
             foreach (var index in mouthIndices)
@@ -694,7 +698,7 @@ namespace RH.Core.Render
             for (var i = 0; i < bottomPoints.Length; ++i)
             {
                 var point = points[bottomPoints[i]];
-                var delta = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedBottomPoints[i]) - point.Value;
+                var delta = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedBottomPoints[i], ProgramCore.CurrentProgram) - point.Value;
                 point.Value += delta;
                 autodotsShapeHelper.Transform(point.Value, bottomPoints[i]);
             }
@@ -703,7 +707,7 @@ namespace RH.Core.Render
             for (var i = 0; i < bottomPointsX.Length; ++i)
             {
                 var point = points[bottomPointsX[i]];
-                var delta = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedBottomPoints[i + 6]) - point.Value;
+                var delta = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedBottomPoints[i + 6], ProgramCore.CurrentProgram) - point.Value;
                 delta = new Vector2(point.Value.X + delta.X, point.Value.Y) - point.Value;
                 point.Value += delta;
                 foreach (var l in point.LinkedPoints)
@@ -720,7 +724,8 @@ namespace RH.Core.Render
         {
             float maxX, minX;
             var center = GetCenter(points, indexes, out minX, out maxX);
-            var rightPosUserSelected = MirroredHeadPoint.GetFrontWorldPoint(targetPoint);          // перенояем координаты с левой картинки в правой
+
+            var rightPosUserSelected = MirroredHeadPoint.GetFrontWorldPoint(targetPoint, ProgramCore.CurrentProgram);          // перенояем координаты с левой картинки в правой
             var delta2 = rightPosUserSelected - center;
 
             foreach (var index in indexes)

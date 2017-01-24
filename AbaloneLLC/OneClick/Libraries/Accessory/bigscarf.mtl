@@ -1,0 +1,239 @@
+newmtl Legs
+d 1
+Kd 1 1 1
+
+newmtl EyeReflection
+d 0
+Ns 0.75
+Ni 1.3
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 1 1 1
+Km 0.02
+
+newmtl Nostrils
+d 1
+Kd 1 1 1
+
+newmtl Lacrimals
+d 1
+Kd 1 1 1
+
+newmtl Pupils
+d 1
+Kd 1 1 1
+
+newmtl Lips
+d 1
+Kd 1 1 1
+
+newmtl Tear
+d 0
+Kd 0.8 0.8 0.8
+
+newmtl Gums
+d 1
+Kd 1 1 1
+
+newmtl Irises
+d 1
+Kd 1 1 1
+
+newmtl Teeth
+d 1
+Kd 1 1 1
+
+newmtl Cornea
+d 0
+Kd 1 1 1
+
+newmtl Face
+d 1
+Kd 1 1 1
+
+newmtl Toenails
+d 1
+Kd 1 1 1
+
+newmtl Sclera
+d 1
+Kd 1 1 1
+
+newmtl Fingernails
+d 1
+Kd 1 1 1
+
+newmtl Head
+d 1
+Kd 1 1 1
+
+newmtl Hands
+d 1
+Kd 1 1 1
+
+newmtl Shoulders
+d 1
+Kd 1 1 1
+
+newmtl Neck
+d 1
+Kd 1 1 1
+
+newmtl Hips
+d 1
+Kd 1 1 1
+
+newmtl Torso
+d 1
+Kd 1 1 1
+
+newmtl Nipples
+d 1
+Kd 1 1 1
+
+newmtl Forearms
+d 1
+Kd 1 1 1
+
+newmtl Feet
+d 1
+Kd 1 1 1
+
+newmtl Eyelashes
+d 1
+Ns 0.75
+Ni 1.3
+Ka 0 0 0
+Kd 0.168627 0.156863 0.133333
+Ks 1 1 1
+Km 0.02
+
+newmtl Tongue
+d 1
+Kd 1 1 1
+
+newmtl InnerMouth
+d 1
+Kd 1 1 1
+
+newmtl Ears
+d 1
+Kd 1 1 1
+
+newmtl material_1
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.227451 0.286275 0.372549
+Ks 0.6 0.6 0.6
+Km 0
+
+newmtl material_2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.6 0.6 0.6
+Km 0
+
+newmtl scarf2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.976471 0.290196 0.737255
+Ks 0.6 0.6 0.6
+Km 0
+
+newmtl ShorterBangs2
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.0901961 0.0901961 0.0901961
+Km 3.6e-05
+
+newmtl ShorterBangs1
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.0901961 0.0901961 0.0901961
+Km 3.6e-05
+
+newmtl Bangs1
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.0901961 0.0901961 0.0901961
+Km 3.6e-05
+
+newmtl Bangs2
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.0901961 0.0901961 0.0901961
+Km 3.6e-05
+
+newmtl Cap
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.00784314 0.00784314 0.00784314
+Km 3.6e-05
+
+newmtl Under
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.0901961 0.0901961 0.0901961
+Km 3.6e-05
+
+newmtl Wisps
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.0901961 0.0901961 0.0901961
+Km 3.6e-05
+
+newmtl Head_Aldora_Hair
+d 1
+Ns 0.95
+Ni 0
+Ka 0 0 0
+Kd 0.968627 0.968627 0.968627
+Ks 0.0901961 0.0901961 0.0901961
+Km 3.6e-05
+
+newmtl Scarf_fScarf1_1
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 0.643137 0.207843
+Ks 0 0 0
+Km 0
+
+newmtl Scarf
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.976471 0.976471 0.976471
+Ks 0.6 0.6 0.6
+Km 0
+
