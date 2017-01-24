@@ -183,6 +183,7 @@ namespace RH.MeshUtils.Helpers
     public enum HeadMeshType
     {
         Eyes,
+        Torso,
         Lip,
         Face,
         Head
@@ -764,17 +765,16 @@ namespace RH.MeshUtils.Helpers
             TransparentTexture = info.TransparentTexture;
             DefaultTextureName = TextureName = info.TextureName;
             TransparentTextureName = info.TransparentTextureName;
-
-            //Name.Contains("SkinHead") || Name.Contains("SkinNeck")
+            
             Name = info.PartName;
             if (Name.Contains("Pupil"))
                 Type = HeadMeshType.Eyes;
-            if (Name.Contains("SkinFace"))
+            else if (Name.Contains("SkinFace"))
                 Type = HeadMeshType.Face;
-            else
-                if (Name.Contains("Lip"))
+            else if (Name.Contains("Lip"))
                 Type = HeadMeshType.Lip;
-
+            else if (Name.Contains("Torso"))
+                Type = HeadMeshType.Torso;
             Indices.Clear();
             var positions = new List<Vector3>();
             var texCoords = new List<Vector2>();

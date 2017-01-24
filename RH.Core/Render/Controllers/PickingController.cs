@@ -261,6 +261,7 @@ namespace RH.Core.Render.Controllers
                 case MeshType.Head:
                     {
                         var tempPluginTexture = string.Empty;
+                        var topPoint = 11.98351f;
                         if (ProgramCore.PluginMode)
                         {
                             var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjDirPath());
@@ -279,6 +280,21 @@ namespace RH.Core.Render.Controllers
                                     tempPluginTexture = Path.Combine(Application.StartupPath, "Plugin", "fsRndColor.png");
                                     break;
                             }
+                        }
+
+                        switch (ProgramCore.Project.ManType)
+                        {
+                            case ManType.Male:
+                                topPoint = 11.98351f;
+                                break;
+                            case ManType.Female:
+                                topPoint = 11.61f;
+                                break;
+                            case ManType.Child:
+                                topPoint = 9.759598f;
+                                break;
+                            default:
+                                break;
                         }
 
                         foreach (var mesh in HeadMeshes)
@@ -326,7 +342,7 @@ namespace RH.Core.Render.Controllers
                         var dv = Vector3.Zero;
                         foreach (var meshPartInfo in meshPartInfos)
                         {
-                            dv = MoveToPosition(ref meshPartInfo.VertexPositions, a, b, Vector3.Zero);
+                            dv = AlignByTop(ref meshPartInfo.VertexPositions, a, b, topPoint);
                             ProgramCore.MainForm.ctrlRenderControl.headMeshesController.CreateMeshPart(meshPartInfo);
                         }
 
@@ -535,6 +551,14 @@ namespace RH.Core.Render.Controllers
                 b.Y = Math.Max(b.Y, p.Y);
                 b.Z = Math.Max(b.Z, p.Z);
             }
+        }
+
+        private Vector3 AlignByTop(ref List<Vector3> points, Vector3 a, Vector3 b, float position)
+        {
+            var dv = new Vector3(-(a.X + b.X) * 0.5f, position - b.Y, -(a.Z + b.Z) * 0.5f);
+            for (var i = 0; i < points.Count; i++)
+                points[i] = points[i] + dv;
+            return dv;
         }
 
         private Vector3 MoveToPosition(ref List<Vector3> points, Vector3 a, Vector3 b, Vector3 position)
