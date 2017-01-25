@@ -362,11 +362,19 @@ namespace RH.MeshUtils.Helpers
             UpdateNormals();
         }
 
+        private bool CheckFixed(Point3d p)
+        {
+            var result = Type == HeadMeshType.Torso || (p.IsFixedLocal == true && p.Position.Y < 0.0f);
+            if (result && Type != HeadMeshType.Torso)
+                result = result;
+            return result;
+        }
+
         public void UpdateShape(ref TexturingInfo s)
         {
             foreach (var p in Points)
             {
-                if (p.ShapeTrinagleInfo.TrinagleIndex < 0)// || (p.IsFixed != null && p.IsFixed.Value))
+                if (p.ShapeTrinagleInfo.TrinagleIndex < 0 || CheckFixed(p))
                     continue;
                 var ti = p.ShapeTrinagleInfo.TrinagleIndex * 3;
                 var v1 = s.Points[s.Indices[ti]].Value;
