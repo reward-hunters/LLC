@@ -364,9 +364,7 @@ namespace RH.MeshUtils.Helpers
 
         private bool CheckFixed(Point3d p)
         {
-            var result = Type == HeadMeshType.Torso || (p.IsFixedLocal == true && p.Position.Y < 0.0f);
-            if (result && Type != HeadMeshType.Torso)
-                result = result;
+            var result = Type == HeadMeshType.Torso || (p.IsFixed == true && p.Position.Y < 0.0f);
             return result;
         }
 

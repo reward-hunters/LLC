@@ -266,6 +266,8 @@ namespace RH.MeshUtils.Data
             var triangle = new int[3];
             foreach (var part in Parts)
             {
+                if (part.Type == HeadMeshType.Torso)
+                    continue;
                 part.FindFixedPoints();
                 var isEyelash = part.Name.ToLower().Contains("eyelash");
                 for (var i = 0; i < part.Indices.Count; i += 3)
