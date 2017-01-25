@@ -106,10 +106,48 @@ namespace RH.Core.Helpers
             faceRectangle = new Rectangle(left, top, newWidth, BottomFace.Y + 15 < image.Height ? (int)(BottomFace.Y + 15) - top : image.Height - top - 1);
             if (needCrop)       // если это создание проекта - то нужно обрезать фотку и оставить только голову
             {
+                var colorPoints = new List<PointF>();
                 var forehead = new PointF(pointFeature[22].x, pointFeature[16].y + (pointFeature[16].y - top) * 0.5f);
+                colorPoints.Add(forehead);
+                colorPoints.Add(new PointF(pointFeature[22].x, pointFeature[22].y));
 
+                colorPoints.Add(new PointF(pointFeature[42].x, pointFeature[42].y));
+                colorPoints.Add(new PointF(pointFeature[43].x, pointFeature[43].y));
+                colorPoints.Add(new PointF(pointFeature[44].x, pointFeature[44].y));
+                colorPoints.Add(new PointF(pointFeature[46].x, pointFeature[46].y));
+                colorPoints.Add(new PointF(pointFeature[50].x, pointFeature[50].y));
+                colorPoints.Add(new PointF(pointFeature[52].x, pointFeature[52].y));
+                colorPoints.Add(new PointF(pointFeature[51].x, pointFeature[51].y));
+                colorPoints.Add(new PointF(pointFeature[53].x, pointFeature[53].y));
+                colorPoints.Add(new PointF(pointFeature[2].x, pointFeature[2].y));
+
+
+                
+               /*                  colorPoints.Add(new PointF(pointFeature[68].x, pointFeature[68].y));
+                colorPoints.Add(new PointF(pointFeature[69].x, pointFeature[69].y));
+                colorPoints.Add(new PointF(pointFeature[5].x, pointFeature[5].y));
+                colorPoints.Add(new PointF(pointFeature[7].x, pointFeature[7].y));
+                colorPoints.Add(new PointF(pointFeature[8].x, pointFeature[8].y));
+                colorPoints.Add(new PointF(pointFeature[6].x, pointFeature[6].y));
+                colorPoints.Add(new PointF(pointFeature[2].x, pointFeature[2].y));*/
+
+                  
+                int r = 0;
+                int g = 0;
+                int b = 0;
                 var bmpImage = new Bitmap(path);
-                var color = bmpImage.GetPixel((int)forehead.X, (int)forehead.Y);
+                foreach (var point in colorPoints)
+                {
+                    var colorH = bmpImage.GetPixel((int)point.X, (int)point.Y);
+                    r += colorH.R;
+                    g += colorH.G;
+                    b += colorH.B;
+                }
+                r /= colorPoints.Count;
+                g /= colorPoints.Count;
+                b /= colorPoints.Count;
+
+                var color = Color.FromArgb(r, g, b);
                 FaceColor = new Vector4((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, 1.0f);
 
                 using (var croppedImage = ImageEx.Crop(bmpImage, faceRectangle))

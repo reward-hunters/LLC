@@ -25,7 +25,7 @@ namespace RH.MeshUtils.Data
             }
             set
             {
-                HalfRadius = value * 0.5f;
+                HalfRadius = value ;
                 radius = value;
             }
         }
