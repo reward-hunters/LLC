@@ -23,7 +23,7 @@ namespace RH.OneClick
                 var currentDomain = AppDomain.CurrentDomain;
                 currentDomain.AssemblyResolve += LoadSubLibs;
 
-                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.PrintAhead_PayPal;
+                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.PrintAhead_Online;
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 

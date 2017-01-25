@@ -516,7 +516,7 @@ namespace RH.Core.Render
             {
                 if (ProgramCore.Project.ManType != ManType.Custom)
                 {
-                    var scaleX = UpdateMeshProportions(aabb);                    
+                    var scaleX = UpdateMeshProportions(aabb);
                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);
 
                     autodotsShapeHelper.TransformRects();
@@ -528,7 +528,6 @@ namespace RH.Core.Render
                             DetectFaceRotation();
                             break;
                     }
-                    
 
                     var points = autodotsShapeHelper.GetBaseDots();
 
@@ -540,7 +539,7 @@ namespace RH.Core.Render
 
                     SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3]);
                     SpecialBottomPointsUpdate(points);
-                    SpecialTopHaedWidth(points);                    
+                    SpecialTopHaedWidth(points);
                 }
                 else
                 {
@@ -617,7 +616,7 @@ namespace RH.Core.Render
             {
                 var point = points[eyePoints[i]];
                 var delta =
-                    MirroredHeadPoint.GetFrontWorldPoint(isLeft? ProgramCore.Project.DetectedLeftEyePoints[i] : ProgramCore.Project.DetectedRightEyePoints[i], ProgramCore.CurrentProgram) - point.Value;
+                    MirroredHeadPoint.GetFrontWorldPoint(isLeft ? ProgramCore.Project.DetectedLeftEyePoints[i] : ProgramCore.Project.DetectedRightEyePoints[i], ProgramCore.CurrentProgram) - point.Value;
                 point.Value += delta;
                 foreach (var l in point.LinkedPoints)
                 {
@@ -1960,12 +1959,18 @@ namespace RH.Core.Render
             if (ProgramCore.ShowDialog(this, ctrl, "New part", MessageBoxButtons.OKCancel, false) != DialogResult.OK)
                 return;
 
+            AttachNewPart(ctrl.Title, fi, e);
+        }
+
+        internal void AttachNewPart(string title, FileInfo fi, DragEventArgs e)
+        {
+
             var meshType = fi.FullName.Contains("Style") ? MeshType.Hair : MeshType.Accessory;
             if (meshType == MeshType.Hair)                          // only one hair in time
                 CleanHairMeshes();
 
-            if (!PartsLibraryMeshes.ContainsKey(ctrl.Title))
-                PartsLibraryMeshes.Add(ctrl.Title, new DynamicRenderMeshes());
+            if (!PartsLibraryMeshes.ContainsKey(title))
+                PartsLibraryMeshes.Add(title, new DynamicRenderMeshes());
 
             var objPath = Path.Combine(fi.DirectoryName, Path.GetFileNameWithoutExtension(fi.Name) + ".obj");
             var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
@@ -1985,16 +1990,14 @@ namespace RH.Core.Render
                 if (mesh == null || mesh.vertexArray.Length == 0) //ТУТ!
                     continue;
 
-                var xy = glControl.PointToClient(new Point(e.X, e.Y));
-
                 Vector3 s;
-                if (!float.IsNaN(meshSize))
-                {
+                if (!float.IsNaN(meshSize) || e == null)
                     s = meshPosition;
-
-                }
                 else
+                {
+                    var xy = glControl.PointToClient(new Point(e.X, e.Y));
                     s = camera.GetWorldPoint(xy.X, xy.Y, Width, Height, 15.0f);
+                }
 
                 mesh.Position = new Vector3(s[0], s[1], s[2]);
                 mesh.Transform[3, 0] += s[0];
@@ -2021,8 +2024,8 @@ namespace RH.Core.Render
                 if (meshType == MeshType.Accessory)
                     mesh.Material.DiffuseColor = ProgramCore.Project.FaceColor;
 
-                mesh.Title = ctrl.Title + "_" + i;
-                PartsLibraryMeshes[ctrl.Title].Add(mesh);
+                mesh.Title = title + "_" + i;
+                PartsLibraryMeshes[title].Add(mesh);
             }
             ProgramCore.MainForm.frmParts.UpdateList();
         }

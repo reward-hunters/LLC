@@ -48,7 +48,8 @@ namespace RH.Core
         public enum ProgramMode
         {
             PrintAhead,                 // обычный PrintAhead
-            PrintAhead_PayPal,           // PrintAhead с интеграцией PayPal. Нет возможности сохранения, экспорта. Только печать за деньги
+            PrintAhead_PayPal,          // PrintAhead с интеграцией PayPal. Нет возможности сохранения, экспорта. Только печать за деньги
+            PrintAhead_Online,          // Онлайн версия (незначительные изменение с paypal версией: загружается ряд аксессуаров по дефолту, добавлены АПИ вызовы для сайта)
             HeadShop,
             HeadShop_OneClick,            // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
             HeadShop_Rotator             // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях.
@@ -65,6 +66,8 @@ namespace RH.Core
                         return "PrintAhead";
                     case ProgramMode.PrintAhead_PayPal:
                         return "PrintAhead 2.0";
+                    case ProgramMode.PrintAhead_Online:
+                        return "PrintAhead Online";
                     case ProgramMode.HeadShop_OneClick:
                         return "HeadShop OneClick";
                 }
@@ -82,6 +85,7 @@ namespace RH.Core
                         return "HeadShop";
                     case ProgramMode.PrintAhead:
                     case ProgramMode.PrintAhead_PayPal:
+                    case ProgramMode.PrintAhead_Online:
                         return "PrintAhead";
 
                 }

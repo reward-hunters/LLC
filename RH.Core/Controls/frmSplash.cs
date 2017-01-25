@@ -23,6 +23,7 @@ namespace RH.Core.Controls
                     image = Resources.Logo_PrintAhead;
                     break;
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_Online:
                     image = Resources.Logo_PrintAheadPayPal;
                     break;
                 case ProgramCore.ProgramMode.HeadShop:

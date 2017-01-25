@@ -424,6 +424,7 @@ namespace RH.Core.Controls.Panels
                     case ProgramCore.ProgramMode.HeadShop:
                     case ProgramCore.ProgramMode.PrintAhead:
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                    case ProgramCore.ProgramMode.PrintAhead_Online:
                         if (frontTab && UserConfig.ByName("Options")["Tutorials", "Freehand", "1"] == "1")
                             ProgramCore.MainForm.frmTutFreehand.ShowDialog(this);
                         break;

@@ -33,7 +33,7 @@ namespace RH.Core.Controls.Libraries
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
                     groupBox_Change.Visible = false;
                     break;
             }
