@@ -7,9 +7,9 @@ using CefSharp;
 using CefSharp.WinForms;
 using PayPal;
 using PayPal.Api;
+using RH.Core;
 using RH.Core.Controls;
 using RH.Core.Helpers;
-using static RH.Core.frmMain;
 
 namespace RH.PrintAhead_Paypal.Controls
 {

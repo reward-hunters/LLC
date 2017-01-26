@@ -934,7 +934,7 @@ namespace RH.Core.Render
             if (!PartsLibraryMeshes.ContainsKey(baseName))
                 PartsLibraryMeshes.Add(baseName, new DynamicRenderMeshes());
 
-            var directoryName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Accessory");
+            var directoryName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory");
             var objPath = Path.Combine(directoryName, baseName + ".obj");
 
             var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
@@ -1959,10 +1959,10 @@ namespace RH.Core.Render
             if (ProgramCore.ShowDialog(this, ctrl, "New part", MessageBoxButtons.OKCancel, false) != DialogResult.OK)
                 return;
 
-            AttachNewPart(ctrl.Title, fi, e);
+            AttachNewPart(ctrl.Title, fi, e, Vector3.Zero);
         }
 
-        internal void AttachNewPart(string title, FileInfo fi, DragEventArgs e)
+        internal void AttachNewPart(string title, FileInfo fi, DragEventArgs e, Vector3 meshPosition, float meshSize = float.NaN)
         {
 
             var meshType = fi.FullName.Contains("Style") ? MeshType.Hair : MeshType.Accessory;
@@ -1975,9 +1975,7 @@ namespace RH.Core.Render
             var objPath = Path.Combine(fi.DirectoryName, Path.GetFileNameWithoutExtension(fi.Name) + ".obj");
             var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
 
-            var meshSize = float.NaN;
-            var meshPosition = Vector3.Zero;
-            if (meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
+            if (meshSize == float.NaN && meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
             {
                 var mesh = meshes[0];
                 meshSize = StringConverter.ToFloat(UserConfig.ByName("Parts")[mesh.Path, "Size"]);

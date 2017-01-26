@@ -249,10 +249,10 @@ namespace RH.Core.Controls.Libraries
             switch (filterIndex)
             {
                 case 1:
-                    directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Stages", "Backgrounds");
+                    directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),  "Stages", "Backgrounds");
                     break;
                 case 2:
-                    directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Stages", "Poses", ProgramCore.Project.ManType.GetCaption());
+                    directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),  "Stages", "Poses", ProgramCore.Project.ManType.GetCaption());
                     break;
             }
 

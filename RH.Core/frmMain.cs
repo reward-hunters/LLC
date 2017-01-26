@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Assimp;
 using Ionic.Zip;
 using Luxand;
+using OpenTK;
 using RH.Core.Controls;
 using RH.Core.Controls.Libraries;
 using RH.Core.Controls.Panels;
@@ -103,7 +104,7 @@ namespace RH.Core
 
         public List<string> PluginUvGroups = new List<string>();
 
-        private string openProjectPath;
+        private readonly string openProjectPath;
 
         public readonly Cursor GrabCursor;
         public readonly Cursor GrabbingCursor;
@@ -143,7 +144,7 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
                     Text = ProgramCore.CurrentProgram == ProgramCore.ProgramMode.PrintAhead_PayPal ? "PrintAhead 2.0" : "PrintAhead Online";
-                    aboutHeadShopProToolStripMenuItem.Text = ProgramCore.CurrentProgram == ProgramCore.ProgramMode.PrintAhead_PayPal ? "About PrintAhead 2.0" : "About PrintAhead Online"; 
+                    aboutHeadShopProToolStripMenuItem.Text = ProgramCore.CurrentProgram == ProgramCore.ProgramMode.PrintAhead_PayPal ? "About PrintAhead 2.0" : "About PrintAhead Online";
                     ProgramCore.paypalHelper.InitializeCef();
                     panelMenuStage.Image = Resources.btnMenuPrintNormal;
                     openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = false;
@@ -231,14 +232,8 @@ namespace RH.Core
                     openProjectPath = fn;
             }
         }
-        ~frmMain()
-        {
-        }
 
-        private void exitBtn_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+        #region Form's event
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -474,8 +469,14 @@ namespace RH.Core
                             switch (ProgramCore.Project.ManType)
                             {
                                 case ManType.Child:
-                                    var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Style", "hair3v2dazhexUV.obj"));
-                                   ctrlRenderControl.AttachNewPart("DefaultHair", fi, null);
+                                    var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Style", "kidhair.obj"));
+                                    var meshSize = 0.4736842f;
+                                    var meshPosition = Vector3Ex.FromString("-0,0205307 / 2,358275 / -2,589062");
+                                    ctrlRenderControl.AttachNewPart("DefaultHair", fi, null, meshPosition, meshSize);
+
+                                    fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory", "Shirt.obj"));
+                                    meshPosition = Vector3Ex.FromString("0,4706078 / -19,36209 / -6,103516E-05");
+                                    ctrlRenderControl.AttachNewPart("DefaultShirt", fi, null, meshPosition);
                                     break;
                             }
                         }
@@ -505,46 +506,9 @@ namespace RH.Core
             frmPrint = null;
             e.Cancel = false;
         }
-
-        private void InitRecentItems()
+        private void frmMain_KeyDown(object sender, KeyEventArgs e)
         {
-            mruManager.Initialize(this, ProgramCore.RegistryPath);
-
-            if (mruManager.mruList.Count == 0)
-            {
-                var recentFile = new ToolStripMenuItem
-                {
-                    Text = "Recent File",
-                    Enabled = false
-                };
-                fileToolStripMenuItem.DropDownItems.Add(recentFile);
-            }
-            else
-            {
-                foreach (string item in mruManager.mruList)
-                {
-                    var recentFile = new ToolStripMenuItem
-                    {
-                        Text = item
-                    };
-                    recentFile.Click += recentFile_Click;
-                    fileToolStripMenuItem.DropDownItems.Add(recentFile);
-                }
-            }
-
-            var separator = new ToolStripSeparator();
-            fileToolStripMenuItem.DropDownItems.Add(separator);
-
-            var exitBtn = new ToolStripMenuItem
-            {
-                Text = "Exit"
-            };
-            exitBtn.Click += exitBtn_Click;
-            fileToolStripMenuItem.DropDownItems.Add(exitBtn);
-        }
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ProgramCore.MainForm.ctrlRenderControl.historyController.Undo();
+            ctrlTemplateImage.KeyDown(e);
         }
 
         private void OnSavePart_Click(object sender, EventArgs e)
@@ -555,15 +519,25 @@ namespace RH.Core
         {
             ctrlRenderControl.SaveHeadToFile();
         }
+        private void OnUndo_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.historyController.Undo();
+        }
 
         private void OnDeleteHeadSelectedPoints_Click(object sender, EventArgs e)
         {
             ctrlRenderControl.headController.RemoveSelectedPoints();
         }
 
-        private void OnUndo_Click(object sender, EventArgs e)
+        #region Menu
+
+        private void exitBtn_Click(object sender, EventArgs e)
         {
-            ctrlRenderControl.historyController.Undo();
+            Application.Exit();
+        }
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         private bool beginExport;
@@ -585,63 +559,267 @@ namespace RH.Core
             Export();
             beginExport = false;
         }
-
-        private void InitializeTutorialLinks()
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            switch (ProgramCore.CurrentProgram)
+            OnExport_Click(this, EventArgs.Empty);
+        }
+        private void exportToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            OnExport_Click(null, EventArgs.Empty);
+        }
+        private void exportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OnExport_Click(null, EventArgs.Empty);
+        }
+        private void exportToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            OnExport_Click(null, EventArgs.Empty);
+        }
+
+        private void saveToolStripMenuItem7_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.SaveSelectedHairToPartsLibrary();
+        }
+        private void saveToolStripMenuItem8_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.SaveHeadToFile();
+        }
+        private void saveToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.SaveHeadToFile();
+        }
+        private void saveToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.SaveHeadToFile();
+        }
+
+        private void deleteToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.DeleteSelectedHair();
+        }
+        private void openToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (frmStyles.Visible)
+                frmStyles.Hide();
+            else
+                frmStyles.Show(this);
+        }
+        private void undoToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.historyController.Undo();
+        }
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProgramCore.MainForm.ctrlRenderControl.historyController.Undo();
+        }
+
+        private void photoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmStages.DoPhoto();
+        }
+        private void linesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            panelFront.btnPolyLine_Click(null, EventArgs.Empty);
+        }
+        private void handToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            panelFront.btnShapeTool_Click(null, EventArgs.Empty);
+        }
+        private void autodotsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            panelFront.btnAutodots_Click(null, EventArgs.Empty);
+        }
+        private void ponitsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            panelFront.btnLasso_Click(null, EventArgs.Empty);
+        }
+        private void flipToLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            panelFront.btnFlipLeft_Click(null, EventArgs.Empty);
+        }
+        private void flipToRightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            panelFront.btnFlipRight_Click(null, EventArgs.Empty);
+        }
+
+        #endregion
+
+        #region Navigaion
+
+        private void checkHand_Click(object sender, EventArgs e)
+        {
+            if (checkHand.Tag.ToString() == "2")
             {
-                case ProgramCore.ProgramMode.PrintAhead:
-                    UserConfig.ByName("Tutorials")["Links", "Start"] = "http://youtu.be/JC5z64YP1xA";
-                    UserConfig.ByName("Tutorials")["Links", "Recognize"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Shapedots"] = "http://youtu.be/pIlrJUByJj8";
-                    UserConfig.ByName("Tutorials")["Links", "Profile"] = "http://youtu.be/Olc7oeQUmWk";
-                    UserConfig.ByName("Tutorials")["Links", "Mirror"] = "http://youtu.be/JC5z64YP1xA";
-                    UserConfig.ByName("Tutorials")["Links", "LineTool"] = "https://www.youtube.com/watch?v=c7YbRsm8m9I";
-                    UserConfig.ByName("Tutorials")["Links", "Freehand"] = "http://youtu.be/c2Yvd2DaiDg";
-                    UserConfig.ByName("Tutorials")["Links", "CustomHeads"] = "http://youtu.be/H9dqNF4HdMQ";
-                    UserConfig.ByName("Tutorials")["Links", "Autodots"] = "http://youtu.be/JC5z64YP1xA";
+                ResetScaleModeTools();
+                ctrlRenderControl.ScaleMode = ScaleMode.Move;
 
-                    UserConfig.ByName("Tutorials")["Links", "Style"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Stage"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Shape"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Material"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Cut"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Accessory"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                checkHand.Tag = "1";
+                checkArrow.Tag = checkZoom.Tag = "2";
 
-                    UserConfig.ByName("Tutorials")["Links", "AdvancedManual"] = "https://youtu.be/gWOkSUDbv0I";
-                    UserConfig.ByName("Tutorials")["Links", "QuickStart"] = "https://youtu.be/8cejdijABQY";
-                    break;
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.HeadShop_OneClick:
-                    UserConfig.ByName("Tutorials")["Links", "Start"] = "https://www.youtube.com/watch?v=0baUErHwngA";
-                    UserConfig.ByName("Tutorials")["Links", "Recognize"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Shapedots"] = "http://youtu.be/pIlrJUByJj8";
-                    UserConfig.ByName("Tutorials")["Links", "Profile"] = "https://youtu.be/IFvfVc-81M4";
-                    UserConfig.ByName("Tutorials")["Links", "Mirror"] = "http://youtu.be/JC5z64YP1xA";
-                    UserConfig.ByName("Tutorials")["Links", "LineTool"] = " https://youtu.be/dzLtPdsmtMY";
-                    UserConfig.ByName("Tutorials")["Links", "Freehand"] = "https://youtu.be/-Lg6AWr17gU";
-                    UserConfig.ByName("Tutorials")["Links", "CustomHeads"] = "http://youtu.be/H9dqNF4HdMQ";
-                    UserConfig.ByName("Tutorials")["Links", "Autodots"] = "https://youtu.be/Cxi_eTyCh-Y";
+                checkHand.Image = Resources.btnHandPressed;
+                checkArrow.Image = Resources.btnArrowNormal;
+                checkZoom.Image = Resources.btnZoomNormal;
+            }
+            else
+            {
+                checkHand.Tag = "2";
+                checkHand.Image = Resources.btnHandNormal;
 
-                    UserConfig.ByName("Tutorials")["Links", "Style"] = "https://youtu.be/8_7CnBSW85M";
-                    UserConfig.ByName("Tutorials")["Links", "Stage"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Shape"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Material"] = "https://youtu.be/zHA7_1ODIl0";
-                    UserConfig.ByName("Tutorials")["Links", "Cut"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
-                    UserConfig.ByName("Tutorials")["Links", "Accessory"] = "https://youtu.be/UeQljfKlNG8";
+                ctrlRenderControl.ScaleMode = ScaleMode.None;
+            }
+        }
+        private void checkArrow_Click(object sender, EventArgs e)
+        {
+            if (checkArrow.Tag.ToString() == "2")
+            {
+                ResetScaleModeTools();
+                ctrlRenderControl.ScaleMode = ScaleMode.Rotate;
 
-                    UserConfig.ByName("Tutorials")["Links", "AdvancedManual"] = "https://youtu.be/z8rnXteNnm0";
-                    UserConfig.ByName("Tutorials")["Links", "QuickStart"] = "https://youtu.be/7sovzyHCnRY";
+                checkArrow.Tag = "1";
+                checkHand.Tag = checkZoom.Tag = "2";
 
-                    UserConfig.ByName("Tutorials")["Links", "Features"] = "https://youtu.be/_hADE739X9w";
-                    UserConfig.ByName("Tutorials")["Links", "Export"] = "https://youtu.be/aPsJOD1Nroc";
-                    UserConfig.ByName("Tutorials")["Links", "3DPrinting"] = "https://youtu.be/A_MQCNI4E8U";
-                    break;
+                checkArrow.Image = Resources.btnArrowPressed;
+                checkHand.Image = Resources.btnHandNormal;
+                checkZoom.Image = Resources.btnZoomNormal;
+            }
+            else
+            {
+                checkArrow.Tag = "2";
+                checkArrow.Image = Resources.btnArrowNormal;
+
+                ctrlRenderControl.ScaleMode = ScaleMode.None;
+            }
+        }
+        private void checkZoom_Click(object sender, EventArgs e)
+        {
+            if (checkZoom.Tag.ToString() == "2")
+            {
+                ResetScaleModeTools();
+                ctrlRenderControl.ScaleMode = ScaleMode.Zoom;
+
+                checkZoom.Tag = "1";
+                checkHand.Tag = checkArrow.Tag = "2";
+
+                checkZoom.Image = Resources.btnZoomPressed;
+                checkHand.Image = Resources.btnHandNormal;
+                checkArrow.Image = Resources.btnArrowNormal;
+            }
+            else
+            {
+                checkZoom.Tag = "2";
+                checkZoom.Image = Resources.btnZoomNormal;
+
+                ctrlRenderControl.ScaleMode = ScaleMode.None;
             }
         }
 
-        #region Information
+        private void btnUnscale_MouseDown(object sender, MouseEventArgs e)
+        {
+            btnUnscale.Image = Resources.btnUnscalePressed;
+        }
+        private void btnUnscale_MouseUp(object sender, MouseEventArgs e)
+        {
+            btnUnscale.Image = Resources.btnUnscaleNormal;
 
+            ctrlRenderControl.camera.ResetCamera(true);
+            if (ProgramCore.MainForm.HeadProfile)
+                ctrlRenderControl.OrtoRight();
+
+            ctrlTemplateImage.RecalcRealTemplateImagePosition();
+
+            checkHand.Tag = checkArrow.Tag = checkZoom.Tag = "2";
+            checkHand.Image = Resources.btnHandNormal;
+            checkArrow.Image = Resources.btnArrowNormal;
+            checkZoom.Image = Resources.btnZoomNormal;
+
+            //    ctrlRenderControl.Mode = Mode.None;
+        }
+
+        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.ZoomIn();
+        }
+        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.ZoomOut();
+        }
+        private void fitWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.camera.ResetCamera(true);
+        }
+
+        private void ortoBackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.OrtoBack();
+        }
+        private void ortoTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.OrtoTop();
+        }
+        private void ortoLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.OrtoLeft();
+        }
+        private void ortoRightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.OrtoRight();
+        }
+
+        private void turnRightoneStepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.TurnRight();
+        }
+        private void turnLeftoneStepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.TurnLeft();
+        }
+
+        private void stepToponeStepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.StepTop();
+        }
+        private void stepBottomoneStepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.StepBottom();
+        }
+
+        private void panTopcontinuousPanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.TimerMode = Mode.TimerStepTop;
+            ctrlRenderControl.workTimer.Start();
+        }
+        private void panBottomcontinuousPanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.TimerMode = Mode.TimerStepBottom;
+            ctrlRenderControl.workTimer.Start();
+        }
+
+        private void rotateLeftcontinuousRotateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.TimerMode = Mode.TimerTurnLeft;
+            ctrlRenderControl.workTimer.Start();
+        }
+        private void rotateRightcontinuousRotateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.TimerMode = Mode.TimerTurnRight;
+            ctrlRenderControl.workTimer.Start();
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ctrlRenderControl.TimerMode = Mode.None;
+            ctrlRenderControl.workTimer.Stop();
+        }
+
+        #endregion
+
+        #region Tutorials
+
+        public void ShowVideo()
+        {
+            var quickStartLink = UserConfig.ByName("Tutorials")["Links", "QuickStart", "https://youtu.be/8cejdijABQY"];
+            Process.Start(quickStartLink);
+        }
         public void ShowTutorial()
         {
             Process.Start("http://ep.yimg.com/ty/cdn/yhst-48396527764316/HeadShop10.2manual.pdf");
@@ -658,6 +836,147 @@ namespace RH.Core
         private void aboutHeadShopProToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ProgramCore.Splash.ShowDialog(this);
+        }
+        private void videoTutorialPart1CutAndShapeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowVideo();
+        }
+        private void videoTutorialPart2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var advancedLink = UserConfig.ByName("Tutorials")["Links", "AdvancedManual", "https://youtu.be/z8rnXteNnm0"];
+            Process.Start(advancedLink);
+        }
+
+        private void startHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutStart.ShowDialog(this);
+                    break;
+            }
+        }
+        private void accessoriesHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutFeatures.ShowDialog(this);
+                    break;
+            }
+        }
+        private void materialHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutExport.ShowDialog(this);
+                    break;
+            }
+        }
+        private void stageHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTut3dPrint.ShowDialog(this);
+                    break;
+            }
+        }
+        private void styleHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutStyle.ShowDialog(this);
+                    break;
+            }
+        }
+
+        private void autodotsHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmTutAutodots.ShowDialog(this);
+        }
+        private void mirrorHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutLineTool.ShowDialog(this);
+                    break;
+            }
+        }
+        private void freehandHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutFreehand.ShowDialog(this);
+                    break;
+            }
+        }
+        private void profileHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmTutProfile.ShowDialog(this);
+        }
+
+        private void accessoriesHelpToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutAccessory.ShowDialog(this);
+                    break;
+            }
+        }
+        private void colorHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                    frmTutMaterial.ShowDialog(this);
+                    break;
+            }
+        }
+        private void childHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
+                    frmTutChild.ShowDialog(this);
+                    break;
+            }
+        }
+        private void retouchHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmTutRetouch.ShowDialog(this);
         }
 
         #endregion
@@ -1031,7 +1350,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     case ProgramCore.ProgramMode.PrintAhead_Online:
-                    ctrlRenderControl.AddBase();
+                        ctrlRenderControl.AddBase();
                         var backPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Stages", "Backgrounds", "fire1.jpg");
                         if (File.Exists(backPath))
                             ProgramCore.MainForm.ctrlRenderControl.BackgroundTexture = backPath;
@@ -1220,855 +1539,101 @@ namespace RH.Core
 
         #endregion
 
-        #region Navigaion
-
-        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.ZoomIn();
-        }
-        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.ZoomOut();
-        }
-        private void fitWindowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.camera.ResetCamera(true);
-        }
-
-        private void ortoBackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.OrtoBack();
-        }
-        private void ortoTopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.OrtoTop();
-        }
-        private void ortoLeftToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.OrtoLeft();
-        }
-        private void ortoRightToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.OrtoRight();
-        }
-
-        private void turnRightoneStepToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.TurnRight();
-        }
-        private void turnLeftoneStepToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.TurnLeft();
-        }
-
-        private void stepToponeStepToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.StepTop();
-        }
-        private void stepBottomoneStepToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.StepBottom();
-        }
-
-        private void panTopcontinuousPanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.TimerMode = Mode.TimerStepTop;
-            ctrlRenderControl.workTimer.Start();
-        }
-        private void panBottomcontinuousPanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.TimerMode = Mode.TimerStepBottom;
-            ctrlRenderControl.workTimer.Start();
-        }
-
-        private void rotateLeftcontinuousRotateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.TimerMode = Mode.TimerTurnLeft;
-            ctrlRenderControl.workTimer.Start();
-        }
-        private void rotateRightcontinuousRotateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.TimerMode = Mode.TimerTurnRight;
-            ctrlRenderControl.workTimer.Start();
-        }
-
-        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.TimerMode = Mode.None;
-            ctrlRenderControl.workTimer.Stop();
-        }
-
         #endregion
 
-        #region ProgressProc
+        #region Supported void's
 
-        private bool isProgress;
-        private DateTime lastUpdateDateTime = DateTime.MinValue;
-        private void ProgressProc(object sender, ProgressProcEventArgs e)
+        private void InitRecentItems()
         {
-            var now = DateTime.Now;
-            if (!isProgress)
-            {
-                StartProgress();
-            }
-            if (now - lastUpdateDateTime > TimeSpan.FromMilliseconds(40))
-            {
-                Application.DoEvents();
-                lastUpdateDateTime = now;
-            }
-            ProgressManager.ProgressProc(sender, e);
-        }
-        private readonly ProgressMessageFilter progressMessageFilter = new ProgressMessageFilter();
-        private void StartProgress()
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-                Application.AddMessageFilter(progressMessageFilter);
-                ProgramCore.AddCallStackReleasedProc(_stopProgress);
-                isProgress = true;
-            }
-            catch (Exception)
-            {
-            }
-        }
-        private void StopProgress()
-        {
-            try
-            {
-                Application.RemoveMessageFilter(progressMessageFilter);
-                Cursor = Cursors.Default;
-                isProgress = false;
-            }
-            catch (Exception)
-            {
-            }
-        }
-        private void _stopProgress(object sender, EventArgs e)
-        {
-            StopProgress();
-        }
-        class ProgressMessageFilter : IMessageFilter
-        {
-            public bool PreFilterMessage(ref Message m)
-            {
-                if (m.HWnd == ProgressManager.ProgressHWnd || m.HWnd == ProgressManager.ProgressCancelButtonHWnd)
-                    return false;
-                return (m.Msg != WMConsts.WM_TIMER && (m.Msg >= WMConsts.WM_KEYFIRST && m.Msg <= WMConsts.WM_KEYLAST || m.Msg >= WMConsts.WM_MOUSEFIRST && m.Msg <= WMConsts.WM_MOUSELAST));
-            }
-        }
+            mruManager.Initialize(this, ProgramCore.RegistryPath);
 
-        #endregion
-
-        #region Instruments
-
-        private void checkHand_Click(object sender, EventArgs e)
-        {
-            if (checkHand.Tag.ToString() == "2")
+            if (mruManager.mruList.Count == 0)
             {
-                ResetScaleModeTools();
-                ctrlRenderControl.ScaleMode = ScaleMode.Move;
-
-                checkHand.Tag = "1";
-                checkArrow.Tag = checkZoom.Tag = "2";
-
-                checkHand.Image = Resources.btnHandPressed;
-                checkArrow.Image = Resources.btnArrowNormal;
-                checkZoom.Image = Resources.btnZoomNormal;
+                var recentFile = new ToolStripMenuItem
+                {
+                    Text = "Recent File",
+                    Enabled = false
+                };
+                fileToolStripMenuItem.DropDownItems.Add(recentFile);
             }
             else
             {
-                checkHand.Tag = "2";
-                checkHand.Image = Resources.btnHandNormal;
-
-                ctrlRenderControl.ScaleMode = ScaleMode.None;
+                foreach (string item in mruManager.mruList)
+                {
+                    var recentFile = new ToolStripMenuItem
+                    {
+                        Text = item
+                    };
+                    recentFile.Click += recentFile_Click;
+                    fileToolStripMenuItem.DropDownItems.Add(recentFile);
+                }
             }
-        }
-        private void checkArrow_Click(object sender, EventArgs e)
-        {
-            if (checkArrow.Tag.ToString() == "2")
+
+            var separator = new ToolStripSeparator();
+            fileToolStripMenuItem.DropDownItems.Add(separator);
+
+            var exitBtn = new ToolStripMenuItem
             {
-                ResetScaleModeTools();
-                ctrlRenderControl.ScaleMode = ScaleMode.Rotate;
-
-                checkArrow.Tag = "1";
-                checkHand.Tag = checkZoom.Tag = "2";
-
-                checkArrow.Image = Resources.btnArrowPressed;
-                checkHand.Image = Resources.btnHandNormal;
-                checkZoom.Image = Resources.btnZoomNormal;
-            }
-            else
-            {
-                checkArrow.Tag = "2";
-                checkArrow.Image = Resources.btnArrowNormal;
-
-                ctrlRenderControl.ScaleMode = ScaleMode.None;
-            }
+                Text = "Exit"
+            };
+            exitBtn.Click += exitBtn_Click;
+            fileToolStripMenuItem.DropDownItems.Add(exitBtn);
         }
-        private void checkZoom_Click(object sender, EventArgs e)
-        {
-            if (checkZoom.Tag.ToString() == "2")
-            {
-                ResetScaleModeTools();
-                ctrlRenderControl.ScaleMode = ScaleMode.Zoom;
-
-                checkZoom.Tag = "1";
-                checkHand.Tag = checkArrow.Tag = "2";
-
-                checkZoom.Image = Resources.btnZoomPressed;
-                checkHand.Image = Resources.btnHandNormal;
-                checkArrow.Image = Resources.btnArrowNormal;
-            }
-            else
-            {
-                checkZoom.Tag = "2";
-                checkZoom.Image = Resources.btnZoomNormal;
-
-                ctrlRenderControl.ScaleMode = ScaleMode.None;
-            }
-        }
-
-        private void btnUnscale_MouseDown(object sender, MouseEventArgs e)
-        {
-            btnUnscale.Image = Resources.btnUnscalePressed;
-        }
-        private void btnUnscale_MouseUp(object sender, MouseEventArgs e)
-        {
-            btnUnscale.Image = Resources.btnUnscaleNormal;
-
-            ctrlRenderControl.camera.ResetCamera(true);
-            if (ProgramCore.MainForm.HeadProfile)
-                ctrlRenderControl.OrtoRight();
-
-            ctrlTemplateImage.RecalcRealTemplateImagePosition();
-
-            checkHand.Tag = checkArrow.Tag = checkZoom.Tag = "2";
-            checkHand.Image = Resources.btnHandNormal;
-            checkArrow.Image = Resources.btnArrowNormal;
-            checkZoom.Image = Resources.btnZoomNormal;
-
-            //    ctrlRenderControl.Mode = Mode.None;
-        }
-
-        private void photoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmStages.DoPhoto();
-        }
-
-        private void stage1ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelMenuStage_Click(this, EventArgs.Empty);
-            frmStages.SetStage1();
-        }
-        private void stage2ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelMenuStage_Click(this, EventArgs.Empty);
-            frmStages.SetStage2();
-        }
-        private void stage3ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelMenuStage_Click(this, EventArgs.Empty);
-            frmStages.SetStage3();
-        }
-
-        private void pose1ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelMenuStage_Click(this, EventArgs.Empty);
-            frmStages.SetPose1();
-        }
-        private void pose2ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelMenuStage_Click(this, EventArgs.Empty);
-            frmStages.SetPose2();
-        }
-        private void pose3ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelMenuStage_Click(this, EventArgs.Empty);
-            frmStages.SetPose3();
-        }
-
-        private void lineToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelCut.btnLine_Click(this, EventArgs.Empty);
-        }
-        private void polyLineToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelCut.btnPolyLine_Click(this, EventArgs.Empty);
-        }
-        private void arcToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelCut.btnArc_Click(this, EventArgs.Empty);
-        }
-
-        private void mirrorToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            panelShape.btnMirror_Click(this, EventArgs.Empty);
-        }
-        private void stretchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelShape.btnStretch_Click(this, EventArgs.Empty);
-        }
-        private void shapeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelShape.btnShape_Click(this, EventArgs.Empty);
-        }
-
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelCut.btnCut_Click(this, EventArgs.Empty);
-        }
-        private void mirrorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelCut.btnMirror_Click(this, EventArgs.Empty);
-        }
-
-        #endregion
-
-        #region Project
-
-        private static void DirectoryCopy(string sourceDirName, string destDirName)
-        {
-            // Get the subdirectories for the specified directory.
-            var dir = new DirectoryInfo(sourceDirName);
-
-            if (!dir.Exists)
-            {
-                throw new DirectoryNotFoundException(
-                    "Source directory does not exist or could not be found: "
-                    + sourceDirName);
-            }
-
-            var dirs = dir.GetDirectories();
-            // If the destination directory doesn't exist, create it.
-            if (!Directory.Exists(destDirName))
-            {
-                Directory.CreateDirectory(destDirName);
-            }
-
-            // Get the files in the directory and copy them to the new location.
-            var files = dir.GetFiles();
-            foreach (var file in files)
-            {
-                var temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, false);
-            }
-
-            // If copying subdirectories, copy them and their contents to new location.
-            foreach (var subdir in dirs)
-            {
-                var temppath = Path.Combine(destDirName, subdir.Name);
-                DirectoryCopy(subdir.FullName, temppath);
-            }
-        }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        private void InitializeTutorialLinks()
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
-                    {
-                        var frm = new frmNewProject4HeadShop(false);
-                        frm.ShowDialog();
-                        if (frm.dialogResult != DialogResult.OK)
-                            return;
+                case ProgramCore.ProgramMode.PrintAhead:
+                case ProgramCore.ProgramMode.PrintAhead_Online:
+                case ProgramCore.ProgramMode.PrintAhead_PayPal:
+                    UserConfig.ByName("Tutorials")["Links", "Start"] = "http://youtu.be/JC5z64YP1xA";
+                    UserConfig.ByName("Tutorials")["Links", "Recognize"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Shapedots"] = "http://youtu.be/pIlrJUByJj8";
+                    UserConfig.ByName("Tutorials")["Links", "Profile"] = "http://youtu.be/Olc7oeQUmWk";
+                    UserConfig.ByName("Tutorials")["Links", "Mirror"] = "http://youtu.be/JC5z64YP1xA";
+                    UserConfig.ByName("Tutorials")["Links", "LineTool"] = "https://www.youtube.com/watch?v=c7YbRsm8m9I";
+                    UserConfig.ByName("Tutorials")["Links", "Freehand"] = "http://youtu.be/c2Yvd2DaiDg";
+                    UserConfig.ByName("Tutorials")["Links", "CustomHeads"] = "http://youtu.be/H9dqNF4HdMQ";
+                    UserConfig.ByName("Tutorials")["Links", "Autodots"] = "http://youtu.be/JC5z64YP1xA";
 
-                        frm.CreateProject();
-                    }
+                    UserConfig.ByName("Tutorials")["Links", "Style"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Stage"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Shape"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Material"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Cut"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Accessory"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+
+                    UserConfig.ByName("Tutorials")["Links", "AdvancedManual"] = "https://youtu.be/gWOkSUDbv0I";
+                    UserConfig.ByName("Tutorials")["Links", "QuickStart"] = "https://youtu.be/8cejdijABQY";
                     break;
+                case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
-                case ProgramCore.ProgramMode.PrintAhead:
-                    {
-                        var frm = new frmNewProject4PrintAhead(false);
-                        frm.ShowDialog();
-                        if (frm.dialogResult != DialogResult.OK)
-                            return;
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    UserConfig.ByName("Tutorials")["Links", "Start"] = "https://www.youtube.com/watch?v=0baUErHwngA";
+                    UserConfig.ByName("Tutorials")["Links", "Recognize"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Shapedots"] = "http://youtu.be/pIlrJUByJj8";
+                    UserConfig.ByName("Tutorials")["Links", "Profile"] = "https://youtu.be/IFvfVc-81M4";
+                    UserConfig.ByName("Tutorials")["Links", "Mirror"] = "http://youtu.be/JC5z64YP1xA";
+                    UserConfig.ByName("Tutorials")["Links", "LineTool"] = " https://youtu.be/dzLtPdsmtMY";
+                    UserConfig.ByName("Tutorials")["Links", "Freehand"] = "https://youtu.be/-Lg6AWr17gU";
+                    UserConfig.ByName("Tutorials")["Links", "CustomHeads"] = "http://youtu.be/H9dqNF4HdMQ";
+                    UserConfig.ByName("Tutorials")["Links", "Autodots"] = "https://youtu.be/Cxi_eTyCh-Y";
 
-                        frm.CreateProject();
-                    }
+                    UserConfig.ByName("Tutorials")["Links", "Style"] = "https://youtu.be/8_7CnBSW85M";
+                    UserConfig.ByName("Tutorials")["Links", "Stage"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Shape"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Material"] = "https://youtu.be/zHA7_1ODIl0";
+                    UserConfig.ByName("Tutorials")["Links", "Cut"] = "https://www.youtube.com/watch?v=AjG09RGgHvw";
+                    UserConfig.ByName("Tutorials")["Links", "Accessory"] = "https://youtu.be/UeQljfKlNG8";
+
+                    UserConfig.ByName("Tutorials")["Links", "AdvancedManual"] = "https://youtu.be/z8rnXteNnm0";
+                    UserConfig.ByName("Tutorials")["Links", "QuickStart"] = "https://youtu.be/7sovzyHCnRY";
+
+                    UserConfig.ByName("Tutorials")["Links", "Features"] = "https://youtu.be/_hADE739X9w";
+                    UserConfig.ByName("Tutorials")["Links", "Export"] = "https://youtu.be/aPsJOD1Nroc";
+                    UserConfig.ByName("Tutorials")["Links", "3DPrinting"] = "https://youtu.be/A_MQCNI4E8U";
                     break;
             }
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var ofd = new OpenFileDialogEx("Open HeadShop/HairShop project", "HeadShop projects|*.hds|HairShop projects|*.hs"))
-            {
-                if (ofd.ShowDialog(false) != DialogResult.OK)
-                    return;
-
-                OpenProject(ofd.FileName);
-            }
-        }
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ProgramCore.Project != null)
-            {
-                ctrlRenderControl.pickingController.SelectedMeshes.Clear();
-                ProgramCore.Project.ToStream();
-                MessageBox.Show("Project successfully saved!", "Done", MessageBoxButtons.OK);
-            }
-        }
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ProgramCore.Project == null)
-                return;
-
-            using (var sfd = new SaveFileDialogEx("Save as HeadShop project", "HeadShop projects|*.hs|OBJ Hair|*.obj|DAE model|*.dae"))
-            {
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    switch (sfd.FilterIndex)
-                    {
-                        case 1:
-                            #region All project
-
-                            var fullPath = sfd.FileName;
-                            var projectName = Path.GetFileNameWithoutExtension(fullPath);
-                            var projectPath = Path.Combine(Path.GetDirectoryName(fullPath), projectName);
-
-                            var newDirectoryPath = Path.Combine(projectPath, "Model");
-                            var directoryPath = Path.Combine(ProgramCore.Project.ProjectPath, "Model");
-
-                            DirectoryCopy(directoryPath, newDirectoryPath);
-
-                            var frontImage = ProgramCore.Project.FrontImagePath;
-                            var newFrontImage = Path.Combine(projectPath, Path.GetFileName(frontImage));
-                            File.Copy(Path.Combine(ProgramCore.Project.ProjectPath, frontImage), newFrontImage);
-
-                            ProgramCore.Project.ProjectName = projectName;
-                            ProgramCore.Project.ProjectPath = projectPath;
-                            ProgramCore.Project.HeadModelPath = Path.Combine(projectPath, "Model", Path.GetFileName(ProgramCore.Project.HeadModelPath));
-                            ProgramCore.Project.ToStream();
-                            MessageBox.Show("Project successfully saved!", "Done", MessageBoxButtons.OK);
-
-                            #endregion
-                            break;
-                        case 2:
-                            Export();
-                            break;
-                        case 3:
-
-                            #region Копируем модель
-
-                            File.Copy(ProgramCore.Project.HeadModelPath, sfd.FileName, true);           // сама модель
-
-                            #region Обрабатываем mtl файл и папку с текстурами
-
-                            var oldFileName = Path.GetFileNameWithoutExtension(ProgramCore.Project.HeadModelPath);
-                            var mtl = oldFileName + ".mtl";
-                            using (var ms = new StreamReader(ProgramCore.Project.HeadModelPath))
-                            {
-                                for (var i = 0; i < 10; i++)
-                                {
-                                    if (ms.EndOfStream)
-                                        break;
-                                    var line = ms.ReadLine();
-                                    if (line.ToLower().Contains("mtllib"))          // ищем ссылку в obj файле на mtl файл (у них могут быть разные названия, но всегда в одной папке
-                                    {
-                                        var lines = line.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                                        if (lines.Length > 1)
-                                        {
-                                            mtl = lines[1];
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-
-                            ObjLoader.CopyMtl(mtl, mtl, Path.GetDirectoryName(ProgramCore.Project.HeadModelPath), "", Path.GetDirectoryName(sfd.FileName), ProgramCore.Project.TextureSize);
-
-                            #endregion
-
-                            MessageBox.Show("Model successfully exported!", "Done", MessageBoxButtons.OK);
-
-                            #endregion
-
-
-
-                            break;
-                    }
-                }
-            }
-        }
-        private void recentFile_Click(object sender, EventArgs e)
-        {
-            var item = sender as ToolStripMenuItem;
-            OpenProject(item.Text);
-        }
-
-        public void UpdateProjectControls(bool newProject, RectangleAABB aabb = null)
-        {
-            if (ProgramCore.Project == null)
-            {
-                ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
-            }
-            else
-            {
-                ctrlRenderControl.LoadProject(newProject, aabb);
-                ctrlRenderControl.camera.UpdateDy();
-
-                if (panelCut != null && panelStyles != null)
-                {
-                    if (ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes.Count == 0)
-                        panelMenuStyle_Click(null, EventArgs.Empty);
-                    else
-                        panelMenuCut_Click(null, EventArgs.Empty);
-                }
-
-                if (frmStages != null)
-                    frmStages.InitializeListView();
-
-                if (ProgramCore.Project.FrontImage == null)
-                    ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
-                else
-                {
-                    using (var bmp = new Bitmap(ProgramCore.Project.FrontImage))
-                        ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage((Bitmap)bmp.Clone());
-                }
-                if (newProject && ProgramCore.Project.ManType == ManType.Custom)
-                    ctrlRenderControl.camera.ResetCamera(true);
-            }
-
-            if (frmPrint != null || frmStages != null)
-            {
-                ctrlRenderControl.StagesActivate(false);     // for recalc
-                ctrlRenderControl.StagesDeactivate(0);
-            }
-
-            if (frmParts != null)
-                frmParts.UpdateList();
-        }
-        private void OpenProject(string fileName)
-        {
-            ProgramCore.Project = Project.FromStream(fileName);
-            UpdateProjectControls(false);
-
-            ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper();         // инициализация точек головы.
-            ProgramCore.MainForm.ctrlTemplateImage.RecalcProfilePoints();            // пидоры сломали все. инициализируем профиль.
-
-            if (ProgramCore.Project.AgeCoefficient != 0 || ProgramCore.Project.FatCoefficient != 0)  // восстанавливаем морфинги
-            {
-                foreach (var m in ProgramCore.MainForm.ctrlRenderControl.OldMorphing)
-                    m.Value.Delta = ProgramCore.Project.AgeCoefficient;
-                foreach (var m in ProgramCore.MainForm.ctrlRenderControl.FatMorphing)
-                    m.Value.Delta = ProgramCore.Project.FatCoefficient;
-                ProgramCore.MainForm.ctrlRenderControl.DoMorth();
-            }
-
-            if (!float.IsNaN(ProgramCore.Project.MorphingScale))
-                ctrlRenderControl.DoMorth(ProgramCore.Project.MorphingScale);
-
-            MessageBox.Show("Project successfully loaded!", "Done");
-            mruManager.Add(fileName);
-        }
-
-        internal void ResetModeTools()
-        {
-            if (panelShape != null)
-                panelShape.ResetModeTools();
-            if (panelCut != null)
-                panelCut.ResetModeTools();
-            if (panelFront != null)
-                panelFront.ResetModeTools();
-
-            ctrlRenderControl.ResetModeTools();
-        }
-        private void ResetScaleModeTools()
-        {
-            if (checkHand.Tag.ToString() == "1")
-                checkHand_Click(this, EventArgs.Empty);
-            if (checkZoom.Tag.ToString() == "1")
-                checkZoom_Click(this, EventArgs.Empty);
-            if (checkArrow.Tag.ToString() == "1")
-                checkArrow_Click(this, EventArgs.Empty);
-        }
-
-        #endregion
-
-        #region Helping
-
-        public void ShowVideo()
-        {
-            var quickStartLink = UserConfig.ByName("Tutorials")["Links", "QuickStart", "https://youtu.be/8cejdijABQY"];
-            Process.Start(quickStartLink);
-        }
-        private void videoTutorialPart1CutAndShapeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowVideo();
-        }
-        private void videoTutorialPart2ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var advancedLink = UserConfig.ByName("Tutorials")["Links", "AdvancedManual", "https://youtu.be/z8rnXteNnm0"];
-            Process.Start(advancedLink);
-        }
-
-        private void startHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutStart.ShowDialog(this);
-                    break;
-            }
-        }
-
-        private void cutHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutCut.ShowDialog(this);
-                    break;
-            }
-        }
-        private void shapeHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutShape.ShowDialog(this);
-                    break;
-            }
-        }
-        private void accessoriesHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutFeatures.ShowDialog(this);
-                    break;
-            }
-        }
-        private void materialHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutExport.ShowDialog(this);
-                    break;
-            }
-        }
-        private void stageHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTut3dPrint.ShowDialog(this);
-                    break;
-            }
-        }
-        private void styleHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutStyle.ShowDialog(this);
-                    break;
-            }
-        }
-
-        private void autodotsHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmTutAutodots.ShowDialog(this);
-        }
-        private void shapedotsHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutShapedots.ShowDialog(this);
-                    break;
-            }
-        }
-        private void mirrorHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutLineTool.ShowDialog(this);
-                    break;
-            }
-        }
-        private void freehandHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutFreehand.ShowDialog(this);
-                    break;
-            }
-        }
-        private void profileHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmTutProfile.ShowDialog(this);
-        }
-
-        public void EnableRotating()
-        {
-            checkArrow.Enabled = true;
-            rotateLeftcontinuousRotateToolStripMenuItem.Enabled = true;
-            rotateRightcontinuousRotateToolStripMenuItem.Enabled = true;
-            turnLeftoneStepToolStripMenuItem.Enabled = true;
-            turnRightoneStepToolStripMenuItem.Enabled = true;
-
-            ctrlRenderControl.panelOrtoLeft.Enabled = ctrlRenderControl.panelOrtoRight.Enabled = true;
-        }
-        public void DisableRotating()
-        {
-            if (checkArrow.Tag.ToString() == "1")
-                checkArrow_Click(this, EventArgs.Empty);
-            if (ctrlRenderControl.TimerMode == Mode.TimerTurnLeft || ctrlRenderControl.TimerMode == Mode.TimerTurnRight)
-            {
-                ctrlRenderControl.workTimer.Stop();
-                ctrlRenderControl.TimerMode = Mode.None;
-            }
-
-            checkArrow.Enabled = false;
-            rotateLeftcontinuousRotateToolStripMenuItem.Enabled = false;
-            rotateRightcontinuousRotateToolStripMenuItem.Enabled = false;
-            turnLeftoneStepToolStripMenuItem.Enabled = false;
-            turnRightoneStepToolStripMenuItem.Enabled = false;
-
-            ctrlRenderControl.panelOrtoLeft.Enabled = ctrlRenderControl.panelOrtoRight.Enabled = false;
-        }
-
-        #endregion
-
-        private void frmMain_KeyDown(object sender, KeyEventArgs e)
-        {
-            ctrlTemplateImage.KeyDown(e);
-        }
-
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OnExport_Click(this, EventArgs.Empty);
-        }
-        private void exportToolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            OnExport_Click(null, EventArgs.Empty);
-        }
-        private void exportToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            OnExport_Click(null, EventArgs.Empty);
-        }
-
-        private void pleatToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelShape.btnPleat_Click(this, EventArgs.Empty);
-        }
-        private void saveToolStripMenuItem7_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.SaveSelectedHairToPartsLibrary();
-        }
-        private void deleteToolStripMenuItem5_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.DeleteSelectedHair();
-        }
-        private void exportToolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            OnExport_Click(null, EventArgs.Empty);
-        }
-
-        private void openToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            if (frmStyles.Visible)
-                frmStyles.Hide();
-            else
-                frmStyles.Show(this);
-        }
-
-        private void saveToolStripMenuItem8_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.SaveHeadToFile();
-        }
-
-        private void undoToolStripMenuItem5_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.historyController.Undo();
-        }
-
-        private void saveToolStripMenuItem5_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.SaveHeadToFile();
-        }
-
-        private void linesToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            panelFront.btnPolyLine_Click(null, EventArgs.Empty);
-        }
-
-        private void handToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            panelFront.btnShapeTool_Click(null, EventArgs.Empty);
-        }
-
-        private void saveToolStripMenuItem6_Click(object sender, EventArgs e)
-        {
-            ctrlRenderControl.SaveHeadToFile();
-        }
-
-        private void autodotsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelFront.btnAutodots_Click(null, EventArgs.Empty);
-        }
-
-        private void ponitsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelFront.btnLasso_Click(null, EventArgs.Empty);
-        }
-
-        private void flipToLeftToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelFront.btnFlipLeft_Click(null, EventArgs.Empty);
-        }
-
-        private void flipToRightToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panelFront.btnFlipRight_Click(null, EventArgs.Empty);
-        }
-
-        public void ChangeCursors(Cursor cursor)
-        {
-            Cursor = cursor;
-            ctrlTemplateImage.Cursor = cursor;
-            ctrlRenderControl.Cursor = cursor;
-        }
-
-        public enum PrintType
-        {
-            STL,            //5$
-            Collada         // zip archive 8$
         }
 
         public void SuccessPay(PrintType printType)
@@ -2088,7 +1653,6 @@ namespace RH.Core
 
             MessageBox.Show("Payment was failed!");
         }
-
         /// <summary> Формат stl 5$</summary>
         public void ExportSTL()
         {
@@ -2294,7 +1858,6 @@ namespace RH.Core
 
             MessageBox.Show("Color 3D export finished!", "Done");
         }
-
         /// <summary> Экспорт на кнопки плюс экспорт ПЛАГИНА! </summary>
         /// <param name="exportColor3DPrint">Добавляет фото профиля и анфаса.</param>
         public void Export()
@@ -2459,50 +2022,368 @@ namespace RH.Core
                 Environment.Exit(0);
         }
 
-        private void accessoriesHelpToolStripMenuItem1_Click(object sender, EventArgs e)
+        public void ChangeCursors(Cursor cursor)
+        {
+            Cursor = cursor;
+            ctrlTemplateImage.Cursor = cursor;
+            ctrlRenderControl.Cursor = cursor;
+        }
+        public void EnableRotating()
+        {
+            checkArrow.Enabled = true;
+            rotateLeftcontinuousRotateToolStripMenuItem.Enabled = true;
+            rotateRightcontinuousRotateToolStripMenuItem.Enabled = true;
+            turnLeftoneStepToolStripMenuItem.Enabled = true;
+            turnRightoneStepToolStripMenuItem.Enabled = true;
+
+            ctrlRenderControl.panelOrtoLeft.Enabled = ctrlRenderControl.panelOrtoRight.Enabled = true;
+        }
+        public void DisableRotating()
+        {
+            if (checkArrow.Tag.ToString() == "1")
+                checkArrow_Click(this, EventArgs.Empty);
+            if (ctrlRenderControl.TimerMode == Mode.TimerTurnLeft || ctrlRenderControl.TimerMode == Mode.TimerTurnRight)
+            {
+                ctrlRenderControl.workTimer.Stop();
+                ctrlRenderControl.TimerMode = Mode.None;
+            }
+
+            checkArrow.Enabled = false;
+            rotateLeftcontinuousRotateToolStripMenuItem.Enabled = false;
+            rotateRightcontinuousRotateToolStripMenuItem.Enabled = false;
+            turnLeftoneStepToolStripMenuItem.Enabled = false;
+            turnRightoneStepToolStripMenuItem.Enabled = false;
+
+            ctrlRenderControl.panelOrtoLeft.Enabled = ctrlRenderControl.panelOrtoRight.Enabled = false;
+        }
+        internal void ResetModeTools()
+        {
+            panelShape?.ResetModeTools();
+            panelCut?.ResetModeTools();
+            panelFront?.ResetModeTools();
+
+            ctrlRenderControl.ResetModeTools();
+        }
+        private void ResetScaleModeTools()
+        {
+            if (checkHand.Tag.ToString() == "1")
+                checkHand_Click(this, EventArgs.Empty);
+            if (checkZoom.Tag.ToString() == "1")
+                checkZoom_Click(this, EventArgs.Empty);
+            if (checkArrow.Tag.ToString() == "1")
+                checkArrow_Click(this, EventArgs.Empty);
+        }
+
+        #region ProgressProc
+
+        private bool isProgress;
+        private DateTime lastUpdateDateTime = DateTime.MinValue;
+        private void ProgressProc(object sender, ProgressProcEventArgs e)
+        {
+            var now = DateTime.Now;
+            if (!isProgress)
+            {
+                StartProgress();
+            }
+            if (now - lastUpdateDateTime > TimeSpan.FromMilliseconds(40))
+            {
+                Application.DoEvents();
+                lastUpdateDateTime = now;
+            }
+            ProgressManager.ProgressProc(sender, e);
+        }
+        private readonly ProgressMessageFilter progressMessageFilter = new ProgressMessageFilter();
+        private void StartProgress()
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                Application.AddMessageFilter(progressMessageFilter);
+                ProgramCore.AddCallStackReleasedProc(_stopProgress);
+                isProgress = true;
+            }
+            catch (Exception)
+            {
+            }
+        }
+        private void StopProgress()
+        {
+            try
+            {
+                Application.RemoveMessageFilter(progressMessageFilter);
+                Cursor = Cursors.Default;
+                isProgress = false;
+            }
+            catch (Exception)
+            {
+            }
+        }
+        private void _stopProgress(object sender, EventArgs e)
+        {
+            StopProgress();
+        }
+        class ProgressMessageFilter : IMessageFilter
+        {
+            public bool PreFilterMessage(ref Message m)
+            {
+                if (m.HWnd == ProgressManager.ProgressHWnd || m.HWnd == ProgressManager.ProgressCancelButtonHWnd)
+                    return false;
+                return (m.Msg != WMConsts.WM_TIMER && (m.Msg >= WMConsts.WM_KEYFIRST && m.Msg <= WMConsts.WM_KEYLAST || m.Msg >= WMConsts.WM_MOUSEFIRST && m.Msg <= WMConsts.WM_MOUSELAST));
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Project
+
+        private static void DirectoryCopy(string sourceDirName, string destDirName)
+        {
+            // Get the subdirectories for the specified directory.
+            var dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            var dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            var files = dir.GetFiles();
+            foreach (var file in files)
+            {
+                var temppath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            foreach (var subdir in dirs)
+            {
+                var temppath = Path.Combine(destDirName, subdir.Name);
+                DirectoryCopy(subdir.FullName, temppath);
+            }
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutAccessory.ShowDialog(this);
-                    break;
-            }
-        }
+                    {
+                        var frm = new frmNewProject4HeadShop(false);
+                        frm.ShowDialog();
+                        if (frm.dialogResult != DialogResult.OK)
+                            return;
 
-        private void colorHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.PrintAhead:
-                case ProgramCore.ProgramMode.PrintAhead_PayPal:
-                case ProgramCore.ProgramMode.PrintAhead_Online:
-                    frmTutMaterial.ShowDialog(this);
+                        frm.CreateProject();
+                    }
                     break;
-            }
-        }
-
-        private void childHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            switch (ProgramCore.CurrentProgram)
-            {
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
-                    frmTutChild.ShowDialog(this);
+                case ProgramCore.ProgramMode.PrintAhead:
+                    {
+                        var frm = new frmNewProject4PrintAhead(false);
+                        frm.ShowDialog();
+                        if (frm.dialogResult != DialogResult.OK)
+                            return;
+
+                        frm.CreateProject();
+                    }
                     break;
             }
         }
-
-        private void retouchHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmTutRetouch.ShowDialog(this);
+            using (var ofd = new OpenFileDialogEx("Open HeadShop/HairShop project", "HeadShop projects|*.hds|HairShop projects|*.hs"))
+            {
+                if (ofd.ShowDialog(false) != DialogResult.OK)
+                    return;
+
+                OpenProject(ofd.FileName);
+            }
+        }
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ProgramCore.Project != null)
+            {
+                ctrlRenderControl.pickingController.SelectedMeshes.Clear();
+                ProgramCore.Project.ToStream();
+                MessageBox.Show("Project successfully saved!", "Done", MessageBoxButtons.OK);
+            }
+        }
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ProgramCore.Project == null)
+                return;
+
+            using (var sfd = new SaveFileDialogEx("Save as HeadShop project", "HeadShop projects|*.hs|OBJ Hair|*.obj|DAE model|*.dae"))
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    switch (sfd.FilterIndex)
+                    {
+                        case 1:
+                            #region All project
+
+                            var fullPath = sfd.FileName;
+                            var projectName = Path.GetFileNameWithoutExtension(fullPath);
+                            var projectPath = Path.Combine(Path.GetDirectoryName(fullPath), projectName);
+
+                            var newDirectoryPath = Path.Combine(projectPath, "Model");
+                            var directoryPath = Path.Combine(ProgramCore.Project.ProjectPath, "Model");
+
+                            DirectoryCopy(directoryPath, newDirectoryPath);
+
+                            var frontImage = ProgramCore.Project.FrontImagePath;
+                            var newFrontImage = Path.Combine(projectPath, Path.GetFileName(frontImage));
+                            File.Copy(Path.Combine(ProgramCore.Project.ProjectPath, frontImage), newFrontImage);
+
+                            ProgramCore.Project.ProjectName = projectName;
+                            ProgramCore.Project.ProjectPath = projectPath;
+                            ProgramCore.Project.HeadModelPath = Path.Combine(projectPath, "Model", Path.GetFileName(ProgramCore.Project.HeadModelPath));
+                            ProgramCore.Project.ToStream();
+                            MessageBox.Show("Project successfully saved!", "Done", MessageBoxButtons.OK);
+
+                            #endregion
+                            break;
+                        case 2:
+                            Export();
+                            break;
+                        case 3:
+
+                            #region Копируем модель
+
+                            File.Copy(ProgramCore.Project.HeadModelPath, sfd.FileName, true);           // сама модель
+
+                            #region Обрабатываем mtl файл и папку с текстурами
+
+                            var oldFileName = Path.GetFileNameWithoutExtension(ProgramCore.Project.HeadModelPath);
+                            var mtl = oldFileName + ".mtl";
+                            using (var ms = new StreamReader(ProgramCore.Project.HeadModelPath))
+                            {
+                                for (var i = 0; i < 10; i++)
+                                {
+                                    if (ms.EndOfStream)
+                                        break;
+                                    var line = ms.ReadLine();
+                                    if (line.ToLower().Contains("mtllib"))          // ищем ссылку в obj файле на mtl файл (у них могут быть разные названия, но всегда в одной папке
+                                    {
+                                        var lines = line.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                                        if (lines.Length > 1)
+                                        {
+                                            mtl = lines[1];
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            ObjLoader.CopyMtl(mtl, mtl, Path.GetDirectoryName(ProgramCore.Project.HeadModelPath), "", Path.GetDirectoryName(sfd.FileName), ProgramCore.Project.TextureSize);
+
+                            #endregion
+
+                            MessageBox.Show("Model successfully exported!", "Done", MessageBoxButtons.OK);
+
+                            #endregion
+
+
+
+                            break;
+                    }
+                }
+            }
+        }
+        private void recentFile_Click(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            OpenProject(item.Text);
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        public void UpdateProjectControls(bool newProject, RectangleAABB aabb = null)
         {
-            Application.Exit();
+            if (ProgramCore.Project == null)
+            {
+                ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
+            }
+            else
+            {
+                ctrlRenderControl.LoadProject(newProject, aabb);
+                ctrlRenderControl.camera.UpdateDy();
+
+                if (panelCut != null && panelStyles != null)
+                {
+                    if (ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes.Count == 0)
+                        panelMenuStyle_Click(null, EventArgs.Empty);
+                    else
+                        panelMenuCut_Click(null, EventArgs.Empty);
+                }
+
+                if (frmStages != null)
+                    frmStages.InitializeListView();
+
+                if (ProgramCore.Project.FrontImage == null)
+                    ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
+                else
+                {
+                    using (var bmp = new Bitmap(ProgramCore.Project.FrontImage))
+                        ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage((Bitmap)bmp.Clone());
+                }
+                if (newProject && ProgramCore.Project.ManType == ManType.Custom)
+                    ctrlRenderControl.camera.ResetCamera(true);
+            }
+
+            if (frmPrint != null || frmStages != null)
+            {
+                ctrlRenderControl.StagesActivate(false);     // for recalc
+                ctrlRenderControl.StagesDeactivate(0);
+            }
+
+            if (frmParts != null)
+                frmParts.UpdateList();
         }
+        private void OpenProject(string fileName)
+        {
+            ProgramCore.Project = Project.FromStream(fileName);
+            UpdateProjectControls(false);
+
+            ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper();         // инициализация точек головы.
+            ProgramCore.MainForm.ctrlTemplateImage.RecalcProfilePoints();            // пидоры сломали все. инициализируем профиль.
+
+            if (ProgramCore.Project.AgeCoefficient != 0 || ProgramCore.Project.FatCoefficient != 0)  // восстанавливаем морфинги
+            {
+                foreach (var m in ProgramCore.MainForm.ctrlRenderControl.OldMorphing)
+                    m.Value.Delta = ProgramCore.Project.AgeCoefficient;
+                foreach (var m in ProgramCore.MainForm.ctrlRenderControl.FatMorphing)
+                    m.Value.Delta = ProgramCore.Project.FatCoefficient;
+                ProgramCore.MainForm.ctrlRenderControl.DoMorth();
+            }
+
+            if (!float.IsNaN(ProgramCore.Project.MorphingScale))
+                ctrlRenderControl.DoMorth(ProgramCore.Project.MorphingScale);
+
+            MessageBox.Show("Project successfully loaded!", "Done");
+            mruManager.Add(fileName);
+        }
+
+        #endregion
+
     }
+
+    #region Enum's
+
+    public enum PrintType
+    {
+        STL,            //5$
+        Collada         // zip archive 8$
+    }
+
+    #endregion
 }

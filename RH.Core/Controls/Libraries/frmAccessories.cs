@@ -204,7 +204,7 @@ namespace RH.Core.Controls.Libraries
                     return;
                 sampleImagePath = ofd.FileName;
             }
-            var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Accessory");
+            var directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),  "Libraries", "Accessory");
             var oldFileName = Path.GetFileNameWithoutExtension(accessoryPath);
             var newFileName = oldFileName;
             var filePath = Path.Combine(directoryPath, newFileName + ".obj");
@@ -307,7 +307,7 @@ namespace RH.Core.Controls.Libraries
                     return;
                 using (var writer = new StreamWriter(sfd.FileName, false, Encoding.Default))
                 {
-                    var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Accessory");
+                    var directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),  "Libraries", "Accessory");
                     var data = UserConfig.ByName("Parts").data;
                     var result = data.Select(x => x.s1).Distinct();
                     foreach (var d in result)

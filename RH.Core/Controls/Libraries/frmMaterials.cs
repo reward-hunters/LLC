@@ -282,7 +282,7 @@ namespace RH.Core.Controls.Libraries
                 if (ofd.ShowDialog() != DialogResult.OK)
                     return;
 
-                var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Abalone", "Libraries", "Materials");
+                var directoryPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),  "Libraries", "Materials");
                 var oldFileName = Path.GetFileNameWithoutExtension(ofd.FileName);
                 var newFileName = oldFileName;
                 var filePath = Path.Combine(directoryPath, newFileName + ".jpg");

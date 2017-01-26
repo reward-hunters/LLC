@@ -26,7 +26,7 @@ namespace RH.PrintAhead_Paypal
             Cef.Shutdown();     // хромиум пускаем по пизде
         }
 
-        public override void MakePayment(string price, string description, frmMain.PrintType printType)
+        public override void MakePayment(string price, string description, PrintType printType)
         {
             if (ProgramCore.IsFreeVersion)
             {
