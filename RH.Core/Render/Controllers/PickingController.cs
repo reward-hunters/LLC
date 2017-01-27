@@ -282,6 +282,7 @@ namespace RH.Core.Render.Controllers
                             }
                         }
 
+                        float scale = 1.0f;
                         switch (ProgramCore.Project.ManType)
                         {
                             case ManType.Male:
@@ -291,6 +292,8 @@ namespace RH.Core.Render.Controllers
                                 topPoint = 11.61f;
                                 break;
                             case ManType.Child:
+                                //scale = 0.85965602922658633119424253239068f;
+                                scale = 0.85f;
                                 topPoint = 9.759598f;
                                 break;
                             default:
@@ -326,7 +329,7 @@ namespace RH.Core.Render.Controllers
 
                             var meshPartInfo = new MeshPartInfo
                             {
-                                VertexPositions = renderMesh.GetVertices(),
+                                VertexPositions = GetScaledVertices(renderMesh.GetVertices(), scale),
                                 TextureCoords = renderMesh.GetTexCoords(),
                                 PartName = renderMesh.Title,
                                 Color = renderMesh.Material.DiffuseColor,
@@ -361,6 +364,16 @@ namespace RH.Core.Render.Controllers
             foreach (var item in result)
                 item.Path = path;
 
+            return result;
+        }
+
+        private List<Vector3> GetScaledVertices(List<Vector3> vlist, float scale)
+        {
+            var result = new List<Vector3>();
+            foreach (var v in vlist)
+            {
+                result.Add(v * scale);
+            }
             return result;
         }
 
