@@ -470,12 +470,12 @@ namespace RH.Core
                             {
                                 case ManType.Child:
                                     var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Style", "kidhair.obj"));
-                                    var meshSize = 0.4736842f;
+                                    var meshSize = 0.2736842f;
                                     var meshPosition = Vector3Ex.FromString("-0,0205307 / 2,358275 / -2,589062");
                                     ctrlRenderControl.AttachNewPart("DefaultHair", fi, null, meshPosition, meshSize);
 
                                     fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory", "Shirt.obj"));
-                                    meshPosition = Vector3Ex.FromString("0,4706078 / -19,36209 / -6,103516E-05");
+                                    meshPosition = Vector3Ex.FromString("0,4706078 / -17,36209 / -6,103516E-05");
                                     ctrlRenderControl.AttachNewPart("DefaultShirt", fi, null, meshPosition);
                                     break;
                             }
