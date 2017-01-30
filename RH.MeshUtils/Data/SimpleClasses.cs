@@ -488,6 +488,7 @@ namespace RH.MeshUtils.Data
 
     public class MeshPartInfo
     {
+
         public List<Vector3> VertexPositions = new List<Vector3>();
         public List<Vector2> TextureCoords = new List<Vector2>();
         public List<uint> VertexIndices = new List<uint>();
@@ -497,6 +498,7 @@ namespace RH.MeshUtils.Data
         public int TransparentTexture = 0;
         public string TextureName;
         public string TransparentTextureName;
+        public string MaterialName;
 
         public void Clear()
         {

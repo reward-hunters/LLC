@@ -27,7 +27,7 @@ namespace RH.Core.Render.Controllers
         private readonly Camera camera;
         public DynamicRenderMeshes AccesoryMeshes;
         public DynamicRenderMeshes HairMeshes;
-        public List<DynamicRenderMesh> HeadMeshes = new List<DynamicRenderMesh>();
+        //public List<DynamicRenderMesh> HeadMeshes = new List<DynamicRenderMesh>();
 
         public readonly DynamicRenderMeshes SelectedMeshes;    // only one attributes may selected, but hairs - maybe more than one. should check it
 
@@ -292,17 +292,10 @@ namespace RH.Core.Render.Controllers
                                 topPoint = 11.61f;
                                 break;
                             case ManType.Child:
-                                //scale = 0.85965602922658633119424253239068f;
                                 scale = 0.85f;
                                 topPoint = 9.759598f;
                                 break;
-                            default:
-                                break;
                         }
-
-                        foreach (var mesh in HeadMeshes)
-                            mesh.Destroy();
-                        HeadMeshes.Clear();
 
                         var objModelFull = animationPath == string.Empty ? null : ObjLoader.LoadObjFile(animationPath);
                         if (objModelFull != null &&
@@ -311,35 +304,21 @@ namespace RH.Core.Render.Controllers
                             objModel.TextureCoords.Count != objModelFull.TextureCoords.Count))
                             objModelFull = null;
                         LastTriangleIndex = 0;
-                        result = LoadHairMeshes(objModel, objModelFull, fromDragAndDrop, manType, MeshType.Head);
-                        var meshPartInfos = new List<MeshPartInfo>();
+                        var meshPartInfos = LoadHeadMeshes(objModel, fromDragAndDrop, manType, scale);
+                        //result = LoadHairMeshes(objModel, objModelFull, fromDragAndDrop, manType, MeshType.Head);
+                        //var meshPartInfos = new List<MeshPartInfo>();
                         var a = new Vector3(99999.0f, 99999.0f, 99999.0f);
                         var b = new Vector3(-99999.0f, -99999.0f, -99999.0f);
-                        foreach (var renderMesh in result)
+                        foreach (var meshPartInfo in meshPartInfos)
                         {
-                            HeadMeshes.Add(renderMesh);
-
-                            if (ProgramCore.PluginMode && ProgramCore.MainForm.PluginUvGroups.Contains(renderMesh.Material.Name))
+                            if (ProgramCore.PluginMode && ProgramCore.MainForm.PluginUvGroups.Contains(meshPartInfo.MaterialName))
                             {
-                                if (string.IsNullOrEmpty(renderMesh.Material.DiffuseTextureMap))
-                                    renderMesh.Material.DiffuseTextureMap = tempPluginTexture;
-                                else if (!File.Exists(renderMesh.Material.DiffuseTextureMap))
-                                    renderMesh.Material.DiffuseTextureMap = tempPluginTexture;
+                                if (string.IsNullOrEmpty(meshPartInfo.TextureName))
+                                    meshPartInfo.TextureName = tempPluginTexture;
+                                else if (!File.Exists(meshPartInfo.TextureName))
+                                    meshPartInfo.TextureName = tempPluginTexture;
                             }
-
-                            var meshPartInfo = new MeshPartInfo
-                            {
-                                VertexPositions = GetScaledVertices(renderMesh.GetVertices(), scale),
-                                TextureCoords = renderMesh.GetTexCoords(),
-                                PartName = renderMesh.Title,
-                                Color = renderMesh.Material.DiffuseColor,
-                                Texture = renderMesh.Material.Texture,
-                                TransparentTexture = renderMesh.Material.TransparentTexture,
-                                TextureName = renderMesh.Material.DiffuseTextureMap,
-                                TransparentTextureName = renderMesh.Material.TransparentTextureMap
-                            };                  // создаем инфу о голове. для работы с headshop
                             GetAABB(ref a, ref b, meshPartInfo.VertexPositions);
-                            meshPartInfos.Add(meshPartInfo);
 
                         }
                         var dv = Vector3.Zero;
@@ -354,8 +333,8 @@ namespace RH.Core.Render.Controllers
                             ObjExport.Delta = -dv;
                         ProgramCore.MainForm.ctrlRenderControl.headMeshesController.FinishCreating();
 
+                        return null;
                         // ProgramCore.MainForm.ctrlRenderControl.headMeshesController.InitializeTexturing(HeadController.GetDots(ProgramCore.Project.ManType), HeadController.GetIndices(ProgramCore.Project.ManType));
-                        break;
                     }
                 default:
                     return result;
@@ -447,6 +426,60 @@ namespace RH.Core.Render.Controllers
             }
             return 246f;
         }
+
+        private List<MeshPartInfo> LoadHeadMeshes(ObjItem objModel, bool fromDragAndDrop, ManType manType, float scale)
+        {
+            var result = new List<MeshPartInfo>();
+            var vertexPositions = new List<float>();
+            var vertexNormals = new List<float>();
+            var vertexTextureCoordinates = new List<float>();
+            var vertexBoneIndices = new List<float>();
+            var vertexBoneWeights = new List<float>();
+            var indeces = new List<uint>();
+
+            foreach (var modelGroup in objModel.Groups) // one group - one mesh
+            {
+                vertexPositions.Clear();
+                vertexNormals.Clear();
+                vertexTextureCoordinates.Clear();
+                vertexBoneIndices.Clear();
+                vertexBoneWeights.Clear();
+                indeces.Clear();
+
+                foreach (var face in modelGroup.Value.Faces)          //  combine all meshes in group - to one mesh.
+                    GetObjFace(face, objModel, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces);
+
+                var positions = new List<Vector3>();
+                var texCoords = new List<Vector2>();
+                var index = 0;
+                for (var i = 0; i < vertexPositions.Count / 3; ++i)
+                {
+                    index = i * 3;
+                    positions.Add(new Vector3(vertexPositions[index], vertexPositions[index + 1], vertexPositions[index + 2]));
+                    texCoords.Add(new Vector2(vertexTextureCoordinates[i * 2], 1.0f - vertexTextureCoordinates[i * 2 + 1]));
+                }
+
+                var meshPartInfo = new MeshPartInfo
+                {
+                    VertexPositions = GetScaledVertices(positions, scale),
+                    MaterialName = modelGroup.Key.Name,
+                    TextureCoords = texCoords,
+                    PartName = modelGroup.Key.Name == "default" ? string.Empty : modelGroup.Key.Name,
+                    Color =
+                                           new Vector4(modelGroup.Key.DiffuseColor.X, modelGroup.Key.DiffuseColor.Y,
+                                               modelGroup.Key.DiffuseColor.Z, modelGroup.Key.Transparency),
+                    Texture = modelGroup.Key.Texture,
+                    TransparentTexture = modelGroup.Key.TransparentTexture,
+                    TextureName = modelGroup.Key.DiffuseTextureMap,
+                    TransparentTextureName = modelGroup.Key.TransparentTextureMap
+                };
+
+                result.Add(meshPartInfo);
+            }
+
+            return result;
+        }
+
         private List<DynamicRenderMesh> LoadHairMeshes(ObjItem objModel, ObjItem objModelNull, bool fromDragAndDrop, ManType manType, MeshType meshType)
         {
             var result = new List<DynamicRenderMesh>();
