@@ -470,16 +470,23 @@ namespace RH.Core
                             switch (ProgramCore.Project.ManType)
                             {
                                 case ManType.Child:
-                                    Thread.Sleep(3000);
+
+                                 /*   Thread.Sleep(2000);
+                                    GC.Collect();
+                                    GC.WaitForPendingFinalizers();
+
+                                  
                                     var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Style", "kidhair.obj"));
                                     var meshSize = 0.2736842f;
                                     var meshPosition = Vector3Ex.FromString("-0,0205307 / 2,358275 / -2,589062");
                                     ctrlRenderControl.AttachNewPart("DefaultHair", fi, null, meshPosition, meshSize);
 
-                                    Thread.Sleep(2000);
+                                    GC.Collect();
+                                    GC.WaitForPendingFinalizers();
+
                                     fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory", "Shirt.obj"));
                                     meshPosition = Vector3Ex.FromString("0,4706078 / -17,36209 / -6,103516E-05");
-                                    ctrlRenderControl.AttachNewPart("DefaultShirt", fi, null, meshPosition);
+                                    ctrlRenderControl.AttachNewPart("DefaultShirt", fi, null, meshPosition);*/
                                     break;
                             }
                         }
