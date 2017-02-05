@@ -65,7 +65,7 @@ namespace RH.MeshUtils
 
         public void FinishCreating()
         {
-            UpdateBuffers();
+            UpdateBuffers(true);
             RenderMesh.FindFixedPoints();
         }
 
@@ -89,10 +89,10 @@ namespace RH.MeshUtils
             return result;
         }
 
-        public void UpdateBuffers()
+        public void UpdateBuffers(bool firstTime = false)
         {
             foreach (var part in RenderMesh.Parts)
-                part.UpdateBuffers();
+                part.UpdateBuffers(firstTime);
         }
 
         public void Smooth()

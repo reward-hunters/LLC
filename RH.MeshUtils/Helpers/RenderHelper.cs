@@ -731,10 +731,10 @@ namespace RH.MeshUtils.Helpers
             UpdateBuffers();
         }
 
-        public void UpdateBuffers()
+        public void UpdateBuffers(bool firstTime = false)
         {
-            UpdateIndexBuffer();
-            UpdateVertexBuffer();
+            UpdateIndexBuffer(firstTime);
+            UpdateVertexBuffer(firstTime);
         }
 
         public void Undo(MeshUndoInfo info)
@@ -993,28 +993,38 @@ namespace RH.MeshUtils.Helpers
             }
         }
 
-        private void UpdateVertexBuffer()
+        private void UpdateVertexBuffer(bool firstTime = false)
         {
-            /*if (TempVertices != null)
-            {
-                TempUpdateVertexBuffer();
-                return;
-            }*/
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vertex3d.Stride), Vertices, BufferUsageHint.StreamDraw);
+            if (firstTime)
+            {
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vertex3d.Stride), Vertices, BufferUsageHint.StreamDraw);
+            }
+            else
+            {
+                GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, (IntPtr)(Vertices.Length * Vertex3d.Stride), Vertices);
+            }
             OpenGlHelper.CheckErrors();
         }
 
-        public void UpdateIndexBuffer()
+        public void UpdateIndexBuffer(bool firstTime = false)
         {
-            UpdateIndexBuffer(Indices);
+            UpdateIndexBuffer(Indices, firstTime);
         }
 
-        public void UpdateIndexBuffer(List<uint> indices)
+        public void UpdateIndexBuffer(List<uint> indices, bool firstTime = false)
         {
             CountIndices = indices.Count;
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBuffer);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, new IntPtr(CountIndices * sizeof(uint)), indices.ToArray(), BufferUsageHint.DynamicDraw);
+            if(firstTime)
+            {
+                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(CountIndices * sizeof(uint)), indices.ToArray(), BufferUsageHint.DynamicDraw);
+            }
+            else
+            {
+                GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)0, (IntPtr)(CountIndices * sizeof(uint)), indices.ToArray());
+            }
+            
             OpenGlHelper.CheckErrors();
         }
 
