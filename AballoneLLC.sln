@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RH.FaceShopExecutor", "RH.FaceShopExecutor\RH.FaceShopExecutor.csproj", "{B7D6A447-BC18-48B4-879E-5C4179A83D00}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RH.PrintAhead_Paypal", "RH.PrintAhead_Paypal\RH.PrintAhead_Paypal.csproj", "{0DF433B8-A9DB-444F-A0D5-3FD2C68765FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RH.OneClick", "RH.OneClick\RH.OneClick.csproj", "{DE1A2E3B-7C1D-497D-843C-11ACA87C3AC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RH.WebCore", "RH.WebCore\RH.WebCore.csproj", "{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,14 @@ Global
 		{DE1A2E3B-7C1D-497D-843C-11ACA87C3AC6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE1A2E3B-7C1D-497D-843C-11ACA87C3AC6}.Release|x86.ActiveCfg = Release|Any CPU
 		{DE1A2E3B-7C1D-497D-843C-11ACA87C3AC6}.Release|x86.Build.0 = Release|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Debug|x86.Build.0 = Debug|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Release|x86.ActiveCfg = Release|Any CPU
+		{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

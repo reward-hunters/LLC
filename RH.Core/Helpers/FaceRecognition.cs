@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -15,6 +16,7 @@ using RH.Core.Render.Helpers;
 
 namespace RH.Core.Helpers
 {
+
     public class LuxandFaceRecognition
     {
         public RectangleF FaceRectRelative;
@@ -122,16 +124,16 @@ namespace RH.Core.Helpers
                 colorPoints.Add(new PointF(pointFeature[2].x, pointFeature[2].y));
 
 
-                
-               /*                  colorPoints.Add(new PointF(pointFeature[68].x, pointFeature[68].y));
-                colorPoints.Add(new PointF(pointFeature[69].x, pointFeature[69].y));
-                colorPoints.Add(new PointF(pointFeature[5].x, pointFeature[5].y));
-                colorPoints.Add(new PointF(pointFeature[7].x, pointFeature[7].y));
-                colorPoints.Add(new PointF(pointFeature[8].x, pointFeature[8].y));
-                colorPoints.Add(new PointF(pointFeature[6].x, pointFeature[6].y));
-                colorPoints.Add(new PointF(pointFeature[2].x, pointFeature[2].y));*/
 
-                  
+                /*                  colorPoints.Add(new PointF(pointFeature[68].x, pointFeature[68].y));
+                 colorPoints.Add(new PointF(pointFeature[69].x, pointFeature[69].y));
+                 colorPoints.Add(new PointF(pointFeature[5].x, pointFeature[5].y));
+                 colorPoints.Add(new PointF(pointFeature[7].x, pointFeature[7].y));
+                 colorPoints.Add(new PointF(pointFeature[8].x, pointFeature[8].y));
+                 colorPoints.Add(new PointF(pointFeature[6].x, pointFeature[6].y));
+                 colorPoints.Add(new PointF(pointFeature[2].x, pointFeature[2].y));*/
+
+
                 int r = 0;
                 int g = 0;
                 int b = 0;
