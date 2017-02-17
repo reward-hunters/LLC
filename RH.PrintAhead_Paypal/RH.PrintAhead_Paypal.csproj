@@ -125,6 +125,10 @@
       <Project>{808DC684-BF79-46D8-A453-45C554610809}</Project>
       <Name>RH.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RH.WebCore\RH.WebCore.csproj">
+      <Project>{7AF19BDA-3A9B-4472-88A4-0BD3CEF008E2}</Project>
+      <Name>RH.WebCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />

@@ -1,0 +1,5 @@
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\AbaloneLLC\Libraries\RH.WebCore.dll
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\AbaloneLLC\Libraries\RH.WebCore.pdb
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.WebCore\obj\Debug\RH.WebCore.csprojResolveAssemblyReference.cache
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.WebCore\obj\Debug\RH.WebCore.dll
+C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.WebCore\obj\Debug\RH.WebCore.pdb

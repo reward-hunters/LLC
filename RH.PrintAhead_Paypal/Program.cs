@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using RH.Core;
 using RH.PrintAhead_Paypal;
+using RH.WebCore;
 
 namespace RH.OneClick
 {
@@ -26,6 +27,8 @@ namespace RH.OneClick
                 ProgramCore.CurrentProgram = ProgramCore.ProgramMode.PrintAhead_Online;
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
+
+                CropHelper.Pass1(@"http://printahead.net/wp-content/uploads/origin/lady.jpg");
 
                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);
