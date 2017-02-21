@@ -1,3 +1,5 @@
+AZURE:
+
 0. Накатить update 3 на студию
 1. Требуется обновить Azure SDk до послендней версии (VWDOrVs2015AzurePack). Иначе будут проблемы с деплоем.
 =====
@@ -51,3 +53,23 @@ jquery-form - за аякс запросы
 
 Кроме того, отличный мануал тут:
 http://stackoverflow.com/questions/7089760/how-to-call-an-asp-net-c-sharp-method-using-javascript
+
+
+======
+
+AZURE не работает с gdi+
+Как вариант - перенести на web role:https://social.msdn.microsoft.com/Forums/en-US/6ed5c738-390a-4ca7-81d0-370124a4fc88/azure-websites-faq?forum=windowsazurewebsitespreview
+
+Для создания web role - создаем новый проект.
+В cloud выбрать azure cloud service.  А там уже webrole
+
+============================
+============================
+============================
+AMAZON:
+0. Поставить в нугетах AWSSDK
+1. Создать новую приложуху как AWS web app. Иначе деплой убдет идти ебанутый
+2. В web.config добавить в элемент system.web строку: 
+<customErrors mode="Off"></customErrors> 
+чтобы нормально ошибки выводились 
+3. Создать  Environment в админке. В Конфигурациях настроить разрешение запуска х86 приложений-длл-к

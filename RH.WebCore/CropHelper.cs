@@ -5,15 +5,14 @@ using System.IO;
 using System.Net;
 using Luxand;
 using OpenTK;
-using RH.Core.Helpers;
-using RH.Core.IO;
 using RH.Core.Render.Helpers;
+
 
 namespace RH.WebCore
 {
     public static class CropHelper
     {
-        public static void Pass1(string path)
+        public static void Pass1(string path, string sessionID)
         {
             using (WebClient client = new WebClient())
             {
@@ -21,16 +20,17 @@ namespace RH.WebCore
 
                 using (var ms = new MemoryStream(imageBytes))
                 {
-                   ActivateRecognition();
-                    
+                    ActivateRecognition();
+
                     var img = new Bitmap(ms);
-                    img.Save(Path.Combine(Environment.CurrentDirectory, "test.jpeg"),ImageFormat.Jpeg);
-             //       var image = new FSDK.CImage(Path.Combine(Environment.CurrentDirectory, "test.jpeg"));
-             
-              /*      if (ActivateRecognition())
-                        WebCropImage(img, true);
+
+                    //    var image = new FSDK.CImage(img);
+
+
+                    if (ActivateRecognition())
+                        WebCropImage(img, sessionID);
                     else
-                        SaveToFTP(img);*/
+                        SaveToFTP(img, sessionID);
                 }
             }
         }
@@ -46,105 +46,96 @@ namespace RH.WebCore
             return true;
         }
 
-        public static void Pass(string path)
-        {
-            using (WebClient client = new WebClient())
-            {
-                byte[] imageBytes = client.DownloadData(path);
 
-                using (var ms = new MemoryStream(imageBytes))
-                {
-                    var img = Image.FromStream(ms);
-                    using (var croppedImage = ImageEx.Crop(img, new Rectangle(0, 0, 20, 20)))
-                    {
-
-                        byte[] data;
-                        using (MemoryStream m = new MemoryStream())
-                        {
-                            croppedImage.Save(m, ImageFormat.Jpeg);
-                            data = m.ToArray();
-                        }
-
-                        FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209", "i2q1d8b1", "B45B2nnFv$!j6V");
-                        ftpHelper.Upload(new MemoryStream(data), "test1.jpeg");
-                    }
-                }
-            }
-        }
-
-        public static void SaveToFTP(Image img)
+        public static void SaveToFTP(Image img, string name)
         {
             byte[] data;
             using (MemoryStream m = new MemoryStream())
             {
                 img.Save(m, ImageFormat.Jpeg);
+                m.Flush();
+
                 data = m.ToArray();
             }
 
-            FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209", "i2q1d8b1", "B45B2nnFv$!j6V");
-            ftpHelper.Upload(new MemoryStream(data), "test1.jpeg");
+            FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_images", "i2q1d8b1", "B45B2nnFv$!j6V");
+            ftpHelper.Upload(new MemoryStream(data), name + ".jpeg");
         }
 
 
-        public static void WebCropImage(Image sourceImage, bool needCrop)
+        public static void WebCropImage(Image sourceImage, string imageName)
         {
+
             FSDK.TPoint[] pointFeature;
 
-                var image = new FSDK.CImage(new Bitmap(sourceImage));
+            var image = new FSDK.CImage(new Bitmap(sourceImage));
 
 
-            /*
-                        var faceRectangle = Rectangle.Empty;
 
-                        var facePosition = image.DetectFace();
-                        if (0 == facePosition.w)
-                        {
-                            SaveToFTP(sourceImage);
-                            return;
-                        }
+            var faceRectangle = Rectangle.Empty;
 
-                        pointFeature = image.DetectFacialFeaturesInRegion(ref facePosition);
+            var facePosition = image.DetectFace();
+            if (0 == facePosition.w)
+            {
+                SaveToFTP(sourceImage, imageName);
+                return;
+            }
 
-                        var left = facePosition.xc - (int)(facePosition.w * 0.6f);
-                        left = left < 0 ? 0 : left;
-                        //   int top = facePosition.yc - (int)(facePosition.w * 0.5f);             // верхушку определяет неправильлно. поэтому просто не будем обрезать :)
-                        var BottomFace = new Vector2(pointFeature[11].x, pointFeature[11].y);
+            pointFeature = image.DetectFacialFeaturesInRegion(ref facePosition);
 
-                        var distance = pointFeature[2].y - pointFeature[11].y;
-                        var top = pointFeature[16].y + distance - 15; // определение высоты по алгоритму старикана
-                        top = top < 0 ? 0 : top;
+            var left = facePosition.xc - (int)(facePosition.w * 0.6f);
+            left = left < 0 ? 0 : left;
+            //   int top = facePosition.yc - (int)(facePosition.w * 0.5f);             // верхушку определяет неправильлно. поэтому просто не будем обрезать :)
+            var BottomFace = new Vector2(pointFeature[11].x, pointFeature[11].y);
 
-                        var newWidth = (int)(facePosition.w * 1.2);
-                        newWidth = newWidth > image.Width || newWidth == 0 ? image.Width : newWidth;
+            var distance = pointFeature[2].y - pointFeature[11].y;
+            var top = pointFeature[16].y + distance - 15; // определение высоты по алгоритму старикана
+            top = top < 0 ? 0 : top;
 
-                        faceRectangle = new Rectangle(left, top, newWidth,
-                            BottomFace.Y + 15 < image.Height ? (int)(BottomFace.Y + 15) - top : image.Height - top - 1);
+            var newWidth = (int)(facePosition.w * 1.2);
+            newWidth = newWidth > image.Width || newWidth == 0 ? image.Width : newWidth;
 
-                        if (needCrop) // если это создание проекта - то нужно обрезать фотку и оставить только голову
-                        {
-                            using (var croppedImage = ImageEx.Crop(sourceImage, faceRectangle))
-                                WebCropImage(croppedImage, false);
-                        }*/
-            /*
-                        var LeftEyeCenter = new Vector2(pointFeature[0].x, pointFeature[0].y);
-                        var RightEyeCenter = new Vector2(pointFeature[1].x, pointFeature[1].y);
+            faceRectangle = new Rectangle(left, top, newWidth,
+                BottomFace.Y + 15 < image.Height ? (int)(BottomFace.Y + 15) - top : image.Height - top - 1);
 
-                        #region Поворот фотки по глазам!
+            sourceImage = ImageEx.Crop(new Bitmap(sourceImage), faceRectangle);
 
-                        var v = new Vector2(LeftEyeCenter.X - RightEyeCenter.X, LeftEyeCenter.Y - RightEyeCenter.Y);
-                        v.Normalize(); // ПД !
-                        var xVector = new Vector2(1, 0);
 
-                        var xDiff = xVector.X - v.X;
-                        var yDiff = xVector.Y - v.Y;
-                        var angle = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
+            // по новой картинке еще раз распознаемм все
+            image = new FSDK.CImage(new Bitmap(sourceImage));
+            facePosition = image.DetectFace();
+            if (0 == facePosition.w)
+            {
+                SaveToFTP(sourceImage, imageName);
+                return;
+            }
 
-                        if (Math.Abs(angle) > 1) // поворачиваем наклоненные головы
-                            sourceImage = ImageEx.RotateImage(new Bitmap(sourceImage), (float)-angle);
+            pointFeature = image.DetectFacialFeaturesInRegion(ref facePosition);
 
-                        #endregion*/
 
-            SaveToFTP(sourceImage);
+            var LeftEyeCenter = new Vector2(pointFeature[0].x, pointFeature[0].y);
+            var RightEyeCenter = new Vector2(pointFeature[1].x, pointFeature[1].y);
+
+            #region Поворот фотки по глазам!
+
+
+
+            var v = new Vector2(LeftEyeCenter.X - RightEyeCenter.X, LeftEyeCenter.Y - RightEyeCenter.Y);
+            v.Normalize(); // ПД !
+            var xVector = new Vector2(1, 0);
+
+            var xDiff = xVector.X - v.X;
+            var yDiff = xVector.Y - v.Y;
+            var angle = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
+
+            if (Math.Abs(angle) > 1) // поворачиваем наклоненные головы
+                sourceImage = ImageEx.RotateImage(new Bitmap(sourceImage), (float)-angle);
+
+
+
+            #endregion
+
+            SaveToFTP(sourceImage, imageName);
         }
     }
 }
