@@ -131,7 +131,17 @@ namespace RH.WebCore
             if (Math.Abs(angle) > 1) // поворачиваем наклоненные головы
                 sourceImage = ImageEx.RotateImage(new Bitmap(sourceImage), (float)-angle);
 
+            #endregion
 
+            #region Корректируем размер фотки
+
+            const int selectedSize = 1024;              // вызывается уже при создании проекта
+            var max = (float)Math.Max(sourceImage.Width, sourceImage.Height);           
+            if (max != selectedSize)
+            {
+                var k = selectedSize / max;
+                sourceImage = ImageEx.ResizeImage(sourceImage, new Size((int)Math.Round(sourceImage.Width * k), (int)Math.Round((sourceImage.Height * k))));
+            }
 
             #endregion
 
