@@ -2108,7 +2108,10 @@ namespace RH.MeshUtils.Helpers
         public void InitializeShaping()
         {
             headMeshesController.InitializeShaping(ref ShapeInfo);
+#if WEB_APP
+#else
             headMeshesController.InitializeShapingProfile(ref ShapeProfileInfo);
+#endif
         }
     }
 }

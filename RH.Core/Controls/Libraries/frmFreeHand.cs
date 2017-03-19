@@ -53,12 +53,12 @@ namespace RH.Core.Controls.Libraries
 
         private void trackRadius_MouseUp(object sender, MouseEventArgs e)
         {
-            ProgramCore.MainForm.ctrlRenderControl.HeadShapeController.UpdateRadius(Radius);
+            ProgramCore.Project.RenderMainHelper.HeadShapeController.UpdateRadius(Radius);
             handBrush_CheckedChanged(null, EventArgs.Empty);
         }
         private void handBrush_CheckedChanged(object sender, EventArgs e)
         {
-            ProgramCore.MainForm.ctrlRenderControl.HeadShapeController.UpdateCoef(CoefType, Radius);
+            ProgramCore.Project.RenderMainHelper.HeadShapeController.UpdateCoef(CoefType, Radius);
         }
 
         private void cbMirror_CheckedChanged(object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace RH.Core.Controls.Libraries
             if (IsUpdating)
                 return;
 
-            ProgramCore.MainForm.ctrlRenderControl.HeadShapeController.StartShaping(new Vector3(ProgramCore.MainForm.ctrlRenderControl.HeadShapeP.X, ProgramCore.MainForm.ctrlRenderControl.HeadShapeP.Y, 0.0f),
+            ProgramCore.Project.RenderMainHelper.HeadShapeController.StartShaping(new Vector3(ProgramCore.MainForm.ctrlRenderControl.HeadShapeP.X, ProgramCore.MainForm.ctrlRenderControl.HeadShapeP.Y, 0.0f),
                                                                                     ProgramCore.MainForm.ctrlRenderControl.camera.ViewMatrix, UseMirror, Radius, CoefType);
         }
     }

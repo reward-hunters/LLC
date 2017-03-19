@@ -198,7 +198,11 @@ namespace RH.MeshUtils.Helpers
             get;
             set;
         }
-        public int IndexBuffer, VertexBuffer = 0, NumIndices;
+#if (WEB_APP)
+#else
+        public int IndexBuffer, VertexBuffer = 0;
+#endif
+        public int NumIndices;
         public int CountIndices
         {
             get;
@@ -233,9 +237,9 @@ namespace RH.MeshUtils.Helpers
                 return Type == HeadMeshType.Face || Type == HeadMeshType.Lip || Type == HeadMeshType.Head;
             }
         }
-        #endregion
+#endregion
 
-        #region Public
+#region Public
 
         public bool IsMirrored
         {
@@ -311,7 +315,10 @@ namespace RH.MeshUtils.Helpers
                 v.Normal = normals[i];
                 Vertices[i] = v;
             }
+#if (WEB_APP)
+#else
             UpdateVertexBuffer();
+#endif
         }
 
         public void UpdateProfileShape(ref TexturingInfo s, float percent = 0.6f)
@@ -387,7 +394,10 @@ namespace RH.MeshUtils.Helpers
                     Vertices[i] = v;
                 }
             }
+#if (WEB_APP)
+#else
             UpdateVertexBuffer();
+#endif
         }
 
         public void UpdateTexCoords(ref TexturingInfo t)
@@ -411,7 +421,10 @@ namespace RH.MeshUtils.Helpers
                     Vertices[i] = v;
                 }
             }
+#if (WEB_APP)
+#else
             UpdateVertexBuffer();
+#endif
         }
 
         public void FillBlendingData(List<BlendingInfo> blendingInfos)
@@ -490,7 +503,10 @@ namespace RH.MeshUtils.Helpers
             Indices.AddRange(baseIndices);
             CountIndices = Indices.Count;
             baseIndices.Clear();
+#if (WEB_APP)
+#else
             UpdateBuffers();
+#endif
         }
 
         public void FindFixedPoints()
@@ -728,13 +744,114 @@ namespace RH.MeshUtils.Helpers
             Indices = indices;
             CountIndices = indices.Count;
             Vertices = vertices.ToArray();
+#if (WEB_APP)
+#else
             UpdateBuffers();
+#endif
         }
 
+#if (WEB_APP)
+#else
+        private void TempUpdateVertexBuffer()
+        {
+            for (var i = 0; i < Indices.Count / 3; i++)
+            {
+                var index = i * 3;
+                var p0 = Vertices[(int)Indices[index]];
+                var p1 = Vertices[(int)Indices[index + 1]];
+                var p2 = Vertices[(int)Indices[index + 2]];
+                var n = Normal.GetNormal(ref p0.Position, ref p1.Position, ref p2.Position);
+
+                TempVertices[index].Position = p0.Position;
+                TempVertices[index].TexCoord = p0.TexCoord;
+                TempVertices[index].AutodotsTexCoord = p0.AutodotsTexCoord;
+                TempVertices[index].Normal = n;
+
+                TempVertices[index + 1].Position = p1.Position;
+                TempVertices[index + 1].TexCoord = p1.TexCoord;
+                TempVertices[index + 1].AutodotsTexCoord = p1.AutodotsTexCoord;
+                TempVertices[index + 1].Normal = n;
+
+                TempVertices[index + 2].Position = p2.Position;
+                TempVertices[index + 2].TexCoord = p2.TexCoord;
+                TempVertices[index + 2].AutodotsTexCoord = p2.AutodotsTexCoord;
+                TempVertices[index + 2].Normal = n;
+            }
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(TempVertices.Length * Vertex3d.Stride), TempVertices, BufferUsageHint.StreamDraw);
+            OpenGlHelper.CheckErrors();
+        }       
+        
+
+        private void TempUpdateIndexBuffer()
+        {
+            UpdateIndexBuffer(TempIndices);
+        }
+#endif
         public void UpdateBuffers(bool firstTime = false)
         {
             UpdateIndexBuffer(firstTime);
             UpdateVertexBuffer(firstTime);
+        }
+
+        public void Destroy()
+        {
+#if (WEB_APP)
+#else
+            if (VertexBuffer != 0)
+            {
+                GL.DeleteBuffers(1, ref VertexBuffer);
+                VertexBuffer = 0;
+            }
+
+            if (IndexBuffer != 0)
+            {
+                GL.DeleteBuffers(1, ref IndexBuffer);
+                IndexBuffer = 0;
+            }
+#endif
+        }
+
+        private void UpdateVertexBuffer(bool firstTime = false)
+        {
+#if (WEB_APP)
+#else
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer);
+            if (firstTime)
+            {
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vertex3d.Stride), Vertices, BufferUsageHint.StreamDraw);
+            }
+            else
+            {
+                GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, (IntPtr)(Vertices.Length * Vertex3d.Stride), Vertices);
+            }
+            OpenGlHelper.CheckErrors();
+#endif
+        }
+
+        public void UpdateIndexBuffer(bool firstTime = false)
+        {
+            UpdateIndexBuffer(Indices, firstTime);
+        }
+
+        public void UpdateIndexBuffer(List<uint> indices, bool firstTime = false)
+        {
+#if (WEB_APP)
+#else
+            CountIndices = indices.Count;
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBuffer);
+            if (firstTime)
+            {
+                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(CountIndices * sizeof(uint)), indices.ToArray(), BufferUsageHint.DynamicDraw);
+            }
+            else
+            {
+                GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)0, (IntPtr)(CountIndices * sizeof(uint)), indices.ToArray());
+            }
+
+            OpenGlHelper.CheckErrors();
+#endif
         }
 
         public void Undo(MeshUndoInfo info)
@@ -856,25 +973,15 @@ namespace RH.MeshUtils.Helpers
             //temp
 
             FillPoints(pointsIndicesDict);
+#if (WEB_APP)
+#else
             Destroy();
             GL.GenBuffers(1, out VertexBuffer);
             GL.GenBuffers(1, out IndexBuffer);
+#endif
             return true;
         }
-        public void Destroy()
-        {
-            if (VertexBuffer != 0)
-            {
-                GL.DeleteBuffers(1, ref VertexBuffer);
-                VertexBuffer = 0;
-            }
-
-            if (IndexBuffer != 0)
-            {
-                GL.DeleteBuffers(1, ref IndexBuffer);
-                IndexBuffer = 0;
-            }
-        }
+        
 
         public void ToStream(BinaryWriter bw)
         {
@@ -933,9 +1040,12 @@ namespace RH.MeshUtils.Helpers
             result.Type = (HeadMeshType)br.ReadInt32();
             result.IsBaseTexture = br.ReadBoolean();
 
+#if (WEB_APP)
+#else
             result.Destroy();
             GL.GenBuffers(1, out result.VertexBuffer);
             GL.GenBuffers(1, out result.IndexBuffer);
+#endif
 
             //temp
             result.TempIndices = new List<uint>();
@@ -959,9 +1069,9 @@ namespace RH.MeshUtils.Helpers
             return result;
         }
 
-        #endregion
+#endregion
 
-        #region Private
+#region Private
 
         private void FillPoints(Dictionary<int, int> dictionary)
         {
@@ -991,80 +1101,9 @@ namespace RH.MeshUtils.Helpers
                     }
                 }
             }
-        }
+        } 
 
-        private void UpdateVertexBuffer(bool firstTime = false)
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer);
-            if (firstTime)
-            {
-                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vertex3d.Stride), Vertices, BufferUsageHint.StreamDraw);
-            }
-            else
-            {
-                GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, (IntPtr)(Vertices.Length * Vertex3d.Stride), Vertices);
-            }
-            OpenGlHelper.CheckErrors();
-        }
-
-        public void UpdateIndexBuffer(bool firstTime = false)
-        {
-            UpdateIndexBuffer(Indices, firstTime);
-        }
-
-        public void UpdateIndexBuffer(List<uint> indices, bool firstTime = false)
-        {
-            CountIndices = indices.Count;
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBuffer);
-            if(firstTime)
-            {
-                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(CountIndices * sizeof(uint)), indices.ToArray(), BufferUsageHint.DynamicDraw);
-            }
-            else
-            {
-                GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)0, (IntPtr)(CountIndices * sizeof(uint)), indices.ToArray());
-            }
-            
-            OpenGlHelper.CheckErrors();
-        }
-
-        private void TempUpdateVertexBuffer()
-        {
-            for (var i = 0; i < Indices.Count / 3; i++)
-            {
-                var index = i * 3;
-                var p0 = Vertices[(int)Indices[index]];
-                var p1 = Vertices[(int)Indices[index + 1]];
-                var p2 = Vertices[(int)Indices[index + 2]];
-                var n = Normal.GetNormal(ref p0.Position, ref p1.Position, ref p2.Position);
-
-                TempVertices[index].Position = p0.Position;
-                TempVertices[index].TexCoord = p0.TexCoord;
-                TempVertices[index].AutodotsTexCoord = p0.AutodotsTexCoord;
-                TempVertices[index].Normal = n;
-
-                TempVertices[index + 1].Position = p1.Position;
-                TempVertices[index + 1].TexCoord = p1.TexCoord;
-                TempVertices[index + 1].AutodotsTexCoord = p1.AutodotsTexCoord;
-                TempVertices[index + 1].Normal = n;
-
-                TempVertices[index + 2].Position = p2.Position;
-                TempVertices[index + 2].TexCoord = p2.TexCoord;
-                TempVertices[index + 2].AutodotsTexCoord = p2.AutodotsTexCoord;
-                TempVertices[index + 2].Normal = n;
-            }
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(TempVertices.Length * Vertex3d.Stride), TempVertices, BufferUsageHint.StreamDraw);
-            OpenGlHelper.CheckErrors();
-        }
-
-        private void TempUpdateIndexBuffer()
-        {
-            UpdateIndexBuffer(TempIndices);
-        }
-
-        #endregion
+#endregion
     }
 
     public class RenderMeshParts : List<RenderMeshPart>

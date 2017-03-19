@@ -325,16 +325,16 @@ namespace RH.Core.Render.Controllers
                         foreach (var meshPartInfo in meshPartInfos)
                         {
                             dv = AlignByTop(ref meshPartInfo.VertexPositions, a, b, topPoint);
-                            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.CreateMeshPart(meshPartInfo);
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.CreateMeshPart(meshPartInfo);
                         }
 
                         ObjExport = objModel.ObjExport;
                         if (ObjExport != null)
                             ObjExport.Delta = -dv;
-                        ProgramCore.MainForm.ctrlRenderControl.headMeshesController.FinishCreating();
+                        ProgramCore.Project.RenderMainHelper.headMeshesController.FinishCreating();
 
                         return null;
-                        // ProgramCore.MainForm.ctrlRenderControl.headMeshesController.InitializeTexturing(HeadController.GetDots(ProgramCore.Project.ManType), HeadController.GetIndices(ProgramCore.Project.ManType));
+                        // ProgramCore.Project.RenderMainHelper.headMeshesController.InitializeTexturing(HeadController.GetDots(ProgramCore.Project.ManType), HeadController.GetIndices(ProgramCore.Project.ManType));
                     }
                 default:
                     return result;

@@ -310,6 +310,8 @@ namespace RH.MeshUtils.Data
 
         public void Draw(bool debug)
         {
+#if (WEB_APP)
+#else
             GL.Color3(1.0f, 1.0f, 1.0f);
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.EnableClientState(ArrayCap.NormalArray);
@@ -345,10 +347,13 @@ namespace RH.MeshUtils.Data
 
             if (debug)
                 OpenGlHelper.DrawAABB(AABB.A, AABB.B);
+#endif
         }
 
         public void DrawToTexture(IEnumerable<RenderMeshPart> parts)
         {
+#if (WEB_APP)
+#else
             GL.Color3(1.0f, 1.0f, 1.0f);
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.EnableClientState(ArrayCap.NormalArray);
@@ -371,6 +376,7 @@ namespace RH.MeshUtils.Data
             GL.DisableClientState(ArrayCap.VertexArray);
             GL.DisableClientState(ArrayCap.NormalArray);
             GL.DisableClientState(ArrayCap.TextureCoordArray);
+#endif
         }
 
         public void Destroy()

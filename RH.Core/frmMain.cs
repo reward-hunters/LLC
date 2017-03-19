@@ -536,7 +536,7 @@ namespace RH.Core
 
         private void OnDeleteHeadSelectedPoints_Click(object sender, EventArgs e)
         {
-            ctrlRenderControl.headController.RemoveSelectedPoints();
+            ProgramCore.Project.RenderMainHelper.headController.RemoveSelectedPoints();
         }
 
         #region Menu
@@ -1703,12 +1703,12 @@ namespace RH.Core
             }
 
             var meshInfos = new List<MeshInfo>();
-            foreach (var part in ctrlRenderControl.headMeshesController.RenderMesh.Parts)
+            foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 meshInfos.Add(new MeshInfo(part));
 
             ObjSaver.ExportMergedModel(fiName, ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes,
                 ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes, meshInfos,
-               ctrlRenderControl.headMeshesController.RenderMesh.RealScale);
+               ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale);
 
             var importer = new AssimpImporter();
             importer.ConvertFromFileToFile(fiName, stlName, "stl");
@@ -1766,25 +1766,25 @@ namespace RH.Core
             }
 
             //var tempScale = 5f;
-            var realScale = ctrlRenderControl.headMeshesController.RenderMesh.RealScale;
+            var realScale = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
             if (ProgramCore.PluginMode)
             {
                 var scale = 1f;
                 switch (ProgramCore.Project.ManType)
                 {
                     case ManType.Male:
-                        scale = ctrlRenderControl.headMeshesController.SetSize(29.9421043f); // подгонка размера 
+                        scale = ProgramCore.Project.RenderMainHelper.headMeshesController.SetSize(29.9421043f); // подгонка размера 
                         break;
                     case ManType.Female:
-                        scale = ctrlRenderControl.headMeshesController.SetSize(29.3064537f); // подгонка размера 
+                        scale = ProgramCore.Project.RenderMainHelper.headMeshesController.SetSize(29.3064537f); // подгонка размера 
                         break;
                     case ManType.Child:
-                        scale = ctrlRenderControl.headMeshesController.SetSize(25.6209984f); // подгонка размера 
+                        scale = ProgramCore.Project.RenderMainHelper.headMeshesController.SetSize(25.6209984f); // подгонка размера 
                         break;
                 }
 
-                //tempScale = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale;
-                //ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale /= scale;
+                //tempScale = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;
+                //ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale /= scale;
                 realScale /= scale;
             }
 
@@ -1800,7 +1800,7 @@ namespace RH.Core
             Process.Start("http://www.shapeways.com/");
 
             var meshInfos = new List<MeshInfo>();
-            foreach (var part in ctrlRenderControl.headMeshesController.RenderMesh.Parts)
+            foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 meshInfos.Add(new MeshInfo(part));
             MeshInfo.FindCenter(meshInfos, "Меши бошки до экспорта frmMain::ExportCollada()");
             ProgramCore.EchoToLog(String.Format("realScale frmMain::ExportCollada(): {0}", realScale), EchoMessageType.Information);
@@ -1864,7 +1864,7 @@ namespace RH.Core
             #endregion
 
             //if (ProgramCore.PluginMode)
-            //    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale = tempScale;
+            //    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = tempScale;
 
             MessageBox.Show("Color 3D export finished!", "Done");
         }
@@ -1877,8 +1877,8 @@ namespace RH.Core
             var tempScale = 5f;
             if (ProgramCore.PluginMode)
             {
-                tempScale = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale;
-                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale = 1;          // чтобы скейл в проге не влиял на экспорт.
+                tempScale = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;
+                ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 1;          // чтобы скейл в проге не влиял на экспорт.
 
                 var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
@@ -1900,7 +1900,7 @@ namespace RH.Core
 
             var haPath = Path.GetFileNameWithoutExtension(fiName) + "hair.obj";
             var hairPath = Path.Combine(ProgramCore.Project.ProjectPath, haPath);
-            var realScale = ProgramCore.PluginMode ? 1.0f : ctrlRenderControl.headMeshesController.RenderMesh.RealScale;
+            var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
 
             ObjSaver.SaveObjFile(hairPath, ctrlRenderControl.pickingController.HairMeshes, MeshType.Hair, realScale, true);
 
@@ -1927,7 +1927,7 @@ namespace RH.Core
 
                 var iTexture = -1;
 
-                foreach (var part in ctrlRenderControl.headMeshesController.RenderMesh.Parts)
+                foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 {
                     if (ProgramCore.MainForm.PluginUvGroups.Contains(part.Name.ToLower().Trim()))
                     {
@@ -2024,7 +2024,7 @@ namespace RH.Core
                     file.LastWriteTime = now;
                 }
 
-                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale = tempScale;
+                ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = tempScale;
             }
 
             MessageBox.Show(ProgramCore.ProgramCaption + " project successfully exported!", "Done", MessageBoxButtons.OK);

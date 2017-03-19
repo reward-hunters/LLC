@@ -118,7 +118,7 @@ namespace RH.Core.Controls.Libraries
 
             currentPose = animPath;
 
-            ProgramCore.MainForm.ctrlRenderControl.PoseMorphing = ProgramCore.MainForm.ctrlRenderControl.pickingController.LoadPartsMorphInfo(currentPose, ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh);
+            ProgramCore.MainForm.ctrlRenderControl.PoseMorphing = ProgramCore.MainForm.ctrlRenderControl.pickingController.LoadPartsMorphInfo(currentPose, ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh);
 
             trackBarPose.Enabled = true;
             trackBarPose.Value = 100;
@@ -160,7 +160,7 @@ namespace RH.Core.Controls.Libraries
             if (IsUpdating)
                 return;
 
-            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale = trackSize.Value;
+            ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = trackSize.Value;
             ProgramCore.MainForm.ctrlRenderControl.UpdateCameraPosition(-0.54f);
         }
 
@@ -169,7 +169,7 @@ namespace RH.Core.Controls.Libraries
             ProgramCore.MainForm.ctrlRenderControl.StagesActivate(false);
 
             BeginUpdate();
-            trackSize.Value = (int)ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.MorphScale;
+            trackSize.Value = (int)ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;
             EndUpdate();
         }
         private void frmStages_FormClosing(object sender, FormClosingEventArgs e)

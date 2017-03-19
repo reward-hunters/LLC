@@ -33,7 +33,11 @@ namespace RH.Core.Render.Obj
             set
             {
                 transparentTextureMap = value;
+#if (WEB_APP)
+                TransparentTexture = string.IsNullOrEmpty(transparentTextureMap) ? 0 : ProgramCore.Project.RenderMainHelper.GetTexture(transparentTextureMap);
+#else
                 TransparentTexture = string.IsNullOrEmpty(transparentTextureMap) ? 0 : ProgramCore.MainForm.ctrlRenderControl.GetTexture(transparentTextureMap);
+#endif
             }
         }
         public int TransparentTexture
@@ -52,7 +56,11 @@ namespace RH.Core.Render.Obj
             set
             {
                 diffuseTextureMap = value;
+#if (WEB_APP)
+                Texture = string.IsNullOrEmpty(diffuseTextureMap) ? 0 : ProgramCore.Project.RenderMainHelper.GetTexture(diffuseTextureMap);
+#else
                 Texture = string.IsNullOrEmpty(diffuseTextureMap) ? 0 : ProgramCore.MainForm.ctrlRenderControl.GetTexture(diffuseTextureMap);
+#endif
             }
         }
         public int Texture
@@ -61,9 +69,9 @@ namespace RH.Core.Render.Obj
             set;
         }
 
-        #endregion
+#endregion
 
-        #region Non-usable items
+#region Non-usable items
 
         public Vector3 AmbientColor
         {
@@ -131,7 +139,7 @@ namespace RH.Core.Render.Obj
             set;
         }
 
-        #endregion
+#endregion
 
         public ObjMaterial(string materialName)
         {

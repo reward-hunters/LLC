@@ -446,7 +446,7 @@ namespace RH.Core.Render.Controllers
         /// <summary> Удалить выделенные точки </summary>
         public void RemoveSelectedPoints()
         {
-            var history = new HistoryHeadAutoDots(ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots);
+            var history = new HistoryHeadAutoDots(ProgramCore.Project.RenderMainHelper.headController.AutoDots);
             ProgramCore.MainForm.ctrlRenderControl.historyController.Add(history);
 
             for (var i = Lines.Count - 1; i >= 0; i--)
@@ -1065,7 +1065,7 @@ namespace RH.Core.Render.Controllers
                 return;
 
             ShapeDots.Clear();
-            foreach (var dot in ProgramCore.MainForm.ctrlRenderControl.headMeshesController.TexturingInfo.Points)
+            foreach (var dot in ProgramCore.Project.RenderMainHelper.headMeshesController.TexturingInfo.Points)
             {
                 var newPoint = new MirroredHeadPoint(dot.Value, dot.Value);
                 newPoint.Visible = dot.Visible;
@@ -1080,8 +1080,10 @@ namespace RH.Core.Render.Controllers
             //ClarifyEyeAndMouth(new List<int> { 43, 44, 45, 46 }, ProgramCore.Project.RightEyeCenter);  // Right eye
 
             //ClarifyEyeAndMouth(new List<int> { 1, 15, 16, 17, 37, 38, 39, 51 }, ProgramCore.Project.MouthCenter);  // Mouth
-
+#if WEB_APP
+#else
             ProgramCore.MainForm.ctrlTemplateImage.UpdateUserCenterPositions(false, true);
+#endif
         }
         public void EndAutodots(bool needClear = true)
         {
@@ -1089,7 +1091,7 @@ namespace RH.Core.Render.Controllers
             foreach (var point in AutoDots)
                 results.Add(point.ValueMirrored);
 
-            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.UpdateTexCoors(results);
+            ProgramCore.Project.RenderMainHelper.headMeshesController.UpdateTexCoors(results);
             if (needClear)
                 AutoDots.ClearSelection();
         }
@@ -1236,20 +1238,23 @@ namespace RH.Core.Render.Controllers
         {
             if (needTransform)
             {
+#if WEB_APP
+#else
                 if (ProgramCore.MainForm.HeadFront)
                 {
-                    //var v = point - new Vector2(ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.A.X, ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.B.Y);
-                    //v.X /= ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.X;
-                    //v.Y /= (-ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.Y);
+#endif
+                    //var v = point - new Vector2(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.A.X, ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.B.Y);
+                    //v.X /= ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.X;
+                    //v.Y /= (-ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.Y);
 
                     //v.X = ProgramCore.Project.FaceRectRelative.Width * v.X + ProgramCore.Project.FaceRectRelative.X;
                     //v.Y = ProgramCore.Project.FaceRectRelative.Height * v.Y + ProgramCore.Project.FaceRectRelative.Y;
                     //ValueMirrored = v;
 
-                    var v = point - new Vector2(ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.A.X,
-                        ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.B.Y);
-                    v.X /= ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.X;
-                    v.Y /= (-ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.Y);
+                    var v = point - new Vector2(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.A.X,
+                        ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.B.Y);
+                    v.X /= ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.X;
+                    v.Y /= (-ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.Y);
 
                     var width = ProgramCore.Project.FaceRectRelative.Width * ProgramCore.Project.FrontImage.Width;
                     var height = ProgramCore.Project.FaceRectRelative.Height * ProgramCore.Project.FrontImage.Height;
@@ -1261,6 +1266,8 @@ namespace RH.Core.Render.Controllers
                     v.Y = ((v.Y * height) + y) / ProgramCore.Project.FrontImage.Height;
 
                     ValueMirrored = v;
+#if WEB_APP
+#else
                 }
                 else if (ProgramCore.MainForm.HeadProfile)
                 {
@@ -1272,6 +1279,7 @@ namespace RH.Core.Render.Controllers
                     v.Y = ProgramCore.MainForm.ctrlTemplateImage.ProfileFaceRect.Height * v.Y + ProgramCore.MainForm.ctrlTemplateImage.ProfileFaceRect.Y;
                     ValueMirrored = v;
                 }
+#endif
             }
             else
                 ValueMirrored = mirroredPoint;
@@ -1314,8 +1322,8 @@ namespace RH.Core.Render.Controllers
             v.X = ((valueMirrored.X * ProgramCore.Project.FrontImage.Width) - x) / width;
             v.Y = ((valueMirrored.Y * ProgramCore.Project.FrontImage.Height) - y) / height;
 
-            result.X = v.X * ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.X + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.A.X;
-            result.Y = v.Y * (-ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.Y) + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.B.Y;
+            result.X = v.X * ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.X + ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.A.X;
+            result.Y = v.Y * (-ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.Y) + ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.B.Y;
             return result;
         }
         /// <summary> Функция только для версии HeadShop 11 Rotator (для работы с повернутыми головами на фото) </summary>
@@ -1333,12 +1341,12 @@ namespace RH.Core.Render.Controllers
             v.X = ((valueMirrored.X * ProgramCore.Project.FrontImage.Width) - x) / width;
             v.Y = ((valueMirrored.Y * ProgramCore.Project.FrontImage.Height) - y) / height;
 
-            result.X = v.X * ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.X + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.A.X;
-            result.Y = v.Y * (-ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.Size.Y) + ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.AABB.B.Y;
+            result.X = v.X * ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.X + ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.A.X;
+            result.Y = v.Y * (-ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.Y) + ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.B.Y;
 
-            var centerX = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.FaceCenterX;
-            var angle = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.HeadAngle;
-            var noseDepth = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.NoseDepth;
+            var centerX = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.FaceCenterX;
+            var angle = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle;
+            var noseDepth = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.NoseDepth;
             result.X = ((result.X - centerX) + (float)Math.Sin(angle) * 0.0f * noseDepth) / (float)Math.Cos(angle);
 
             /*

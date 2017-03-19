@@ -234,6 +234,7 @@ namespace RH.Core.Controls
             FolderEx.CreateDirectory(path, true);
 
             ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, ManType, CustomModelPath, true, SelectedSize);
+            ProgramCore.Project.LoadMeshes();
 
             var minX = fcr.GetMinX();
             var topPoint = (TopEdgeTransformed.Y - ImageTemplateOffsetY) / ImageTemplateHeight;

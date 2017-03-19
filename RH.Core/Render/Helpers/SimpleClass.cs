@@ -239,9 +239,14 @@ namespace RH.Core.Render.Helpers
             Material = new ObjMaterial(part.Guid.ToString().Replace("-", ""));
             Material.DiffuseColor = part.Color;
             Material.Texture = part.Texture;
-            Material.DiffuseTextureMap = ProgramCore.MainForm.ctrlRenderControl.GetTexturePath(part.Texture);
             Material.TransparentTexture = part.TransparentTexture;
+#if WEB_APP
+            Material.DiffuseTextureMap = ProgramCore.Project.RenderMainHelper.GetTexturePath(part.Texture);
+            Material.TransparentTextureMap = ProgramCore.Project.RenderMainHelper.GetTexturePath(part.TransparentTexture);
+#else
+            Material.DiffuseTextureMap = ProgramCore.MainForm.ctrlRenderControl.GetTexturePath(part.Texture);            
             Material.TransparentTextureMap = ProgramCore.MainForm.ctrlRenderControl.GetTexturePath(part.TransparentTexture);
+#endif
         }
 
         public Matrix4 TempTransform = Matrix4.Identity;
@@ -325,7 +330,7 @@ namespace RH.Core.Render.Helpers
         }
     }
 
-    #region Cutting
+#region Cutting
 
     public enum CollisionType
     {
@@ -439,5 +444,5 @@ namespace RH.Core.Render.Helpers
         public List<int> Connections = new List<int>();
     }
 
-    #endregion
+#endregion
 }

@@ -12,6 +12,7 @@ using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
 using RH.Core.Render.Obj;
 using RH.MeshUtils.Data;
+using RH.MeshUtils.Helpers;
 
 namespace RH.Core
 {
@@ -124,6 +125,8 @@ namespace RH.Core
 
         public Vector4 FaceColor { get; set; }
 
+        public readonly RenderMainHelper RenderMainHelper = new RenderMainHelper();
+
         /// <summary> Центр правого глаза, опредееленный распознаванием лица. Относительные координаты </summary>
         private Vector2 rightEyeCenter;
         public Vector2 RightEyeCenter
@@ -160,6 +163,7 @@ namespace RH.Core
         public Vector2 NoseUserCenter = new Vector2(0, 0);       // так мы его никак не определим. ждем первых автоточек, Тогда будет пересчет
 
         #endregion
+        
 
         /// <summary> Тип лица (мужское, женское, ребенок)</summary>
         public ManType ManType;
@@ -272,8 +276,23 @@ namespace RH.Core
                 FrontImagePath = templateImageName;
                 HeadModelPath = headModelPath;
             }
+        }
 
-            var modelPath = Path.Combine(projectPath, "OBJ", "hair.obj");
+        public void LoadMeshes()
+        {
+#if WEB_APP
+            var modelPath = Path.Combine(ProjectPath, "OBJ", "hair.obj");
+
+            RenderMainHelper.LoadModel(modelPath, true, ManType, MeshType.Hair);
+
+            var acDirPath = Path.GetDirectoryName(modelPath);
+            var acName = Path.GetFileNameWithoutExtension(modelPath) + "_accessory.obj";
+            var accessoryPath = Path.Combine(acDirPath, acName);
+            if (File.Exists(accessoryPath))
+                RenderMainHelper.LoadModel(accessoryPath, false, ManType, MeshType.Accessory);
+
+#else
+            var modelPath = Path.Combine(ProjectPath, "OBJ", "hair.obj");
             ProgramCore.MainForm.ctrlRenderControl.LoadModel(modelPath, true, ManType, MeshType.Hair);
 
             var acDirPath = Path.GetDirectoryName(modelPath);
@@ -281,6 +300,7 @@ namespace RH.Core
             var accessoryPath = Path.Combine(acDirPath, acName);
             if (File.Exists(accessoryPath))
                 ProgramCore.MainForm.ctrlRenderControl.LoadModel(accessoryPath, false, ManType, MeshType.Accessory);
+#endif
         }
 
         /// <summary> Save current project to file </summary>
@@ -382,11 +402,11 @@ namespace RH.Core
                     bw.Write(FaceColor.Y);
                     bw.Write(FaceColor.Z);
 
-                    #region Информация о модели головы
+#region Информация о модели головы
 
                     var rmPath = Path.Combine(ProjectPath, "Model", "MeshParts.rm");
 
-                    #region Сохранение RenderMesh
+#region Сохранение RenderMesh
 
                     if (ManType != ManType.Custom)
                     {
@@ -397,7 +417,7 @@ namespace RH.Core
                         ProgramCore.MainForm.ctrlRenderControl.DoMorth();
                     }
 
-                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Save(rmPath);
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Save(rmPath);
 
                     if (ManType != ManType.Custom)
                     {
@@ -408,7 +428,7 @@ namespace RH.Core
                         ProgramCore.MainForm.ctrlRenderControl.DoMorth();
                     }
 
-                    #endregion
+#endregion
 
                     if (BaseDots != null)
                     {
@@ -428,22 +448,22 @@ namespace RH.Core
                     else
                         bw.Write(0);
 
-                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeInfo.ToStream(bw);
-                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo.ToStream(bw);
+                    RenderMainHelper.autodotsShapeHelper.ShapeInfo.ToStream(bw);
+                    RenderMainHelper.autodotsShapeHelper.ShapeProfileInfo.ToStream(bw);
 
-                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.TexturingInfo.ToStream(bw);
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.TexturingInfo.ToStream(bw);
 
 
-                    bw.Write(ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.Count);
-                    foreach (var dot in ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots)
+                    bw.Write(ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Count);
+                    foreach (var dot in ProgramCore.Project.RenderMainHelper.headController.ShapeDots)
                         dot.ToStreamM(bw);
-                    bw.Write(ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.Count);
-                    foreach (var dot in ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots)
+                    bw.Write(ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count);
+                    foreach (var dot in ProgramCore.Project.RenderMainHelper.headController.AutoDots)
                         dot.ToStreamM(bw);
 
                     bw.Write(CustomHeadNeedProfileSetup);
 
-                    #endregion
+#endregion
 
                     bw.Write(ProfileEyeLocation.X);
                     bw.Write(ProfileEyeLocation.Y);
@@ -484,7 +504,7 @@ namespace RH.Core
 
                 var projectName = br.ReadString();
 
-                #region template image
+#region template image
 
                 var templateImagePath = br.ReadString();
                 if (!string.IsNullOrEmpty(templateImagePath))
@@ -498,7 +518,7 @@ namespace RH.Core
                     }
                 }
 
-                #endregion
+#endregion
 
                 var headModelPath = br.ReadString();
 
@@ -507,6 +527,7 @@ namespace RH.Core
                 var shapeFlip = (FlipType)br.ReadInt32();
 
                 result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick ? 2048 : 1024);
+                result.LoadMeshes();
                 result.TextureFlip = textureFlip;
                 result.ShapeFlip = shapeFlip;
 
@@ -560,11 +581,11 @@ namespace RH.Core
                 //Сохраняем цвет головы
                 result.FaceColor = new Vector4(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), 1.0f);
 
-                #region Информация о модели головы
+#region Информация о модели головы
 
                 var rmPath = Path.Combine(projectFi.DirectoryName, "Model", "MeshParts.rm");
-                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Load(rmPath);
-                foreach (var part in ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts)
+                ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Load(rmPath);
+                foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 {
                     if (!string.IsNullOrEmpty(part.TextureName))
                         part.Texture = ProgramCore.MainForm.ctrlRenderControl.GetTexture(part.TextureName);
@@ -580,23 +601,23 @@ namespace RH.Core
                 for (var i = 0; i < profileBaseDotsCount; i++)
                     result.ProfileBaseDots.Add(HeadPoint.FromStream(br));
 
-                ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeInfo = TexturingInfo.FromStream(br);
-                ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo = TexturingInfo.FromStream(br);
+                result.RenderMainHelper.autodotsShapeHelper.ShapeInfo = TexturingInfo.FromStream(br);
+                result.RenderMainHelper.autodotsShapeHelper.ShapeProfileInfo = TexturingInfo.FromStream(br);
 
-                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.TexturingInfo = TexturingInfo.FromStream(br);
+                ProgramCore.Project.RenderMainHelper.headMeshesController.TexturingInfo = TexturingInfo.FromStream(br);
 
-                ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.Clear();
-                ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.Clear();
+                ProgramCore.Project.RenderMainHelper.headController.AutoDots.Clear();
+                ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Clear();
                 var cnt = br.ReadInt32();
                 for (var i = 0; i < cnt; i++)
-                    ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.Add(MirroredHeadPoint.FromStreamW(br));
+                    ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Add(MirroredHeadPoint.FromStreamW(br));
                 cnt = br.ReadInt32();
                 for (var i = 0; i < cnt; i++)
-                    ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.Add(MirroredHeadPoint.FromStreamW(br));
+                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.Add(MirroredHeadPoint.FromStreamW(br));
 
                 result.CustomHeadNeedProfileSetup = br.ReadBoolean();
 
-                #endregion
+#endregion
 
                 result.ProfileEyeLocation = new Vector2(br.ReadSingle(), br.ReadSingle());
                 result.ProfileMouthLocation = new Vector2(br.ReadSingle(), br.ReadSingle());

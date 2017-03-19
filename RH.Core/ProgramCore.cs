@@ -29,7 +29,7 @@ namespace RH.Core
             get;
             private set;
         }
-
+        
         public static Project Project
         {
             get;

@@ -175,20 +175,20 @@ namespace RH.Core.Render.Controllers
 
         public override void Undo()
         {
-            ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.Clear();         // все точки нужны
+            ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Clear();         // все точки нужны
             foreach (var dot in shapeDotsInfo)
             {
                 var newDot = dot.Clone() as MirroredHeadPoint;
-                ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.Add(newDot);
+                ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Add(newDot);
             }
-            ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ToArray(), false);
+            ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ToArray(), false);
 
             foreach (var meshInfo in partsInfo)
             {
-                if (!ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts.Contains(meshInfo.Key))
+                if (!ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts.Contains(meshInfo.Key))
                     continue;
 
-                var mesh = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts[meshInfo.Key];
+                var mesh = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts[meshInfo.Key];
                 mesh.Undo(meshInfo.Value);
             }
 
@@ -228,11 +228,11 @@ namespace RH.Core.Render.Controllers
         {
             if (partsInfo == null)
             {
-                ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Clear();
+                ProgramCore.Project.RenderMainHelper.headController.Lines.Clear();
                 foreach (var line in Lines)
                 {
                     var currentLine = new HeadLine();
-                    ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(currentLine);
+                    ProgramCore.Project.RenderMainHelper.headController.Lines.Add(currentLine);
                     foreach (var point in line)
                         currentLine.Add(point.Clone() as MirroredHeadPoint);
                 }
@@ -241,19 +241,19 @@ namespace RH.Core.Render.Controllers
             {
                 foreach (var meshInfo in partsInfo)
                 {
-                    if (!ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts.Contains(meshInfo.Key))
+                    if (!ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts.Contains(meshInfo.Key))
                         continue;
 
-                    var mesh = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts[meshInfo.Key];
+                    var mesh = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts[meshInfo.Key];
                     mesh.Undo(meshInfo.Value);
                 }
 
                 if (isProfile)
-                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo = TexturingInfo.Clone();
+                    ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo = TexturingInfo.Clone();
                 else
-                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeInfo = TexturingInfo.Clone();
+                    ctrlRenderControl.autodotsShapeHelper.ShapeInfo = TexturingInfo.Clone();
 
-                ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.TransformRects();
+                ctrlRenderControl.autodotsShapeHelper.TransformRects();
             }
 
             ProgramCore.MainForm.ctrlTemplateImage.UpdateUserCenterPositions(false, true);
@@ -273,14 +273,14 @@ namespace RH.Core.Render.Controllers
 
         public override void Undo()
         {
-            ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.Clear();         // все точки нужны
+            ProgramCore.Project.RenderMainHelper.headController.AutoDots.Clear();         // все точки нужны
             foreach (var dot in autoDotsInfo)
-                ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.Add(dot.Clone() as MirroredHeadPoint);
+                ProgramCore.Project.RenderMainHelper.headController.AutoDots.Add(dot.Clone() as MirroredHeadPoint);
 
             if (ProgramCore.Project.AutodotsUsed)
             {
                 ProgramCore.MainForm.ctrlRenderControl.CalcReflectedBitmaps();
-                ProgramCore.MainForm.ctrlRenderControl.headController.EndAutodots(false);
+                ProgramCore.Project.RenderMainHelper.headController.EndAutodots(false);
                 ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
             }
             ProgramCore.MainForm.ctrlTemplateImage.UpdateUserCenterPositions(false, true);
@@ -301,10 +301,10 @@ namespace RH.Core.Render.Controllers
         {
             foreach (var meshInfo in partsInfo)
             {
-                if (!ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts.Contains(meshInfo.Key))
+                if (!ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts.Contains(meshInfo.Key))
                     continue;
 
-                var mesh = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts[meshInfo.Key];
+                var mesh = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts[meshInfo.Key];
                 mesh.Undo(meshInfo.Value);
             }
         }

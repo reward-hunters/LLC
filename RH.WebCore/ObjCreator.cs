@@ -1,50 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK;
 using RH.Core;
 using RH.Core.Helpers;
 using RH.Core.IO;
 using RH.Core.Render;
+using RH.MeshUtils.Data;
+using RH.MeshUtils.Helpers;
 using RH.Core.Render.Controllers;
+using RH.MeshUtils;
+using Luxand;
+using System.Windows.Forms;
+using RH.Core.Render.Obj;
 
 namespace RH.WebCore
 {
-    public static class ObjCreator
+    public class ObjCreator
     {
-        public static void CreateObj(ManType manType)
+
+        #region Fields
+        private HeadShapeController HeadShapeController
         {
-            var render = new ctrlRenderControl();
-            render.Initialize();
-
-            #region Создание проекта
-
-            var path = UserConfig.AppDataDir;
-            path = Path.Combine(path, "TempProject");
-            FolderEx.CreateDirectory(path, true);
-
-            var templateImage = Path.Combine(path, "sourceImg.jpeg");
-            using (WebClient client = new WebClient())
+            get
             {
-                byte[] imageBytes = client.DownloadData(path);
-
-                using (var ms = new MemoryStream(imageBytes))
-                {
-                    var img = new Bitmap(ms);
-                    img.Save(templateImage);
-                }
+                return ProgramCore.Project.RenderMainHelper.HeadShapeController;
             }
+        }
+        private HeadController headController
+        {
+            get
+            {
+                return ProgramCore.Project.RenderMainHelper.headController;
+            }
+        }
+        private HeadMeshesController headMeshesController
+        {
+            get
+            {
+                return ProgramCore.Project.RenderMainHelper.headMeshesController;
+            }
+        }
 
-            ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, manType, string.Empty, true, 1024);
+        public static AutodotsShapeHelper autodotsShapeHelper
+        {
+            get
+            {
+                return ProgramCore.Project.RenderMainHelper.autodotsShapeHelper;
+            }
+        }
+        #endregion
 
+        private void Recognize(string templateImage)
+        {
             var fcr = new LuxandFaceRecognition();
             fcr.Recognize(ref templateImage, true);
-
 
             var distance = fcr.FacialFeatures[2].Y - fcr.FacialFeatures[11].Y;
             var topPoint = fcr.FacialFeatures[16].Y + distance;
@@ -102,48 +113,90 @@ namespace RH.WebCore
 
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[66]);
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[67]);
+        }
 
-            var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
-            ProgramCore.MainForm.UpdateProjectControls(true, aabb);
+        public void UpdateProjectControls(bool newProject, RectangleAABB aabb = null)
+        {
+            ProgramCore.Project.RenderMainHelper.LoadProject(newProject, aabb);
 
-            ProgramCore.Project.ToStream();
+            //if (ProgramCore.Project == null)
+            //{
+            //    ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
+            //}
+            //else
+            //{
 
+
+
+            //    if (ProgramCore.Project.FrontImage == null)
+            //        ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
+            //    else
+            //    {
+            //        using (var bmp = new Bitmap(ProgramCore.Project.FrontImage))
+            //            ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage((Bitmap)bmp.Clone());
+            //    }
+            //}
+        }
+        
+        public void CreateObj(ManType manType)
+        {
+            #region Создание проекта
+            var path = UserConfig.AppDataDir;
+            path = Path.Combine(path, "TempProject");
+            FolderEx.CreateDirectory(path, true);
+
+            var templateImage = Path.Combine(path, "sourceImg.jpeg");
+            //using (WebClient client = new WebClient())
+            //{
+            //    byte[] imageBytes = client.DownloadData(path);
+
+            //    using (var ms = new MemoryStream(imageBytes))
+            //    {
+            //        var img = new Bitmap(ms);
+            //        img.Save(templateImage);
+            //    }
+            //}
+            ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, manType, string.Empty, false, 1024);
+            ProgramCore.Project.LoadMeshes();
+            #endregion
+
+            #region активация охуенной распознавалки
+
+            if (FSDK.FSDKE_OK != FSDK.ActivateLibrary("DWysHuomlBcczVM2MQfiz/3WraXb7r+fM0th71X5A9z+gsHn2kpGOgWrVh9D/9sQWlPXO00CFmGMvetl9A+VEr9Y5GVBIccyV32uaZutZjKYH5KB2k87NJAAw6NPkzK0DSQ5b5W7EO0yg2+x4HxpWzPogGyIIYcAHIYY11/YGsU="))
+            {
+                MessageBox.Show("Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+
+            FSDK.InitializeLibrary();
+            FSDK.SetFaceDetectionParameters(true, true, 384);
 
             #endregion
 
-            render.LoadProject(true, aabb);
+            Recognize(templateImage);
+            var aabb = ProgramCore.Project.RenderMainHelper.InitializeShapedotsHelper(true);
+            ProgramCore.Project.RenderMainHelper.LoadProject(true, aabb);
+            string fiName = Path.Combine(path, ProgramCore.Project.ProjectName + ".obj");            
 
-            #region Texture
+            headMeshesController.InitializeTexturing(autodotsShapeHelper.GetBaseDots(), HeadController.GetIndices());
+            autodotsShapeHelper.Transform(headMeshesController.TexturingInfo.Points.ToArray());
+            headController.StartAutodots();
+            ProgramCore.Project.RenderMainHelper.UpdateUserCenterPositions();
 
-            // Start Autodots
-
-            render.headMeshesController.InitializeTexturing(render.autodotsShapeHelper.GetBaseDots(), HeadController.GetIndices());
-            render.autodotsShapeHelper.Transform(render.headMeshesController.TexturingInfo.Points.ToArray());
-            render.headController.StartAutodots();
-
-            // End  Autodots
-
-            for (var i = 0; i < render.headMeshesController.RenderMesh.Parts.Count; i++)
+            for (var i = 0; i < headMeshesController.RenderMesh.Parts.Count; i++)
             {
-                var part = render.headMeshesController.RenderMesh.Parts[i];
+                var part = headMeshesController.RenderMesh.Parts[i];
                 if (part.Texture == 0)
                 {
-                    part.Texture = render.HeadTextureId;
-                    part.TextureName = render.GetTexturePath(part.Texture);
+                    part.Texture = ProgramCore.Project.RenderMainHelper.HeadTextureId;
+                    part.TextureName = ProgramCore.Project.RenderMainHelper.GetTexturePath(part.Texture);
                 }
             }
 
-            render.headController.EndAutodots();
-            render.ApplySmoothedTextures();
+            headController.EndAutodots();            
 
-            for (var i = 0; i < render.headController.AutoDots.Count; i++)      // после слияние с ShapeDots. Проверить!
-            {
-                var p = render.headController.AutoDots[i];
-                render.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
-            }
-            render.CalcReflectedBitmaps();
-
-            #endregion 
+            ProgramCore.Project.RenderMainHelper.SaveHead(fiName);
+            ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures();
         }
     }
 }

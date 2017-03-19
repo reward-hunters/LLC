@@ -70,7 +70,7 @@ namespace RH.Core.Helpers
             var executablePath = Path.GetDirectoryName(Application.ExecutablePath);
             FSDK.TPoint[] pointFeature;
             var image = new FSDK.CImage(path);
-            image.Save(@"C:\Users\Kulikov\AppData\Roaming\Abalone\PrintAhead\2.jpeg");
+            //image.Save(@"C:\Users\Kulikov\AppData\Roaming\Abalone\PrintAhead\2.jpeg");
 
             var faceRectangle = Rectangle.Empty;
             var mouthRectangle = Rectangle.Empty;

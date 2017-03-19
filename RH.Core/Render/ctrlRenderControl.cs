@@ -75,15 +75,42 @@ namespace RH.Core.Render
         public bool IsShapeChanged = false;
         public ShapeController shapeController = new ShapeController();
         public ShapeController shapeControllerMirror = new ShapeController();
-        public readonly HeadShapeController HeadShapeController = new HeadShapeController();
+        public SliceController sliceController = new SliceController();        
+
         public AnimationController animationController = new AnimationController();
-        public readonly SoundController soundController = new SoundController();
-        public SliceController sliceController = new SliceController();
+        public readonly SoundController soundController = new SoundController();        
         public HistoryController historyController = new HistoryController();
 
-        public readonly HeadController headController = new HeadController();
-        public readonly HeadMeshesController headMeshesController = new HeadMeshesController();
-        public readonly AutodotsShapeHelper autodotsShapeHelper = new AutodotsShapeHelper();
+        private HeadShapeController HeadShapeController
+        {
+            get
+            {
+                return ProgramCore.Project.RenderMainHelper.HeadShapeController;
+            }
+        }
+        private HeadController headController
+        {
+            get
+            {
+                return ProgramCore.Project.RenderMainHelper.headController;
+            }
+        }
+        private HeadMeshesController headMeshesController
+        {
+            get
+            {
+                return ProgramCore.Project.RenderMainHelper.headMeshesController;
+            }
+        }
+
+
+        public static AutodotsShapeHelper autodotsShapeHelper
+        {
+            get
+            {
+                return ProgramCore.Project.RenderMainHelper.autodotsShapeHelper;
+            }
+        }
 
         private Mode mode;
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -209,8 +236,7 @@ namespace RH.Core.Render
         public ctrlRenderControl()
         {
             InitializeComponent();
-            glControl.PreviewKeyDown += glControl_PreviewKeyDown;
-            headMeshesController.RenderMesh.OnBeforePartDraw += RenderMesh_OnBeforePartDraw;
+            glControl.PreviewKeyDown += glControl_PreviewKeyDown;            
         }
         ~ctrlRenderControl()
         {
@@ -380,6 +406,9 @@ namespace RH.Core.Render
 
         public void LoadProject(bool newProject, RectangleAABB aabb)
         {
+            headMeshesController.RenderMesh.OnBeforePartDraw -= RenderMesh_OnBeforePartDraw;
+            headMeshesController.RenderMesh.OnBeforePartDraw += RenderMesh_OnBeforePartDraw;
+
             tempBitmaps.Clear();
             var headTexturePath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
             HeadTextureId = 0;
@@ -923,7 +952,7 @@ namespace RH.Core.Render
                     scale = 0.86f;
                     break;
             }
-            if (baseName == String.Empty || ProgramCore.MainForm.ctrlRenderControl.PartsLibraryMeshes.ContainsKey(baseName))
+            if (baseName == String.Empty || PartsLibraryMeshes.ContainsKey(baseName))
                 return;
             foreach (var mesh in pickingController.AccesoryMeshes)
                 if (mesh.Path.Contains(baseName))

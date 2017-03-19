@@ -268,7 +268,7 @@ namespace RH.Core.Controls
                     float angle;
                     Rectangle faceRectangle;
 
-                    pictureTemplate.Image = ProgramCore.MainForm.ctrlRenderControl.headController.InitProfileImage(originalImage, originalMouthPoint, originalEyePoint, out angle, out faceRectangle);
+                    pictureTemplate.Image = ProgramCore.Project.RenderMainHelper.headController.InitProfileImage(originalImage, originalMouthPoint, originalEyePoint, out angle, out faceRectangle);
 
                     FaceRectangle = faceRectangle;
                     Angle = angle;

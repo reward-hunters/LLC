@@ -128,7 +128,7 @@ namespace RH.Core.Render
         /// <summary> Заполнить опорные точки для правой модели. Они константы </summary>
         public void InitializeProfileControlPoints()
         {
-            var headController = ProgramCore.MainForm.ctrlRenderControl.headController;
+            var headController = ProgramCore.Project.RenderMainHelper.headController;
             profileControlPoints.Clear();
 
             if (headController.ShapeDots.Count == 0)
@@ -366,16 +366,16 @@ namespace RH.Core.Render
 
         public void SelectAutodotsByLasso()
         {
-            ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();
-            foreach (var point in ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots)
+            ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+            foreach (var point in ProgramCore.Project.RenderMainHelper.headController.AutoDots)
                 point.CheckLassoSelection(headAutodotsLassoPoints);
 
             headAutodotsLassoPoints.Clear();
         }
         public void SelectShapedotsByLasso()
         {
-            ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
-            foreach (var point in ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots)
+            ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
+            foreach (var point in ProgramCore.Project.RenderMainHelper.headController.ShapeDots)
                 point.CheckLassoSelection(headShapedotsLassoPoints);
 
             headShapedotsLassoPoints.Clear();
@@ -386,17 +386,17 @@ namespace RH.Core.Render
             if (ProgramCore.MainForm.ctrlRenderControl.Mode == Mode.HeadAutodots)
             {
                 if (e.KeyData == (Keys.A))
-                    ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.SelectAll();
+                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.SelectAll();
                 else if (e.KeyData == (Keys.D))
                 {
-                    ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();
+                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
                 }
             }
         }
 
         private void UpdateFaceRect()
         {
-            var indicies = ProgramCore.MainForm.ctrlRenderControl.headController.GetFaceIndexes();
+            var indicies = ProgramCore.Project.RenderMainHelper.headController.GetFaceIndexes();
             List<MirroredHeadPoint> faceDots;
             switch (ProgramCore.MainForm.ctrlRenderControl.Mode)
             {
@@ -404,10 +404,10 @@ namespace RH.Core.Render
                 case Mode.HeadLine:
                 case Mode.HeadShapeFirstTime:
                 case Mode.HeadShape:
-                    faceDots = ProgramCore.MainForm.ctrlRenderControl.headController.GetSpecialShapedots(indicies);
+                    faceDots = ProgramCore.Project.RenderMainHelper.headController.GetSpecialShapedots(indicies);
                     break;
                 default:
-                    faceDots = ProgramCore.MainForm.ctrlRenderControl.headController.GetSpecialAutodots(indicies);
+                    faceDots = ProgramCore.Project.RenderMainHelper.headController.GetSpecialAutodots(indicies);
                     break;
             }
 
@@ -433,19 +433,19 @@ namespace RH.Core.Render
         }
         public void UpdateUserCenterPositions(bool onlySelected, bool updateRect)
         {
-            var center = UpdateUserCenterPositions(ProgramCore.MainForm.ctrlRenderControl.headController.GetLeftEyeIndexes(), onlySelected);  // Left eye
+            var center = UpdateUserCenterPositions(ProgramCore.Project.RenderMainHelper.headController.GetLeftEyeIndexes(), onlySelected);  // Left eye
             if (center != Vector2.Zero)
                 ProgramCore.Project.LeftEyeUserCenter = center;
 
-            center = UpdateUserCenterPositions(ProgramCore.MainForm.ctrlRenderControl.headController.GetRightEyeIndexes(), onlySelected);  // Right eye
+            center = UpdateUserCenterPositions(ProgramCore.Project.RenderMainHelper.headController.GetRightEyeIndexes(), onlySelected);  // Right eye
             if (center != Vector2.Zero)
                 ProgramCore.Project.RightEyeUserCenter = center;
 
-            center = UpdateUserCenterPositions(ProgramCore.MainForm.ctrlRenderControl.headController.GetMouthIndexes(), onlySelected);  // Mouth
+            center = UpdateUserCenterPositions(ProgramCore.Project.RenderMainHelper.headController.GetMouthIndexes(), onlySelected);  // Mouth
             if (center != Vector2.Zero)
                 ProgramCore.Project.MouthUserCenter = center;
 
-            center = UpdateUserCenterPositions(ProgramCore.MainForm.ctrlRenderControl.headController.GetNoseIndexes(), onlySelected);  // Nose
+            center = UpdateUserCenterPositions(ProgramCore.Project.RenderMainHelper.headController.GetNoseIndexes(), onlySelected);  // Nose
             if (center != Vector2.Zero)
                 ProgramCore.Project.NoseUserCenter = center;
 
@@ -467,10 +467,10 @@ namespace RH.Core.Render
                 case Mode.HeadLine:
                 case Mode.HeadShapeFirstTime:
                 case Mode.HeadShape:
-                    sourcePoints = ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots;
+                    sourcePoints = ProgramCore.Project.RenderMainHelper.headController.ShapeDots;
                     break;
                 default:
-                    sourcePoints = ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots;
+                    sourcePoints = ProgramCore.Project.RenderMainHelper.headController.AutoDots;
                     break;
             }
             if (sourcePoints.Count == 0)
@@ -519,9 +519,9 @@ namespace RH.Core.Render
                                                         (int)(ProfileFaceRect.Width * ImageTemplateWidth),
                                                        (int)(ProfileFaceRect.Height * ImageTemplateHeight));
 
-            if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count == 2)
+            if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count == 2)
             {
-                var currentLine = ProgramCore.MainForm.ctrlRenderControl.headController.Lines[0];
+                var currentLine = ProgramCore.Project.RenderMainHelper.headController.Lines[0];
                 foreach (var point in currentLine)
                     point.UpdateWorldPoint();
             }
@@ -545,18 +545,18 @@ namespace RH.Core.Render
                 case MeshPartType.ProfileBottom:
                 case MeshPartType.Lip:
                 case MeshPartType.None:
-                    if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count != 0)
+                    if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count != 0)
                     {
-                        if (ProgramCore.MainForm.ctrlRenderControl.HeadLineMode == MeshPartType.Head && ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count > 1)
+                        if (ProgramCore.MainForm.ctrlRenderControl.HeadLineMode == MeshPartType.Head && ProgramCore.Project.RenderMainHelper.headController.Lines.Count > 1)
                             break; // рисуем вторую линию, ее замыкать нельзя!
 
                         if (ProgramCore.MainForm.HeadProfile)
                         {
-                            if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count == 1)
+                            if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count == 1)
                             {
-                                var line = ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Last();
+                                var line = ProgramCore.Project.RenderMainHelper.headController.Lines.Last();
                                 if (line.Count >= 1)
-                                    ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(new HeadLine());
+                                    ProgramCore.Project.RenderMainHelper.headController.Lines.Add(new HeadLine());
                             }
 
                             ProgramCore.MainForm.ctrlRenderControl.UpdateProfileRectangle();
@@ -564,14 +564,14 @@ namespace RH.Core.Render
                         }
                         else
                         {
-                            if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count == 1)
+                            if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count == 1)
                             {
-                                var line = ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Last();
+                                var line = ProgramCore.Project.RenderMainHelper.headController.Lines.Last();
                                 if (line.Count > 1)
                                 {
                                     line.Add(line.First());
 
-                                    ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(new HeadLine());
+                                    ProgramCore.Project.RenderMainHelper.headController.Lines.Add(new HeadLine());
                                 }
                             }
                         }
@@ -617,9 +617,9 @@ namespace RH.Core.Render
         private void ctrlTemplateImage_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyData == (Keys.A))
-                ProgramCore.MainForm.ctrlRenderControl.headController.SelectAll();
+                ProgramCore.Project.RenderMainHelper.headController.SelectAll();
             else if (e.KeyData == (Keys.D))
-                ProgramCore.MainForm.ctrlRenderControl.headController.ClearPointsSelection();
+                ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
             else if (e.KeyData == (Keys.ShiftKey | Keys.Shift))
                 shiftKeyPressed = true;
             else if (e.KeyData == Keys.Enter)
@@ -635,28 +635,28 @@ namespace RH.Core.Render
                                 ProgramCore.MainForm.panelFront.UpdateProfileSmoothing(isProfileSmoothing);
                             }
                             else
-                            if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count == 2)
+                            if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count == 2)
                             {
-                                if (ProgramCore.MainForm.ctrlRenderControl.headController.AllPoints.Count > 3)
+                                if (ProgramCore.Project.RenderMainHelper.headController.AllPoints.Count > 3)
                                 {
-                                    foreach (var point in ProgramCore.MainForm.ctrlRenderControl.headController.AllPoints)
+                                    foreach (var point in ProgramCore.Project.RenderMainHelper.headController.AllPoints)
                                         point.UpdateWorldPoint();
 
                                     #region История (undo)
 
                                     Dictionary<Guid, MeshUndoInfo> undoInfo;
-                                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.GetUndoInfo(out undoInfo);
+                                    ProgramCore.Project.RenderMainHelper.headMeshesController.GetUndoInfo(out undoInfo);
                                     var isProfile = ProgramCore.MainForm.HeadProfile;
-                                    var teInfo = isProfile ? ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo : ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeInfo;
+                                    var teInfo = isProfile ? ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo : ctrlRenderControl.autodotsShapeHelper.ShapeInfo;
                                     var historyElem = new HistoryHeadShapeLines(undoInfo, null, teInfo, isProfile);
                                     ProgramCore.MainForm.ctrlRenderControl.historyController.Add(historyElem);
 
                                     #endregion
 
-                                    var userPoints = ProgramCore.MainForm.ctrlRenderControl.headController.AllPoints.Select(x => x.ValueMirrored).ToList();
+                                    var userPoints = ProgramCore.Project.RenderMainHelper.headController.AllPoints.Select(x => x.ValueMirrored).ToList();
                                     var pointsTop = new List<Vector2>();
                                     List<Vector2> pointsBottom = null;
-                                    var lipsY = ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.GetLipsTopY();
+                                    var lipsY = ctrlRenderControl.autodotsShapeHelper.GetLipsTopY();
                                     var prevPoint = Vector2.Zero;
                                     for (var i = 0; i < userPoints.Count; ++i)
                                     {
@@ -687,26 +687,26 @@ namespace RH.Core.Render
                                     }
 
 
-                                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(MeshPartType.ProfileTop, pointsTop, Vector2.Zero);
-                                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(MeshPartType.ProfileBottom, pointsBottom, Vector2.Zero);
+                                    ctrlRenderControl.autodotsShapeHelper.Transform(MeshPartType.ProfileTop, pointsTop, Vector2.Zero);
+                                    ctrlRenderControl.autodotsShapeHelper.Transform(MeshPartType.ProfileBottom, pointsBottom, Vector2.Zero);
 
                                     var th = new Thread(() =>
                                     {
                                         Thread.CurrentThread.IsBackground = true;
-                                        ProgramCore.MainForm.ctrlRenderControl.headMeshesController.Smooth();
+                                        ProgramCore.Project.RenderMainHelper.headMeshesController.Smooth();
                                     });
 
                                     th.Start();
                                     while (th.IsAlive)
                                         ProgramCore.Progress("Please wait");
 
-                                    ProfileSmoothing = new ProfileSmoothing(ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh, undoInfo);
+                                    ProfileSmoothing = new ProfileSmoothing(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh, undoInfo);
                                 }
 
-                                foreach (var p in ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts)
+                                foreach (var p in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                                     p.UpdateNormals();
 
-                                ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Clear();
+                                ProgramCore.Project.RenderMainHelper.headController.Lines.Clear();
                                 //ProgramCore.MainForm.ctrlRenderControl.HeadLineMode = ProgramCore.MainForm.ctrlRenderControl.HeadLineMode == MeshPartType.ProfileTop ? MeshPartType.ProfileBottom : MeshPartType.ProfileTop;
                                 ProgramCore.MainForm.ctrlRenderControl.UpdateProfileRectangle();
                                 isProfileSmoothing = true;
@@ -874,7 +874,7 @@ namespace RH.Core.Render
 
                             #region Линии лица
 
-                            foreach (var rect in ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ProfileRects)
+                            foreach (var rect in ctrlRenderControl.autodotsShapeHelper.ProfileRects)
                                 if (rect.LinkedShapeRect != null)
                                 {
                                     for (var i = 1; i < rect.Points.Length; i++)
@@ -899,7 +899,7 @@ namespace RH.Core.Render
             }
 
             if (ImageTemplateOffsetX != -1)
-                ProgramCore.MainForm.ctrlRenderControl.headController.DrawOnPictureBox(e.Graphics);
+                ProgramCore.Project.RenderMainHelper.headController.DrawOnPictureBox(e.Graphics);
         }
 
         public void pictureTemplate_MouseDown(object sender, MouseEventArgs e)
@@ -982,7 +982,7 @@ namespace RH.Core.Render
                                     if (dblClick)
                                     {
                                         RectTransformMode = false;
-                                        ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();
+                                        ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
                                     }
 
                                     #region Rectangle transforM ?
@@ -1004,7 +1004,7 @@ namespace RH.Core.Render
 
                                     if (moveRectIndex == -1) // если таскаем не прямоугольник, а точки
                                     {
-                                        foreach (var item in ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.SelectedPoints)
+                                        foreach (var item in ProgramCore.Project.RenderMainHelper.headController.AutoDots.SelectedPoints)
                                             headTempPoints.Add(item.Clone() as MirroredHeadPoint);
                                     }
                                     else
@@ -1027,7 +1027,7 @@ namespace RH.Core.Render
                                        if (dblClick)
                                        {
                                            RectTransformMode = false;
-                                           ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
+                                           ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                                        }
 
                                        #region Rectangle transforM ?
@@ -1049,7 +1049,7 @@ namespace RH.Core.Render
 
                                        if (moveRectIndex == -1) // если таскаем не прямоугольник, а точки
                                        {
-                                           foreach (var item in ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.SelectedPoints)
+                                           foreach (var item in ProgramCore.Project.RenderMainHelper.headController.ShapeDots.SelectedPoints)
                                                headTempPoints.Add(item.Clone() as MirroredHeadPoint);
                                        }
                                        else
@@ -1103,7 +1103,7 @@ namespace RH.Core.Render
                                         FinishLine();
                                     else
                                     {
-                                        foreach (var item in ProgramCore.MainForm.ctrlRenderControl.headController.SelectedPoints)
+                                        foreach (var item in ProgramCore.Project.RenderMainHelper.headController.SelectedPoints)
                                             headTempPoints.Add(item.Clone() as MirroredHeadPoint);
                                     }
 
@@ -1120,7 +1120,7 @@ namespace RH.Core.Render
                                         FinishLine();
                                     else
                                     {
-                                        foreach (var item in ProgramCore.MainForm.ctrlRenderControl.headController.SelectedPoints)
+                                        foreach (var item in ProgramCore.Project.RenderMainHelper.headController.SelectedPoints)
                                             headTempPoints.Add(item.Clone() as MirroredHeadPoint);
                                     }
 
@@ -1161,7 +1161,7 @@ namespace RH.Core.Render
                             if (ProgramCore.MainForm.ctrlRenderControl.HeadLineMode == MeshPartType.None)
                                 return;
 
-                            ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(new HeadLine());
+                            ProgramCore.Project.RenderMainHelper.headController.Lines.Add(new HeadLine());
 
                             #endregion
                         }
@@ -1169,7 +1169,7 @@ namespace RH.Core.Render
                         {
                             #region Вид сбоку
 
-                            ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(new HeadLine());
+                            ProgramCore.Project.RenderMainHelper.headController.Lines.Add(new HeadLine());
 
                             #endregion
                         }
@@ -1269,20 +1269,20 @@ namespace RH.Core.Render
                                     return;
 
                                 if (firstMove &&
-                                    ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.SelectedPoints.Count >
+                                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.SelectedPoints.Count >
                                     0)
                                 {
                                     var history =
                                         new HistoryHeadAutoDots(
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots);
+                                            ProgramCore.Project.RenderMainHelper.headController.AutoDots);
                                     ProgramCore.MainForm.ctrlRenderControl.historyController.Add(history);
 
                                     Dictionary<Guid, MeshUndoInfo> undoInfo;
-                                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.GetUndoInfo(
+                                    ProgramCore.Project.RenderMainHelper.headMeshesController.GetUndoInfo(
                                         out undoInfo);
                                     ProgramCore.MainForm.ctrlRenderControl.historyController.Add(
                                         new HistoryHeadShapeDots(undoInfo,
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots));
+                                            ProgramCore.Project.RenderMainHelper.headController.ShapeDots));
                                 }
 
                                 if (startMove)
@@ -1332,7 +1332,7 @@ namespace RH.Core.Render
                                         var ky = newHeight / tempMoveRectHeight;
                                         foreach (
                                             var point in
-                                                ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots
+                                                ProgramCore.Project.RenderMainHelper.headController.AutoDots
                                                     .SelectedPoints)
                                         {
                                             var p = point.ValueMirrored - tempMoveRectCenter;
@@ -1349,7 +1349,7 @@ namespace RH.Core.Render
                                     else // таскаем точки
                                     {
                                         var selectedPoints =
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots
+                                            ProgramCore.Project.RenderMainHelper.headController.AutoDots
                                                 .SelectedPoints;
                                         for (var i = 0; i < selectedPoints.Count; i++)
                                         {
@@ -1369,15 +1369,15 @@ namespace RH.Core.Render
                                 if (LineSelectionMode)
                                 {
                                     if (firstMove &&
-                                        ProgramCore.MainForm.ctrlRenderControl.headController.SelectedPoints.Count > 0)
+                                        ProgramCore.Project.RenderMainHelper.headController.SelectedPoints.Count > 0)
                                     {
                                         var isProfile = ProgramCore.MainForm.HeadProfile;
                                         var teInfo = isProfile
-                                            ? ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper
+                                            ? ctrlRenderControl.autodotsShapeHelper
                                                 .ShapeProfileInfo
-                                            : ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeInfo;
+                                            : ctrlRenderControl.autodotsShapeHelper.ShapeInfo;
                                         var historyElem = new HistoryHeadShapeLines(null,
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.Lines, teInfo,
+                                            ProgramCore.Project.RenderMainHelper.headController.Lines, teInfo,
                                             isProfile);
                                         historyElem.Group =
                                             ProgramCore.MainForm.ctrlRenderControl.historyController.currentGroup;
@@ -1386,11 +1386,11 @@ namespace RH.Core.Render
 
                                     delta2 = newPoint - headLastPointRelative;
                                     for (var i = 0;
-                                        i < ProgramCore.MainForm.ctrlRenderControl.headController.SelectedPoints.Count;
+                                        i < ProgramCore.Project.RenderMainHelper.headController.SelectedPoints.Count;
                                         i++)
                                     {
                                         var headPoint =
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.SelectedPoints[i];
+                                            ProgramCore.Project.RenderMainHelper.headController.SelectedPoints[i];
                                         headPoint.ValueMirrored = headTempPoints[i].ValueMirrored + delta2;
                                         headPoint.UpdateWorldPoint();
                                     }
@@ -1406,15 +1406,15 @@ namespace RH.Core.Render
                                              Cursor = ProgramCore.MainForm.GrabbingCursor;
 
                                          if (firstMove &&
-                                             ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.SelectedPoints
+                                             ProgramCore.Project.RenderMainHelper.headController.ShapeDots.SelectedPoints
                                                  .Count > 0)
                                          {
                                              Dictionary<Guid, MeshUndoInfo> undoInfo;
-                                             ProgramCore.MainForm.ctrlRenderControl.headMeshesController.GetUndoInfo(
+                                             ProgramCore.Project.RenderMainHelper.headMeshesController.GetUndoInfo(
                                                  out undoInfo);
                                              ProgramCore.MainForm.ctrlRenderControl.historyController.Add(
                                                  new HistoryHeadShapeDots(undoInfo,
-                                                     ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots));
+                                                     ProgramCore.Project.RenderMainHelper.headController.ShapeDots));
                                          }
 
                                          delta2 = newPoint - headLastPointRelative;
@@ -1459,7 +1459,7 @@ namespace RH.Core.Render
                                              var ky = newHeight / tempMoveRectHeight;
                                              foreach (
                                                  var point in
-                                                     ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots
+                                                     ProgramCore.Project.RenderMainHelper.headController.ShapeDots
                                                          .SelectedPoints)
                                              {
                                                  var p = point.ValueMirrored - tempMoveRectCenter;
@@ -1476,7 +1476,7 @@ namespace RH.Core.Render
                                          else // таскаем точки
                                          {
                                              var selectedPoints =
-                                                 ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots
+                                                 ProgramCore.Project.RenderMainHelper.headController.ShapeDots
                                                      .SelectedPoints;
                                              for (var i = 0; i < selectedPoints.Count; i++)
                                              {
@@ -1536,7 +1536,7 @@ namespace RH.Core.Render
                                    || (e.X >= RightEyeTransformed.X - HalfPointRectSize && e.X <= RightEyeTransformed.X + HalfPointRectSize && e.Y >= RightEyeTransformed.Y - HalfPointRectSize && e.Y <= RightEyeTransformed.Y + HalfPointRectSize)  // правый глаз
                                     || (e.X >= NoseTransformed.X - HalfPointRectSize && e.X <= NoseTransformed.X + HalfPointRectSize && e.Y >= NoseTransformed.Y - HalfPointRectSize && e.Y <= NoseTransformed.Y + HalfPointRectSize) // нос
                                     || (e.X >= CentralFacePoint.X - HalfPointRectSize && e.X <= CentralFacePoint.X + HalfPointRectSize && e.Y >= CentralFacePoint.Y - HalfPointRectSize && e.Y <= CentralFacePoint.Y + HalfPointRectSize) // прямоугольник и выделение всех точек
-                                    || ProgramCore.MainForm.ctrlRenderControl.headController.UpdateAutodotsPointSelection(e.X, e.Y, false))
+                                    || ProgramCore.Project.RenderMainHelper.headController.UpdateAutodotsPointSelection(e.X, e.Y, false))
                                         Cursor = ProgramCore.MainForm.GrabCursor;
                                     else
                                         Cursor = Cursors.Arrow;
@@ -1570,7 +1570,7 @@ namespace RH.Core.Render
                                                      e.Y <= CentralFacePoint.Y + HalfPointRectSize)
                                                     // прямоугольник и выделение всех точек
                                                     ||
-                                                    ProgramCore.MainForm.ctrlRenderControl.headController
+                                                    ProgramCore.Project.RenderMainHelper.headController
                                                         .UpdateShapedotsPointSelection(e.X, e.Y, false))
                                                     Cursor = ProgramCore.MainForm.GrabCursor;
                                                 else
@@ -1610,33 +1610,33 @@ namespace RH.Core.Render
                                     if (!startMove && !dblClick)
                                     {
                                         if (!shiftKeyPressed)
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();
+                                            ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
 
                                         if (e.X >= MouthTransformed.X - HalfPointRectSize && e.X <= MouthTransformed.X + HalfPointRectSize && e.Y >= MouthTransformed.Y - HalfPointRectSize && e.Y <= MouthTransformed.Y + HalfPointRectSize)       // рот
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.SelectAutdotsMouth();
+                                            ProgramCore.Project.RenderMainHelper.headController.SelectAutdotsMouth();
                                         else if (e.X >= LeftEyeTransformed.X - HalfPointRectSize && e.X <= LeftEyeTransformed.X + HalfPointRectSize && e.Y >= LeftEyeTransformed.Y - HalfPointRectSize && e.Y <= LeftEyeTransformed.Y + HalfPointRectSize)  // левый глаз
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.SelectAutodotsLeftEye();
+                                            ProgramCore.Project.RenderMainHelper.headController.SelectAutodotsLeftEye();
                                         else if (e.X >= RightEyeTransformed.X - HalfPointRectSize && e.X <= RightEyeTransformed.X + HalfPointRectSize && e.Y >= RightEyeTransformed.Y - HalfPointRectSize && e.Y <= RightEyeTransformed.Y + HalfPointRectSize)  // правый глаз
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.SelectAutodotsRightEye();
+                                            ProgramCore.Project.RenderMainHelper.headController.SelectAutodotsRightEye();
                                         else if (e.X >= NoseTransformed.X - HalfPointRectSize && e.X <= NoseTransformed.X + HalfPointRectSize && e.Y >= NoseTransformed.Y - HalfPointRectSize && e.Y <= NoseTransformed.Y + HalfPointRectSize) // нос
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.SelectAutodotsNose();
+                                            ProgramCore.Project.RenderMainHelper.headController.SelectAutodotsNose();
                                         else if (e.X >= CentralFacePoint.X - HalfPointRectSize && e.X <= CentralFacePoint.X + HalfPointRectSize && e.Y >= CentralFacePoint.Y - HalfPointRectSize && e.Y <= CentralFacePoint.Y + HalfPointRectSize) // прямоугольник и выделение всех точек
                                         {
                                             if (RectTransformMode)
                                             {
                                                 RectTransformMode = false;
-                                                ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();
+                                                ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
                                             }
                                             else
                                             {
                                                 RectTransformMode = true;
                                                 UpdateUserCenterPositions(true, true);
 
-                                                ProgramCore.MainForm.ctrlRenderControl.headController.SelectAutodotsFaceEllipse();
+                                                ProgramCore.Project.RenderMainHelper.headController.SelectAutodotsFaceEllipse();
                                             }
                                         }
                                         else
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.UpdateAutodotsPointSelection(e.X, e.Y, true);
+                                            ProgramCore.Project.RenderMainHelper.headController.UpdateAutodotsPointSelection(e.X, e.Y, true);
                                     }
                                     else
                                     {
@@ -1645,15 +1645,15 @@ namespace RH.Core.Render
                                         if (ProgramCore.MainForm.ctrlRenderControl.Mode == Mode.HeadAutodots)
                                         {
                                             ProgramCore.MainForm.ctrlRenderControl.CalcReflectedBitmaps();
-                                            ProgramCore.MainForm.ctrlRenderControl.headController.EndAutodots(false);
+                                            ProgramCore.Project.RenderMainHelper.headController.EndAutodots(false);
                                             ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
 
-                                            for (var i = 0; i < ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.Count; i++)      // после слияние с ShapeDots. Проверить!
+                                            for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count; i++)      // после слияние с ShapeDots. Проверить!
                                             {
-                                                var p = ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots[i];
+                                                var p = ProgramCore.Project.RenderMainHelper.headController.AutoDots[i];
 
                                                 if (p.Selected)
-                                                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
+                                                    ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
                                             }
                                         }
                                     }
@@ -1666,39 +1666,39 @@ namespace RH.Core.Render
                                       if (!startMove && !dblClick)
                                       {
                                           if (!shiftKeyPressed)
-                                              ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
+                                              ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
 
                                           if (e.X >= MouthTransformed.X - HalfPointRectSize && e.X <= MouthTransformed.X + HalfPointRectSize && e.Y >= MouthTransformed.Y - HalfPointRectSize && e.Y <= MouthTransformed.Y + HalfPointRectSize) // рот
-                                              ProgramCore.MainForm.ctrlRenderControl.headController.SelectShapedotsMouth();
+                                              ProgramCore.Project.RenderMainHelper.headController.SelectShapedotsMouth();
                                           else if (e.X >= LeftEyeTransformed.X - HalfPointRectSize && e.X <= LeftEyeTransformed.X + HalfPointRectSize && e.Y >= LeftEyeTransformed.Y - HalfPointRectSize && e.Y <= LeftEyeTransformed.Y + HalfPointRectSize) // левый глаз
-                                              ProgramCore.MainForm.ctrlRenderControl.headController.SelectShapedotsLeftEye();
+                                              ProgramCore.Project.RenderMainHelper.headController.SelectShapedotsLeftEye();
                                           else if (e.X >= RightEyeTransformed.X - HalfPointRectSize && e.X <= RightEyeTransformed.X + HalfPointRectSize && e.Y >= RightEyeTransformed.Y - HalfPointRectSize && e.Y <= RightEyeTransformed.Y + HalfPointRectSize) // правый глаз
-                                              ProgramCore.MainForm.ctrlRenderControl.headController.SelectShapedotsRightEye();
+                                              ProgramCore.Project.RenderMainHelper.headController.SelectShapedotsRightEye();
                                           else if (e.X >= NoseTransformed.X - HalfPointRectSize && e.X <= NoseTransformed.X + HalfPointRectSize && e.Y >= NoseTransformed.Y - HalfPointRectSize && e.Y <= NoseTransformed.Y + HalfPointRectSize) // нос
-                                              ProgramCore.MainForm.ctrlRenderControl.headController.SelectShapedotsNose();
+                                              ProgramCore.Project.RenderMainHelper.headController.SelectShapedotsNose();
                                           else if (e.X >= CentralFacePoint.X - HalfPointRectSize && e.X <= CentralFacePoint.X + HalfPointRectSize && e.Y >= CentralFacePoint.Y - HalfPointRectSize && e.Y <= CentralFacePoint.Y + HalfPointRectSize) // прямоугольник и выделение всех точек
                                           {
                                               if (RectTransformMode)
                                               {
                                                   RectTransformMode = false;
-                                                  ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
+                                                  ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                                               }
                                               else
                                               {
                                                   RectTransformMode = true;
                                                   UpdateUserCenterPositions(true, true);
 
-                                                  ProgramCore.MainForm.ctrlRenderControl.headController.SelectShapedotsFaceEllipse();
+                                                  ProgramCore.Project.RenderMainHelper.headController.SelectShapedotsFaceEllipse();
                                               }
                                           }
                                           else
-                                              ProgramCore.MainForm.ctrlRenderControl.headController.UpdateShapedotsPointSelection(e.X, e.Y, true);
+                                              ProgramCore.Project.RenderMainHelper.headController.UpdateShapedotsPointSelection(e.X, e.Y, true);
                                       }
                                       else
                                       {
-                                          for (var i = 0; i < ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.Count; i++)
+                                          for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Count; i++)
                                           {
-                                              var p = ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots[i];
+                                              var p = ProgramCore.Project.RenderMainHelper.headController.ShapeDots[i];
 
                                               if (p.Selected)
                                                   ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
@@ -1758,8 +1758,8 @@ namespace RH.Core.Render
 
                                             if (firstTime)          // выбираем режим линии
                                             {
-                                                ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Clear();
-                                                ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ResetPoints(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode);
+                                                ProgramCore.Project.RenderMainHelper.headController.Lines.Clear();
+                                                ctrlRenderControl.autodotsShapeHelper.ResetPoints(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode);
                                             }
                                             else if (ProgramCore.MainForm.ctrlRenderControl.HeadLineMode != MeshPartType.None)          // добавляем новые точки
                                             {
@@ -1768,17 +1768,17 @@ namespace RH.Core.Render
 
                                                 #region Проверка на количество линий и режим выделения
 
-                                                if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count > 1)
+                                                if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count > 1)
                                                 {
                                                     var condition = false;
                                                     switch (ProgramCore.MainForm.ctrlRenderControl.HeadLineMode)
                                                     {
                                                         case MeshPartType.Lip:
-                                                            if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count > 2)
+                                                            if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count > 2)
                                                                 condition = true;
                                                             break;
                                                         default:
-                                                            if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count > 1)
+                                                            if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count > 1)
 
                                                                 condition = true;
                                                             break;
@@ -1787,20 +1787,20 @@ namespace RH.Core.Render
                                                     if (condition) // если ничего не выделили - начинаем рисовать новую линию. иначе уходим в режим выделения и таскания точек
                                                     {
                                                         if (!shiftKeyPressed)
-                                                            ProgramCore.MainForm.ctrlRenderControl.headController.ClearPointsSelection();
+                                                            ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
 
-                                                        if (ProgramCore.MainForm.ctrlRenderControl.headController.UpdatePointSelection(point.Value.X, point.Value.Y))
+                                                        if (ProgramCore.Project.RenderMainHelper.headController.UpdatePointSelection(point.Value.X, point.Value.Y))
                                                             LineSelectionMode = true;
                                                         else
                                                         {
                                                             if (LineSelectionMode)
                                                             {
                                                                 LineSelectionMode = false;
-                                                                ProgramCore.MainForm.ctrlRenderControl.headController.ClearPointsSelection();
+                                                                ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
                                                                 break;
                                                             }
                                                             else
-                                                                ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Clear();
+                                                                ProgramCore.Project.RenderMainHelper.headController.Lines.Clear();
                                                         }
                                                     }
                                                 }
@@ -1811,15 +1811,15 @@ namespace RH.Core.Render
                                                 {
                                                     #region Добавляем новые точки линии
 
-                                                    if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count == 0)
+                                                    if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count == 0)
                                                     {
                                                         var line = new HeadLine();
                                                         line.Add(point);
-                                                        ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(line);
+                                                        ProgramCore.Project.RenderMainHelper.headController.Lines.Add(line);
                                                     }
                                                     else
                                                     {
-                                                        var currentLine = ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Last();
+                                                        var currentLine = ProgramCore.Project.RenderMainHelper.headController.Lines.Last();
                                                         var hasIntersections = false;
 
                                                         if (currentLine.Count > 1) // проверка на пересечения линий
@@ -1843,10 +1843,10 @@ namespace RH.Core.Render
                                                         }
 
                                                         var inAnotherPoint = false;
-                                                        if (ProgramCore.MainForm.ctrlRenderControl.HeadLineMode == MeshPartType.Lip && ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count == 2)
+                                                        if (ProgramCore.MainForm.ctrlRenderControl.HeadLineMode == MeshPartType.Lip && ProgramCore.Project.RenderMainHelper.headController.Lines.Count == 2)
                                                         {
                                                             // ЭТо вторая линия губ
-                                                            foreach (var lPoint in ProgramCore.MainForm.ctrlRenderControl.headController.Lines.First())
+                                                            foreach (var lPoint in ProgramCore.Project.RenderMainHelper.headController.Lines.First())
                                                                 if (point.Value.X >= lPoint.Value.X - 0.25 && point.Value.X <= lPoint.Value.X + 0.25 && point.Value.Y >= lPoint.Value.Y - 0.25 && point.Value.Y <= lPoint.Value.Y + 0.25 && !currentLine.Contains(lPoint))
                                                                 {
                                                                     if (currentLine.Count == 0)
@@ -1854,7 +1854,7 @@ namespace RH.Core.Render
                                                                     else
                                                                     {
                                                                         currentLine.Add(lPoint);
-                                                                        ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(new HeadLine());
+                                                                        ProgramCore.Project.RenderMainHelper.headController.Lines.Add(new HeadLine());
                                                                     }
                                                                     inAnotherPoint = true;
                                                                     break;
@@ -1870,7 +1870,7 @@ namespace RH.Core.Render
                                                             if (point.Value.X >= firstPoint.Value.X - 0.25 && point.Value.X <= firstPoint.Value.X + 0.25 && point.Value.Y >= firstPoint.Value.Y - 0.25 && point.Value.Y <= firstPoint.Value.Y + 0.25)
                                                             {
                                                                 currentLine.Add(firstPoint);
-                                                                ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(new HeadLine());
+                                                                ProgramCore.Project.RenderMainHelper.headController.Lines.Add(new HeadLine());
                                                             }
                                                             else
                                                                 currentLine.Add(point);
@@ -1897,19 +1897,19 @@ namespace RH.Core.Render
                                             point.UpdateWorldPoint();
 
                                             #region Проверка на количество линий и режим выделения
-                                            if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count > 1) // если ничего не выделили - начинаем рисовать новую линию. иначе уходим в режим выделения и таскания точек
+                                            if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count > 1) // если ничего не выделили - начинаем рисовать новую линию. иначе уходим в режим выделения и таскания точек
                                             {
                                                 if (!shiftKeyPressed)
-                                                    ProgramCore.MainForm.ctrlRenderControl.headController.ClearPointsSelection();
+                                                    ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
 
-                                                if (ProgramCore.MainForm.ctrlRenderControl.headController.UpdatePointSelection(point.Value.X, point.Value.Y))
+                                                if (ProgramCore.Project.RenderMainHelper.headController.UpdatePointSelection(point.Value.X, point.Value.Y))
                                                     LineSelectionMode = true;
                                                 else
                                                 {
                                                     if (LineSelectionMode)
                                                     {
                                                         LineSelectionMode = false;
-                                                        ProgramCore.MainForm.ctrlRenderControl.headController.ClearPointsSelection();
+                                                        ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
                                                         break;
                                                     }
                                                 }
@@ -1920,15 +1920,15 @@ namespace RH.Core.Render
                                             {
                                                 #region Добавляем новые точки линии
 
-                                                if (ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Count == 0)
+                                                if (ProgramCore.Project.RenderMainHelper.headController.Lines.Count == 0)
                                                 {
                                                     var line = new HeadLine();
                                                     line.Add(point);
-                                                    ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Add(line);
+                                                    ProgramCore.Project.RenderMainHelper.headController.Lines.Add(line);
                                                 }
                                                 else
                                                 {
-                                                    var currentLine = ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Last();
+                                                    var currentLine = ProgramCore.Project.RenderMainHelper.headController.Lines.Last();
                                                     var hasIntersections = false;
 
                                                     if (currentLine.Count > 1) // проверка на пересечения линий
@@ -2083,7 +2083,7 @@ namespace RH.Core.Render
         {
             btnNewProfilePict.Image = Resources.newProfilePictNormal;
 
-            ProgramCore.MainForm.ctrlRenderControl.headController.LoadNewProfileImage();
+            ProgramCore.Project.RenderMainHelper.headController.LoadNewProfileImage();
         }
 
         public void RecalcProfilePoints()

@@ -231,7 +231,7 @@ namespace RH.Core.Controls.Panels
         }
         private void UpdateNormals()
         {
-            foreach (var part in ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts)
+            foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 part.UpdateNormals();
         }
 
@@ -304,7 +304,7 @@ namespace RH.Core.Controls.Panels
                 btnMirror.ForeColor = Color.Black;
 
                 ProgramCore.MainForm.ctrlRenderControl.ToolMirrored = false;
-                ProgramCore.MainForm.ctrlRenderControl.headController.ClearPointsSelection();
+                ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
             }
             SetPanelLogic();
         }
@@ -367,7 +367,7 @@ namespace RH.Core.Controls.Panels
                     case Mode.HeadAutodotsLassoActive:
                         break;
                     default:
-                        ProgramCore.MainForm.ctrlRenderControl.headController.ClearPointsSelection();
+                        ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
                         break;
                 }
 
@@ -438,7 +438,7 @@ namespace RH.Core.Controls.Panels
                 btnDots.Enabled = btnPolyLine.Enabled = btnShapeTool.Enabled = false;
                 ProgramCore.MainForm.ctrlRenderControl.Mode = Mode.None;
                 ProgramCore.MainForm.DisableRotating();
-                ProgramCore.MainForm.ctrlRenderControl.HeadShapeController.EndShape();
+                ProgramCore.Project.RenderMainHelper.HeadShapeController.EndShape();
 
                 ProgramCore.MainForm.frmFreeHand.BeginUpdate();
                 ProgramCore.MainForm.frmFreeHand.cbMirror.Enabled = false;
@@ -474,9 +474,9 @@ namespace RH.Core.Controls.Panels
                     ProgramCore.MainForm.ctrlRenderControl.Mode = Mode.HeadAutodots;
                 else
                 {
-                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.InitializeTexturing(ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.GetBaseDots(), HeadController.GetIndices());
-                    ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.headMeshesController.TexturingInfo.Points.ToArray());
-                    ProgramCore.MainForm.ctrlRenderControl.headController.StartAutodots();
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.InitializeTexturing(ctrlRenderControl.autodotsShapeHelper.GetBaseDots(), HeadController.GetIndices());
+                    ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.Project.RenderMainHelper.headMeshesController.TexturingInfo.Points.ToArray());
+                    ProgramCore.Project.RenderMainHelper.headController.StartAutodots();
 
                     ProgramCore.MainForm.ctrlRenderControl.Mode = Mode.HeadAutodotsFirstTime;
 
@@ -502,11 +502,11 @@ namespace RH.Core.Controls.Panels
                 if (!ProgramCore.Project.AutodotsUsed)
                 {
                     //заменть все шейп-точки на новые
-                    //    ProgramCore.MainForm.ctrlRenderControl.headController.UpdateAllShapedotsFromAutodots();
+                    //    ProgramCore.Project.RenderMainHelper.headController.UpdateAllShapedotsFromAutodots();
 
-                    for (var i = 0; i < ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts.Count; i++)
+                    for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts.Count; i++)
                     {
-                        var part = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts[i];
+                        var part = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts[i];
                         if (part.Texture == 0)
                         {
                             part.Texture = ProgramCore.MainForm.ctrlRenderControl.HeadTextureId;
@@ -516,13 +516,13 @@ namespace RH.Core.Controls.Panels
 
                     ProgramCore.Project.AutodotsUsed = true;
                     btnProfile.Enabled = true;
-                    ProgramCore.MainForm.ctrlRenderControl.headController.EndAutodots();
+                    ProgramCore.Project.RenderMainHelper.headController.EndAutodots();
                     ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
 
-                    for (var i = 0; i < ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.Count; i++)      // после слияние с ShapeDots. Проверить!
+                    for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count; i++)      // после слияние с ShapeDots. Проверить!
                     {
-                        var p = ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots[i];
-                        ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
+                        var p = ProgramCore.Project.RenderMainHelper.headController.AutoDots[i];
+                        ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
                     }
                 }
 
@@ -613,16 +613,16 @@ namespace RH.Core.Controls.Panels
                 btnPolyLine.Tag = "2";
                 btnPolyLine.Image = Resources.btnPolyLineNormal;
 
-                var userPoints = ProgramCore.MainForm.ctrlRenderControl.headController.AllPoints.Select(x => x.Value).ToList();
+                var userPoints = ProgramCore.Project.RenderMainHelper.headController.AllPoints.Select(x => x.Value).ToList();
                 if (userPoints.Count >= 3)          // если твое условие - просто не выполняем ничего. но интерфейсно все равно отключить надо!
                 {
                     #region История (undo)
 
                     Dictionary<Guid, MeshUndoInfo> undoInfo;
-                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.GetUndoInfo(out undoInfo);
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.GetUndoInfo(out undoInfo);
                     var isProfile = ProgramCore.MainForm.HeadProfile;
-                    var teInfo = isProfile ? ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo : ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.ShapeInfo;
-                    var historyElem = new HistoryHeadShapeLines(undoInfo, ProgramCore.MainForm.ctrlRenderControl.headController.Lines, teInfo, isProfile);
+                    var teInfo = isProfile ? ctrlRenderControl.autodotsShapeHelper.ShapeProfileInfo : ctrlRenderControl.autodotsShapeHelper.ShapeInfo;
+                    var historyElem = new HistoryHeadShapeLines(undoInfo, ProgramCore.Project.RenderMainHelper.headController.Lines, teInfo, isProfile);
                     historyElem.Group = ProgramCore.MainForm.ctrlRenderControl.historyController.currentGroup;
                     ProgramCore.MainForm.ctrlRenderControl.historyController.Add(historyElem);
 
@@ -637,13 +637,13 @@ namespace RH.Core.Controls.Panels
                             var center = ProgramCore.MainForm.ctrlRenderControl.HeadLineMode == MeshPartType.LEye ? ProgramCore.Project.LeftEyeUserCenter : ProgramCore.Project.RightEyeCenter;
                             center = MirroredHeadPoint.UpdateWorldPoint(center);
 
-                            ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, center);
+                            ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, center);
                             break;
                         case MeshPartType.Nose: //тут центр не нужен,сказал воваш.. 
-                            ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, Vector2.Zero);
+                            ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, Vector2.Zero);
                             break;
                         case MeshPartType.Lip: // ТУТ ЦЕНТР???
-                            ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, Vector2.Zero);
+                            ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, Vector2.Zero);
                             break;
                         case MeshPartType.Head:
                             userPoints.RemoveAt(userPoints.Count - 1);
@@ -654,12 +654,12 @@ namespace RH.Core.Controls.Panels
                             center = new Vector2(eyesMouthRect.X + eyesMouthRect.Width * 0.5f, eyesMouthRect.Y + eyesMouthRect.Height * 0.5f);
                             center = MirroredHeadPoint.UpdateWorldPoint(center);
 
-                            ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, center);
+                            ctrlRenderControl.autodotsShapeHelper.Transform(ProgramCore.MainForm.ctrlRenderControl.HeadLineMode, userPoints, center);
                             break;
                     }
                 }
 
-                ProgramCore.MainForm.ctrlRenderControl.headController.Lines.Clear();
+                ProgramCore.Project.RenderMainHelper.headController.Lines.Clear();
 
                 ProgramCore.MainForm.EnableRotating();
                 UpdateNormals();
@@ -690,22 +690,22 @@ namespace RH.Core.Controls.Panels
                     {
                         case Mode.HeadLine:
                             //    case Mode.HeadShapedots:
-                            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.Mirror(true, 0);
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);
                             ProgramCore.Project.ShapeFlip = FlipType.LeftToRight;
 
-                            ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();
-                            ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
+                            ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                            ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                             ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                             break;
                         case Mode.HeadAutodotsFirstTime:
                         case Mode.HeadAutodots:
                             ProgramCore.MainForm.ctrlRenderControl.FlipLeft(true);
-                            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.Mirror(true, 0);                // добавлено после слияниея с shapedots!
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);                // добавлено после слияниея с shapedots!
 
                             ProgramCore.Project.TextureFlip = FlipType.LeftToRight;
 
-                            ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();            // добавлено после слияниея с shapedots!
-                            ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
+                            ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();            // добавлено после слияниея с shapedots!
+                            ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                             ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                             break;
                     }
@@ -724,12 +724,12 @@ namespace RH.Core.Controls.Panels
                     {
                         case Mode.HeadLine:
                             //     case Mode.HeadShapedots:
-                            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.UndoMirror();
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();
                             ProgramCore.Project.ShapeFlip = FlipType.None;
                             break;
                         case Mode.HeadAutodotsFirstTime:
                         case Mode.HeadAutodots:
-                            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.UndoMirror();     // после слияние с ShapeDots. Проверить!
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();     // после слияние с ShapeDots. Проверить!
                             ProgramCore.MainForm.ctrlRenderControl.FlipLeft(false);
                             ProgramCore.Project.TextureFlip = FlipType.None;
                             break;
@@ -750,22 +750,22 @@ namespace RH.Core.Controls.Panels
                   {
                       case Mode.HeadLine:
                           //       case Mode.HeadShapedots:
-                          ProgramCore.MainForm.ctrlRenderControl.headMeshesController.Mirror(false, 0);
+                          ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);
                           ProgramCore.Project.ShapeFlip = FlipType.RightToLeft;
 
-                          ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();
-                          ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
+                          ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                          ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                           ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                           break;
                       case Mode.HeadAutodotsFirstTime:
                       case Mode.HeadAutodots:
-                          ProgramCore.MainForm.ctrlRenderControl.headMeshesController.Mirror(false, 0);       // после слияние с ShapeDots. Проверить!
+                          ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);       // после слияние с ShapeDots. Проверить!
 
                           ProgramCore.MainForm.ctrlRenderControl.FlipRight(true);
                           ProgramCore.Project.TextureFlip = FlipType.RightToLeft;
 
-                          ProgramCore.MainForm.ctrlRenderControl.headController.AutoDots.ClearSelection();        // после слияние с ShapeDots. Проверить!
-                          ProgramCore.MainForm.ctrlRenderControl.headController.ShapeDots.ClearSelection();
+                          ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();        // после слияние с ShapeDots. Проверить!
+                          ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                           ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                           break;
                   }
@@ -782,12 +782,12 @@ namespace RH.Core.Controls.Panels
                   {
                       case Mode.HeadLine:
                           //    case Mode.HeadShapedots:
-                          ProgramCore.MainForm.ctrlRenderControl.headMeshesController.UndoMirror();
+                          ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();
                           ProgramCore.Project.ShapeFlip = FlipType.None;
                           break;
                       case Mode.HeadAutodotsFirstTime:
                       case Mode.HeadAutodots:
-                          ProgramCore.MainForm.ctrlRenderControl.headMeshesController.UndoMirror();           // после слияние с ShapeDots. Проверить!
+                          ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();           // после слияние с ShapeDots. Проверить!
                           ProgramCore.MainForm.ctrlRenderControl.FlipRight(false);
                           ProgramCore.Project.TextureFlip = FlipType.None;
                           break;
@@ -830,7 +830,7 @@ namespace RH.Core.Controls.Panels
 
                 ProgramCore.MainForm.EnableRotating();
 
-                ProgramCore.MainForm.ctrlRenderControl.autodotsShapeHelper.UpdateProfileLines();
+                ctrlRenderControl.autodotsShapeHelper.UpdateProfileLines();
                 ProgramCore.MainForm.ctrlTemplateImage.InitializeProfileControlPoints();
 
                 if (ProgramCore.Project.ProfileImage == null) // если нет профиля - просто копируем ебало справа
