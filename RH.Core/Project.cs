@@ -191,7 +191,14 @@ namespace RH.Core
                 case ManType.Female:        // если это обычные модели - копируем их из папки с прогой - в папку с проектом
                 case ManType.Child:
                     if (!ProgramCore.PluginMode)        //тогда хед модел пас оставляем какой был! пиздец важно!
+                    {
+#if WEB_APP
+                        headModelPath = Path.Combine("ftp://108.167.164.209/public_ftp/PrintAhead_DefaultModels/", manType.GetObjPath());
+#else
                         headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPath());
+#endif
+                    }
+                        
                     break;
                 case ManType.Custom:
                     {
@@ -225,7 +232,7 @@ namespace RH.Core
                         }
                     }
 
-                    #region Копируем модель
+#region Копируем модель
 
                     var directoryPath = Path.Combine(ProjectPath, "Model");
                     FolderEx.CreateDirectory(directoryPath);
@@ -236,7 +243,7 @@ namespace RH.Core
                     File.Copy(headModelPath, filePath, true); // сама модель
                     HeadModelPath = filePath;
 
-                    #region Обрабатываем mtl файл и папку с текстурами
+#region Обрабатываем mtl файл и папку с текстурами
 
                     var mtl = oldFileName + ".mtl";
                     using (var ms = new StreamReader(headModelPath))
@@ -261,9 +268,9 @@ namespace RH.Core
 
                     ObjLoader.CopyMtl(mtl, mtl, Path.GetDirectoryName(headModelPath), "", directoryPath, selectedSize);
 
-                    #endregion
+#endregion
 
-                    #endregion
+#endregion
                 }
                 catch
                 {

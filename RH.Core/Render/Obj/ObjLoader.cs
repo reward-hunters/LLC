@@ -10,6 +10,7 @@ using OpenTK;
 using RH.Core.Helpers;
 using RH.Core.IO;
 using RH.Core.Render.Helpers;
+using System.Net;
 
 namespace RH.Core.Render.Obj
 {
@@ -19,120 +20,165 @@ namespace RH.Core.Render.Obj
         {
             return LoadObjFile(filePath, false);
         }
-
+        
         public static ObjItem LoadObjFile(string filePath, bool needExporter)
         {
-            var result = new ObjItem(needExporter);
-            var fi = new FileInfo(filePath);
-            if (!fi.Exists)
-                return null;
+            var result = new ObjItem(needExporter);           
 
-            using (var sr = new StreamReader(fi.FullName, Encoding.Default))
+#if WEB_APP
+            var request = (FtpWebRequest)FtpWebRequest.Create(filePath);
+            const string Login = "i2q1d8b1";
+            const string Password = "B45B2nnFv$!j6V";
+            request.Credentials = new NetworkCredential(Login, Password);
+
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            var ftpResponse = (FtpWebResponse)request.GetResponse();
+
+            byte[] buffer = new byte[16 * 1024];
+            using (var ftpStream = ftpResponse.GetResponseStream())
             {
-                var currentGroup = default(ObjGroup);
-                CheckAndAttachDefaultGroup(ref currentGroup, ref result);
-
-                var index = 0;
-                var lastGroupName = String.Empty;
-
-                if (ProgramCore.PluginMode)
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjDirPath());
-                    switch (ProgramCore.Project.ManType)
+                    int read;
+                    while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        case ManType.Male:
-                            LoadMtlib(Path.Combine(folderPath, "Male.mtl"), ref result);
-                            break;
-                        case ManType.Female:
-                            LoadMtlib(Path.Combine(folderPath, "Fem.mtl"), ref result);
-                            break;
-                        case ManType.Child:
-                            LoadMtlib(Path.Combine(folderPath, "Child.mtl"), ref result);
-                            break;
+                        ms.Write(buffer, 0, read);
                     }
-                }
+                    ms.Position = 0;
+                    ms.Flush();
+                    using (var sr = new StreamReader(ms, Encoding.Default))
+#else
 
-                while (!sr.EndOfStream)
-                {
-                    var currentLine = sr.ReadLine();
-
-                    if (String.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '#')
+                 var fi = new FileInfo(filePath);
+                if (!fi.Exists)
+                    return null;
+                    using (var sr = new StreamReader(fi.FullName, Encoding.Default))
+#endif
                     {
-                        if (currentLine == "#Accessories")
-                            result.accessoryByHeadShop = true;
-                        else if (currentLine == "#HeadShop Model")
-                            result.modelByHeadShop = true;
-                        continue;
-                    }
+                        var currentGroup = default(ObjGroup);
+                        CheckAndAttachDefaultGroup(ref currentGroup, ref result);
 
-                    var fields = currentLine.Trim().Split(null, 2);
-                    if (fields.Length < 2)
-                    {
-                        ProgramCore.EchoToLog(String.Format("Bad obj file format. File: '{0}'", fi.FullName), EchoMessageType.Warning);
-                        continue;
-                    }
+                        var index = 0;
+                        var lastGroupName = String.Empty;
 
-                    var keyword = fields[0].Trim().ToLower();
-                    var data = fields[1].Trim();
-
-                    switch (keyword)
-                    {
-                        case "v":       // verticles
-                            var vertex = ParseVector3(data);
-                            result.Vertices.Add(vertex);
-                            if (needExporter)
-                                result.ObjExport.Vertices.Add(vertex);
-                            break;
-                        case "vt":      // texture coords
-                            var textureCoord = ParseTextureCoords(data);
-                            result.TextureCoords.Add(textureCoord);
-                            if (needExporter)
-                                result.ObjExport.TexCoords.Add(textureCoord);
-                            break;
-                        case "vn":      // normals
-                            var normal = ParseVector3(data);
-                            result.Normals.Add(normal);
-                            if (needExporter)
-                                result.ObjExport.Normals.Add(normal);
-                            break;
-                        case "f":      // faces
-                            var face = ParceFace(data);
-                            if (needExporter)
+                        if (ProgramCore.PluginMode)
+                        {
+                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjDirPath());
+                            switch (ProgramCore.Project.ManType)
                             {
-                                face.ObjExportIndex = result.ObjExport.Faces.Count;
-                                result.ObjExport.Faces.Add(new ObjExportFace(face.Count, face.Vertices));
+                                case ManType.Male:
+                                    LoadMtlib(Path.Combine(folderPath, "Male.mtl"), ref result);
+                                    break;
+                                case ManType.Female:
+                                    LoadMtlib(Path.Combine(folderPath, "Fem.mtl"), ref result);
+                                    break;
+                                case ManType.Child:
+                                    LoadMtlib(Path.Combine(folderPath, "Child.mtl"), ref result);
+                                    break;
                             }
-                            currentGroup.AddFace(face);
-                            index++;
-                            break;
-                        case "g":      // start group
-                            if (needExporter)
+                        }
+
+                        while (!sr.EndOfStream)
+                        {
+                            var currentLine = sr.ReadLine();
+
+                            if (String.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '#')
                             {
-                                lastGroupName = data;
-                                if (result.ObjExport.MaterialsGroups.Count > 0)
-                                {
-                                    result.ObjExport.MaterialsGroups.Last().Groups.Last().EndFaceIndex = index - 1;
-                                    result.ObjExport.MaterialsGroups.Last().Groups.Add(new ObjExportGroup
+                                if (currentLine == "#Accessories")
+                                    result.accessoryByHeadShop = true;
+                                else if (currentLine == "#HeadShop Model")
+                                    result.modelByHeadShop = true;
+                                continue;
+                            }
+
+                            var fields = currentLine.Trim().Split(null, 2);
+                            if (fields.Length < 2)
+                            {
+#if WEB_APP
+#else
+                                ProgramCore.EchoToLog(String.Format("Bad obj file format. File: '{0}'", fi.FullName), EchoMessageType.Warning);
+#endif
+                                continue;
+                            }
+
+                            var keyword = fields[0].Trim().ToLower();
+                            var data = fields[1].Trim();
+
+                            switch (keyword)
+                            {
+                                case "v":       // verticles
+                                    var vertex = ParseVector3(data);
+                                    result.Vertices.Add(vertex);
+                                    if (needExporter)
+                                        result.ObjExport.Vertices.Add(vertex);
+                                    break;
+                                case "vt":      // texture coords
+                                    var textureCoord = ParseTextureCoords(data);
+                                    result.TextureCoords.Add(textureCoord);
+                                    if (needExporter)
+                                        result.ObjExport.TexCoords.Add(textureCoord);
+                                    break;
+                                case "vn":      // normals
+                                    var normal = ParseVector3(data);
+                                    result.Normals.Add(normal);
+                                    if (needExporter)
+                                        result.ObjExport.Normals.Add(normal);
+                                    break;
+                                case "f":      // faces
+                                    var face = ParceFace(data);
+                                    if (needExporter)
                                     {
-                                        Group = data,
-                                        StartFaceIndex = index
-                                    });
-                                }
-                            }
-                            break;
-                        case "mtllib":  //parse mtl file
-                            var path = Path.Combine(fi.DirectoryName, data);
-                            LoadMtlib(path, ref result);
-                            break;
-                        case "usemtl":
-                            if (needExporter)
-                            {
-                                if (result.ObjExport.MaterialsGroups.Count > 0)
-                                    result.ObjExport.MaterialsGroups.Last().Groups.Last().EndFaceIndex = index - 1;
-                                result.ObjExport.MaterialsGroups.Add(new ObjExportMaterial
-                                {
-                                    Material = data,
-                                    Groups = new List<ObjExportGroup>
+                                        face.ObjExportIndex = result.ObjExport.Faces.Count;
+                                        result.ObjExport.Faces.Add(new ObjExportFace(face.Count, face.Vertices));
+                                    }
+                                    currentGroup.AddFace(face);
+                                    index++;
+                                    break;
+                                case "g":      // start group
+                                    if (needExporter)
+                                    {
+                                        lastGroupName = data;
+                                        if (result.ObjExport.MaterialsGroups.Count > 0)
+                                        {
+                                            result.ObjExport.MaterialsGroups.Last().Groups.Last().EndFaceIndex = index - 1;
+                                            result.ObjExport.MaterialsGroups.Last().Groups.Add(new ObjExportGroup
+                                            {
+                                                Group = data,
+                                                StartFaceIndex = index
+                                            });
+                                        }
+                                    }
+                                    break;
+                                case "mtllib":  //parse mtl file
+#if WEB_APP
+                                    var path = ProgramCore.Project.HeadModelPath.Replace(".obj", ".mtl");
+                                    switch (ProgramCore.Project.ManType)
+                                    {
+                                        case ManType.Male:
+                                            LoadMtlib(path, ref result);
+                                            break;
+                                        case ManType.Female:
+                                            LoadMtlib(path, ref result);
+                                            break;
+                                        case ManType.Child:
+                                            LoadMtlib(path, ref result);
+                                            break;
+                                    }
+#else
+                                    var path = Path.Combine(fi.DirectoryName, data);
+                                    LoadMtlib(path, ref result);
+#endif
+                                    break;
+                                case "usemtl":
+                                    if (needExporter)
+                                    {
+                                        if (result.ObjExport.MaterialsGroups.Count > 0)
+                                            result.ObjExport.MaterialsGroups.Last().Groups.Last().EndFaceIndex = index - 1;
+                                        result.ObjExport.MaterialsGroups.Add(new ObjExportMaterial
+                                        {
+                                            Material = data,
+                                            Groups = new List<ObjExportGroup>
                                         {
                                             new ObjExportGroup
                                             {
@@ -140,33 +186,37 @@ namespace RH.Core.Render.Obj
                                                 StartFaceIndex = index
                                             }
                                         }
-                                });
-                            }
+                                        });
+                                    }
 
-                            var lowerData = data.ToLower();
-                            var materialKey = result.Materials.Keys.SingleOrDefault(x => x == lowerData);
-                            ObjMaterial material;
-                            if (materialKey == null)                        // if can't parse mtl, create default group
-                            {
-                                material = new ObjMaterial(lowerData);
-                                result.Materials.Add(lowerData, material);
-                            }
-                            else
-                                material = result.Materials[materialKey];
+                                    var lowerData = data.ToLower();
+                                    var materialKey = result.Materials.Keys.SingleOrDefault(x => x == lowerData);
+                                    ObjMaterial material;
+                                    if (materialKey == null)                        // if can't parse mtl, create default group
+                                    {
+                                        material = new ObjMaterial(lowerData);
+                                        result.Materials.Add(lowerData, material);
+                                    }
+                                    else
+                                        material = result.Materials[materialKey];
 
-                            if (result.Groups.ContainsKey(material))
-                                currentGroup = result.Groups[material];
-                            else
-                            {
-                                currentGroup = new ObjGroup(material.Name);
-                                result.Groups.Add(material, currentGroup);
+                                    if (result.Groups.ContainsKey(material))
+                                        currentGroup = result.Groups[material];
+                                    else
+                                    {
+                                        currentGroup = new ObjGroup(material.Name);
+                                        result.Groups.Add(material, currentGroup);
+                                    }
+                                    break;
                             }
-                            break;
+                        }
+                        if (result.ObjExport != null && result.ObjExport.MaterialsGroups.Count > 0 && needExporter)
+                            result.ObjExport.MaterialsGroups.Last().Groups.Last().EndFaceIndex = index - 1;
                     }
+#if WEB_APP
                 }
-                if (result.ObjExport != null && result.ObjExport.MaterialsGroups.Count > 0 && needExporter)
-                    result.ObjExport.MaterialsGroups.Last().Groups.Last().EndFaceIndex = index - 1;
             }
+#endif
             return result;
         }
 
@@ -242,104 +292,134 @@ namespace RH.Core.Render.Obj
 
         private static void LoadMtlib(string filePath, ref ObjItem result)
         {
+
+#if WEB_APP
+            var request = (FtpWebRequest)FtpWebRequest.Create(filePath);
+            const string Login = "i2q1d8b1";
+            const string Password = "B45B2nnFv$!j6V";
+            request.Credentials = new NetworkCredential(Login, Password);
+
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            var ftpResponse = (FtpWebResponse)request.GetResponse();
+
+            byte[] buffer = new byte[16 * 1024];
+            using (var ftpStream = ftpResponse.GetResponseStream())
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    ms.Position = 0;
+                    ms.Flush();
+                    using (var sr = new StreamReader(ms, Encoding.Default))
+#else
             var fi = new FileInfo(filePath);
             if (!fi.Exists)
                 return;
 
             using (var sr = new StreamReader(fi.FullName))
-            {
-                var material = default(ObjMaterial);
-                while (!sr.EndOfStream)
-                {
-                    var currentLine = sr.ReadLine();
-
-                    if (String.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '#')
-                        continue;
-
-                    var fields = currentLine.Trim().Split(null, 2);
-                    var keyword = fields[0].Trim().ToLower();
-                    var data = fields[1].Trim();
-
-                    switch (keyword)
+#endif
                     {
-                        case "newmtl":
-                            var dt = data.ToLower();
-                            if (result.Materials.ContainsKey(dt))
-                                material = result.Materials[dt];
-                            else
+                        var material = default(ObjMaterial);
+                        while (!sr.EndOfStream)
+                        {
+                            var currentLine = sr.ReadLine();
+
+                            if (String.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '#')
+                                continue;
+
+                            var fields = currentLine.Trim().Split(null, 2);
+                            var keyword = fields[0].Trim().ToLower();
+                            var data = fields[1].Trim();
+
+                            switch (keyword)
                             {
-                                material = new ObjMaterial(data);
-                                result.Materials.Add(dt, material);
+                                case "newmtl":
+                                    var dt = data.ToLower();
+                                    if (result.Materials.ContainsKey(dt))
+                                        material = result.Materials[dt];
+                                    else
+                                    {
+                                        material = new ObjMaterial(data);
+                                        result.Materials.Add(dt, material);
+                                    }
+                                    break;
+                                case "ka":
+                                    if (material != null)
+                                        material.AmbientColor = ParseVector3(data);
+                                    break;
+                                case "kd":
+                                    if (material != null)
+                                    {
+                                        var color = ParseVector3(data);
+                                        material.DiffuseColor = new Vector4(color.X, color.Y, color.Z, 1f);
+                                    }
+                                    break;
+                                case "ks":
+                                    if (material != null)
+                                        material.SpecularColor = ParseVector3(data);
+                                    break;
+                                case "ns":
+                                    if (material != null)
+                                        material.SpecularCoefficient = StringConverter.ToFloat(data);
+                                    break;
+                                case "ni":
+                                    if (material != null)
+                                        material.OpticalDensity = StringConverter.ToFloat(data);
+                                    break;
+                                case "d":
+                                case "tr":
+                                    if (material != null)
+                                        material.Transparency = StringConverter.ToFloat(data);
+                                    break;
+                                case "illum":
+                                    if (material != null)
+                                        material.IlluminationModel = StringConverter.ToInt(data);
+                                    break;
+                                case "map_ka":
+                                    if (material != null)
+                                        material.AmbientTextureMap = GetMapFullPath(data, filePath);
+                                    break;
+                                case "map_kd":
+                                    if (material != null)
+                                        material.DiffuseTextureMap = GetMapFullPath(data, filePath);
+                                    break;
+                                case "map_ks":
+                                    if (material != null)
+                                        material.SpecularTextureMap = GetMapFullPath(data, filePath);
+                                    break;
+                                case "map_ns":
+                                    if (material != null)
+                                        material.SpecularHighlightTextureMap = GetMapFullPath(data, filePath);
+                                    break;
+                                case "map_d":
+                                    if (material != null)
+                                        material.TransparentTextureMap = GetMapFullPath(data, filePath);
+                                    break;
+                                case "map_bump":
+                                case "bump":
+                                    if (material != null)
+                                        material.BumpMap = GetMapFullPath(data, filePath);
+                                    break;
+                                case "disp":
+                                    if (material != null)
+                                        material.DisplacementMap = GetMapFullPath(data, filePath);
+                                    break;
+                                case "decal":
+                                    if (material != null)
+                                        material.StencilDecalMap = GetMapFullPath(data, filePath);
+                                    break;
                             }
-                            break;
-                        case "ka":
-                            if (material != null)
-                                material.AmbientColor = ParseVector3(data);
-                            break;
-                        case "kd":
-                            if (material != null)
-                            {
-                                var color = ParseVector3(data);
-                                material.DiffuseColor = new Vector4(color.X, color.Y, color.Z, 1f);
-                            }
-                            break;
-                        case "ks":
-                            if (material != null)
-                                material.SpecularColor = ParseVector3(data);
-                            break;
-                        case "ns":
-                            if (material != null)
-                                material.SpecularCoefficient = StringConverter.ToFloat(data);
-                            break;
-                        case "ni":
-                            if (material != null)
-                                material.OpticalDensity = StringConverter.ToFloat(data);
-                            break;
-                        case "d":
-                        case "tr":
-                            if (material != null)
-                                material.Transparency = StringConverter.ToFloat(data);
-                            break;
-                        case "illum":
-                            if (material != null)
-                                material.IlluminationModel = StringConverter.ToInt(data);
-                            break;
-                        case "map_ka":
-                            if (material != null)
-                                material.AmbientTextureMap = GetMapFullPath(data, filePath);
-                            break;
-                        case "map_kd":
-                            if (material != null)
-                                material.DiffuseTextureMap = GetMapFullPath(data, filePath);
-                            break;
-                        case "map_ks":
-                            if (material != null)
-                                material.SpecularTextureMap = GetMapFullPath(data, filePath);
-                            break;
-                        case "map_ns":
-                            if (material != null)
-                                material.SpecularHighlightTextureMap = GetMapFullPath(data, filePath);
-                            break;
-                        case "map_d":
-                            if (material != null)
-                                material.TransparentTextureMap = GetMapFullPath(data, filePath);
-                            break;
-                        case "map_bump":
-                        case "bump":
-                            if (material != null)
-                                material.BumpMap = GetMapFullPath(data, filePath);
-                            break;
-                        case "disp":
-                            if (material != null)
-                                material.DisplacementMap = GetMapFullPath(data, filePath);
-                            break;
-                        case "decal":
-                            if (material != null)
-                                material.StencilDecalMap = GetMapFullPath(data, filePath);
-                            break;
+                        }
                     }
+#if WEB_APP
                 }
             }
+#endif
         }
 
         private static string GetMapFullPath(string data, string mtlPath)

@@ -195,8 +195,10 @@ namespace RH.Core.Render.Obj
             }
             // SaveMaterial(mtlPath, materials, fi);
         }
+        
         public static void SaveObjFile(string filePath, List<MeshInfo> meshInfos, MeshType type, bool saveBrushesToTexture, bool isCollada)
         {
+            ///TODO: Задефайнить и зменить на MemoryStream
             if (meshInfos.Count == 0)
                 return;
 
@@ -497,7 +499,8 @@ namespace RH.Core.Render.Obj
             if (!string.IsNullOrEmpty(mapPath))
             {
                 var textureName = Path.GetFileName(mapPath);
-
+#if WEB_APP
+#else
                 var newTexturePath = isCollada ? fi.DirectoryName : Path.Combine(fi.DirectoryName, "Textures");
                 var newTextureFullPath = Path.Combine(newTexturePath, textureName);
 
@@ -525,7 +528,7 @@ namespace RH.Core.Render.Obj
                         File.Copy(mapPath, newTextureFullPath, false);
                     }
                 }
-
+#endif
                 res += mapTitle + " /Textures/" + textureName + "\n";
             }
         }

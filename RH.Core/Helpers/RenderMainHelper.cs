@@ -75,25 +75,25 @@ namespace RH.Core.Helpers
             return result;
         }
 
-        public int GetTexture(String textureName)
+        public int GetTexture(string textureName)
         {
             var textureId = 0;
-            if (textureName != String.Empty && File.Exists(textureName))
+            if (!string.IsNullOrEmpty(textureName))//&& File.Exists(textureName))
             {
 
                 if (textures.ContainsKey(textureName))
                     return textures[textureName].Texture;
 
-                Bitmap bitmap;
-                using (var ms = new MemoryStream(File.ReadAllBytes(textureName)))
-                    bitmap = (Bitmap)Image.FromStream(ms);
+                //Bitmap bitmap;
+                //using (var ms = new MemoryStream(File.ReadAllBytes(textureName)))
+                //    bitmap = (Bitmap)Image.FromStream(ms);
 
                 textureId = textures.Count + 1; //GetTexture(bitmap);
                 textures.Add(textureName, new TextureInfo
                 {
                     Texture = textureId,
-                    Width = bitmap.Width,
-                    Height = bitmap.Height
+                    Width = 0,
+                    Height = 0
                 });
             }
             return textureId;
@@ -109,27 +109,27 @@ namespace RH.Core.Helpers
             return string.Empty;
         }
 
-        public void LoadProject(bool newProject, RectangleAABB aabb)
+        public void LoadProject(bool newProject, RectangleAABB aabb, string headTexturePath)
         {
-            var headTexturePath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
+            //var headTexturePath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
             HeadTextureId = 0;
             if (!string.IsNullOrEmpty(headTexturePath))
             {
                 HeadTextureId = GetTexture(headTexturePath);
 
-                if (ProgramCore.Project.FaceRectRelative == RectangleF.Empty)
-                {
-                    var fileName = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
+                //if (ProgramCore.Project.FaceRectRelative == RectangleF.Empty)
+                //{
+                //    var fileName = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
 
-                    var faceRecognition = new OpenCvFaceRecognition();
-                    faceRecognition.Recognize(ref fileName, false);
+                //    var faceRecognition = new OpenCvFaceRecognition();
+                //    faceRecognition.Recognize(ref fileName, false);
 
-                    ProgramCore.Project.FaceRectRelative = faceRecognition.FaceRectRelative;
-                    ProgramCore.Project.MouthCenter = faceRecognition.MouthCenter;
-                    ProgramCore.Project.LeftEyeCenter = faceRecognition.LeftEyeCenter;
-                    ProgramCore.Project.RightEyeCenter = faceRecognition.RightEyeCenter;
-                    ProgramCore.Project.FaceColor = faceRecognition.FaceColor;
-                }
+                //    ProgramCore.Project.FaceRectRelative = faceRecognition.FaceRectRelative;
+                //    ProgramCore.Project.MouthCenter = faceRecognition.MouthCenter;
+                //    ProgramCore.Project.LeftEyeCenter = faceRecognition.LeftEyeCenter;
+                //    ProgramCore.Project.RightEyeCenter = faceRecognition.RightEyeCenter;
+                //    ProgramCore.Project.FaceColor = faceRecognition.FaceColor;
+                //}
 
             }
 
@@ -179,6 +179,7 @@ namespace RH.Core.Helpers
             #region Сглаживание текстур
 
             SmoothedTextures.Clear();
+            var index = 1;
             for (var i = 0; i < headMeshesController.RenderMesh.Parts.Count; i++)
             {
                 var part = headMeshesController.RenderMesh.Parts[i];
@@ -195,20 +196,20 @@ namespace RH.Core.Helpers
                     }
                     else
                     {
-                        var path = part.DefaultTextureName;//GetTexturePath(part.Texture);                        
-                        var newImagePath = Path.Combine(ProgramCore.Project.ProjectPath, "Textures");
-                        var di = new DirectoryInfo(newImagePath);
-                        if (!di.Exists)
-                            di.Create();
+                        //var path = part.DefaultTextureName;//GetTexturePath(part.Texture);                        
+                        //var newImagePath = Path.Combine(ProgramCore.Project.ProjectPath, "Textures");
+                        //var di = new DirectoryInfo(newImagePath);
+                        // if (!di.Exists)
+                        //    di.Create();
 
                         //var brushImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + "_brush.png");
-                        var smoothedImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + "_smoothed" + Path.GetExtension(path));
-                        if (!File.Exists(smoothedImagePath))
-                            File.Copy(path, smoothedImagePath, true);
+                        //var smoothedImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + "_smoothed" + Path.GetExtension(path));
+                        //if (!File.Exists(smoothedImagePath))
+                        //File.Copy(path, smoothedImagePath, true);
 
                         //newImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + Path.GetExtension(path));
                         //File.Copy(path, newImagePath, true);                        
-                        var smoothedTexture = GetTexture(smoothedImagePath); // по старому пути у нас будут храниться сглаженные текстуры (что бы сохранение модельки сильно не менять)
+                        var smoothedTexture = textures.Count + (index++);// GetTexture(smoothedImagePath); // по старому пути у нас будут храниться сглаженные текстуры (что бы сохранение модельки сильно не менять)
                         part.Texture = oldTexture;
                         SmoothedTextures.Add(oldTexture, smoothedTexture); // связка - айди старой-новой текстур
 
