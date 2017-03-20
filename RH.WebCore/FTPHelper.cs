@@ -75,10 +75,10 @@ namespace RH.WebCore
 
         public static bool IsFileExists(string path)
         {
-            var request = (FtpWebRequest)WebRequest.Create
-                (path);
+            var request = (FtpWebRequest)WebRequest.Create(path);
             request.Credentials = new NetworkCredential("i2q1d8b1", "B45B2nnFv$!j6V");
-            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
+            request.UseBinary = true;
 
             try
             {

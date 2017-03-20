@@ -184,7 +184,7 @@ namespace RH.WebCore
 
             #endregion
 
-            Recognize(templateImage);
+       //     Recognize(templateImage);
             var aabb = ProgramCore.Project.RenderMainHelper.InitializeShapedotsHelper(true);
             ProgramCore.Project.RenderMainHelper.LoadProject(true, aabb);
             string fiName = Path.Combine(path, ProgramCore.Project.ProjectName + ".obj");
