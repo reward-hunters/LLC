@@ -39,7 +39,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\AbaloneLLC\Libraries\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WEB_APP</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
@@ -412,6 +412,7 @@
     <Compile Include="Helpers\MRUManager.cs" />
     <Compile Include="Helpers\PaypalHelper.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Helpers\RenderMainHelper.cs" />
     <Compile Include="Helpers\StringConverter.cs" />
     <Compile Include="Helpers\UserControlEx.cs">
       <SubType>UserControl</SubType>

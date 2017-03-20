@@ -28,8 +28,12 @@ namespace RH.OneClick
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
+
                 var objectCreator = new ObjCreator();
-                objectCreator.CreateObj(ManType.Female);
+                    objectCreator.CreateObj(0, "http://www.learnopencv.com/wp-content/uploads/2016/05/average-woman-face.jpg", "1fxp4j4ixurjv1uyetgvkyj4");
+                //  FTPHelper.IsFileExists("ftp://108.167.164.209/public_ftp/PrintAhead_images/ppgqhqeuxhcjzsvodxtpbxv23.jpeg");
+                //    var objectCreator = new ObjCreator();
+                //    objectCreator.CreateObj(ManType.Female);
                 // CropHelper.Pass1(@"http://i0.wp.com/peopledotcom.files.wordpress.com/2016/11/prince-harry7.jpg?crop=0px%2C0px%2C1427px%2C1427px&resize=1000%2C1000&ssl=1");
 
                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);

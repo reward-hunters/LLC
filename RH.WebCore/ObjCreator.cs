@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using OpenTK;
 using RH.Core;
@@ -137,26 +138,36 @@ namespace RH.WebCore
             //    }
             //}
         }
-        
-        public void CreateObj(ManType manType)
+
+        public void CreateObj(int manTypeInt, string imagePath, string sessionID)
         {
+            var manType = ManType.Male;
+            switch (manTypeInt)
+            {
+                case 1:
+                    manType = ManType.Female;
+                    break;
+                case 2:
+                    manType = ManType.Child;
+                    break;
+            }
+
             #region Создание проекта
-            var path = UserConfig.AppDataDir;
-            path = Path.Combine(path, "TempProject");
+
+            var path = Application.ExecutablePath; // UserConfig.AppDataDir;
+            path = Path.Combine(path, "Temp", sessionID);
             FolderEx.CreateDirectory(path, true);
 
-            var templateImage = Path.Combine(path, "sourceImg.jpeg");
-            //using (WebClient client = new WebClient())
-            //{
-            //    byte[] imageBytes = client.DownloadData(path);
+            var templateImage = default(Bitmap);
+            using (WebClient client = new WebClient())
+            {
+                byte[] imageBytes = client.DownloadData(imagePath);
 
-            //    using (var ms = new MemoryStream(imageBytes))
-            //    {
-            //        var img = new Bitmap(ms);
-            //        img.Save(templateImage);
-            //    }
-            //}
-            ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, manType, string.Empty, false, 1024);
+                using (var ms = new MemoryStream(imageBytes))
+                    templateImage = new Bitmap(ms);
+            }
+
+            ProgramCore.Project = new Project(sessionID, path, string.Empty, manType, string.Empty, false, 1024);
             ProgramCore.Project.LoadMeshes();
             #endregion
 
@@ -176,7 +187,7 @@ namespace RH.WebCore
             Recognize(templateImage);
             var aabb = ProgramCore.Project.RenderMainHelper.InitializeShapedotsHelper(true);
             ProgramCore.Project.RenderMainHelper.LoadProject(true, aabb);
-            string fiName = Path.Combine(path, ProgramCore.Project.ProjectName + ".obj");            
+            string fiName = Path.Combine(path, ProgramCore.Project.ProjectName + ".obj");
 
             headMeshesController.InitializeTexturing(autodotsShapeHelper.GetBaseDots(), HeadController.GetIndices());
             autodotsShapeHelper.Transform(headMeshesController.TexturingInfo.Points.ToArray());
@@ -193,10 +204,24 @@ namespace RH.WebCore
                 }
             }
 
-            headController.EndAutodots();            
+            headController.EndAutodots();
 
             ProgramCore.Project.RenderMainHelper.SaveHead(fiName);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures();
+
+            FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + sessionID, "i2q1d8b1", "B45B2nnFv$!j6V");
+            foreach (var file in Directory.GetFiles(path))              // сохраняем все папки
+                ftpHelper.Upload(file, Path.GetFileName(file));
+
+            foreach (var directory in Directory.GetDirectories(path))
+            {
+                var fullPath = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
+                var lastDirectory = Path.GetFileName(fullPath);
+
+                ftpHelper.Address = @"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + sessionID + "/" + lastDirectory;
+                foreach (var file in Directory.GetFiles(directory)) // и все папки, вложенностью = 1
+                    ftpHelper.Upload(file, Path.GetFileName(file));
+            }
         }
     }
 }

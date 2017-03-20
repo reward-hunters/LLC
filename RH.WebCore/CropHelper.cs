@@ -12,7 +12,7 @@ namespace RH.WebCore
 {
     public static class CropHelper
     {
-        public static void Pass1(string path, string sessionID)
+        public static void WebCropImage(string path, string sessionID)
         {
             using (WebClient client = new WebClient())
             {
@@ -28,7 +28,7 @@ namespace RH.WebCore
 
 
                     if (ActivateRecognition())
-                        WebCropImage(img, sessionID);
+                        CropImage(img, sessionID);
                     else
                         SaveToFTP(img, sessionID);
                 }
@@ -63,7 +63,7 @@ namespace RH.WebCore
         }
 
 
-        public static void WebCropImage(Image sourceImage, string imageName)
+        private static void CropImage(Image sourceImage, string imageName)
         {
 
             FSDK.TPoint[] pointFeature;
