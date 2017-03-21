@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RH.WebCore;
 
 namespace RH.Core.Helpers
 {
@@ -462,7 +463,7 @@ namespace RH.Core.Helpers
         #endregion
 
         private void SaveObj(string fiName)
-        {            
+        {
             var haPath = Path.GetFileNameWithoutExtension(fiName) + "hair.obj";
             var hairPath = Path.Combine(ProgramCore.Project.ProjectPath, haPath);
             var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
@@ -482,6 +483,27 @@ namespace RH.Core.Helpers
 
         public void SaveSmoothedTextures()
         {
+#if (WEB_APP)
+            var frontTexture = ProgramCore.Project.FrontImage;
+            var address = "ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures";
+            var ftpHelper = new FTPHelper(address);
+            foreach (var smoothTex in SmoothedTextures.Where(s => s.Key != 0))
+            {
+                var oldTexturePath = GetTexturePath(smoothTex.Key);
+                var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value, frontTexture);
+                if (bitmap == null)
+                    continue;
+
+                using (var stream = new MemoryStream())
+                {
+                    bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + // "_smoothed" +
+                                   Path.GetExtension(oldTexturePath);
+                    ftpHelper.Upload(stream, fileName);
+                }
+            }
+#else
+
             var newFolderPath = Path.Combine(ProgramCore.Project.ProjectPath, "Textures");
             var di = new DirectoryInfo(newFolderPath);
             if (!di.Exists)
@@ -496,17 +518,25 @@ namespace RH.Core.Helpers
                 var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value, frontTexture);
                 bitmap.Save(newImagePath, ImageFormat.Jpeg);
             }
-        }        
+#endif
+        }
 
         public Bitmap RenderToTexture(int oldTextureId, int textureId, Bitmap frontTexture)
         {
             var textureWidth = 0;
             var textureHeight = 0;
+#if WEB_APP
             var texPath = GetTexturePath(oldTextureId);
-            var img = new Bitmap(texPath);            
+            var img = FTPHelper.DownloadImage(texPath);
+            if (img == null)
+                return null;
+#else
+            var texPath = GetTexturePath(oldTextureId);
+            var img = new Bitmap(texPath);
+#endif
             textureWidth = img.Width;
             textureHeight = img.Height;
-            PointF[] points = new []{ new PointF(), new PointF(), new PointF() };
+            PointF[] points = new[] { new PointF(), new PointF(), new PointF() };
             var faceColor = Color.FromArgb((int)(ProgramCore.Project.FaceColor.X * 255), (int)(ProgramCore.Project.FaceColor.Y * 255), (int)(ProgramCore.Project.FaceColor.Z * 255));
 
             using (var graphic = Graphics.FromImage(img))
@@ -562,26 +592,26 @@ namespace RH.Core.Helpers
 
             var brush = new SolidBrush(RandomColor());
 
-            const float u_BlendStartDepth =  -0.5f;
+            const float u_BlendStartDepth = -0.5f;
             const float u_BlendDepth = 4f;
-            
+
 
             for (int index = 0; index < part.Indices.Count; index += 3)
             {
                 var v0 = part.Vertices[part.Indices[index]];
                 var v1 = part.Vertices[part.Indices[index + 1]];
                 var v2 = part.Vertices[part.Indices[index + 2]];
-               
+
                 if (v0.TexCoord.Y > v1.TexCoord.Y) Swap(ref v0, ref v1);
                 if (v0.TexCoord.Y > v2.TexCoord.Y) Swap(ref v0, ref v2);
                 if (v1.TexCoord.Y > v2.TexCoord.Y) Swap(ref v1, ref v2);
-                
+
                 t0.X = (int)Math.Round(v0.TexCoord.X * width);
                 t0.Y = (int)Math.Round(v0.TexCoord.Y * height);
                 t1.X = (int)Math.Round(v1.TexCoord.X * width);
                 t1.Y = (int)Math.Round(v1.TexCoord.Y * height);
                 t2.X = (int)Math.Round(v2.TexCoord.X * width);
-                t2.Y = (int)Math.Round(v2.TexCoord.Y * height);                
+                t2.Y = (int)Math.Round(v2.TexCoord.Y * height);
 
                 uv0.X = Clamp(v0.AutodotsTexCoord.X, 0f, 1f) * newWidth;
                 uv0.Y = Clamp(v0.AutodotsTexCoord.Y, 0f, 1f) * newHeight;
@@ -601,7 +631,7 @@ namespace RH.Core.Helpers
                 {
                     continue;
                 }
-                    
+
 
                 var total_height = t2.Y - t0.Y;
 
@@ -626,7 +656,7 @@ namespace RH.Core.Helpers
                         Swap(ref a, ref b);
                         Swap(ref uvA, ref uvB);
                     }
-                        
+
                     var ax = a.X;
                     var bx = b.X;
                     for (int j = ax; j <= bx; j++)
@@ -639,7 +669,7 @@ namespace RH.Core.Helpers
                         var resultColor = Color.FromArgb((int)(blend * 255), color.R, color.G, color.B);
                         g.FillRectangle(new SolidBrush(resultColor), j, t0.Y + i, 1, 1);
                     }
-                }                
+                }
             }
         }
 
@@ -760,7 +790,7 @@ namespace RH.Core.Helpers
                 /*if (ProgramCore.Project.AutodotsUsed)
                     SaveBlendingTextures();*/
 
-                ObjSaver.SaveObjFile(path, headMeshesController.RenderMesh, MeshType.Hair, pickingController.ObjExport, saveBrushesToTexture);               
+                ObjSaver.SaveObjFile(path, headMeshesController.RenderMesh, MeshType.Hair, pickingController.ObjExport, saveBrushesToTexture);
             }
             finally
             {
@@ -801,13 +831,13 @@ namespace RH.Core.Helpers
             List<MirroredHeadPoint> sourcePoints = ProgramCore.Project.RenderMainHelper.headController.AutoDots;
             if (sourcePoints.Count == 0)
                 return Vector2.Zero;
-          
+
             var dots = new List<MirroredHeadPoint>();
             foreach (var index in indexes)
             {
                 var dot = sourcePoints[index];
-                dots.Add(dot);                
-            }            
+                dots.Add(dot);
+            }
 
             var minX = dots.Min(point => point.ValueMirrored.X);
             var maxX = dots.Max(point => point.ValueMirrored.X);

@@ -386,7 +386,8 @@ namespace RH.Core.Render.Obj
                                     break;
                                 case "map_kd":
                                     if (material != null)
-                                        material.DiffuseTextureMap = GetMapFullPath(data, filePath);
+
+                                    material.DiffuseTextureMap = GetMapFullPath(data, filePath);
                                     break;
                                 case "map_ks":
                                     if (material != null)
@@ -428,7 +429,12 @@ namespace RH.Core.Render.Obj
             {
                 var path = data.Replace("/", "\\").Remove(0, 1);
                 var directory = Path.GetDirectoryName(mtlPath);
-                return Path.Combine(directory, path);
+                path = Path.Combine(directory, path);
+#if WEB_APP
+                path = path.Replace(@"\", @"/");
+#endif
+
+                return path;
             }
 
             return data;

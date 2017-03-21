@@ -196,10 +196,6 @@ namespace RH.WebCore
 
             #region Создание проекта
 
-            //var path = Application.ExecutablePath; // UserConfig.AppDataDir;
-            //path = Path.Combine(path, "Temp", sessionID);
-            //FolderEx.CreateDirectory(path, true);
-
             var templateImage = default(Bitmap);
             using (WebClient client = new WebClient())
             {
@@ -249,8 +245,8 @@ namespace RH.WebCore
             headController.EndAutodots();
 
             //string fiName = Path.Combine(path, ProgramCore.Project.ProjectName + ".obj");
-            
-            ProgramCore.Project.RenderMainHelper.SaveHead("");
+
+            ProgramCore.Project.RenderMainHelper.SaveHead(sessionID);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures();
 
             //FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + sessionID, "i2q1d8b1", "B45B2nnFv$!j6V");

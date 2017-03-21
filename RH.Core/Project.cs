@@ -26,6 +26,7 @@ namespace RH.Core
 
         public string HeadModelPath;
 
+
         /// <summary> Относительный путь до левой картинке (шаблона)</summary>
         private string frontImagePath = string.Empty;
         public string FrontImagePath

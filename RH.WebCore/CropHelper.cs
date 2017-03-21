@@ -58,7 +58,7 @@ namespace RH.WebCore
                 data = m.ToArray();
             }
 
-            FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_images", "i2q1d8b1", "B45B2nnFv$!j6V");
+            FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_images");
             ftpHelper.Upload(new MemoryStream(data), name + ".jpeg");
         }
 

@@ -408,6 +408,7 @@
     <Compile Include="Helpers\FormEx.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Helpers\FTPHelper.cs" />
     <Compile Include="Helpers\HeadAutodots.cs" />
     <Compile Include="Helpers\MRUManager.cs" />
     <Compile Include="Helpers\PaypalHelper.cs" />

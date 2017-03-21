@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CropHelper.cs" />
-    <Compile Include="FTPHelper.cs" />
     <Compile Include="ObjCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

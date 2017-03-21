@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using OpenTK;
 using RH.Core.Helpers;
@@ -12,6 +13,7 @@ using RH.Core.Render.Controllers;
 using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
 using RH.MeshUtils.Data;
+using RH.WebCore;
 
 namespace RH.Core.Render.Obj
 {
@@ -195,14 +197,22 @@ namespace RH.Core.Render.Obj
             }
             // SaveMaterial(mtlPath, materials, fi);
         }
-        
+
         public static void SaveObjFile(string filePath, List<MeshInfo> meshInfos, MeshType type, bool saveBrushesToTexture, bool isCollada)
         {
-            ///TODO: Задефайнить и зменить на MemoryStream
             if (meshInfos.Count == 0)
                 return;
 
-            var fi = new FileInfo(filePath);
+            var materials = new Dictionary<string, ObjMaterial>();         // group title, diffuse color, texture path
+
+#if WEB_APP
+            var mtlPath = filePath + ".mtl";
+            var mtlName = mtlPath;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (var sw = new StreamWriter(ms, Encoding.Default))
+#else
+             var fi = new FileInfo(filePath);
             if (fi.Exists)
                 fi.Delete();
 
@@ -211,81 +221,96 @@ namespace RH.Core.Render.Obj
             if (fiMtl.Exists)
                 fiMtl.Delete();
 
-            var materials = new Dictionary<string, ObjMaterial>();         // group title, diffuse color, texture path
+                    var mtlName = fiMtl.Name;
             using (var sw = new StreamWriter(filePath, false, Encoding.Default))
-            {
-                sw.WriteLine("#Produced by HeadShop");
-                if (type == MeshType.Accessory)
-                    sw.WriteLine("#Accessories");
-                else
-                    sw.WriteLine("#HeadShop Model");
-                sw.WriteLine("#" + DateTime.Now.ToShortDateString());
+#endif
 
-                sw.WriteLine("mtllib " + fiMtl.Name);
-                sw.WriteLine();
-
-                SaveVerticles(meshInfos, sw, Matrix4.Zero);
-                SaveTextureCoords(meshInfos, sw);
-                SaveNormals(meshInfos, sw, Matrix4.Zero);
-
-                var groupIndex = 0;
-                var startPositionIndex = 1;
-                var startTexIndex = 1;
-                var startNormalIndex = 1;
-                foreach (var meshInfo in meshInfos)         // faces should write differently
                 {
-                    if (meshInfo.IndicesNormals.Count == 0)
-                        continue;
-
-                    var groupTitle = string.Empty;
-                    if (string.IsNullOrEmpty(meshInfo.Title))
-                    {
-                        groupTitle = "Element_" + groupIndex;
-
-                        while (materials.ContainsKey(groupTitle))
-                        {
-                            ++groupIndex;
-                            groupTitle = "Element_" + groupIndex;
-                        }
-
-                        ++groupIndex;
-                    }
+                    sw.WriteLine("#Produced by HeadShop");
+                    if (type == MeshType.Accessory)
+                        sw.WriteLine("#Accessories");
                     else
-                        groupTitle = meshInfo.Title;
+                        sw.WriteLine("#HeadShop Model");
+                    sw.WriteLine("#" + DateTime.Now.ToShortDateString());
 
-                    if (!materials.ContainsKey(groupTitle))
-                        materials.Add(groupTitle, meshInfo.Material);
+                    sw.WriteLine("mtllib " + mtlName);
+                    sw.WriteLine();
 
-                    sw.WriteLine("g " + groupTitle);
-                    sw.WriteLine("usemtl " + groupTitle);
+                    SaveVerticles(meshInfos, sw, Matrix4.Zero);
+                    SaveTextureCoords(meshInfos, sw);
+                    SaveNormals(meshInfos, sw, Matrix4.Zero);
 
-                    #region Faces
-
-                    var resStr = "f ";
-                    var index = 0;
-                    for (var i = 0; i < meshInfo.IndicesTexCoords.Count; i++)
+                    var groupIndex = 0;
+                    var startPositionIndex = 1;
+                    var startTexIndex = 1;
+                    var startNormalIndex = 1;
+                    foreach (var meshInfo in meshInfos) // faces should write differently
                     {
-                        resStr += (startPositionIndex + meshInfo.IndicesPositions[i]).ToString(ProgramCore.Nfi) + "/";
-                        resStr += (startTexIndex + meshInfo.IndicesTexCoords[i]).ToString(ProgramCore.Nfi) + "/";
-                        resStr += (startNormalIndex + meshInfo.IndicesNormals[i]).ToString(ProgramCore.Nfi) + " ";
-                        ++index;
+                        if (meshInfo.IndicesNormals.Count == 0)
+                            continue;
 
-                        if (index == 3)
+                        var groupTitle = string.Empty;
+                        if (string.IsNullOrEmpty(meshInfo.Title))
                         {
-                            index = 0;
-                            sw.WriteLine(resStr.Remove(resStr.Length - 1));
-                            resStr = "f ";
+                            groupTitle = "Element_" + groupIndex;
+
+                            while (materials.ContainsKey(groupTitle))
+                            {
+                                ++groupIndex;
+                                groupTitle = "Element_" + groupIndex;
+                            }
+
+                            ++groupIndex;
                         }
+                        else
+                            groupTitle = meshInfo.Title;
+
+                        if (!materials.ContainsKey(groupTitle))
+                            materials.Add(groupTitle, meshInfo.Material);
+
+                        sw.WriteLine("g " + groupTitle);
+                        sw.WriteLine("usemtl " + groupTitle);
+
+                        #region Faces
+
+                        var resStr = "f ";
+                        var index = 0;
+                        for (var i = 0; i < meshInfo.IndicesTexCoords.Count; i++)
+                        {
+                            resStr +=
+                                (startPositionIndex + meshInfo.IndicesPositions[i]).ToString(ProgramCore.Nfi) + "/";
+                            resStr += (startTexIndex + meshInfo.IndicesTexCoords[i]).ToString(ProgramCore.Nfi) + "/";
+                            resStr += (startNormalIndex + meshInfo.IndicesNormals[i]).ToString(ProgramCore.Nfi) +
+                                      " ";
+                            ++index;
+
+                            if (index == 3)
+                            {
+                                index = 0;
+                                sw.WriteLine(resStr.Remove(resStr.Length - 1));
+                                resStr = "f ";
+                            }
+                        }
+
+                        startPositionIndex += (meshInfo.IndicesPositions.Max() + 1);
+                        startTexIndex += (meshInfo.IndicesTexCoords.Max() + 1);
+                        startNormalIndex += (meshInfo.IndicesNormals.Max() + 1);
+
+                        #endregion
                     }
 
-                    startPositionIndex += (meshInfo.IndicesPositions.Max() + 1);
-                    startTexIndex += (meshInfo.IndicesTexCoords.Max() + 1);
-                    startNormalIndex += (meshInfo.IndicesNormals.Max() + 1);
 
-                    #endregion
+#if WEB_APP
+                    sw.Flush();
+                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName);
+                    ftpHelper.Upload(ms, filePath + ".obj");
                 }
             }
-            SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada);
+            SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada);
+#else
+}
+              SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada);
+#endif
         }
 
         private static void TransformForPluginMode(DynamicRenderMesh mesh, MeshInfo meshInfo)
@@ -459,39 +484,70 @@ namespace RH.Core.Render.Obj
         /// <param name="isCollada">Если коллада - то текстуры должны лежать в той же папке. Заказ старикана</param>
         private static void SaveMaterial(string mtlPath, Dictionary<string, ObjMaterial> materials, FileInfo fi, bool saveBrushesToTexture, bool isCollada)
         {
-            using (var sw = new StreamWriter(mtlPath, false, Encoding.Default))
+#if WEB_APP
+            using (MemoryStream ms = new MemoryStream())
             {
-                var res1 = string.Empty;
-                foreach (var material in materials)
+                using (var sw = new StreamWriter(ms, Encoding.Default))
+#else
+                         using (var sw = new StreamWriter(mtlPath, false, Encoding.Default))
+#endif
                 {
-                    res1 += "newmtl " + material.Key + "\n";
-
-                    if (!float.IsNaN(material.Value.SpecularCoefficient))
-                        res1 += "Ns " + material.Value.SpecularCoefficient.ToString(ProgramCore.Nfi) + "\n";
-                    if (!float.IsNaN(material.Value.OpticalDensity))
-                        res1 += "Ni " + material.Value.OpticalDensity.ToString(ProgramCore.Nfi) + "\n";
-
-                    if (material.Value.AmbientColor != Vector3.Zero)
-                        res1 += "Ka " + material.Value.AmbientColor.X.ToString(ProgramCore.Nfi) + " " + material.Value.AmbientColor.Y.ToString(ProgramCore.Nfi) + " " + material.Value.AmbientColor.Z.ToString(ProgramCore.Nfi) + "\n";
-                    if (material.Value.DiffuseColor != Vector4.Zero)
+                    var res1 = string.Empty;
+                    foreach (var material in materials)
                     {
-                        res1 += "d " + material.Value.DiffuseColor.W.ToString(ProgramCore.Nfi) + "\n";
-                        res1 += "Kd " + material.Value.DiffuseColor.X.ToString(ProgramCore.Nfi) + " " + material.Value.DiffuseColor.Y.ToString(ProgramCore.Nfi) + " " + material.Value.DiffuseColor.Z.ToString(ProgramCore.Nfi) + "\n";
-                    }
-                    if (material.Value.SpecularColor != Vector3.Zero)
-                        res1 += "Ks " + material.Value.SpecularColor.X.ToString(ProgramCore.Nfi) + " " + material.Value.SpecularColor.Y.ToString(ProgramCore.Nfi) + " " + material.Value.SpecularColor.Z.ToString(ProgramCore.Nfi) + "\n";
+                        res1 += "newmtl " + material.Key + "\n";
 
-                    SetTextureMap(material.Value.AmbientTextureMap, "map_Ka", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.DiffuseTextureMap, "map_Kd", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.SpecularTextureMap, "map_Ks", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.SpecularHighlightTextureMap, "map_Ns", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.TransparentTextureMap, "map_d", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.BumpMap, "map_Bump", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.DisplacementMap, "disp", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.StencilDecalMap, "decal", fi, ref res1, saveBrushesToTexture, isCollada);
+                        if (!float.IsNaN(material.Value.SpecularCoefficient))
+                            res1 += "Ns " + material.Value.SpecularCoefficient.ToString(ProgramCore.Nfi) + "\n";
+                        if (!float.IsNaN(material.Value.OpticalDensity))
+                            res1 += "Ni " + material.Value.OpticalDensity.ToString(ProgramCore.Nfi) + "\n";
+
+                        if (material.Value.AmbientColor != Vector3.Zero)
+                            res1 += "Ka " + material.Value.AmbientColor.X.ToString(ProgramCore.Nfi) + " " +
+                                    material.Value.AmbientColor.Y.ToString(ProgramCore.Nfi) + " " +
+                                    material.Value.AmbientColor.Z.ToString(ProgramCore.Nfi) + "\n";
+                        if (material.Value.DiffuseColor != Vector4.Zero)
+                        {
+                            res1 += "d " + material.Value.DiffuseColor.W.ToString(ProgramCore.Nfi) + "\n";
+                            res1 += "Kd " + material.Value.DiffuseColor.X.ToString(ProgramCore.Nfi) + " " +
+                                    material.Value.DiffuseColor.Y.ToString(ProgramCore.Nfi) + " " +
+                                    material.Value.DiffuseColor.Z.ToString(ProgramCore.Nfi) + "\n";
+                        }
+                        if (material.Value.SpecularColor != Vector3.Zero)
+                            res1 += "Ks " + material.Value.SpecularColor.X.ToString(ProgramCore.Nfi) + " " +
+                                    material.Value.SpecularColor.Y.ToString(ProgramCore.Nfi) + " " +
+                                    material.Value.SpecularColor.Z.ToString(ProgramCore.Nfi) + "\n";
+
+                        SetTextureMap(material.Value.AmbientTextureMap, "map_Ka", fi, ref res1, saveBrushesToTexture,
+                            isCollada);
+                        SetTextureMap(material.Value.DiffuseTextureMap, "map_Kd", fi, ref res1, saveBrushesToTexture,
+                            isCollada);
+                        SetTextureMap(material.Value.SpecularTextureMap, "map_Ks", fi, ref res1, saveBrushesToTexture,
+                            isCollada);
+                        SetTextureMap(material.Value.SpecularHighlightTextureMap, "map_Ns", fi, ref res1,
+                            saveBrushesToTexture, isCollada);
+                        SetTextureMap(material.Value.TransparentTextureMap, "map_d", fi, ref res1, saveBrushesToTexture,
+                            isCollada);
+                        SetTextureMap(material.Value.BumpMap, "map_Bump", fi, ref res1, saveBrushesToTexture, isCollada);
+                        SetTextureMap(material.Value.DisplacementMap, "disp", fi, ref res1, saveBrushesToTexture,
+                            isCollada);
+                        SetTextureMap(material.Value.StencilDecalMap, "decal", fi, ref res1, saveBrushesToTexture,
+                            isCollada);
+                    }
+                    sw.Write(res1);
+
+
+#if WEB_APP
+                    sw.Flush();
+                    ms.Position = 0;
+                    ms.Flush();
+                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName);
+                    ftpHelper.Upload(ms, mtlPath);
                 }
-                sw.Write(res1);
             }
+#else
+}
+#endif
         }
 
         private static void SetTextureMap(string mapPath, string mapTitle, FileInfo fi, ref string res, bool saveBrushesToTexture, bool isCollada)
@@ -500,6 +556,16 @@ namespace RH.Core.Render.Obj
             {
                 var textureName = Path.GetFileName(mapPath);
 #if WEB_APP
+
+                var ftp = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures");
+
+                using (WebClient client = new WebClient())
+                {
+                    byte[] imageBytes = client.DownloadData(mapPath);
+
+                    using (var ms = new MemoryStream(imageBytes))
+                        ftp.Upload(ms, Path.GetFileName(mapPath));
+                }
 #else
                 var newTexturePath = isCollada ? fi.DirectoryName : Path.Combine(fi.DirectoryName, "Textures");
                 var newTextureFullPath = Path.Combine(newTexturePath, textureName);
