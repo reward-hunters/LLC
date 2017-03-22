@@ -32,7 +32,7 @@ namespace RH.OneClick
                 var objectCreator = new ObjCreator();
                 objectCreator.CreateObj(1, "http://www.gimpart.org/wp-content/uploads/2011/12/lady.jpg", "1fxp4j4ixurjv1uyetgvkyj4");
 
-                //FTPHelper.IsFileExists("ftp://108.167.164.209/public_ftp/PrintAhead_images/wqlofu1vq4p4a2x0rnslcikm.jpeg");
+                //FTPHelper.IsFileExists("ftp://108.167.164.209/public_html/printahead.online/PrintAhead_images/wqlofu1vq4p4a2x0rnslcikm.jpeg");
                 //    var objectCreator = new ObjCreator();
                 //    objectCreator.CreateObj(ManType.Female);
                 // CropHelper.Pass1(@"http://i0.wp.com/peopledotcom.files.wordpress.com/2016/11/prince-harry7.jpg?crop=0px%2C0px%2C1427px%2C1427px&resize=1000%2C1000&ssl=1");

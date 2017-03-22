@@ -248,20 +248,7 @@ namespace RH.WebCore
 
             ProgramCore.Project.RenderMainHelper.SaveHead(sessionID);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures();
-
-            //FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + sessionID, "i2q1d8b1", "B45B2nnFv$!j6V");
-            //foreach (var file in Directory.GetFiles(path))              // сохраняем все папки
-            //    ftpHelper.Upload(file, Path.GetFileName(file));
-
-            //foreach (var directory in Directory.GetDirectories(path))
-            //{
-            //    var fullPath = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
-            //    var lastDirectory = Path.GetFileName(fullPath);
-
-            //    ftpHelper.Address = @"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + sessionID + "/" + lastDirectory;
-            //    foreach (var file in Directory.GetFiles(directory)) // и все папки, вложенностью = 1
-            //        ftpHelper.Upload(file, Path.GetFileName(file));
-            //}
+       
         }
     }
 }

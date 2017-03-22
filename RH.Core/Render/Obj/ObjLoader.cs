@@ -27,9 +27,7 @@ namespace RH.Core.Render.Obj
 
 #if WEB_APP
             var request = (FtpWebRequest)FtpWebRequest.Create(filePath);
-            const string Login = "i2q1d8b1";
-            const string Password = "B45B2nnFv$!j6V";
-            request.Credentials = new NetworkCredential(Login, Password);
+            request.Credentials = new NetworkCredential(FTPHelper.Login, FTPHelper.Password);
 
             request.Method = WebRequestMethods.Ftp.DownloadFile;
 
@@ -295,9 +293,7 @@ namespace RH.Core.Render.Obj
 
 #if WEB_APP
             var request = (FtpWebRequest)FtpWebRequest.Create(filePath);
-            const string Login = "i2q1d8b1";
-            const string Password = "B45B2nnFv$!j6V";
-            request.Credentials = new NetworkCredential(Login, Password);
+            request.Credentials = new NetworkCredential(FTPHelper.Login, FTPHelper.Password);
 
             request.Method = WebRequestMethods.Ftp.DownloadFile;
 

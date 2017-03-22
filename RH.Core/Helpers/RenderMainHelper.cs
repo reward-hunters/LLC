@@ -14,7 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RH.WebCore;
 
 namespace RH.Core.Helpers
 {
@@ -485,7 +484,7 @@ namespace RH.Core.Helpers
         {
 #if (WEB_APP)
             var frontTexture = ProgramCore.Project.FrontImage;
-            var address = "ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures";
+            var address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures";
             var ftpHelper = new FTPHelper(address);
             foreach (var smoothTex in SmoothedTextures.Where(s => s.Key != 0))
             {
@@ -494,13 +493,12 @@ namespace RH.Core.Helpers
                 if (bitmap == null)
                     continue;
 
-                using (var stream = new MemoryStream())
-                {
-                    bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + // "_smoothed" +
-                                   Path.GetExtension(oldTexturePath);
-                    ftpHelper.Upload(stream, fileName);
-                }
+                var stream = new MemoryStream();
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + // "_smoothed" +
+                               Path.GetExtension(oldTexturePath);
+
+                ftpHelper.Upload(stream, fileName);
             }
 #else
 

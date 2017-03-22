@@ -13,7 +13,6 @@ using RH.Core.Render.Controllers;
 using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
 using RH.MeshUtils.Data;
-using RH.WebCore;
 
 namespace RH.Core.Render.Obj
 {
@@ -302,7 +301,9 @@ namespace RH.Core.Render.Obj
 
 #if WEB_APP
                     sw.Flush();
-                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName);
+                    ms.Position = 0;
+                    ms.Flush();
+                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName);
                     ftpHelper.Upload(ms, filePath + ".obj");
                 }
             }
@@ -541,7 +542,7 @@ namespace RH.Core.Render.Obj
                     sw.Flush();
                     ms.Position = 0;
                     ms.Flush();
-                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName);
+                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName);
                     ftpHelper.Upload(ms, mtlPath);
                 }
             }
@@ -557,14 +558,27 @@ namespace RH.Core.Render.Obj
                 var textureName = Path.GetFileName(mapPath);
 #if WEB_APP
 
-                var ftp = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures");
+                var ftp = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures");
 
-                using (WebClient client = new WebClient())
+                if (mapPath.StartsWith("http"))
                 {
-                    byte[] imageBytes = client.DownloadData(mapPath);
+                    using (WebClient client = new WebClient())
+                    {
+                        byte[] imageBytes = client.DownloadData(mapPath);
 
-                    using (var ms = new MemoryStream(imageBytes))
-                        ftp.Upload(ms, Path.GetFileName(mapPath));
+                        using (var ms = new MemoryStream(imageBytes))
+                            ftp.Upload(ms, Path.GetFileName(mapPath));
+                    }
+                }
+                else
+                {
+
+                    var image = FTPHelper.DownloadImage(mapPath);
+                    using (var m = new MemoryStream())
+                    {
+                        image.Save(m, image.RawFormat);
+                        ftp.Upload(m, Path.GetFileName(mapPath));
+                    }
                 }
 #else
                 var newTexturePath = isCollada ? fi.DirectoryName : Path.Combine(fi.DirectoryName, "Textures");

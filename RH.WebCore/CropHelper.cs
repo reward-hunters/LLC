@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using Luxand;
 using OpenTK;
+using RH.Core.Helpers;
 using RH.Core.Render.Helpers;
 
 
@@ -58,7 +59,7 @@ namespace RH.WebCore
                 data = m.ToArray();
             }
 
-            FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_ftp/PrintAhead_images");
+            FTPHelper ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_images");
             ftpHelper.Upload(new MemoryStream(data), name + ".jpeg");
         }
 

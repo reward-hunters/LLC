@@ -194,7 +194,7 @@ namespace RH.Core
                     if (!ProgramCore.PluginMode)        //тогда хед модел пас оставляем какой был! пиздец важно!
                     {
 #if WEB_APP
-                        headModelPath = Path.Combine("ftp://108.167.164.209/public_ftp/PrintAhead_DefaultModels/", manType.GetObjPath());
+                        headModelPath = Path.Combine("ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/", manType.GetObjPath());
 #else
                         headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPath());
 #endif

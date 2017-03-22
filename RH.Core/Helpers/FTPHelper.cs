@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 
-namespace RH.WebCore
+namespace RH.Core.Helpers
 {
     public class FTPHelper
     {
@@ -60,6 +60,9 @@ namespace RH.WebCore
                 request.Credentials = new NetworkCredential(Login, Password);
 
                 request.UseBinary = true;
+
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.Flush();
 
                 var buffer = new byte[stream.Length];
                 stream.Read(buffer, 0, buffer.Length);
@@ -119,26 +122,26 @@ namespace RH.WebCore
             var ftpResponse = (FtpWebResponse)request.GetResponse();
 
             byte[] buffer = new byte[16 * 1024];
+            Bitmap result;
             using (var ftpStream = ftpResponse.GetResponseStream())
             {
-                using (MemoryStream ms = new MemoryStream())
+                var ms = new MemoryStream();
+
+                int read;
+                while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    int read;
-                    while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        ms.Write(buffer, 0, read);
-                    }
-                    ms.Position = 0;
-                    ms.Flush();
-                    return new Bitmap(ms);
+                    ms.Write(buffer, 0, read);
                 }
+                ms.Seek(0, SeekOrigin.Begin);
+                result = (Bitmap)Image.FromStream(ms);
             }
+            return result;
         }
 
         public static bool IsFileExists(string path)
         {
             var request = (FtpWebRequest)WebRequest.Create(path);
-            request.Credentials = new NetworkCredential("i2q1d8b1", "B45B2nnFv$!j6V");
+            request.Credentials = new NetworkCredential(Login, Password);
             request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
             request.UseBinary = true;
 
