@@ -558,28 +558,28 @@ namespace RH.Core.Render.Obj
                 var textureName = Path.GetFileName(mapPath);
 #if WEB_APP
 
-                var ftp = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures");
+                //var ftp = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures");
 
-                if (mapPath.StartsWith("http"))
-                {
-                    using (WebClient client = new WebClient())
-                    {
-                        byte[] imageBytes = client.DownloadData(mapPath);
+                //if (mapPath.StartsWith("http"))
+                //{
+                //    using (WebClient client = new WebClient())
+                //    {
+                //        byte[] imageBytes = client.DownloadData(mapPath);
 
-                        using (var ms = new MemoryStream(imageBytes))
-                            ftp.Upload(ms, Path.GetFileName(mapPath));
-                    }
-                }
-                else
-                {
+                //        using (var ms = new MemoryStream(imageBytes))
+                //            ftp.Upload(ms, Path.GetFileName(mapPath));
+                //    }
+                //}
+                //else
+                //{
 
-                    var image = FTPHelper.DownloadImage(mapPath);
-                    using (var m = new MemoryStream())
-                    {
-                        image.Save(m, image.RawFormat);
-                        ftp.Upload(m, Path.GetFileName(mapPath));
-                    }
-                }
+                //    var image = FTPHelper.DownloadImage(mapPath);
+                //    using (var m = new MemoryStream())
+                //    {
+                //        image.Save(m, image.RawFormat);
+                //        ftp.Upload(m, Path.GetFileName(mapPath));
+                //    }
+                //}
 #else
                 var newTexturePath = isCollada ? fi.DirectoryName : Path.Combine(fi.DirectoryName, "Textures");
                 var newTextureFullPath = Path.Combine(newTexturePath, textureName);

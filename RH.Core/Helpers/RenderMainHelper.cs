@@ -196,20 +196,21 @@ namespace RH.Core.Helpers
                     }
                     else
                     {
-                        //var path = part.DefaultTextureName;//GetTexturePath(part.Texture);                        
-                        //var newImagePath = Path.Combine(ProgramCore.Project.ProjectPath, "Textures");
+                        var path = part.DefaultTextureName;//GetTexturePath(part.Texture);                        
+                        var newImagePath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures/";
+                        //var ftpHelper = new FTPHelper();
                         //var di = new DirectoryInfo(newImagePath);
                         // if (!di.Exists)
                         //    di.Create();
 
                         //var brushImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + "_brush.png");
-                        //var smoothedImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + "_smoothed" + Path.GetExtension(path));
+                        var smoothedImagePath = newImagePath + Path.GetFileNameWithoutExtension(path) + "_smoothed" + Path.GetExtension(path);
                         //if (!File.Exists(smoothedImagePath))
                         //File.Copy(path, smoothedImagePath, true);
 
                         //newImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + Path.GetExtension(path));
                         //File.Copy(path, newImagePath, true);                        
-                        var smoothedTexture = textures.Count + (index++);// GetTexture(smoothedImagePath); // по старому пути у нас будут храниться сглаженные текстуры (что бы сохранение модельки сильно не менять)
+                        var smoothedTexture = GetTexture(smoothedImagePath);// GetTexture(smoothedImagePath); // по старому пути у нас будут храниться сглаженные текстуры (что бы сохранение модельки сильно не менять)
                         part.Texture = oldTexture;
                         SmoothedTextures.Add(oldTexture, smoothedTexture); // связка - айди старой-новой текстур
 
@@ -495,7 +496,7 @@ namespace RH.Core.Helpers
 
                 var stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
-                var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + // "_smoothed" +
+                var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + "_smoothed" +
                                Path.GetExtension(oldTexturePath);
 
                 ftpHelper.Upload(stream, fileName);
