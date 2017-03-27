@@ -487,6 +487,7 @@ namespace RH.Core.Helpers
             var frontTexture = ProgramCore.Project.FrontImage;
             var address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures";
             var ftpHelper = new FTPHelper(address);
+
             foreach (var smoothTex in SmoothedTextures.Where(s => s.Key != 0))
             {
                 var oldTexturePath = GetTexturePath(smoothTex.Key);
@@ -494,7 +495,7 @@ namespace RH.Core.Helpers
                 if (bitmap == null)
                     continue;
 
-                var stream = new MemoryStream();
+               var stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
                 var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + "_smoothed" +
                                Path.GetExtension(oldTexturePath);

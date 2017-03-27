@@ -181,7 +181,7 @@ namespace RH.WebCore
             ProgramCore.Project.DetectedTopPoints.Add(facialFeatures[67]);
         }
 
-        public void CreateObj(int manTypeInt, string imagePath, string sessionID)
+        public void CreateObj(int manTypeInt, string sessionID)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -197,13 +197,14 @@ namespace RH.WebCore
             #region Создание проекта
 
             var templateImage = default(Bitmap);
-            using (WebClient client = new WebClient())
-            {
-                byte[] imageBytes = client.DownloadData(imagePath);
+            WebClient client = new WebClient();
 
-                using (var ms = new MemoryStream(imageBytes))
-                    templateImage = new Bitmap(ms);
-            }
+            var imagePath = "http://printahead.net/printahead.online/PrintAhead_images/" + sessionID + ".jpeg";
+            byte[] imageBytes = client.DownloadData(imagePath);
+
+            var ms = new MemoryStream(imageBytes);
+            templateImage = new Bitmap(ms);
+
 
             ProgramCore.Project = new Project(sessionID, null, null, manType, null, false, 1024);
             ProgramCore.Project.FrontImage = templateImage;
@@ -248,7 +249,14 @@ namespace RH.WebCore
 
             ProgramCore.Project.RenderMainHelper.SaveHead(sessionID);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures();
-       
+
+            var address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures";
+            var ftpHelper = new FTPHelper(address);
+
+            var stream = new MemoryStream();
+            templateImage.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            ftpHelper.Upload(stream, sessionID + ".jpeg");
+
         }
     }
 }

@@ -28,9 +28,9 @@ namespace RH.OneClick
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
-
-                var objectCreator = new ObjCreator();
-                objectCreator.CreateObj(2, "http://www.gimpart.org/wp-content/uploads/2011/12/lady.jpg", "1fxp4j4ixurjv1uyetgvkyj4");
+               
+                      var objectCreator = new ObjCreator();
+                   objectCreator.CreateObj(0, "2ud5awfny4chthgghwdaivpw");
 
                 //FTPHelper.IsFileExists("ftp://108.167.164.209/public_html/printahead.online/PrintAhead_images/wqlofu1vq4p4a2x0rnslcikm.jpeg");
                 //    var objectCreator = new ObjCreator();
