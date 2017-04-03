@@ -2004,7 +2004,7 @@ namespace RH.Core.Render
             var objPath = Path.Combine(fi.DirectoryName, Path.GetFileNameWithoutExtension(fi.Name) + ".obj");
             var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
 
-            if (meshSize == float.NaN && meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
+            if (float.IsNaN(meshSize) && meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
             {
                 var mesh = meshes[0];
                 meshSize = StringConverter.ToFloat(UserConfig.ByName("Parts")[mesh.Path, "Size"]);
