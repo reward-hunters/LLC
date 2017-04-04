@@ -101,7 +101,7 @@ namespace RH.Core.Controls
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
-                    rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = labelNotes.Visible = labelNotes1.Visible =  false;
+                    rbImportObj.Visible = btnChild.Visible = label8.Visible = label11.Visible = labelNotes.Visible = labelNotes1.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     labelNotes.Visible = labelNotes1.Visible = !ProgramCore.IsFreeVersion;
@@ -686,8 +686,14 @@ namespace RH.Core.Controls
 
                 RecalcRealTemplateImagePosition();
 
-                //      var distance = facialFeaturesTransformed[2].Y - facialFeaturesTransformed[11].Y;
-                var distance = facialFeaturesTransformed[22].Y - facialFeaturesTransformed[11].Y;           // раньше использовалась 2 точка.но согласно ТЗ от 27.3.2017 используем теперь эту точку
+
+
+                Single distance;
+                if (fcr.IsMale)
+                    distance = facialFeaturesTransformed[22].Y - facialFeaturesTransformed[11].Y;           // раньше использовалась 2 точка.но согласно ТЗ от 27.3.2017 используем теперь эту точку
+                else
+                    distance = facialFeaturesTransformed[2].Y - facialFeaturesTransformed[11].Y;
+
                 TopEdgeTransformed.Y = facialFeaturesTransformed[16].Y + distance;          // определение высоты по алгоритму старикана
 
                 RenderTimer.Start();

@@ -108,7 +108,6 @@ namespace RH.Core.Helpers
             var executablePath = Path.GetDirectoryName(Application.ExecutablePath);
             FSDK.TPoint[] pointFeature;
             var image = new FSDK.CImage(path);
-            //image.Save(@"C:\Users\Kulikov\AppData\Roaming\Abalone\PrintAhead\2.jpeg");
 
             var faceRectangle = Rectangle.Empty;
             var mouthRectangle = Rectangle.Empty;
@@ -231,19 +230,6 @@ namespace RH.Core.Helpers
             FacialFeatures = new List<Vector2>();
             foreach (var point in pointFeature)
                 FacialFeatures.Add(new Vector2(point.x / (image.Width * 1f), point.y / (image.Height * 1f)));
-
-            /*     int left = facePosition.xc - (int)(facePosition.w * 0.6f);
-                 int top = facePosition.yc - (int)(facePosition.w * 0.5f);
-                 var lRelative = 
-
-                 faceRectangle = new Rectangle(left, top, (int)(facePosition.w * 1.2), (int)(facePosition.w * 1.2));
-                 FaceRectRelative = 
-                 */
-
-
-            //      var leftTop = new Vector2(LeftEyeCenter.X, Math.Max(LeftEyeCenter.Y, RightEyeCenter.Y));
-            //     var rightBottom = new Vector2(RightEyeCenter.X, LeftMouth.Y);
-            // FaceRectRelative = new RectangleF(leftTop.X, leftTop.Y, rightBottom.X - leftTop.X, rightBottom.Y - leftTop.Y);
 
             #endregion
 
