@@ -25,6 +25,13 @@ http://stackoverflow.com/questions/28708471/web-publish-password-not-the-same-as
 Пароль: B45B2nnFv$!j6V
 
 Удобнее работать через filezilla
+====
+https://279528467592.signin.aws.amazon.com/console
+
+Abalone LLC
+laslovespremi@gmail.com
+
+Pass: Menelaos12#
 
 
 ======
