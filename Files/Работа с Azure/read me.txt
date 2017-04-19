@@ -60,6 +60,11 @@ jquery-form - за аякс запросы
 
 Кроме того, отличный мануал тут:
 http://stackoverflow.com/questions/7089760/how-to-call-an-asp-net-c-sharp-method-using-javascript
+====
+
+В случае вызова долгих процедур возможна ошибка 504 gateway timeout (это относится к Amazon)
+Тогда настроить конфигурацию сервера согласно мануалу: 
+http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html
 
 
 ======
