@@ -70,8 +70,7 @@ namespace RH.Core.Render.Controllers
                 SelectedColor.Add(mesh, mesh.Material.DiffuseColor);
             SetPointColor(selectionColor);
 
-            if (OnSelectedMeshChanged != null)
-                OnSelectedMeshChanged();
+            OnSelectedMeshChanged?.Invoke();
         }
 
         #endregion

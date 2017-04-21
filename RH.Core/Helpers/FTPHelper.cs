@@ -138,6 +138,40 @@ namespace RH.Core.Helpers
             return result;
         }
 
+        public static void CopyFromFtpToFtp(string oldFilePath, string newFilePathDir, string newFileName, string sessionID)
+        {
+            if (oldFilePath.StartsWith(@"ftp:/1"))
+                oldFilePath = oldFilePath.Replace(@"ftp:/1", @"ftp://1");
+            oldFilePath = GetCaseSensitiveFileName(oldFilePath);
+
+            var request = (FtpWebRequest)FtpWebRequest.Create(oldFilePath);
+            request.Credentials = new NetworkCredential(Login, Password);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            var ftpResponse = (FtpWebResponse)request.GetResponse();
+
+            byte[] buffer = new byte[16 * 1024];
+            Bitmap result;
+            using (var ftpStream = ftpResponse.GetResponseStream())
+            {
+                var ms = new MemoryStream();
+
+                int read;
+                while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var ftpHelper = new FTPHelper(newFilePathDir);
+                ftpHelper.Upload(ms, newFileName);
+
+                var ms1 = new MemoryStream();
+                ftpHelper.Upload(ms1, "Hair.mtl");
+            }
+        }
+
+
         public static bool IsFileExists(string path)
         {
             var request = (FtpWebRequest)WebRequest.Create(path);

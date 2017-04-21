@@ -62,9 +62,8 @@ jquery-form - за аякс запросы
 http://stackoverflow.com/questions/7089760/how-to-call-an-asp-net-c-sharp-method-using-javascript
 ====
 
-В случае вызова долгих процедур возможна ошибка 504 gateway timeout (это относится к Amazon)
-Тогда настроить конфигурацию сервера согласно мануалу: 
-http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html
+
+
 
 
 ======
@@ -85,3 +84,9 @@ AMAZON:
 <customErrors mode="Off"></customErrors> 
 чтобы нормально ошибки выводились 
 3. Создать  Environment в админке. В Конфигурациях настроить разрешение запуска х86 приложений-длл-к
+
+В случае вызова долгих процедур возможна ошибка 504 gateway timeout (это относится к Amazon)
+Тогда настроить конфигурацию сервера согласно мануалу: 
+http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html
+
+Не забыть выбрать более мощный инстанс при переносе. По умолчанию ставится t1-micro - он очень слабый. Сейчас работает на t2-micro, он гораздо лучше.
