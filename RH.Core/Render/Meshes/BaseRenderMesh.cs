@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using RH.Core.IO;
 using RH.Core.Render.Controllers;
 using RH.Core.Render.Helpers;
 using RH.Core.Render.Obj;
@@ -103,7 +102,7 @@ namespace RH.Core.Render.Meshes
                 useTextures.X = Material.Texture;
             }
             //shader.UpdateUniform("u_UseTexture", useTexture ? (float)Material.Texture : 0);
-            
+
             shader.UpdateUniform("u_UseTexture", useTextures);
 
             GL.EnableClientState(ArrayCap.VertexArray);
@@ -191,19 +190,24 @@ namespace RH.Core.Render.Meshes
             Material.TransparentTextureMap = alphaTexturePath;
             NumIndices = indices.Count;
 
+#if WEB_APP
+#else
+
             GL.GenBuffers(1, out VertexBuffer);
             GL.GenBuffers(1, out IndexBuffer);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBuffer);
             GL.BufferData(BufferTarget.ElementArrayBuffer, new IntPtr(indices.Count * sizeof(uint)), indices.ToArray(), BufferUsageHint.DynamicDraw);
 
-            ProgramCore.EchoToLog(String.Format("IndexBuffer Size: {0}", indices.Count), EchoMessageType.Information);
+
+            ProgramCore.EchoToLog($"IndexBuffer Size: {indices.Count}", EchoMessageType.Information);
 
             var error = GL.GetError();
             if (error != ErrorCode.NoError)
             {
                 throw new Exception(error.ToString());
             }
+#endif
 
             vertexArray = new Vertex[vertexPositions.Count / 3];
             for (var i = 0; i < vertexPositions.Count / 3; i++)
@@ -218,7 +222,10 @@ namespace RH.Core.Render.Meshes
             vertexBoneIndicsArray = vertexBoneIndices.ToArray();
             vertexBoneWeightArray = vertexBoneWeights.ToArray();
 
+#if WEB_APP
+#else
             UpdateBuffer();
+#endif
             UpdatePointIndices();
 
             return true;

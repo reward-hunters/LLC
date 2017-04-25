@@ -233,9 +233,11 @@ namespace RH.Core.Render.Controllers
             var objModel = ObjLoader.LoadObjFile(path, needExporter);
             if (objModel == null)
             {
-                ProgramCore.EchoToLog(string.Format("Can't load obj model '{0}'", path), EchoMessageType.Error);
+                ProgramCore.EchoToLog($"Can't load obj model '{path}'", EchoMessageType.Error);
                 return result;
             }
+
+            var lastTriangle = 0;
 
             switch (type)
             {
@@ -249,7 +251,7 @@ namespace RH.Core.Render.Controllers
                             //  objModel.TextureCoords.Count != objModelNull.TextureCoords.Count))
                             objModelNull = null;
 
-                        result = LoadHairMeshes(objModel, objModelNull, fromDragAndDrop, manType, MeshType.Hair);
+                        result = LoadHairMeshes(objModel, objModelNull, fromDragAndDrop, manType, MeshType.Hair, ref lastTriangle);
                         foreach (var renderMesh in result)
                             HairMeshes.Add(renderMesh);
                         break;
@@ -302,8 +304,8 @@ namespace RH.Core.Render.Controllers
                             objModel.Vertices.Count != objModelFull.Vertices.Count ||
                             objModel.TextureCoords.Count != objModelFull.TextureCoords.Count))
                             objModelFull = null;
-                        LastTriangleIndex = 0;
-                        var meshPartInfos = LoadHeadMeshes(objModel, fromDragAndDrop, manType, scale);
+                        
+                        var meshPartInfos = LoadHeadMeshes(objModel, fromDragAndDrop, manType, scale, ref lastTriangle);
                         //result = LoadHairMeshes(objModel, objModelFull, fromDragAndDrop, manType, MeshType.Head);
                         //var meshPartInfos = new List<MeshPartInfo>();
                         var a = new Vector3(99999.0f, 99999.0f, 99999.0f);
@@ -355,20 +357,18 @@ namespace RH.Core.Render.Controllers
             return result;
         }
 
-        private int LastTriangleIndex = 0;
-
-        private void SetFaceTriangleIndex(ObjFace face, ObjItem objModel)
+        private static void SetFaceTriangleIndex(ObjFace face, ObjItem objModel, ref int lastTriangleIndex)
         {
             if (objModel.ObjExport != null && face.ObjExportIndex > -1)
             {
-                objModel.ObjExport.Faces[face.ObjExportIndex].TriangleIndex0 = LastTriangleIndex++;
+                objModel.ObjExport.Faces[face.ObjExportIndex].TriangleIndex0 = lastTriangleIndex++;
                 if (face.Count == 4)
-                    objModel.ObjExport.Faces[face.ObjExportIndex].TriangleIndex1 = LastTriangleIndex++;
+                    objModel.ObjExport.Faces[face.ObjExportIndex].TriangleIndex1 = lastTriangleIndex++;
             }
         }
 
-        private void GetObjFace(ObjFace face, ObjItem objModel,
-                                             ref List<float> vertexPositions, ref List<float> vertexNormals, ref List<float> vertexTextureCoordinates, ref List<float> vertexBoneWeights, ref List<float> vertexBoneIndices, ref List<uint> indeces)
+        private static void GetObjFace(ObjFace face, ObjItem objModel,
+                                             ref List<float> vertexPositions, ref List<float> vertexNormals, ref List<float> vertexTextureCoordinates, ref List<float> vertexBoneWeights, ref List<float> vertexBoneIndices, ref List<uint> indeces, ref int lastTriangle)
         {
             if (face.Count == 3)
             {
@@ -377,7 +377,7 @@ namespace RH.Core.Render.Controllers
                     var faceVertex = face[i];
                     ObjLoader.AppendObjTriangle(objModel, faceVertex, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces);
                 }
-                SetFaceTriangleIndex(face, objModel);
+                SetFaceTriangleIndex(face, objModel, ref lastTriangle);
             }
             else if (face.Count == 4)
             {
@@ -393,7 +393,7 @@ namespace RH.Core.Render.Controllers
                 ObjLoader.AppendObjTriangle(objModel, faceVertex2, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces);
                 ObjLoader.AppendObjTriangle(objModel, faceVertex3, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces);
                 ObjLoader.AppendObjTriangle(objModel, faceVertex0, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces);
-                SetFaceTriangleIndex(face, objModel);
+                SetFaceTriangleIndex(face, objModel, ref lastTriangle);
             }
         }
 
@@ -426,7 +426,7 @@ namespace RH.Core.Render.Controllers
             return 246f;
         }
 
-        private List<MeshPartInfo> LoadHeadMeshes(ObjItem objModel, bool fromDragAndDrop, ManType manType, float scale)
+        private List<MeshPartInfo> LoadHeadMeshes(ObjItem objModel, bool fromDragAndDrop, ManType manType, float scale, ref int lastTriangle)
         {
             var result = new List<MeshPartInfo>();
             var vertexPositions = new List<float>();
@@ -446,7 +446,7 @@ namespace RH.Core.Render.Controllers
                 indeces.Clear();
 
                 foreach (var face in modelGroup.Value.Faces)          //  combine all meshes in group - to one mesh.
-                    GetObjFace(face, objModel, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces);
+                    GetObjFace(face, objModel, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces, ref lastTriangle);
 
                 var positions = new List<Vector3>();
                 var texCoords = new List<Vector2>();
@@ -479,7 +479,7 @@ namespace RH.Core.Render.Controllers
             return result;
         }
 
-        private List<DynamicRenderMesh> LoadHairMeshes(ObjItem objModel, ObjItem objModelNull, bool fromDragAndDrop, ManType manType, MeshType meshType)
+        public static List<DynamicRenderMesh> LoadHairMeshes(ObjItem objModel, ObjItem objModelNull, bool fromDragAndDrop, ManType manType, MeshType meshType, ref int lastTriangle)
         {
             var result = new List<DynamicRenderMesh>();
             var vertexPositions = new List<float>();
@@ -508,7 +508,7 @@ namespace RH.Core.Render.Controllers
                 indeces.Clear();
 
                 foreach (var face in modelGroup.Value.Faces)          //  combine all meshes in group - to one mesh.
-                    GetObjFace(face, objModel, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces);
+                    GetObjFace(face, objModel, ref vertexPositions, ref vertexNormals, ref vertexTextureCoordinates, ref vertexBoneWeights, ref vertexBoneIndices, ref indeces, ref lastTriangle);
 
                 var renderMesh = new DynamicRenderMesh(meshType);
                 renderMesh.groupName = modelGroup.Value.Name;
@@ -539,7 +539,7 @@ namespace RH.Core.Render.Controllers
                         indecesNull.Clear();
                         foreach (var face in groupNull.Faces)
                         {
-                            GetObjFace(face, objModelNull, ref vertexPositionsNull, ref vertexNormalsNull, ref vertexTextureCoordinatesNull, ref vertexBoneWeightsNull, ref vertexBoneIndicesNull, ref indecesNull);
+                            GetObjFace(face, objModelNull, ref vertexPositionsNull, ref vertexNormalsNull, ref vertexTextureCoordinatesNull, ref vertexBoneWeightsNull, ref vertexBoneIndicesNull, ref indecesNull, ref lastTriangle);
                         }
                         renderMesh.SetNullPoints(vertexPositionsNull, vertexNormalsNull, vertexTextureCoordinatesNull);
                     }
@@ -614,7 +614,7 @@ namespace RH.Core.Render.Controllers
             return dv;
         }
 
-        public Dictionary<Guid, PartMorphInfo> LoadPartsMorphInfo(string path, RenderMesh renderMesh)
+        public Dictionary<Guid, PartMorphInfo> LoadPartsMorphInfo(string path, RenderMesh renderMesh, ref int lastTriangle)
         {
             var vertexPositions = new List<float>();
             List<float> tmp = null;
@@ -637,7 +637,7 @@ namespace RH.Core.Render.Controllers
 
                 foreach (var face in modelGroup.Value.Faces) //  combine all meshes in group - to one mesh.
                     GetObjFace(face, objModel, ref vertexPositions, ref tmp, ref tmp,
-                        ref tmp, ref tmp, ref uitmp);
+                        ref tmp, ref tmp, ref uitmp, ref lastTriangle);
                 vertices.Clear();
                 for (var i = 0; i < vertexPositions.Count; i += 3)
                     vertices.Add(new Vector3(vertexPositions[i], vertexPositions[i + 1], vertexPositions[i + 2]));

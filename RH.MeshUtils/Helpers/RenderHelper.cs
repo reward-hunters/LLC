@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using RH.MeshUtils.Data;
 
 namespace RH.MeshUtils.Helpers

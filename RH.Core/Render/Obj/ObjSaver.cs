@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using OpenTK;
 using RH.Core.Helpers;
@@ -18,37 +15,37 @@ namespace RH.Core.Render.Obj
 {
     public static class ObjSaver
     {
-        public static void SaveObjFile(string filePath, RenderMesh mesh, MeshType type, bool saveBrushesToTexture = false)
+        public static void SaveObjFile(string filePath, RenderMesh mesh, MeshType type, string sessionId, bool saveBrushesToTexture = false)
         {
-            SaveObjFile(filePath, mesh, type, null, saveBrushesToTexture);
+            SaveObjFile(filePath, mesh, type, null, sessionId, saveBrushesToTexture);
         }
 
-        public static void SaveObjFile(string filePath, RenderMesh mesh, MeshType type, ObjExport objExport, bool saveBrushesToTexture = false, bool isCollada = false)
+        public static void SaveObjFile(string filePath, RenderMesh mesh, MeshType type, ObjExport objExport, string sessionId, bool saveBrushesToTexture = false, bool isCollada = false)
         {
             var meshInfos = new List<MeshInfo>();
 
             foreach (var part in mesh.Parts)
                 meshInfos.Add(new MeshInfo(part, mesh.MorphScale));
-            SaveObjFile(filePath, meshInfos, type, objExport, saveBrushesToTexture, isCollada);
+            SaveObjFile(filePath, meshInfos, type, objExport, saveBrushesToTexture, isCollada, sessionId);
         }
 
-        public static void SaveObjFile(string filePath, DynamicRenderMeshes meshes, MeshType type, float scale, bool saveBrushesToTexture = false, bool isCollada = false)
+        public static void SaveObjFile(string filePath, DynamicRenderMeshes meshes, MeshType type, float scale, ManType manType, string sessionId, bool saveBrushesToTexture = false, bool isCollada = false)
         {
             var meshInfos = new List<MeshInfo>();
 
             foreach (var mesh in meshes)
             {
-                var meshInfo = mesh.GetMeshInfo(scale);
+                var meshInfo = mesh.GetMeshInfo(scale, manType);
                 meshInfos.Add(meshInfo);
             }
-            SaveObjFile(filePath, meshInfos, type, saveBrushesToTexture, isCollada);
+            SaveObjFile(filePath, meshInfos, type, saveBrushesToTexture, isCollada, sessionId);
         }
 
-        public static void SaveObjFile(string filePath, List<MeshInfo> meshInfos, MeshType type, ObjExport objExport, bool saveBrushesToTexture, bool isCollada)
+        public static void SaveObjFile(string filePath, List<MeshInfo> meshInfos, MeshType type, ObjExport objExport, bool saveBrushesToTexture, bool isCollada, string sessionId)
         {
             if (objExport == null)
             {
-                SaveObjFile(filePath, meshInfos, type, saveBrushesToTexture, isCollada);
+                SaveObjFile(filePath, meshInfos, type, saveBrushesToTexture, isCollada, sessionId);
                 return;
             }
             var fi = new FileInfo(filePath);
@@ -197,7 +194,7 @@ namespace RH.Core.Render.Obj
             // SaveMaterial(mtlPath, materials, fi);
         }
 
-        public static void SaveObjFile(string filePath, List<MeshInfo> meshInfos, MeshType type, bool saveBrushesToTexture, bool isCollada)
+        public static void SaveObjFile(string filePath, List<MeshInfo> meshInfos, MeshType type, bool saveBrushesToTexture, bool isCollada, string sessionId)
         {
             if (meshInfos.Count == 0)
                 return;
@@ -303,11 +300,11 @@ namespace RH.Core.Render.Obj
                     sw.Flush();
                     ms.Position = 0;
                     ms.Flush();
-                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName);
+                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionId);
                     ftpHelper.Upload(ms, filePath + ".obj");
                 }
             }
-            SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada);
+            SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId);
 #else
 }
               SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada);
@@ -350,7 +347,7 @@ namespace RH.Core.Render.Obj
         /// <param name="saveBrushesToTexture">При экспорте в ДАЗ или в колладу - нужно сохранять то что поправили кисточкой в туже текстуру </param>
         /// <param name="isCollada">Если коллада - то текстуры должны лежать в той же папке. Заказ старикана</param>
         public static void ExportMergedModel(string filePath, DynamicRenderMeshes HairMeshes, DynamicRenderMeshes AccesoryMeshes,
-            List<MeshInfo> faceParts, float morphScale, bool saveBrushesToTexture = false, bool isCollada = false)
+            List<MeshInfo> faceParts, float morphScale, string sessionId, bool saveBrushesToTexture = false, bool isCollada = false)
         {
             //if (meshInfos.Count == 0)
             //    return;
@@ -381,7 +378,7 @@ namespace RH.Core.Render.Obj
                 var meshInfos = new List<MeshInfo>();
                 foreach (var mesh in HairMeshes)
                 {
-                    var meshInfo = mesh.GetMeshInfo(morphScale);
+                    var meshInfo = mesh.GetMeshInfo(morphScale, ProgramCore.Project.ManType);
                     MeshInfo.FindCenter(meshInfo.Positions, "Волосы до трансформации ObjSaver::ExportMergedModel()");
                     TransformForPluginMode(mesh, meshInfo);
                     meshInfos.Add(meshInfo);
@@ -389,7 +386,7 @@ namespace RH.Core.Render.Obj
                 }
                 foreach (var mesh in AccesoryMeshes)
                 {
-                    var meshInfo = mesh.GetMeshInfo(morphScale);
+                    var meshInfo = mesh.GetMeshInfo(morphScale, ProgramCore.Project.ManType);
                     MeshInfo.FindCenter(meshInfo.Positions, "Аксесуары до трансформации ObjSaver::ExportMergedModel()");
                     TransformForPluginMode(mesh, meshInfo);
                     meshInfos.Add(meshInfo);
@@ -474,7 +471,7 @@ namespace RH.Core.Render.Obj
                     #endregion
                 }
             }
-            SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada);
+            SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, sessionId);
         }
 
         /// <summary>  </summary>
@@ -483,7 +480,7 @@ namespace RH.Core.Render.Obj
         /// <param name="fi"></param>
         /// <param name="saveBrushesToTexture">При экспорте в ДАЗ или в колладу - нужно сохранять то что поправили кисточкой в туже текстуру </param>
         /// <param name="isCollada">Если коллада - то текстуры должны лежать в той же папке. Заказ старикана</param>
-        private static void SaveMaterial(string mtlPath, Dictionary<string, ObjMaterial> materials, FileInfo fi, bool saveBrushesToTexture, bool isCollada)
+        private static void SaveMaterial(string mtlPath, Dictionary<string, ObjMaterial> materials, FileInfo fi, bool saveBrushesToTexture, bool isCollada, string sessionId)
         {
 #if WEB_APP
             using (MemoryStream ms = new MemoryStream())
@@ -542,7 +539,7 @@ namespace RH.Core.Render.Obj
                     sw.Flush();
                     ms.Position = 0;
                     ms.Flush();
-                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName);
+                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionId);
                     ftpHelper.Upload(ms, mtlPath);
                 }
             }

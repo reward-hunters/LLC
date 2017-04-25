@@ -8,7 +8,6 @@ using OpenTK;
 using RH.Core.Helpers;
 using RH.Core.Render.Helpers;
 
-
 namespace RH.WebCore
 {
     public static class CropHelper

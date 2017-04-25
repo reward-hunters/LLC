@@ -42,7 +42,7 @@ namespace RH.Core.Render
         private bool startPress = true;
 
         public readonly Camera camera = new Camera();
-        public readonly Dictionary<String, TextureInfo> textures = new Dictionary<String, TextureInfo>();
+        public readonly Dictionary<string, TextureInfo> textures = new Dictionary<string, TextureInfo>();
         private List<int> baseProfilePoints = new List<int>();
         internal BrushTool brushTool = new BrushTool();
 
@@ -470,11 +470,13 @@ namespace RH.Core.Render
 
             if (ProgramCore.Project.ManType != ManType.Custom)
             {
+                var temp = 0;
                 var oldMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Old.obj"); // загружаем трансформации для старения
-                OldMorphing = pickingController.LoadPartsMorphInfo(oldMorphingPath, headMeshesController.RenderMesh);
+                OldMorphing = pickingController.LoadPartsMorphInfo(oldMorphingPath, headMeshesController.RenderMesh, ref temp);
 
+                temp = 0;
                 var fatMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
-                FatMorphing = pickingController.LoadPartsMorphInfo(fatMorphingPath, headMeshesController.RenderMesh);
+                FatMorphing = pickingController.LoadPartsMorphInfo(fatMorphingPath, headMeshesController.RenderMesh, ref temp);
             }
 
             var baseDots = HeadController.GetBaseDots(ProgramCore.Project.ManType);
@@ -933,7 +935,7 @@ namespace RH.Core.Render
 
         public void AddBase()
         {
-            string baseName = String.Empty;
+            string baseName = string.Empty;
             var position = Vector3.Zero;
             var scale = 1.0f;
             switch (ProgramCore.Project.ManType)
@@ -952,7 +954,7 @@ namespace RH.Core.Render
                     scale = 0.86f;
                     break;
             }
-            if (baseName == String.Empty || PartsLibraryMeshes.ContainsKey(baseName))
+            if (baseName == string.Empty || PartsLibraryMeshes.ContainsKey(baseName))
                 return;
             foreach (var mesh in pickingController.AccesoryMeshes)
                 if (mesh.Path.Contains(baseName))
@@ -2326,7 +2328,7 @@ namespace RH.Core.Render
                 }
             }
         }
-        public List<TextRenderHelper> TextRenderHelpers = null;
+        public List<TextRenderHelper> TextRenderHelpers;
         public Font TextFont = new Font(new FontFamily(GenericFontFamilies.SansSerif), 20, GraphicsUnit.Pixel);
 
         void DrawAABB()
@@ -2643,7 +2645,6 @@ namespace RH.Core.Render
             const float theta = (float)(2 * 3.1415926 / numSegments);
             var c = (float)Math.Cos(theta);//precalculate the sine and cosine
             var s = (float)Math.Sin(theta);
-            float t;
 
             var x = accessoryRotateRadius;//we start at angle = 0 
             float y = 0;
@@ -2695,7 +2696,7 @@ namespace RH.Core.Render
                 GL.Vertex2(x + accessoryRotateCenterCirclePoint.X, y + accessoryRotateCenterCirclePoint.Y);//output vertex 
 
                 //apply the rotation matrix
-                t = x;
+                var t = x;
                 x = c * x - s * y;
                 y = s * t + c * y;
             }
@@ -2767,7 +2768,7 @@ namespace RH.Core.Render
 
         private void RenderMesh_OnBeforePartDraw(RenderMeshPart part)
         {
-            var transparent = UseTexture ? (float)part.TransparentTexture : 0.0f;
+            var transparent = UseTexture ? part.TransparentTexture : 0.0f;
             if (transparent > 0.0f)
                 EnableTransparent();
             else
@@ -3055,10 +3056,7 @@ namespace RH.Core.Render
                     continue;
 
                 var sprite = customBasePointsSprites[i];
-                if (point.Selected)
-                    sprite.Color = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);
-                else
-                    sprite.Color = Vector4.One;
+                sprite.Color = point.Selected ? new Vector4(1.0f, 0.0f, 0.0f, 1.0f) : Vector4.One;
 
                 customBasePointsSprites[i].Draw(false, true);
             }
@@ -3326,8 +3324,8 @@ namespace RH.Core.Render
         public class BrushTextureInfo
         {
             public int Texture = 0;
-            public Bitmap TextureData = null;
-            public String LinkedTextureName = String.Empty;
+            public Bitmap TextureData;
+            public string LinkedTextureName = string.Empty;
         }
 
         public Dictionary<int, BrushTextureInfo> brushTextures = new Dictionary<int, BrushTextureInfo>();
@@ -3417,8 +3415,8 @@ namespace RH.Core.Render
 
         public Bitmap RenderToTexture(int oldTextureId, int textureId)
         {
-            var textureWidth = 0;
-            var textureHeight = 0;
+            int textureWidth;
+            int textureHeight;
             var texPath = GetTexturePath(oldTextureId);
             using (var img = new Bitmap(texPath))
             {
@@ -3493,7 +3491,7 @@ namespace RH.Core.Render
             GL.MatrixMode(MatrixMode.Projection);
             GL.PopMatrix();
 
-            var result = GrabScreenshot(String.Empty, textureWidth, textureHeight, useAlpha);
+            var result = GrabScreenshot(string.Empty, textureWidth, textureHeight, useAlpha);
             glControl.Context.MakeCurrent(glControl.WindowInfo);
             SetupViewport(glControl);
             return result;
@@ -3525,10 +3523,10 @@ namespace RH.Core.Render
         /// <summary> Get or load texture by filename </summary>
         /// <param name="textureName">Path to texture</param>
         /// <returns>Texture id</returns>
-        public int GetTexture(String textureName)
+        public int GetTexture(string textureName)
         {
             var textureId = 0;
-            if (textureName != String.Empty && File.Exists(textureName))
+            if (textureName != string.Empty && File.Exists(textureName))
             {
 
                 if (textures.ContainsKey(textureName))
@@ -3728,7 +3726,7 @@ namespace RH.Core.Render
                     meshes.Add(mesh);
 
                 pickingController.SelectedMeshes.Clear();
-                ObjSaver.SaveObjFile(sfd.FileName, meshes, MeshType.Hair, headMeshesController.RenderMesh.RealScale);
+                ObjSaver.SaveObjFile(sfd.FileName, meshes, MeshType.Hair, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName);
 
                 var fileName = Path.GetFileNameWithoutExtension(sfd.FileName);
                 var title = fileName;
@@ -3770,7 +3768,7 @@ namespace RH.Core.Render
                 if (ProgramCore.Project.AutodotsUsed)
                     SaveBlendingTextures();
 
-                ObjSaver.SaveObjFile(path, headMeshesController.RenderMesh, MeshType.Hair, pickingController.ObjExport, saveBrushesToTexture);
+                ObjSaver.SaveObjFile(path, headMeshesController.RenderMesh, MeshType.Hair, pickingController.ObjExport, ProgramCore.Project.ProjectName, saveBrushesToTexture);
 
                 #region Сохраняем отраженную текстуру
 
@@ -4026,7 +4024,7 @@ namespace RH.Core.Render
             foreach (var texture in brushTextures)
             {
                 var texturePath = texture.Value.LinkedTextureName.Contains("_smoothed.") ?
-                    texture.Value.LinkedTextureName.Replace("_smoothed" + Path.GetExtension(texture.Value.LinkedTextureName), String.Empty) :
+                    texture.Value.LinkedTextureName.Replace("_smoothed" + Path.GetExtension(texture.Value.LinkedTextureName), string.Empty) :
                     texture.Value.LinkedTextureName;
 
                 texturePath = Path.Combine(newFolderPath, Path.GetFileNameWithoutExtension(texturePath) + "_brush.png");

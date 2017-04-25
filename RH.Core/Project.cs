@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using OpenTK;
 using RH.Core.Helpers;
 using RH.Core.IO;
@@ -12,7 +11,6 @@ using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
 using RH.Core.Render.Obj;
 using RH.MeshUtils.Data;
-using RH.MeshUtils.Helpers;
 
 namespace RH.Core
 {
@@ -194,7 +192,8 @@ namespace RH.Core
                     if (!ProgramCore.PluginMode)        //тогда хед модел пас оставляем какой был! пиздец важно!
                     {
 #if WEB_APP
-                        headModelPath = Path.Combine("ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/", manType.GetObjPath());
+                        headModelPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" +  manType.GetObjPath();
+                        headModelPath = headModelPath.Replace(@"\", "/");
 #else
                         headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPath());
 #endif
@@ -338,7 +337,7 @@ namespace RH.Core
                     FolderEx.CreateDirectory(Path.GetDirectoryName(fiName));
                     if (ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes.Count > 0) // save hair file
                         ObjSaver.SaveObjFile(fiName, ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes,
-                            MeshType.Hair, 1.0f);
+                            MeshType.Hair, 1.0f, ManType, ProgramCore.Project.ProjectName);
                     else
                         FolderEx.DeleteSafety(fiName);      // если раньше были волосы , а сейчас удалили - надо их грохнуть из папки тоже
 
@@ -348,7 +347,7 @@ namespace RH.Core
                     if (ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes.Count > 0)
                         // save accessory file
                         ObjSaver.SaveObjFile(accessoryPath,
-                            ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, 1.0f);
+                            ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, 1.0f, ManType, ProgramCore.Project.ProjectName);
                     else
                         FolderEx.DeleteSafety(accessoryPath);
 
@@ -371,7 +370,7 @@ namespace RH.Core
                             bw.Write(selMesh.Title);
 
                         var fileName = part.Key + ".obj";
-                        ObjSaver.SaveObjFile(Path.Combine(partsLibraryPath, fileName), part.Value, part.Value[0].meshType, 1.0f);
+                        ObjSaver.SaveObjFile(Path.Combine(partsLibraryPath, fileName), part.Value, part.Value[0].meshType, 1.0f, ManType, ProgramCore.Project.ProjectName);
                     }
 
                     bw.Write(AutodotsUsed);

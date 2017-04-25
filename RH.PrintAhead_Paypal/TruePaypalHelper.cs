@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using CefSharp;
 using RH.Core;
 using RH.Core.Helpers;
@@ -16,7 +17,7 @@ namespace RH.PrintAhead_Paypal
             Application.ApplicationExit += Application_ApplicationExit;
         }
 
-        private void Application_ApplicationExit(object sender, System.EventArgs e)
+        private void Application_ApplicationExit(object sender, EventArgs e)
         {
             ShutdownCef();
         }

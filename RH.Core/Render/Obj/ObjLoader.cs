@@ -4,13 +4,12 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using OpenTK;
 using RH.Core.Helpers;
-using RH.Core.IO;
 using RH.Core.Render.Helpers;
-using System.Net;
 
 namespace RH.Core.Render.Obj
 {
@@ -150,18 +149,21 @@ namespace RH.Core.Render.Obj
                                     break;
                                 case "mtllib":  //parse mtl file
 #if WEB_APP
-                                    var path = ProgramCore.Project.HeadModelPath.Replace(".obj", ".mtl");
-                                    switch (ProgramCore.Project.ManType)
+                                    if (ProgramCore.Project != null)
                                     {
-                                        case ManType.Male:
-                                            LoadMtlib(path, ref result);
-                                            break;
-                                        case ManType.Female:
-                                            LoadMtlib(path, ref result);
-                                            break;
-                                        case ManType.Child:
-                                            LoadMtlib(path, ref result);
-                                            break;
+                                        var path = ProgramCore.Project.HeadModelPath.Replace(".obj", ".mtl");
+                                        switch (ProgramCore.Project.ManType)
+                                        {
+                                            case ManType.Male:
+                                                LoadMtlib(path, ref result);
+                                                break;
+                                            case ManType.Female:
+                                                LoadMtlib(path, ref result);
+                                                break;
+                                            case ManType.Child:
+                                                LoadMtlib(path, ref result);
+                                                break;
+                                        }
                                     }
 #else
                                     var path = Path.Combine(fi.DirectoryName, data);

@@ -1,4 +1,10 @@
-﻿using OpenTK;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using OpenTK;
 using RH.Core.Render.Controllers;
 using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
@@ -6,14 +12,6 @@ using RH.Core.Render.Obj;
 using RH.MeshUtils;
 using RH.MeshUtils.Data;
 using RH.MeshUtils.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RH.Core.Helpers
 {
@@ -468,14 +466,14 @@ namespace RH.Core.Helpers
             var hairPath = Path.Combine(ProgramCore.Project.ProjectPath, haPath);
             var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
 
-            ObjSaver.SaveObjFile(hairPath, pickingController.HairMeshes, MeshType.Hair, realScale, true);
+            ObjSaver.SaveObjFile(hairPath, pickingController.HairMeshes, MeshType.Hair, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
 
             if (pickingController.AccesoryMeshes.Count > 0)            // save accessories to separate file
             {
                 var acName = Path.GetFileNameWithoutExtension(fiName) + "_accessory.obj";
 
                 var accessoryPath = Path.Combine(ProgramCore.Project.ProjectPath, acName);
-                ObjSaver.SaveObjFile(accessoryPath, pickingController.AccesoryMeshes, MeshType.Accessory, realScale, true);
+                ObjSaver.SaveObjFile(accessoryPath, pickingController.AccesoryMeshes, MeshType.Accessory, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
             }
 
             SaveHead(fiName, true);
@@ -790,7 +788,7 @@ namespace RH.Core.Helpers
                 /*if (ProgramCore.Project.AutodotsUsed)
                     SaveBlendingTextures();*/
 
-                ObjSaver.SaveObjFile(path, headMeshesController.RenderMesh, MeshType.Hair, pickingController.ObjExport, saveBrushesToTexture);
+                ObjSaver.SaveObjFile(path, headMeshesController.RenderMesh, MeshType.Hair, pickingController.ObjExport, ProgramCore.Project.ProjectName, saveBrushesToTexture);
             }
             finally
             {

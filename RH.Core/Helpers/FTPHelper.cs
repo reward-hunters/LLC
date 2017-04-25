@@ -138,7 +138,7 @@ namespace RH.Core.Helpers
             return result;
         }
 
-        public static void CopyFromFtpToFtp(string oldFilePath, string newFilePathDir, string newFileName, string sessionID)
+        public static void CopyFromFtpToFtp(string oldFilePath, string newFilePathDir, string newFileName)
         {
             if (oldFilePath.StartsWith(@"ftp:/1"))
                 oldFilePath = oldFilePath.Replace(@"ftp:/1", @"ftp://1");
@@ -151,7 +151,6 @@ namespace RH.Core.Helpers
             var ftpResponse = (FtpWebResponse)request.GetResponse();
 
             byte[] buffer = new byte[16 * 1024];
-            Bitmap result;
             using (var ftpStream = ftpResponse.GetResponseStream())
             {
                 var ms = new MemoryStream();
@@ -165,9 +164,6 @@ namespace RH.Core.Helpers
 
                 var ftpHelper = new FTPHelper(newFilePathDir);
                 ftpHelper.Upload(ms, newFileName);
-
-                var ms1 = new MemoryStream();
-                ftpHelper.Upload(ms1, "Hair.mtl");
             }
         }
 

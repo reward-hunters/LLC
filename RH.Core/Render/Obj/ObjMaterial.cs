@@ -57,7 +57,8 @@ namespace RH.Core.Render.Obj
             {
                 diffuseTextureMap = value;
 #if (WEB_APP)
-                Texture = string.IsNullOrEmpty(diffuseTextureMap) ? 0 : ProgramCore.Project.RenderMainHelper.GetTexture(diffuseTextureMap);
+                if (ProgramCore.Project != null)
+                    Texture = string.IsNullOrEmpty(diffuseTextureMap) ? 0 : ProgramCore.Project.RenderMainHelper.GetTexture(diffuseTextureMap);
 #else
                 Texture = string.IsNullOrEmpty(diffuseTextureMap) ? 0 : ProgramCore.MainForm.ctrlRenderControl.GetTexture(diffuseTextureMap);
 #endif
@@ -69,9 +70,9 @@ namespace RH.Core.Render.Obj
             set;
         }
 
-#endregion
+        #endregion
 
-#region Non-usable items
+        #region Non-usable items
 
         public Vector3 AmbientColor
         {
@@ -139,7 +140,7 @@ namespace RH.Core.Render.Obj
             set;
         }
 
-#endregion
+        #endregion
 
         public ObjMaterial(string materialName)
         {

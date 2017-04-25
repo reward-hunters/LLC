@@ -117,8 +117,8 @@ namespace RH.Core.Controls.Libraries
                 return;
 
             currentPose = animPath;
-
-            ProgramCore.MainForm.ctrlRenderControl.PoseMorphing = ProgramCore.MainForm.ctrlRenderControl.pickingController.LoadPartsMorphInfo(currentPose, ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh);
+            var temp = 0;
+            ProgramCore.MainForm.ctrlRenderControl.PoseMorphing = ProgramCore.MainForm.ctrlRenderControl.pickingController.LoadPartsMorphInfo(currentPose, ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh, ref temp);
 
             trackBarPose.Enabled = true;
             trackBarPose.Value = 100;

@@ -252,7 +252,7 @@ namespace RH.Core.Render.Helpers
         public Matrix4 TempTransform = Matrix4.Identity;
         public Vector3 DeltaTransform = Vector3.Zero;
 
-        public MeshInfo(DynamicRenderMesh parent, Vertex[] vertices, Matrix4 transformMatrix)
+        public MeshInfo(DynamicRenderMesh parent, Vertex[] vertices, Matrix4 transformMatrix, ManType manType)
         {
             Material = parent.Material;
             Title = parent.Title;
@@ -266,9 +266,9 @@ namespace RH.Core.Render.Helpers
                 if (parent.meshType == MeshType.Accessory)
                     scaleCoef = 246f;
                 else if (parent.meshType == MeshType.Head)
-                    scaleCoef = PickingController.GetHeadScale(ProgramCore.Project.ManType);
+                    scaleCoef = PickingController.GetHeadScale(manType);
                 else
-                    scaleCoef = PickingController.GetHairScale(ProgramCore.Project.ManType);
+                    scaleCoef = PickingController.GetHairScale(manType);
                 var useExporter = ProgramCore.PluginMode &&
                 ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport != null;
                 var invScale = Matrix4.CreateScale(useExporter ? 1.0f : 1.0f / scaleCoef);

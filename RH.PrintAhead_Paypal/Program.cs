@@ -29,10 +29,10 @@ namespace RH.OneClick
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
                
-         //             var objectCreator = new ObjCreator();
-          //         objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t");
+                  /*    var objectCreator = new ObjCreator();
+                  objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t");*/
 
-                StyleHelper.AttachHair(0, "jr1u2klohh5kszoo250lcj1t","  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"");
+                StyleHelper.AttachHair(0, "jr1u2klohh5kszoo250lcj1t","  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "");
 
                 //FTPHelper.IsFileExists("ftp://108.167.164.209/public_html/printahead.online/PrintAhead_images/wqlofu1vq4p4a2x0rnslcikm.jpeg");
                 //    var objectCreator = new ObjCreator();

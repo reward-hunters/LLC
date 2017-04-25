@@ -5,12 +5,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Assimp;
 using Ionic.Zip;
 using Luxand;
-using OpenTK;
 using RH.Core.Controls;
 using RH.Core.Controls.Libraries;
 using RH.Core.Controls.Panels;
@@ -136,8 +134,8 @@ namespace RH.Core
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.PrintAhead:
-                    Text = "PrintAhead";
-                    aboutHeadShopProToolStripMenuItem.Text = "About PrintAhead";
+                    Text = @"PrintAhead";
+                    aboutHeadShopProToolStripMenuItem.Text = @"About PrintAhead";
                     panelMenuStage.Image = Resources.btnMenuPrintNormal;
                     openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
@@ -161,14 +159,14 @@ namespace RH.Core
                     materialHelpToolStripMenuItem.Visible = materialtabToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop:
-                    Text = "HeadShop 10";
-                    aboutHeadShopProToolStripMenuItem.Text = "About HeadShop 10.2";
+                    Text = @"HeadShop 10";
+                    aboutHeadShopProToolStripMenuItem.Text = @"About HeadShop 10.2";
                     panelMenuStage.Image = Resources.btnMenuStageNormal;
                     childHelpToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
-                    Text = "HeadShop OneClick";
-                    aboutHeadShopProToolStripMenuItem.Text = "About HeadShop OneClick";
+                    Text = @"HeadShop OneClick";
+                    aboutHeadShopProToolStripMenuItem.Text = @"About HeadShop OneClick";
 
                     editToolStripMenuItem.Visible = frontTabToolStripMenuItem.Visible = false;
                     openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = false;
@@ -193,7 +191,7 @@ namespace RH.Core
 
             if (FSDK.FSDKE_OK != FSDK.ActivateLibrary("DWysHuomlBcczVM2MQfiz/3WraXb7r+fM0th71X5A9z+gsHn2kpGOgWrVh9D/9sQWlPXO00CFmGMvetl9A+VEr9Y5GVBIccyV32uaZutZjKYH5KB2k87NJAAw6NPkzK0DSQ5b5W7EO0yg2+x4HxpWzPogGyIIYcAHIYY11/YGsU="))
             {
-                MessageBox.Show("Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", @"Error activating FaceSDK", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
 
@@ -209,9 +207,9 @@ namespace RH.Core
                 {
                     Directory.Delete(path, true);
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    ProgramCore.EchoToLog(ex);
                 }
 
             if (!string.IsNullOrEmpty(fn))
@@ -471,22 +469,22 @@ namespace RH.Core
                             {
                                 case ManType.Child:
 
-                                 /*   Thread.Sleep(2000);
-                                    GC.Collect();
-                                    GC.WaitForPendingFinalizers();
+                                    /*   Thread.Sleep(2000);
+                                       GC.Collect();
+                                       GC.WaitForPendingFinalizers();
 
-                                  
-                                    var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Style", "kidhair.obj"));
-                                    var meshSize = 0.2736842f;
-                                    var meshPosition = Vector3Ex.FromString("-0,0205307 / 2,358275 / -2,589062");
-                                    ctrlRenderControl.AttachNewPart("DefaultHair", fi, null, meshPosition, meshSize);
 
-                                    GC.Collect();
-                                    GC.WaitForPendingFinalizers();
+                                       var fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Style", "kidhair.obj"));
+                                       var meshSize = 0.2736842f;
+                                       var meshPosition = Vector3Ex.FromString("-0,0205307 / 2,358275 / -2,589062");
+                                       ctrlRenderControl.AttachNewPart("DefaultHair", fi, null, meshPosition, meshSize);
 
-                                    fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory", "Shirt.obj"));
-                                    meshPosition = Vector3Ex.FromString("0,4706078 / -17,36209 / -6,103516E-05");
-                                    ctrlRenderControl.AttachNewPart("DefaultShirt", fi, null, meshPosition);*/
+                                       GC.Collect();
+                                       GC.WaitForPendingFinalizers();
+
+                                       fi = new FileInfo(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory", "Shirt.obj"));
+                                       meshPosition = Vector3Ex.FromString("0,4706078 / -17,36209 / -6,103516E-05");
+                                       ctrlRenderControl.AttachNewPart("DefaultShirt", fi, null, meshPosition);*/
                                     break;
                             }
                         }
@@ -1076,7 +1074,7 @@ namespace RH.Core
             {
                 if (ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes.Count > 0 || ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes.Count > 0)         // mean that it's user action
                 {
-                    if (MessageBox.Show("This action will remove all changes. Are you sure?", "Attention", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                    if (MessageBox.Show(@"This action will remove all changes. Are you sure?", @"Attention", MessageBoxButtons.OKCancel) != DialogResult.OK)
                         return;
 
                     ctrlRenderControl.CleanProjectMeshes();                     // clear all changes and reset position.
@@ -1339,7 +1337,7 @@ namespace RH.Core
                 panelMenuFront.Image = Resources.btnMenuFrontNormal;
                 panelMenuFeatures.Image = Resources.btnMenuFeaturesNormal;
 
-                ProgramCore.MainForm.ctrlRenderControl.StagesActivate(false);
+                ProgramCore.MainForm.ctrlRenderControl.StagesActivate();
 
                 ctrlRenderControl.Mode = Mode.None;
                 ctrlTemplateImage.btnCopyProfileImg.Visible = false;
@@ -1494,7 +1492,7 @@ namespace RH.Core
 
             if (ProgramCore.Project.ManType == ManType.Custom)
             {
-                MessageBox.Show("Features not available for custom head!", "HeadShop", MessageBoxButtons.OK);
+                MessageBox.Show(@"Features not available for custom head!", @"HeadShop", MessageBoxButtons.OK);
                 return;
             }
 
@@ -1561,7 +1559,7 @@ namespace RH.Core
             {
                 var recentFile = new ToolStripMenuItem
                 {
-                    Text = "Recent File",
+                    Text = @"Recent File",
                     Enabled = false
                 };
                 fileToolStripMenuItem.DropDownItems.Add(recentFile);
@@ -1584,7 +1582,7 @@ namespace RH.Core
 
             var exitBtn = new ToolStripMenuItem
             {
-                Text = "Exit"
+                Text = @"Exit"
             };
             exitBtn.Click += exitBtn_Click;
             fileToolStripMenuItem.DropDownItems.Add(exitBtn);
@@ -1661,13 +1659,13 @@ namespace RH.Core
         public void BadPay()
         {
 
-            MessageBox.Show("Payment was failed!");
+            MessageBox.Show(@"Payment was failed!");
         }
         /// <summary> Формат stl 5$</summary>
         public void ExportSTL()
         {
-            var fiName = string.Empty;
-            var stlName = string.Empty;
+            string fiName;
+            string stlName;
 
             switch (ProgramCore.CurrentProgram)
             {
@@ -1702,13 +1700,11 @@ namespace RH.Core
                 ProgramCore.Project.ToStream();
             }
 
-            var meshInfos = new List<MeshInfo>();
-            foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
-                meshInfos.Add(new MeshInfo(part));
+            var meshInfos = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts.Select(part => new MeshInfo(part)).ToList();
 
             ObjSaver.ExportMergedModel(fiName, ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes,
                 ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes, meshInfos,
-               ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale);
+               ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName);
 
             var importer = new AssimpImporter();
             importer.ConvertFromFileToFile(fiName, stlName, "stl");
@@ -1716,10 +1712,10 @@ namespace RH.Core
         /// <summary> Формат dae. (collada) </summary>
         public void ExportDAE()
         {
-            var fiName = string.Empty;
-            var daeName = string.Empty;
-            var newDirectory = string.Empty;
-            var modelName = string.Empty;
+            string fiName;
+            string daeName;
+            string newDirectory;
+            string modelName;
 
             switch (ProgramCore.CurrentProgram)
             {
@@ -1749,7 +1745,7 @@ namespace RH.Core
 
                             if (ofd.SelectedFolder[0] == ProgramCore.Project.ProjectPath)
                             {
-                                MessageBox.Show("Can't export file to project directory.", "Warning");
+                                MessageBox.Show(@"Can't export file to project directory.", @"Warning");
                                 return;
                             }
 
@@ -1803,9 +1799,9 @@ namespace RH.Core
             foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 meshInfos.Add(new MeshInfo(part));
             MeshInfo.FindCenter(meshInfos, "Меши бошки до экспорта frmMain::ExportCollada()");
-            ProgramCore.EchoToLog(String.Format("realScale frmMain::ExportCollada(): {0}", realScale), EchoMessageType.Information);
+            ProgramCore.EchoToLog($"realScale frmMain::ExportCollada(): {realScale}", EchoMessageType.Information);
             ObjSaver.ExportMergedModel(fiName, ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes,
-                ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes, meshInfos, realScale, true, true);
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes, meshInfos, realScale, ProgramCore.Project.ProjectName, true, true);
 
             var importer = new AssimpImporter();
             importer.ConvertFromFileToFile(fiName, daeName, "collada");
@@ -1866,13 +1862,12 @@ namespace RH.Core
             //if (ProgramCore.PluginMode)
             //    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = tempScale;
 
-            MessageBox.Show("Color 3D export finished!", "Done");
+            MessageBox.Show(@"Color 3D export finished!", @"Done");
         }
         /// <summary> Экспорт на кнопки плюс экспорт ПЛАГИНА! </summary>
-        /// <param name="exportColor3DPrint">Добавляет фото профиля и анфаса.</param>
         public void Export()
         {
-            var fiName = string.Empty;
+            string fiName;
             var diName = string.Empty;
             var tempScale = 5f;
             if (ProgramCore.PluginMode)
@@ -1902,14 +1897,14 @@ namespace RH.Core
             var hairPath = Path.Combine(ProgramCore.Project.ProjectPath, haPath);
             var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
 
-            ObjSaver.SaveObjFile(hairPath, ctrlRenderControl.pickingController.HairMeshes, MeshType.Hair, realScale, true);
+            ObjSaver.SaveObjFile(hairPath, ctrlRenderControl.pickingController.HairMeshes, MeshType.Hair, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
 
             if (ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes.Count > 0)            // save accessories to separate file
             {
                 var acName = Path.GetFileNameWithoutExtension(fiName) + "_accessory.obj";
 
                 var accessoryPath = Path.Combine(ProgramCore.Project.ProjectPath, acName);
-                ObjSaver.SaveObjFile(accessoryPath, ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, realScale, true);
+                ObjSaver.SaveObjFile(accessoryPath, ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
             }
 
             ctrlRenderControl.SaveHead(fiName, true);
@@ -1941,10 +1936,7 @@ namespace RH.Core
                 }
                 if (iTexture == -1)
                 {
-                    if (ctrlRenderControl.SmoothedTextures.Count > 0)
-                        iTexture = ctrlRenderControl.SmoothedTextures.Values.ElementAt(0);
-                    else
-                        iTexture = ctrlRenderControl.HeadTextureId;
+                    iTexture = ctrlRenderControl.SmoothedTextures.Count > 0 ? ctrlRenderControl.SmoothedTextures.Values.ElementAt(0) : ctrlRenderControl.HeadTextureId;
                 }
 
                 var mapPath = ctrlRenderControl.GetTexturePath(iTexture);
@@ -2027,7 +2019,7 @@ namespace RH.Core
                 ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = tempScale;
             }
 
-            MessageBox.Show(ProgramCore.ProgramCaption + " project successfully exported!", "Done", MessageBoxButtons.OK);
+            MessageBox.Show(ProgramCore.ProgramCaption + @" project successfully exported!", @"Done", MessageBoxButtons.OK);
             if (ProgramCore.PluginMode)
                 Environment.Exit(0);
         }
@@ -2112,8 +2104,9 @@ namespace RH.Core
                 ProgramCore.AddCallStackReleasedProc(_stopProgress);
                 isProgress = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ProgramCore.EchoToLog(ex);
             }
         }
         private void StopProgress()
@@ -2124,8 +2117,9 @@ namespace RH.Core
                 Cursor = Cursors.Default;
                 isProgress = false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ProgramCore.EchoToLog(ex);
             }
         }
         private void _stopProgress(object sender, EventArgs e)
@@ -2226,7 +2220,7 @@ namespace RH.Core
             {
                 ctrlRenderControl.pickingController.SelectedMeshes.Clear();
                 ProgramCore.Project.ToStream();
-                MessageBox.Show("Project successfully saved!", "Done", MessageBoxButtons.OK);
+                MessageBox.Show(@"Project successfully saved!", @"Done", MessageBoxButtons.OK);
             }
         }
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2260,7 +2254,7 @@ namespace RH.Core
                             ProgramCore.Project.ProjectPath = projectPath;
                             ProgramCore.Project.HeadModelPath = Path.Combine(projectPath, "Model", Path.GetFileName(ProgramCore.Project.HeadModelPath));
                             ProgramCore.Project.ToStream();
-                            MessageBox.Show("Project successfully saved!", "Done", MessageBoxButtons.OK);
+                            MessageBox.Show(@"Project successfully saved!", @"Done", MessageBoxButtons.OK);
 
                             #endregion
                             break;
@@ -2300,7 +2294,7 @@ namespace RH.Core
 
                             #endregion
 
-                            MessageBox.Show("Model successfully exported!", "Done", MessageBoxButtons.OK);
+                            MessageBox.Show(@"Model successfully exported!", @"Done", MessageBoxButtons.OK);
 
                             #endregion
 
@@ -2314,7 +2308,8 @@ namespace RH.Core
         private void recentFile_Click(object sender, EventArgs e)
         {
             var item = sender as ToolStripMenuItem;
-            OpenProject(item.Text);
+            if (item != null)
+                OpenProject(item.Text);
         }
 
         public void UpdateProjectControls(bool newProject, RectangleAABB aabb = null)
@@ -2336,8 +2331,7 @@ namespace RH.Core
                         panelMenuCut_Click(null, EventArgs.Empty);
                 }
 
-                if (frmStages != null)
-                    frmStages.InitializeListView();
+                frmStages?.InitializeListView();
 
                 if (ProgramCore.Project.FrontImage == null)
                     ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
@@ -2352,12 +2346,11 @@ namespace RH.Core
 
             if (frmPrint != null || frmStages != null)
             {
-                ctrlRenderControl.StagesActivate(false);     // for recalc
+                ctrlRenderControl.StagesActivate();     // for recalc
                 ctrlRenderControl.StagesDeactivate(0);
             }
 
-            if (frmParts != null)
-                frmParts.UpdateList();
+            frmParts?.UpdateList();
         }
         private void OpenProject(string fileName)
         {
@@ -2379,7 +2372,7 @@ namespace RH.Core
             if (!float.IsNaN(ProgramCore.Project.MorphingScale))
                 ctrlRenderControl.DoMorth(ProgramCore.Project.MorphingScale);
 
-            MessageBox.Show("Project successfully loaded!", "Done");
+            MessageBox.Show(@"Project successfully loaded!", @"Done");
             mruManager.Add(fileName);
         }
 

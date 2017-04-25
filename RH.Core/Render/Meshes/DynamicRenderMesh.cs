@@ -128,7 +128,7 @@ namespace RH.Core.Render.Meshes
             return true;
         }
 
-        public MeshInfo GetMeshInfo(float scale)
+        public MeshInfo GetMeshInfo(float scale, ManType manType)
         {
             var worldMatrix = Transform;
             var position = new Vector3(worldMatrix[3, 0], worldMatrix[3, 1], worldMatrix[3, 2]);
@@ -141,7 +141,7 @@ namespace RH.Core.Render.Meshes
             worldMatrix[3, 1] = position.Y * scale;
             worldMatrix[3, 2] = position.Z * scale;
             
-            return new MeshInfo(this, vertexArray, worldMatrix);
+            return new MeshInfo(this, vertexArray, worldMatrix, manType);
         }
 
         public void UpdateTextureCoordinates(float angle, float scale)

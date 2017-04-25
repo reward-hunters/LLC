@@ -1,21 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Net;
+using System.Windows.Forms;
+using Luxand;
 using OpenTK;
 using RH.Core;
 using RH.Core.Helpers;
-using RH.Core.IO;
-using RH.Core.Render;
-using RH.MeshUtils.Data;
-using RH.MeshUtils.Helpers;
 using RH.Core.Render.Controllers;
 using RH.MeshUtils;
-using Luxand;
-using System.Windows.Forms;
-using RH.Core.Render.Obj;
-using System.Collections.Generic;
+using RH.MeshUtils.Helpers;
 
 namespace RH.WebCore
 {
@@ -254,7 +250,7 @@ namespace RH.WebCore
             var ftpHelper = new FTPHelper(address);
 
             var stream = new MemoryStream();
-            templateImage.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            templateImage.Save(stream, ImageFormat.Jpeg);
             ftpHelper.Upload(stream, sessionID + ".jpeg");
 
         }

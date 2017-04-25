@@ -645,7 +645,7 @@ namespace RH.Core.Render.Controllers
                     tmpMesh.MeshAngle = mesh.MeshAngle;
                     tmpMesh.MeshSize = mesh.MeshSize;
 
-                    var info = tmpMesh.GetMeshInfo(1.0f);
+                    var info = tmpMesh.GetMeshInfo(1.0f, ProgramCore.Project.ManType);
                     var center = Vector3.Zero;
                     var scale = PickingController.GetHairScale(ProgramCore.Project.ManType);
                     foreach (var vert in info.Positions)

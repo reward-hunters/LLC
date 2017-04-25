@@ -1,6 +1,4 @@
-﻿using static RH.Core.frmMain;
-
-namespace RH.Core.Helpers
+﻿namespace RH.Core.Helpers
 {
     public class PaypalHelper
     {
