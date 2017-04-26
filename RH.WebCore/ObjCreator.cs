@@ -182,6 +182,9 @@ namespace RH.WebCore
         ///   							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\" </summary>
         private string GetParcedHairAccessoriesLink(string uri, string extension)
         {
+            if (uri.Trim().StartsWith(@"ftp://108.167.164.209/public_html/printahead.online/"))
+                return uri.Trim();
+
             var paths = uri.Trim().Split(new string[] { "\"" }, StringSplitOptions.RemoveEmptyEntries);
             if (paths.Length != 0)
             {
@@ -204,7 +207,9 @@ namespace RH.WebCore
         /// <param name="sessionID"></param>
         /// <param name="hairPath"></param>
         /// <param name="hairMaterialPath"></param>
-        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath)
+        /// <param name="accessoryPath"></param>
+        /// <param name="accessoryMaterialPath"></param>
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -270,22 +275,50 @@ namespace RH.WebCore
 
             #region Attach hair
 
-            if (!string.IsNullOrEmpty(hairPath.Trim()))
+            var hairObjPath = string.Empty;
+            if (string.IsNullOrEmpty(hairPath))
+                hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/20.obj";
+            else
+                hairObjPath = GetParcedHairAccessoriesLink(hairPath, ".obj");
+
+            if (!string.IsNullOrEmpty(hairObjPath) && FTPHelper.IsFileExists(hairObjPath))
             {
+                hairMaterialPath = GetParcedHairAccessoriesLink(hairMaterialPath, ".jpg");
+                if (string.IsNullOrEmpty(hairMaterialPath))
+                    hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/blondy.jpg";
 
-                var hairObjPath = GetParcedHairAccessoriesLink(hairPath, ".obj");
-                if (!string.IsNullOrEmpty(hairObjPath) && FTPHelper.IsFileExists(hairObjPath))
-                {
-                    hairMaterialPath = GetParcedHairAccessoriesLink(hairMaterialPath, ".jpg");
-                    if (string.IsNullOrEmpty(hairMaterialPath))
-                        hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/blondy.jpg";
+                var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
+                var fileName = Path.GetFileNameWithoutExtension(hairMaterialPath) + ".jpg";
 
-                    var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
-                    FTPHelper.CopyFromFtpToFtp(hairMaterialPath, temp, "blondy.jpg");
-                    hairMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/blondy.jpg";
+                FTPHelper.CopyFromFtpToFtp(hairMaterialPath, temp, fileName);
+                hairMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
 
-                    ProgramCore.Project.RenderMainHelper.AttachHair(hairObjPath, hairMaterialPath, manType);
-                }
+                ProgramCore.Project.RenderMainHelper.AttachHair(hairObjPath, hairMaterialPath, manType);
+            }
+
+            #endregion
+
+            #region Attach accessories
+
+            var accessoryObjPath = string.Empty;
+            if (string.IsNullOrEmpty(accessoryPath))
+                accessoryObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Standard/HF.obj";
+            else
+                accessoryObjPath = GetParcedHairAccessoriesLink(accessoryPath, ".obj");
+
+            if (!string.IsNullOrEmpty(accessoryObjPath) && FTPHelper.IsFileExists(accessoryObjPath))
+            {
+                accessoryMaterialPath = GetParcedHairAccessoriesLink(accessoryMaterialPath, ".jpg");
+                if (string.IsNullOrEmpty(accessoryMaterialPath))
+                    accessoryMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Materials/greenbase.jpg";
+
+                var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
+                var fileName = Path.GetFileNameWithoutExtension(accessoryMaterialPath) + ".jpg";
+
+                FTPHelper.CopyFromFtpToFtp(accessoryMaterialPath, temp, fileName);
+                accessoryMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
+
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType);
             }
 
             #endregion

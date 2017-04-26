@@ -27,6 +27,7 @@ namespace RH.Core.Helpers
         public readonly Dictionary<int, int> SmoothedTextures = new Dictionary<int, int>();
 
         public readonly Dictionary<string, Tuple<Vector3, float>> HairPositions = new Dictionary<string, Tuple<Vector3, float>>();
+        public readonly Dictionary<string, Tuple<Vector3, float>> AccessoryPositions = new Dictionary<string, Tuple<Vector3, float>>();
 
         public RenderMainHelper()
         {
@@ -949,6 +950,12 @@ namespace RH.Core.Helpers
 
             var temp = 0;
             var meshes = PickingController.LoadHairMeshes(objModel, null, true, manType, MeshType.Hair, ref temp);
+            foreach (var mesh in meshes)
+            {
+                if (mesh == null || mesh.vertexArray.Length == 0) //ТУТ!
+                    continue;
+                mesh.Material.DiffuseTextureMap = materialPath;
+            }
 
             var objName = Path.GetFileNameWithoutExtension(hairObjPath);
             if (HairPositions.ContainsKey(objName))
@@ -961,8 +968,6 @@ namespace RH.Core.Helpers
                     var mesh = meshes[i];
                     if (mesh == null || mesh.vertexArray.Length == 0) //ТУТ!
                         continue;
-
-                    mesh.Material.DiffuseTextureMap = materialPath;
 
                     mesh.Position += new Vector3(s[0], s[1], s[2]);
                     mesh.Transform[3, 0] += s[0];
@@ -978,5 +983,43 @@ namespace RH.Core.Helpers
             ProgramCore.Project.RenderMainHelper.pickingController.HairMeshes.AddRange(meshes);
         }
 
+        public void AttachAccessory(string accessoryObjPath, string accessoryMaterialPath, ManType manType)
+        {
+            var objModel = ObjLoader.LoadObjFile(accessoryObjPath, false);
+            if (objModel == null)
+                return;
+
+            var mesh = PickingController.LoadAccessoryMesh(objModel);
+            mesh.Material.DiffuseTextureMap = accessoryMaterialPath;
+
+            var objName = Path.GetFileNameWithoutExtension(accessoryObjPath);
+            if (AccessoryPositions.ContainsKey(objName))
+            {
+                var meshSize = HairPositions[objName].Item2;
+
+                var s = AccessoryPositions[objName].Item1 * ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;         // домножаем на 8 для веб версии. все на 8 домножаем! любим 8!
+
+                mesh.Position += new Vector3(s[0], s[1], s[2]);
+                mesh.Transform[3, 0] += s[0];
+                mesh.Transform[3, 1] += s[1];
+                mesh.Transform[3, 2] += s[2];
+
+                if (!float.IsNaN(meshSize))
+                {
+                    mesh.Transform[3, 0] -= s[0]; // применяем изменение размера
+                    mesh.Transform[3, 1] -= s[1];
+                    mesh.Transform[3, 2] -= s[2];
+                    mesh.Transform *= Matrix4.CreateScale(meshSize / mesh.MeshSize);
+                    mesh.Transform[3, 0] += s[0];
+                    mesh.Transform[3, 1] += s[1];
+                    mesh.Transform[3, 2] += s[2];
+                    mesh.IsChanged = true;
+                    mesh.MeshSize = meshSize;
+
+                }
+            }
+
+            ProgramCore.Project.RenderMainHelper.pickingController.AccesoryMeshes.Add(mesh);
+        }
     }
 }

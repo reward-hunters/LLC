@@ -28,9 +28,9 @@ namespace RH.OneClick
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
-
-               var objectCreator = new ObjCreator();
-                objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "");
+               
+                var objectCreator = new ObjCreator();
+                objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "", "  							<img src=\" http://printahead.net/printahead.online/Library/Accessory/Standard/HF.jpg\"", "");
                 
 
                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);

@@ -257,7 +257,17 @@ namespace RH.Core.Render.Controllers
                         break;
                     }
                 case MeshType.Accessory:
-                    result.AddRange(objModel.accessoryByHeadShop ? LoadSpecialAccessoryMesh(objModel) : new List<DynamicRenderMesh> { LoadAccessoryMesh(objModel) });
+
+                    if (objModel.accessoryByHeadShop)
+                        result.AddRange(LoadSpecialAccessoryMesh(objModel));
+                    else
+                    {
+                        var accessories = new List<DynamicRenderMesh> { LoadAccessoryMesh(objModel) };
+                        foreach (var accessory in accessories)
+                            AccesoryMeshes.Add(accessory);
+
+                        result.AddRange(accessories);
+                    }
                     break;
                 case MeshType.Head:
                     {
@@ -672,7 +682,7 @@ namespace RH.Core.Render.Controllers
         }
 
         /// <summary> Accessory file by default. Usually here is one accessory devided for differen groups. But it's not correct, so we combine it to one mesh</summary>
-        private DynamicRenderMesh LoadAccessoryMesh(ObjItem objModel)
+        public static DynamicRenderMesh LoadAccessoryMesh(ObjItem objModel)
         {
             var vertexPositions = new List<float>();
             var vertexNormals = new List<float>();
@@ -724,7 +734,11 @@ namespace RH.Core.Render.Controllers
 
                 var center = Vector3.Zero;
                 var count = vertexPositions.Count / 3;
-                const float scale = 246f;
+                float scale = 246f;
+#if WEB_APP
+                scale *= ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;
+#endif
+
                 for (var i = 0; i < count; i++)
                 {
                     center.X += vertexPositions[i * 3] * scale;
@@ -737,7 +751,6 @@ namespace RH.Core.Render.Controllers
                 renderMesh.Transform[3, 1] = -center.Y;
                 renderMesh.Transform[3, 2] = -center.Z;
                 renderMesh.Position = center;
-                AccesoryMeshes.Add(renderMesh);
             }
             return renderMesh;
         }
