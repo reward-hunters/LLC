@@ -28,16 +28,10 @@ namespace RH.OneClick
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
-               
-                  /*    var objectCreator = new ObjCreator();
-                  objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t");*/
 
-                StyleHelper.AttachHair(0, "jr1u2klohh5kszoo250lcj1t","  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "");
-
-                //FTPHelper.IsFileExists("ftp://108.167.164.209/public_html/printahead.online/PrintAhead_images/wqlofu1vq4p4a2x0rnslcikm.jpeg");
-                //    var objectCreator = new ObjCreator();
-                //    objectCreator.CreateObj(ManType.Female);
-                // CropHelper.Pass1(@"http://i0.wp.com/peopledotcom.files.wordpress.com/2016/11/prince-harry7.jpg?crop=0px%2C0px%2C1427px%2C1427px&resize=1000%2C1000&ssl=1");
+               var objectCreator = new ObjCreator();
+                objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "");
+                
 
                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);

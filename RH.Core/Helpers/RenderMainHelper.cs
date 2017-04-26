@@ -26,6 +26,40 @@ namespace RH.Core.Helpers
         public readonly Dictionary<string, TextureInfo> textures = new Dictionary<string, TextureInfo>();
         public readonly Dictionary<int, int> SmoothedTextures = new Dictionary<int, int>();
 
+        public readonly Dictionary<string, Tuple<Vector3, float>> HairPositions = new Dictionary<string, Tuple<Vector3, float>>();
+
+        public RenderMainHelper()
+        {
+            InitializeHairPositions();
+        }
+        private void InitializeHairPositions()
+        {
+            HairPositions.Clear();
+            HairPositions.Add("1", new Tuple<Vector3, float>(new Vector3(-0.1668722f, 2.752857f, -0.8359756f), 0.4736842f));
+            HairPositions.Add("10", new Tuple<Vector3, float>(new Vector3(-0.2335347f, 4.367701f, -2.540943f), 0.4736842f));
+            HairPositions.Add("11", new Tuple<Vector3, float>(new Vector3(0.7068777f, -1.306439f, -2.134681f), 0.4736842f));
+            HairPositions.Add("12", new Tuple<Vector3, float>(new Vector3(-0.3572285f, 1.03902f, -2.879543f), 0.4736842f));
+            HairPositions.Add("13", new Tuple<Vector3, float>(new Vector3(0.2399407f, 4.798049f, -1.051007f), 0.4736842f));
+            HairPositions.Add("14", new Tuple<Vector3, float>(new Vector3(-0.296265f, 4.89653f, -1.254158f), 0.4736842f));
+            HairPositions.Add("15", new Tuple<Vector3, float>(new Vector3(0.4006174f, 2.931466f, -2.744185f), 0.4736842f));
+            HairPositions.Add("16", new Tuple<Vector3, float>(new Vector3(-0.07116318f, 5.937863f, -4.57275f), 0.4736842f));
+            HairPositions.Add("17", new Tuple<Vector3, float>(new Vector3(-0.2833328f, 4.701737f, -2.811848f), 0.4736842f));
+            HairPositions.Add("18", new Tuple<Vector3, float>(new Vector3(0.1474586f, 2.208316f, -3.585868f), 0.4736842f));
+            HairPositions.Add("19", new Tuple<Vector3, float>(new Vector3(0.02676144f, 5.945516f, -4.16637f), 0.4736842f));
+            HairPositions.Add("2", new Tuple<Vector3, float>(new Vector3(-0.2426628f, 1.388428f, -4.301819f), 0.4736842f));
+            HairPositions.Add("20", new Tuple<Vector3, float>(new Vector3(-0.1048148f, 4.274641f, -0.847805f), 0.4736842f));
+            HairPositions.Add("21", new Tuple<Vector3, float>(new Vector3(0.03736171f, 1.962019f, -6.672249f), 0.4736842f));
+            HairPositions.Add("22", new Tuple<Vector3, float>(new Vector3(0.1410284f, 2.292571f, -2.74416f), 0.4736842f));
+            HairPositions.Add("23", new Tuple<Vector3, float>(new Vector3(-0.4505386f, -3.271914f, -5.453121f), 0.4736842f));
+            HairPositions.Add("24", new Tuple<Vector3, float>(new Vector3(-0.4411249f, 3.10844f, -3.815334f), 0.4736842f));
+            HairPositions.Add("3", new Tuple<Vector3, float>(new Vector3(0.008324862f, 2.878448f, -1.93145f), 0.4736842f));
+            HairPositions.Add("4", new Tuple<Vector3, float>(new Vector3(-0.4538152f, 3.352543f, -3.353626f), 0.4736842f));
+            HairPositions.Add("5", new Tuple<Vector3, float>(new Vector3(0.3985637f, -5.926214f, -4.84309f), 0.4736842f));
+            HairPositions.Add("6", new Tuple<Vector3, float>(new Vector3(-0.2392455f, 0.6434188f, -4.708141f), 0.4736842f));
+            HairPositions.Add("7", new Tuple<Vector3, float>(new Vector3(0.1608667f, 6.1294f, -3.963219f), 0.4736842f));
+            HairPositions.Add("8", new Tuple<Vector3, float>(new Vector3(-0.9543619f, 4.264433f, -0.373661f), 0.4736842f));
+        }
+
         public int HeadTextureId;
 
         public void LoadModel(string path, bool needClean, ManType manType, MeshType type)
@@ -493,7 +527,7 @@ namespace RH.Core.Helpers
                 if (bitmap == null)
                     continue;
 
-               var stream = new MemoryStream();
+                var stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
                 var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + "_smoothed" +
                                Path.GetExtension(oldTexturePath);
@@ -796,6 +830,18 @@ namespace RH.Core.Helpers
             }
         }
 
+        public void SaveMergedHead(string path)
+        {
+            var meshInfos = new List<MeshInfo>();
+
+            foreach (var part in headMeshesController.RenderMesh.Parts)
+                meshInfos.Add(new MeshInfo(part, headMeshesController.RenderMesh.MorphScale));
+
+
+            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName);
+        }
+
+
         public void UpdateUserCenterPositions()
         {
             var center = UpdateUserCenterPositions(headController.GetLeftEyeIndexes());  // Left eye
@@ -894,5 +940,43 @@ namespace RH.Core.Helpers
         //    NoseTransformed = new Vector2(ProgramCore.Project.NoseUserCenter.X * ImageTemplateWidth + ImageTemplateOffsetX,
         //                       ProgramCore.Project.NoseUserCenter.Y * ImageTemplateHeight + ImageTemplateOffsetY);
         //}
+
+        public void AttachHair(string hairObjPath, string materialPath, ManType manType)
+        {
+            var objModel = ObjLoader.LoadObjFile(hairObjPath, false);
+            if (objModel == null)
+                return;
+
+            var temp = 0;
+            var meshes = PickingController.LoadHairMeshes(objModel, null, true, manType, MeshType.Hair, ref temp);
+
+            var objName = Path.GetFileNameWithoutExtension(hairObjPath);
+            if (HairPositions.ContainsKey(objName))
+            {
+                var meshSize = HairPositions[objName].Item2;
+
+                var s = HairPositions[objName].Item1 * ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;         // домножаем на 8 для веб версии. все на 8 домножаем! любим 8!
+                for (var i = 0; i < meshes.Count; i++)
+                {
+                    var mesh = meshes[i];
+                    if (mesh == null || mesh.vertexArray.Length == 0) //ТУТ!
+                        continue;
+
+                    mesh.Material.DiffuseTextureMap = materialPath;
+
+                    mesh.Position += new Vector3(s[0], s[1], s[2]);
+                    mesh.Transform[3, 0] += s[0];
+                    mesh.Transform[3, 1] += s[1];
+                    mesh.Transform[3, 2] += s[2];
+
+                    if (!float.IsNaN(meshSize))
+                        mesh.InterpolateMesh(meshSize);
+                }
+            }
+
+            ProgramCore.Project.RenderMainHelper.pickingController.HairMeshes.Clear();
+            ProgramCore.Project.RenderMainHelper.pickingController.HairMeshes.AddRange(meshes);
+        }
+
     }
 }

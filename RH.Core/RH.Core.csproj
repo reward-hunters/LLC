@@ -470,7 +470,6 @@
     <Compile Include="Render\Obj\ObjLoader.cs" />
     <Compile Include="Render\Obj\ObjMaterial.cs" />
     <Compile Include="Render\Obj\ObjSaver.cs" />
-    <Compile Include="WebHelpers\WebStyleHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\ctrlAngleSelector.resx">

@@ -75,10 +75,10 @@ namespace RH.Core.Render
         public bool IsShapeChanged = false;
         public ShapeController shapeController = new ShapeController();
         public ShapeController shapeControllerMirror = new ShapeController();
-        public SliceController sliceController = new SliceController();        
+        public SliceController sliceController = new SliceController();
 
         public AnimationController animationController = new AnimationController();
-        public readonly SoundController soundController = new SoundController();        
+        public readonly SoundController soundController = new SoundController();
         public HistoryController historyController = new HistoryController();
 
         private HeadShapeController HeadShapeController
@@ -236,7 +236,7 @@ namespace RH.Core.Render
         public ctrlRenderControl()
         {
             InitializeComponent();
-            glControl.PreviewKeyDown += glControl_PreviewKeyDown;            
+            glControl.PreviewKeyDown += glControl_PreviewKeyDown;
         }
         ~ctrlRenderControl()
         {
@@ -2004,6 +2004,13 @@ namespace RH.Core.Render
                 PartsLibraryMeshes.Add(title, new DynamicRenderMeshes());
 
             var objPath = Path.Combine(fi.DirectoryName, Path.GetFileNameWithoutExtension(fi.Name) + ".obj");
+
+
+            var objModel = ObjLoader.LoadObjFile(objPath, false);
+            if (objModel == null)
+                return;
+
+
             var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
 
             if (float.IsNaN(meshSize) && meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))

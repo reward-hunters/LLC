@@ -177,7 +177,34 @@ namespace RH.WebCore
             ProgramCore.Project.DetectedTopPoints.Add(facialFeatures[67]);
         }
 
-        public void CreateObj(int manTypeInt, string sessionID)
+        ///  Путь на волосы и аксессуары приходит в виде ссылке на картинку, Там же с тем же названием должен лежать обж.
+        /// Мне проще обработать такие ссылки тут, чем в яве
+        ///   							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\" </summary>
+        private string GetParcedHairAccessoriesLink(string uri, string extension)
+        {
+            var paths = uri.Trim().Split(new string[] { "\"" }, StringSplitOptions.RemoveEmptyEntries);
+            if (paths.Length != 0)
+            {
+                var hairObjPath = paths[1].Trim();
+                hairObjPath = Path.GetDirectoryName(hairObjPath) + "/" + Path.GetFileNameWithoutExtension(hairObjPath) + extension;
+                hairObjPath = hairObjPath.Replace(@"\", "/");
+                if (hairObjPath.StartsWith(@"http:/printahead.net/"))
+                    hairObjPath = hairObjPath.Replace(@"http:/printahead.net/", @"ftp://108.167.164.209/public_html/");
+
+                return hairObjPath;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        ///  Путь на волосы и аксессуары приходит в виде ссылке на картинку, Там же с тем же названием должен лежать обж.
+        /// Мне проще обработать такие ссылки тут, чем в яве
+        ///   							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\" </summary>
+        /// <param name="manTypeInt"></param>
+        /// <param name="sessionID"></param>
+        /// <param name="hairPath"></param>
+        /// <param name="hairMaterialPath"></param>
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -241,10 +268,31 @@ namespace RH.WebCore
 
             headController.EndAutodots();
 
-            //string fiName = Path.Combine(path, ProgramCore.Project.ProjectName + ".obj");
+            #region Attach hair
 
-            ProgramCore.Project.RenderMainHelper.SaveHead(sessionID);
+            if (!string.IsNullOrEmpty(hairPath.Trim()))
+            {
+
+                var hairObjPath = GetParcedHairAccessoriesLink(hairPath, ".obj");
+                if (!string.IsNullOrEmpty(hairObjPath) && FTPHelper.IsFileExists(hairObjPath))
+                {
+                    hairMaterialPath = GetParcedHairAccessoriesLink(hairMaterialPath, ".jpg");
+                    if (string.IsNullOrEmpty(hairMaterialPath))
+                        hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/blondy.jpg";
+
+                    var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
+                    FTPHelper.CopyFromFtpToFtp(hairMaterialPath, temp, "blondy.jpg");
+                    hairMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/blondy.jpg";
+
+                    ProgramCore.Project.RenderMainHelper.AttachHair(hairObjPath, hairMaterialPath, manType);
+                }
+            }
+
+            #endregion
+
+            ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures();
+
 
             var address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures";
             var ftpHelper = new FTPHelper(address);

@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenTK;
 using RH.Core.Helpers;
+using RH.Core.IO;
 using RH.Core.Render.Helpers;
 
 namespace RH.Core.Render.Obj

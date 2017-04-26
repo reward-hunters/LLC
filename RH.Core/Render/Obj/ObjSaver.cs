@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -307,7 +309,7 @@ namespace RH.Core.Render.Obj
             SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId);
 #else
 }
-              SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada);
+              SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, string.Empty);
 #endif
         }
 
@@ -352,126 +354,153 @@ namespace RH.Core.Render.Obj
             //if (meshInfos.Count == 0)
             //    return;
 
+            var materials = new Dictionary<string, ObjMaterial>();         // group title, diffuse color, texture path
+
+#if WEB_APP
+            var mtlPath = filePath + ".mtl";
+            var mtlName = mtlPath;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (var sw = new StreamWriter(ms, Encoding.Default))
+#else
             var fi = new FileInfo(filePath);
             if (fi.Exists)
                 fi.Delete();
 
             var mtlPath = Path.Combine(fi.DirectoryName, Path.GetFileNameWithoutExtension(fi.Name) + ".mtl");
+                    
             var fiMtl = new FileInfo(mtlPath);
             if (fiMtl.Exists)
                 fiMtl.Delete();
+                    var mtlName = fiMtl.Name;
 
-            var materials = new Dictionary<string, ObjMaterial>();         // group title, diffuse color, texture path
+
+
             using (var sw = new StreamWriter(filePath, false, Encoding.Default))
-            {
-                sw.WriteLine("#Produced by HeadShop");
-                //if (type == MeshType.Accessory)
-                //    sw.WriteLine("#Accessories");
-                //else
-                sw.WriteLine("#HeadShop Model");
-                sw.WriteLine("#" + DateTime.Now.ToShortDateString());
-
-                sw.WriteLine("mtllib " + fiMtl.Name);
-                sw.WriteLine();
-
-
-                var meshInfos = new List<MeshInfo>();
-                foreach (var mesh in HairMeshes)
+#endif
                 {
-                    var meshInfo = mesh.GetMeshInfo(morphScale, ProgramCore.Project.ManType);
-                    MeshInfo.FindCenter(meshInfo.Positions, "Волосы до трансформации ObjSaver::ExportMergedModel()");
-                    TransformForPluginMode(mesh, meshInfo);
-                    meshInfos.Add(meshInfo);
-                    MeshInfo.FindCenter(meshInfo.Positions, "Волосы после трансформации ObjSaver::ExportMergedModel()");
-                }
-                foreach (var mesh in AccesoryMeshes)
-                {
-                    var meshInfo = mesh.GetMeshInfo(morphScale, ProgramCore.Project.ManType);
-                    MeshInfo.FindCenter(meshInfo.Positions, "Аксесуары до трансформации ObjSaver::ExportMergedModel()");
-                    TransformForPluginMode(mesh, meshInfo);
-                    meshInfos.Add(meshInfo);
-                    MeshInfo.FindCenter(meshInfo.Positions, "Аксесуары после трансформации ObjSaver::ExportMergedModel()");
-                }
+                    sw.WriteLine("#Produced by HeadShop");
+                    //if (type == MeshType.Accessory)
+                    //    sw.WriteLine("#Accessories");
+                    //else
+                    sw.WriteLine("#HeadShop Model");
+                    sw.WriteLine("#" + DateTime.Now.ToShortDateString());
 
-                if (meshInfos.Count > 0)
-                {
-                    var scale = ProgramCore.PluginMode ? 1.0f : PickingController.GetHairScale(ProgramCore.Project.ManType);
-                    ProgramCore.EchoToLog(String.Format("На это умножаем волосы или аксесуары при экспорте ObjSaver::ExportMergedModel(): {0}", scale), EchoMessageType.Information);
-                    var transformMatrix = Matrix4.CreateScale(scale);
-                    SaveVerticles(meshInfos, sw, transformMatrix);       //write only additional meshes first, with translated positions
-                    MeshInfo.FindCenter(meshInfos, "Аксесуары и волосы, которые ушли на экспорт ObjSaver::ExportMergedModel()");
-                    SaveTextureCoords(meshInfos, sw);
-                    SaveNormals(meshInfos, sw, transformMatrix);
-                }
-                if (faceParts.Count > 0)
-                {
-                    ProgramCore.EchoToLog(String.Format("На это умножаем бошку при экспорте ObjSaver::ExportMergedModel(): {0}", morphScale), EchoMessageType.Information);
-                    var transformMatrix = Matrix4.CreateScale(morphScale);
-                    SaveVerticles(faceParts, sw, transformMatrix);
-                    MeshInfo.FindCenter(faceParts, "Бошка, которая ушла на экспорт ObjSaver::ExportMergedModel()");
-                    SaveTextureCoords(faceParts, sw);
-                    SaveNormals(faceParts, sw, Matrix4.Zero);
-                }
-                meshInfos.AddRange(faceParts);
-                MeshInfo.FindCenter(meshInfos, "Итоговая модель после экспорта ObjSaver::ExportMergedModel()");
+                    sw.WriteLine("mtllib " + mtlName);
+                    sw.WriteLine();
 
-                var groupIndex = 0;
-                var startPositionIndex = 1;
-                var startTexIndex = 1;
-                var startNormalIndex = 1;
-                foreach (var meshInfo in meshInfos)         // faces should write differently
-                {
-                    if (meshInfo.IndicesNormals.Count == 0)
-                        continue;
 
-                    var groupTitle = string.Empty;
-                    if (string.IsNullOrEmpty(meshInfo.Title) || materials.ContainsKey(meshInfo.Title))
+                    var meshInfos = new List<MeshInfo>();
+                    foreach (var mesh in HairMeshes)
                     {
-                        groupTitle = "Element_" + groupIndex;
+                        var meshInfo = mesh.GetMeshInfo(morphScale, ProgramCore.Project.ManType);
+                        MeshInfo.FindCenter(meshInfo.Positions, "Волосы до трансформации ObjSaver::ExportMergedModel()");
 
-                        while (materials.ContainsKey(groupTitle))
+                        TransformForPluginMode(mesh, meshInfo);
+
+                        meshInfos.Add(meshInfo);
+                        MeshInfo.FindCenter(meshInfo.Positions, "Волосы после трансформации ObjSaver::ExportMergedModel()");
+                    }
+                    foreach (var mesh in AccesoryMeshes)
+                    {
+                        var meshInfo = mesh.GetMeshInfo(morphScale, ProgramCore.Project.ManType);
+                        MeshInfo.FindCenter(meshInfo.Positions, "Аксесуары до трансформации ObjSaver::ExportMergedModel()");
+                        TransformForPluginMode(mesh, meshInfo);
+                        meshInfos.Add(meshInfo);
+                        MeshInfo.FindCenter(meshInfo.Positions, "Аксесуары после трансформации ObjSaver::ExportMergedModel()");
+                    }
+
+                    if (meshInfos.Count > 0)
+                    {
+                        var scale = ProgramCore.PluginMode ? 1.0f : PickingController.GetHairScale(ProgramCore.Project.ManType);
+                        ProgramCore.EchoToLog(String.Format("На это умножаем волосы или аксесуары при экспорте ObjSaver::ExportMergedModel(): {0}", scale), EchoMessageType.Information);
+                        var transformMatrix = Matrix4.CreateScale(scale);
+
+                        SaveVerticles(meshInfos, sw, transformMatrix);       //write only additional meshes first, with translated positions
+                        MeshInfo.FindCenter(meshInfos, "Аксесуары и волосы, которые ушли на экспорт ObjSaver::ExportMergedModel()");
+                        SaveTextureCoords(meshInfos, sw);
+                        SaveNormals(meshInfos, sw, transformMatrix);
+                    }
+                    if (faceParts.Count > 0)
+                    {
+                        ProgramCore.EchoToLog(String.Format("На это умножаем бошку при экспорте ObjSaver::ExportMergedModel(): {0}", morphScale), EchoMessageType.Information);
+                        var transformMatrix = Matrix4.CreateScale(morphScale);
+                        SaveVerticles(faceParts, sw, transformMatrix);
+                        MeshInfo.FindCenter(faceParts, "Бошка, которая ушла на экспорт ObjSaver::ExportMergedModel()");
+                        SaveTextureCoords(faceParts, sw);
+                        SaveNormals(faceParts, sw, Matrix4.Zero);
+                    }
+                    meshInfos.AddRange(faceParts);
+                    MeshInfo.FindCenter(meshInfos, "Итоговая модель после экспорта ObjSaver::ExportMergedModel()");
+
+                    var groupIndex = 0;
+                    var startPositionIndex = 1;
+                    var startTexIndex = 1;
+                    var startNormalIndex = 1;
+                    foreach (var meshInfo in meshInfos)         // faces should write differently
+                    {
+                        if (meshInfo.IndicesNormals.Count == 0)
+                            continue;
+
+                        var groupTitle = string.Empty;
+                        if (string.IsNullOrEmpty(meshInfo.Title) || materials.ContainsKey(meshInfo.Title))
                         {
-                            ++groupIndex;
                             groupTitle = "Element_" + groupIndex;
+
+                            while (materials.ContainsKey(groupTitle))
+                            {
+                                ++groupIndex;
+                                groupTitle = "Element_" + groupIndex;
+                            }
+
+                            ++groupIndex;
                         }
+                        else
+                            groupTitle = meshInfo.Title;
 
-                        ++groupIndex;
-                    }
-                    else
-                        groupTitle = meshInfo.Title;
+                        materials.Add(groupTitle, meshInfo.Material);
 
-                    materials.Add(groupTitle, meshInfo.Material);
+                        sw.WriteLine("g " + groupTitle);
+                        sw.WriteLine("usemtl " + groupTitle);
 
-                    sw.WriteLine("g " + groupTitle);
-                    sw.WriteLine("usemtl " + groupTitle);
+                        #region Faces
 
-                    #region Faces
-
-                    var resStr = "f ";
-                    var index = 0;
-                    for (var i = 0; i < meshInfo.IndicesTexCoords.Count; i++)
-                    {
-                        resStr += (startPositionIndex + meshInfo.IndicesPositions[i]).ToString(ProgramCore.Nfi) + "/";
-                        resStr += (startTexIndex + meshInfo.IndicesTexCoords[i]).ToString(ProgramCore.Nfi) + "/";
-                        resStr += (startNormalIndex + meshInfo.IndicesNormals[i]).ToString(ProgramCore.Nfi) + " ";
-                        ++index;
-
-                        if (index == 3)
+                        var resStr = "f ";
+                        var index = 0;
+                        for (var i = 0; i < meshInfo.IndicesTexCoords.Count; i++)
                         {
-                            index = 0;
-                            sw.WriteLine(resStr.Remove(resStr.Length - 1));
-                            resStr = "f ";
+                            resStr += (startPositionIndex + meshInfo.IndicesPositions[i]).ToString(ProgramCore.Nfi) + "/";
+                            resStr += (startTexIndex + meshInfo.IndicesTexCoords[i]).ToString(ProgramCore.Nfi) + "/";
+                            resStr += (startNormalIndex + meshInfo.IndicesNormals[i]).ToString(ProgramCore.Nfi) + " ";
+                            ++index;
+
+                            if (index == 3)
+                            {
+                                index = 0;
+                                sw.WriteLine(resStr.Remove(resStr.Length - 1));
+                                resStr = "f ";
+                            }
                         }
+
+                        startPositionIndex += (meshInfo.IndicesPositions.Max() + 1);
+                        startTexIndex += (meshInfo.IndicesTexCoords.Max() + 1);
+                        startNormalIndex += (meshInfo.IndicesNormals.Max() + 1);
+
+                        #endregion
                     }
-
-                    startPositionIndex += (meshInfo.IndicesPositions.Max() + 1);
-                    startTexIndex += (meshInfo.IndicesTexCoords.Max() + 1);
-                    startNormalIndex += (meshInfo.IndicesNormals.Max() + 1);
-
-                    #endregion
+#if WEB_APP
+                    sw.Flush();
+                    ms.Position = 0;
+                    ms.Flush();
+                    var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionId);
+                    ftpHelper.Upload(ms, filePath + ".obj");
                 }
             }
+            SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId);
+#else
+                }
             SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, sessionId);
+#endif
         }
 
         /// <summary>  </summary>

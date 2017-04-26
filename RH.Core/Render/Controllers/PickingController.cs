@@ -304,7 +304,7 @@ namespace RH.Core.Render.Controllers
                             objModel.Vertices.Count != objModelFull.Vertices.Count ||
                             objModel.TextureCoords.Count != objModelFull.TextureCoords.Count))
                             objModelFull = null;
-                        
+
                         var meshPartInfos = LoadHeadMeshes(objModel, fromDragAndDrop, manType, scale, ref lastTriangle);
                         //result = LoadHairMeshes(objModel, objModelFull, fromDragAndDrop, manType, MeshType.Head);
                         //var meshPartInfos = new List<MeshPartInfo>();
@@ -554,6 +554,11 @@ namespace RH.Core.Render.Controllers
                         renderMesh.Material.TransparentTextureMap = modelGroup.Key.TransparentTextureMap;
 
                     var scale = meshType == MeshType.Head ? GetHeadScale(manType) : GetHairScale(manType);                       // перегруз сделан потому, что на этапе загрузки проекта самого проекта еще может не быть. поэтому лучше передавать
+
+#if WEB_APP
+                    scale *= ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;
+#endif
+
                     renderMesh.Transform = Matrix4.CreateScale(scale);
 
                     var center = Vector3.Zero;
@@ -572,7 +577,9 @@ namespace RH.Core.Render.Controllers
                         renderMesh.Transform[3, 0] = -center.X;
                         renderMesh.Transform[3, 1] = -center.Y;
                         renderMesh.Transform[3, 2] = -center.Z;
+
                         renderMesh.Position = center;
+
                     }
 
                     if (vertexTextureCoordinates.Count > 0 && vertexTextureCoordinates.All(x => x == 0))

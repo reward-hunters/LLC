@@ -32,7 +32,7 @@ namespace RH.Core.Helpers
             }
             catch           // папка может существовать. а адекватой проверки нет.
             {
-
+                AddedAddreses.Add(address);
             }
         }
 
