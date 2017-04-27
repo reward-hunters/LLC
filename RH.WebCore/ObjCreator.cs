@@ -11,6 +11,7 @@ using RH.Core;
 using RH.Core.Helpers;
 using RH.Core.Render.Controllers;
 using RH.MeshUtils;
+using RH.MeshUtils.Data;
 using RH.MeshUtils.Helpers;
 
 namespace RH.WebCore
@@ -40,7 +41,6 @@ namespace RH.WebCore
                 return ProgramCore.Project.RenderMainHelper.headMeshesController;
             }
         }
-
         public static AutodotsShapeHelper autodotsShapeHelper
         {
             get
@@ -48,6 +48,9 @@ namespace RH.WebCore
                 return ProgramCore.Project.RenderMainHelper.autodotsShapeHelper;
             }
         }
+
+        public Dictionary<Guid, PartMorphInfo> OldMorphing = null;
+        public Dictionary<Guid, PartMorphInfo> FatMorphing = null;
         #endregion
 
         private static FSDK.TPoint[] GetFeaturePoints(Image sourceImage)
@@ -199,6 +202,29 @@ namespace RH.WebCore
             return string.Empty;
         }
 
+
+        public void DoMorth(float? k = null)
+        {
+            var morphs = new List<Dictionary<Guid, PartMorphInfo>>();
+            if (OldMorphing != null)
+                morphs.Add(OldMorphing);
+            if (FatMorphing != null)
+                morphs.Add(FatMorphing);
+            //if (PoseMorphing != null)
+            //    morphs.Add(PoseMorphing);
+            if (k != null)
+                headMeshesController.RenderMesh.EndMorph();
+
+            Morphing.Morph(morphs, headMeshesController.RenderMesh);
+
+            if (k != null)
+            {
+                headMeshesController.RenderMesh.BeginMorph();
+                headMeshesController.RenderMesh.DoMorph(k.Value);
+            }
+        }
+
+
         /// <summary>
         ///  Путь на волосы и аксессуары приходит в виде ссылке на картинку, Там же с тем же названием должен лежать обж.
         /// Мне проще обработать такие ссылки тут, чем в яве
@@ -209,7 +235,7 @@ namespace RH.WebCore
         /// <param name="hairMaterialPath"></param>
         /// <param name="accessoryPath"></param>
         /// <param name="accessoryMaterialPath"></param>
-        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath)
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -273,8 +299,65 @@ namespace RH.WebCore
 
             headController.EndAutodots();
 
-          FTPHelper.UpdateAddress(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID);
+            #region Загружаем и применяем морфинги
 
+            #region Старость
+
+            if (oldMorphingValue != 20)          // назачем морфить, если по дефолту итак так. чтобы время на загрузку не тратить
+            {
+                var intTemp = 0;
+
+                var oldMorphingPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" + manType.GetObjDirPath() + "/Old.obj";       // загружаем трансформации для старения
+                oldMorphingPath = oldMorphingPath.Replace(@"\", "/");
+                if (FTPHelper.IsFileExists(oldMorphingPath))
+                    OldMorphing = ProgramCore.Project.RenderMainHelper.pickingController.LoadPartsMorphInfo(oldMorphingPath, headMeshesController.RenderMesh, ref intTemp);
+
+                if (OldMorphing != null)
+                {
+                    var delta = oldMorphingValue == 20 ? 0 : oldMorphingValue / 80f;
+                    foreach (var m in OldMorphing)
+                        m.Value.Delta = delta;
+                    ProgramCore.Project.AgeCoefficient = delta;
+                }
+            }
+
+            #endregion
+
+            #region Толстость
+
+            if (fatMorphingValue != 0)
+            {
+                var intTemp = 0;
+                var fatMorphingPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" + manType.GetObjDirPath() + "/Fat.obj";  // загружаем трансформации для толстения
+                fatMorphingPath = fatMorphingPath.Replace(@"\", "/");
+                if (FTPHelper.IsFileExists(fatMorphingPath))
+                    FatMorphing = ProgramCore.Project.RenderMainHelper.pickingController.LoadPartsMorphInfo(fatMorphingPath, headMeshesController.RenderMesh, ref intTemp);
+
+                if (FatMorphing != null)
+                {
+                    var delta = fatMorphingValue == 0 ? 0 : fatMorphingValue / 30f;
+                    foreach (var m in FatMorphing)
+                        m.Value.Delta = delta;
+                    ProgramCore.Project.FatCoefficient = delta;
+                }
+            }
+
+            #endregion
+
+            float? k = null;
+            if (smoothingValue != 0)
+            {
+                var delta = smoothingValue / 100f;
+
+                ProgramCore.Project.MorphingScale = delta;
+                k = delta;
+            }
+
+            DoMorth(k);
+
+            #endregion
+
+            FTPHelper.UpdateAddress(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID);
             #region Attach hair
 
             var hairObjPath = string.Empty;

@@ -24,7 +24,7 @@ namespace RH.Core.Controls.Libraries
             if (!float.IsNaN(ProgramCore.Project.MorphingScale))
                 trackBarPose.Value = (int)(ProgramCore.Project.MorphingScale * 100);
 
-            Sizeble = false;
+           Sizeble = false;
         }
 
         #region Supported void's
