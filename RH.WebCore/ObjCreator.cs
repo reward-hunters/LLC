@@ -273,6 +273,8 @@ namespace RH.WebCore
 
             headController.EndAutodots();
 
+          FTPHelper.UpdateAddress(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID);
+
             #region Attach hair
 
             var hairObjPath = string.Empty;
@@ -285,7 +287,7 @@ namespace RH.WebCore
             {
                 hairMaterialPath = GetParcedHairAccessoriesLink(hairMaterialPath, ".jpg");
                 if (string.IsNullOrEmpty(hairMaterialPath))
-                    hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/blondy.jpg";
+                    hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/Blonde_Highlight.jpg";
 
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(hairMaterialPath) + ".jpg";

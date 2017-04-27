@@ -30,8 +30,8 @@ namespace RH.OneClick
 
                
                 var objectCreator = new ObjCreator();
-                objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "", "  							<img src=\" http://printahead.net/printahead.online/Library/Accessory/Standard/HF.jpg\"", "");
-                
+                //   objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "", "  							<img src=\" http://printahead.net/printahead.online/Library/Accessory/Standard/HF.jpg\"", "");
+                objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "", "", "", "");
 
                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);

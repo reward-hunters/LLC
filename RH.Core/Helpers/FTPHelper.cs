@@ -11,13 +11,13 @@ namespace RH.Core.Helpers
         public static string Login = "i2q1d8b1";
         public static string Password = "B45B2nnFv$!j6V";
 
-        private readonly HashSet<string> AddedAddreses = new HashSet<string>();
+        public static readonly HashSet<string> AddedAddreses = new HashSet<string>();
         public FTPHelper(string address)
         {
             Address = address;
         }
 
-        public static void UpdateAddress(string address, HashSet<string> AddedAddreses)
+        public static void UpdateAddress(string address)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace RH.Core.Helpers
         {
             try
             {
-                UpdateAddress(Address, AddedAddreses);
+                UpdateAddress(Address);
 
                 var request = (FtpWebRequest)WebRequest.Create(Address + @"/" + fileName);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
@@ -140,6 +140,7 @@ namespace RH.Core.Helpers
 
         public static void CopyFromFtpToFtp(string oldFilePath, string newFilePathDir, string newFileName)
         {
+          UpdateAddress(newFilePathDir);
             if (oldFilePath.StartsWith(@"ftp:/1"))
                 oldFilePath = oldFilePath.Replace(@"ftp:/1", @"ftp://1");
             oldFilePath = GetCaseSensitiveFileName(oldFilePath);

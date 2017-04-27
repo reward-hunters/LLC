@@ -32,6 +32,7 @@ namespace RH.Core.Helpers
         public RenderMainHelper()
         {
             InitializeHairPositions();
+            InitializeAccessoryPositions();
         }
         private void InitializeHairPositions()
         {
@@ -59,6 +60,32 @@ namespace RH.Core.Helpers
             HairPositions.Add("6", new Tuple<Vector3, float>(new Vector3(-0.2392455f, 0.6434188f, -4.708141f), 0.4736842f));
             HairPositions.Add("7", new Tuple<Vector3, float>(new Vector3(0.1608667f, 6.1294f, -3.963219f), 0.4736842f));
             HairPositions.Add("8", new Tuple<Vector3, float>(new Vector3(-0.9543619f, 4.264433f, -0.373661f), 0.4736842f));
+        }
+
+        private void InitializeAccessoryPositions()
+        {
+            AccessoryPositions.Clear();
+
+            AccessoryPositions.Add("AM", new Tuple<Vector3, float>(new Vector3(0.1467524f, -17.10335f, -1.525089f), 1f));
+            AccessoryPositions.Add("B", new Tuple<Vector3, float>(new Vector3(-0.003580093f, -14.59542f, -0.5092049f), 0.8f));
+            AccessoryPositions.Add("BF", new Tuple<Vector3, float>(new Vector3(-0.05731004f, -18.93743f, -1.592815f), 0.94f));
+            AccessoryPositions.Add("C", new Tuple<Vector3, float>(new Vector3(0.1358429f, -14.93406f, -0.9832802f), 0.8f));
+            AccessoryPositions.Add("CF", new Tuple<Vector3, float>(new Vector3(0.1698923f, -20.76338f, -2.811882f), 1f));
+            AccessoryPositions.Add("CF47", new Tuple<Vector3, float>(new Vector3(0.5179834f, -20.16703f, -2.879635f), 1f));
+            AccessoryPositions.Add("CM", new Tuple<Vector3, float>(new Vector3(-0.06410408f, -19.74748f, -2.405499f), 1f));
+            AccessoryPositions.Add("DF", new Tuple<Vector3, float>(new Vector3(-0.005831718f, -16.05902f, -2.270046f), 0.86f));
+            AccessoryPositions.Add("EF2", new Tuple<Vector3, float>(new Vector3(0.2212591f, -16.67964f, -1.254185f), 0.94f));
+            AccessoryPositions.Add("FF", new Tuple<Vector3, float>(new Vector3(-0.2901125f, -15.59492f, -2.879615f), 0.84f));
+            AccessoryPositions.Add("FM", new Tuple<Vector3, float>(new Vector3(-0.3286781f, -16.42225f, -3.003277f), 1.04f));
+            AccessoryPositions.Add("GF", new Tuple<Vector3, float>(new Vector3(-1.158232f, -17.2614f, 2.40197f), 0.92f));
+            AccessoryPositions.Add("HF", new Tuple<Vector3, float>(new Vector3(0.1493607f, -16.40991f, -2.608764f), 1f));
+            AccessoryPositions.Add("HM", new Tuple<Vector3, float>(new Vector3(-0.1168346f, -16.62694f, -2.473255f), 1f));
+            AccessoryPositions.Add("I", new Tuple<Vector3, float>(new Vector3(0.2781005f, -13.0792f, -0.847908f), 0.76f));
+            AccessoryPositions.Add("T8", new Tuple<Vector3, float>(new Vector3(0.4546185f, -21.15005f, -2.065468f), 0.92f));
+            AccessoryPositions.Add("T8headUV", new Tuple<Vector3, float>(new Vector3(0.5227757f, -13.71431f, -2.879673f), 1f));
+            AccessoryPositions.Add("femshirt2", new Tuple<Vector3, float>(new Vector3(0.03368902f, -20.35679f, -2.270073f), 0.94f));
+            AccessoryPositions.Add("fmeshirt2UVball", new Tuple<Vector3, float>(new Vector3(0.3145208f, -20.24687f, -1.660568f), 0.92f));
+            AccessoryPositions.Add("t8NOheadUV", new Tuple<Vector3, float>(new Vector3(0.287241f, -20.08141f, -2.879635f), 1f));
         }
 
         public int HeadTextureId;
@@ -995,7 +1022,7 @@ namespace RH.Core.Helpers
             var objName = Path.GetFileNameWithoutExtension(accessoryObjPath);
             if (AccessoryPositions.ContainsKey(objName))
             {
-                var meshSize = HairPositions[objName].Item2;
+                var meshSize = AccessoryPositions[objName].Item2;
 
                 var s = AccessoryPositions[objName].Item1 * ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;         // домножаем на 8 для веб версии. все на 8 домножаем! любим 8!
 
