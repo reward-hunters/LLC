@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -605,7 +606,7 @@ namespace RH.MeshUtils.Data
             var strs = str.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
             if (strs.Length != 3)
                 return Vector3.Zero;
-            return new Vector3(float.Parse(strs[0]), float.Parse(strs[1]), float.Parse(strs[2]));
+            return new Vector3(StringConverter.ToFloat(strs[0]), StringConverter.ToFloat(strs[1]), StringConverter.ToFloat(strs[2]));
         }
 
     }

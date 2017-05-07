@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using OpenTK;
 using RH.Core.Render.Controllers;
 using RH.Core.Render.Helpers;
@@ -31,61 +33,91 @@ namespace RH.Core.Helpers
 
         public RenderMainHelper()
         {
-            InitializeHairPositions();
-            InitializeAccessoryPositions();
         }
-        private void InitializeHairPositions()
+        public void InitializeHairPositions()
         {
             HairPositions.Clear();
-            HairPositions.Add("1", new Tuple<Vector3, float>(new Vector3(-0.1668722f, 2.752857f, -0.8359756f), 0.4736842f));
-            HairPositions.Add("10", new Tuple<Vector3, float>(new Vector3(-0.2335347f, 4.367701f, -2.540943f), 0.4736842f));
-            HairPositions.Add("11", new Tuple<Vector3, float>(new Vector3(0.7068777f, -1.306439f, -2.134681f), 0.4736842f));
-            HairPositions.Add("12", new Tuple<Vector3, float>(new Vector3(-0.3572285f, 1.03902f, -2.879543f), 0.4736842f));
-            HairPositions.Add("13", new Tuple<Vector3, float>(new Vector3(0.2399407f, 4.798049f, -1.051007f), 0.4736842f));
-            HairPositions.Add("14", new Tuple<Vector3, float>(new Vector3(-0.296265f, 4.89653f, -1.254158f), 0.4736842f));
-            HairPositions.Add("15", new Tuple<Vector3, float>(new Vector3(0.4006174f, 2.931466f, -2.744185f), 0.4736842f));
-            HairPositions.Add("16", new Tuple<Vector3, float>(new Vector3(-0.07116318f, 5.937863f, -4.57275f), 0.4736842f));
-            HairPositions.Add("17", new Tuple<Vector3, float>(new Vector3(-0.2833328f, 4.701737f, -2.811848f), 0.4736842f));
-            HairPositions.Add("18", new Tuple<Vector3, float>(new Vector3(0.1474586f, 2.208316f, -3.585868f), 0.4736842f));
-            HairPositions.Add("19", new Tuple<Vector3, float>(new Vector3(0.02676144f, 5.945516f, -4.16637f), 0.4736842f));
-            HairPositions.Add("2", new Tuple<Vector3, float>(new Vector3(-0.2426628f, 1.388428f, -4.301819f), 0.4736842f));
-            HairPositions.Add("20", new Tuple<Vector3, float>(new Vector3(-0.1048148f, 4.274641f, -0.847805f), 0.4736842f));
-            HairPositions.Add("21", new Tuple<Vector3, float>(new Vector3(0.03736171f, 1.962019f, -6.672249f), 0.4736842f));
-            HairPositions.Add("22", new Tuple<Vector3, float>(new Vector3(0.1410284f, 2.292571f, -2.74416f), 0.4736842f));
-            HairPositions.Add("23", new Tuple<Vector3, float>(new Vector3(-0.4505386f, -3.271914f, -5.453121f), 0.4736842f));
-            HairPositions.Add("24", new Tuple<Vector3, float>(new Vector3(-0.4411249f, 3.10844f, -3.815334f), 0.4736842f));
-            HairPositions.Add("3", new Tuple<Vector3, float>(new Vector3(0.008324862f, 2.878448f, -1.93145f), 0.4736842f));
-            HairPositions.Add("4", new Tuple<Vector3, float>(new Vector3(-0.4538152f, 3.352543f, -3.353626f), 0.4736842f));
-            HairPositions.Add("5", new Tuple<Vector3, float>(new Vector3(0.3985637f, -5.926214f, -4.84309f), 0.4736842f));
-            HairPositions.Add("6", new Tuple<Vector3, float>(new Vector3(-0.2392455f, 0.6434188f, -4.708141f), 0.4736842f));
-            HairPositions.Add("7", new Tuple<Vector3, float>(new Vector3(0.1608667f, 6.1294f, -3.963219f), 0.4736842f));
-            HairPositions.Add("8", new Tuple<Vector3, float>(new Vector3(-0.9543619f, 4.264433f, -0.373661f), 0.4736842f));
+
+            var filePath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/parts.cfg";
+            if (!FTPHelper.IsFileExists(filePath))
+                return;
+
+            var request = (FtpWebRequest)FtpWebRequest.Create(filePath);
+            request.Credentials = new NetworkCredential(FTPHelper.Login, FTPHelper.Password);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            var ftpResponse = (FtpWebResponse)request.GetResponse();
+
+            byte[] buffer = new byte[16 * 1024];
+            using (var ftpStream = ftpResponse.GetResponseStream())
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    ms.Position = 0;
+                    ms.Flush();
+                    using (var sr = new StreamReader(ms, Encoding.Default))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            var path = sr.ReadLine();
+                            var position = sr.ReadLine();
+                            var  size= sr.ReadLine();
+
+                            if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(size) || string.IsNullOrEmpty(position)) continue;
+
+                            HairPositions.Add(Path.GetFileNameWithoutExtension(path.Remove(0,1)), new Tuple<Vector3, float>(Vector3Ex.FromString(position.Split('=')[1]), StringConverter.ToFloat(size.Split('=')[1])));
+                        }
+                    }
+                }
+            }
         }
 
-        private void InitializeAccessoryPositions()
+        public void InitializeAccessoryPositions()
         {
             AccessoryPositions.Clear();
 
-            AccessoryPositions.Add("AM", new Tuple<Vector3, float>(new Vector3(0.1467524f, -17.10335f, -1.525089f), 1f));
-            AccessoryPositions.Add("B", new Tuple<Vector3, float>(new Vector3(-0.003580093f, -14.59542f, -0.5092049f), 0.8f));
-            AccessoryPositions.Add("BF", new Tuple<Vector3, float>(new Vector3(-0.05731004f, -18.93743f, -1.592815f), 0.94f));
-            AccessoryPositions.Add("C", new Tuple<Vector3, float>(new Vector3(0.1358429f, -14.93406f, -0.9832802f), 0.8f));
-            AccessoryPositions.Add("CF", new Tuple<Vector3, float>(new Vector3(0.1698923f, -20.76338f, -2.811882f), 1f));
-            AccessoryPositions.Add("CF47", new Tuple<Vector3, float>(new Vector3(0.5179834f, -20.16703f, -2.879635f), 1f));
-            AccessoryPositions.Add("CM", new Tuple<Vector3, float>(new Vector3(-0.06410408f, -19.74748f, -2.405499f), 1f));
-            AccessoryPositions.Add("DF", new Tuple<Vector3, float>(new Vector3(-0.005831718f, -16.05902f, -2.270046f), 0.86f));
-            AccessoryPositions.Add("EF2", new Tuple<Vector3, float>(new Vector3(0.2212591f, -16.67964f, -1.254185f), 0.94f));
-            AccessoryPositions.Add("FF", new Tuple<Vector3, float>(new Vector3(-0.2901125f, -15.59492f, -2.879615f), 0.84f));
-            AccessoryPositions.Add("FM", new Tuple<Vector3, float>(new Vector3(-0.3286781f, -16.42225f, -3.003277f), 1.04f));
-            AccessoryPositions.Add("GF", new Tuple<Vector3, float>(new Vector3(-1.158232f, -17.2614f, 2.40197f), 0.92f));
-            AccessoryPositions.Add("HF", new Tuple<Vector3, float>(new Vector3(0.1493607f, -16.40991f, -2.608764f), 1f));
-            AccessoryPositions.Add("HM", new Tuple<Vector3, float>(new Vector3(-0.1168346f, -16.62694f, -2.473255f), 1f));
-            AccessoryPositions.Add("I", new Tuple<Vector3, float>(new Vector3(0.2781005f, -13.0792f, -0.847908f), 0.76f));
-            AccessoryPositions.Add("T8", new Tuple<Vector3, float>(new Vector3(0.4546185f, -21.15005f, -2.065468f), 0.92f));
-            AccessoryPositions.Add("T8headUV", new Tuple<Vector3, float>(new Vector3(0.5227757f, -13.71431f, -2.879673f), 1f));
-            AccessoryPositions.Add("femshirt2", new Tuple<Vector3, float>(new Vector3(0.03368902f, -20.35679f, -2.270073f), 0.94f));
-            AccessoryPositions.Add("fmeshirt2UVball", new Tuple<Vector3, float>(new Vector3(0.3145208f, -20.24687f, -1.660568f), 0.92f));
-            AccessoryPositions.Add("t8NOheadUV", new Tuple<Vector3, float>(new Vector3(0.287241f, -20.08141f, -2.879635f), 1f));
+            var filePath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/parts.cfg";
+            if (!FTPHelper.IsFileExists(filePath))
+                return;
+
+            var request = (FtpWebRequest)FtpWebRequest.Create(filePath);
+            request.Credentials = new NetworkCredential(FTPHelper.Login, FTPHelper.Password);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            var ftpResponse = (FtpWebResponse)request.GetResponse();
+
+            byte[] buffer = new byte[16 * 1024];
+            using (var ftpStream = ftpResponse.GetResponseStream())
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    ms.Position = 0;
+                    ms.Flush();
+                    using (var sr = new StreamReader(ms, Encoding.Default))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            var path = sr.ReadLine();
+                            var position = sr.ReadLine();
+                            var size = sr.ReadLine();
+
+                            if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(size) || string.IsNullOrEmpty(position)) continue;
+
+                            AccessoryPositions.Add(Path.GetFileNameWithoutExtension(path.Remove(0, 1)), new Tuple<Vector3, float>(Vector3Ex.FromString(position.Split('=')[1]), StringConverter.ToFloat(size.Split('=')[1])));
+                        }
+                    }
+                }
+            }
         }
 
         public int HeadTextureId;
@@ -1017,7 +1049,10 @@ namespace RH.Core.Helpers
                 return;
 
             var mesh = PickingController.LoadAccessoryMesh(objModel);
-            mesh.Material.DiffuseTextureMap = accessoryMaterialPath;
+            if (string.IsNullOrEmpty(accessoryMaterialPath))
+                mesh.Material.DiffuseColor = new Vector4(0.5f, 0.4f, 0.3f, 1);
+            else
+                mesh.Material.DiffuseTextureMap = accessoryMaterialPath;
 
             var objName = Path.GetFileNameWithoutExtension(accessoryObjPath);
             if (AccessoryPositions.ContainsKey(objName))
