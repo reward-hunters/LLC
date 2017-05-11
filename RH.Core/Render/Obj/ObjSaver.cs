@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ICSharpCode.SharpZipLib.Zip;
 using OpenTK;
 using RH.Core.Helpers;
 using RH.Core.IO;
@@ -349,7 +350,7 @@ namespace RH.Core.Render.Obj
         /// <param name="saveBrushesToTexture">При экспорте в ДАЗ или в колладу - нужно сохранять то что поправили кисточкой в туже текстуру </param>
         /// <param name="isCollada">Если коллада - то текстуры должны лежать в той же папке. Заказ старикана</param>
         public static void ExportMergedModel(string filePath, DynamicRenderMeshes HairMeshes, DynamicRenderMeshes AccesoryMeshes,
-            List<MeshInfo> faceParts, float morphScale, string sessionId, bool saveBrushesToTexture = false, bool isCollada = false)
+            List<MeshInfo> faceParts, float morphScale, string sessionId, bool saveBrushesToTexture = false, bool isCollada = false, int size = -1, ZipOutputStream zipStream = null)
         {
             //if (meshInfos.Count == 0)
             //    return;
@@ -423,6 +424,10 @@ namespace RH.Core.Render.Obj
                     }
                     if (faceParts.Count > 0)
                     {
+#if WEB_APP
+                        morphScale = morphScale * size / 100f;
+#endif
+
                         ProgramCore.EchoToLog(String.Format("На это умножаем бошку при экспорте ObjSaver::ExportMergedModel(): {0}", morphScale), EchoMessageType.Information);
                         var transformMatrix = Matrix4.CreateScale(morphScale);
                         SaveVerticles(faceParts, sw, transformMatrix);
@@ -494,9 +499,18 @@ namespace RH.Core.Render.Obj
                     ms.Flush();
                     var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionId);
                     ftpHelper.Upload(ms, filePath + ".obj");
+
+                    if (zipStream != null)
+                    {
+                        ms.Seek(0, SeekOrigin.Begin);
+                        var newEntry = new ZipEntry(filePath + ".obj");
+                        zipStream.PutNextEntry(newEntry);
+                        ms.CopyTo(zipStream);
+                        zipStream.CloseEntry();
+                    }
                 }
             }
-            SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId);
+            SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId, zipStream);
 #else
                 }
             SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, sessionId);
@@ -509,7 +523,7 @@ namespace RH.Core.Render.Obj
         /// <param name="fi"></param>
         /// <param name="saveBrushesToTexture">При экспорте в ДАЗ или в колладу - нужно сохранять то что поправили кисточкой в туже текстуру </param>
         /// <param name="isCollada">Если коллада - то текстуры должны лежать в той же папке. Заказ старикана</param>
-        private static void SaveMaterial(string mtlPath, Dictionary<string, ObjMaterial> materials, FileInfo fi, bool saveBrushesToTexture, bool isCollada, string sessionId)
+        private static void SaveMaterial(string mtlPath, Dictionary<string, ObjMaterial> materials, FileInfo fi, bool saveBrushesToTexture, bool isCollada, string sessionId, ZipOutputStream zipStream = null)
         {
 #if WEB_APP
             using (MemoryStream ms = new MemoryStream())
@@ -570,6 +584,15 @@ namespace RH.Core.Render.Obj
                     ms.Flush();
                     var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionId);
                     ftpHelper.Upload(ms, mtlPath);
+
+                    if (zipStream != null)
+                    {
+                        ms.Seek(0, SeekOrigin.Begin);
+                        var newEntry = new ZipEntry(mtlPath);
+                        zipStream.PutNextEntry(newEntry);
+                        ms.CopyTo(zipStream);
+                        zipStream.CloseEntry();
+                    }
                 }
             }
 #else

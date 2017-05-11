@@ -251,7 +251,7 @@ namespace RH.Core.Render.Controllers
                             //  objModel.TextureCoords.Count != objModelNull.TextureCoords.Count))
                             objModelNull = null;
 
-                        result = LoadHairMeshes(objModel, objModelNull, fromDragAndDrop, manType, MeshType.Hair, ref lastTriangle);
+                        result = LoadHairMeshes(objModel, objModelNull, fromDragAndDrop, manType, MeshType.Hair, -1, ref lastTriangle);
                         foreach (var renderMesh in result)
                             HairMeshes.Add(renderMesh);
                         break;
@@ -303,7 +303,7 @@ namespace RH.Core.Render.Controllers
                                 topPoint = 11.61f;
                                 break;
                             case ManType.Child:
-                                scale = 0.85f;
+                                         scale = 0.85f;
                                 topPoint = 9.759598f;
                                 break;
                         }
@@ -489,7 +489,7 @@ namespace RH.Core.Render.Controllers
             return result;
         }
 
-        public static List<DynamicRenderMesh> LoadHairMeshes(ObjItem objModel, ObjItem objModelNull, bool fromDragAndDrop, ManType manType, MeshType meshType, ref int lastTriangle)
+        public static List<DynamicRenderMesh> LoadHairMeshes(ObjItem objModel, ObjItem objModelNull, bool fromDragAndDrop, ManType manType, MeshType meshType, int size, ref int lastTriangle)
         {
             var result = new List<DynamicRenderMesh>();
             var vertexPositions = new List<float>();
@@ -567,6 +567,7 @@ namespace RH.Core.Render.Controllers
 
 #if WEB_APP
                     scale *= ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;
+                    scale = scale*size/100f;
 #endif
 
                     renderMesh.Transform = Matrix4.CreateScale(scale);
@@ -682,7 +683,7 @@ namespace RH.Core.Render.Controllers
         }
 
         /// <summary> Accessory file by default. Usually here is one accessory devided for differen groups. But it's not correct, so we combine it to one mesh</summary>
-        public static DynamicRenderMesh LoadAccessoryMesh(ObjItem objModel)
+        public static DynamicRenderMesh LoadAccessoryMesh(ObjItem objModel, int size = -1)
         {
             var vertexPositions = new List<float>();
             var vertexNormals = new List<float>();
@@ -737,6 +738,7 @@ namespace RH.Core.Render.Controllers
                 float scale = 246f;
 #if WEB_APP
                 scale *= ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale;
+                scale = scale * size / 100f;
 #endif
 
                 for (var i = 0; i < count; i++)
@@ -832,7 +834,7 @@ namespace RH.Core.Render.Controllers
             return result;
         }
 
-        #endregion
+#endregion
 
     }
 }

@@ -72,6 +72,10 @@
       <HintPath>..\AbaloneLLC\Libraries\FaceSDK.NET.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AbaloneLLC\Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <HintPath>..\AbaloneLLC\Libraries\Ionic.Zip.dll</HintPath>
       <Private>False</Private>

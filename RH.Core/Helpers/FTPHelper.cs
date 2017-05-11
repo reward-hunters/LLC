@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace RH.Core.Helpers
 {
@@ -138,9 +139,9 @@ namespace RH.Core.Helpers
             return result;
         }
 
-        public static void CopyFromFtpToFtp(string oldFilePath, string newFilePathDir, string newFileName)
+        public static void CopyFromFtpToFtp(string oldFilePath, string newFilePathDir, string newFileName, ZipOutputStream zipStream, string zipFileName)
         {
-          UpdateAddress(newFilePathDir);
+            UpdateAddress(newFilePathDir);
             if (oldFilePath.StartsWith(@"ftp:/1"))
                 oldFilePath = oldFilePath.Replace(@"ftp:/1", @"ftp://1");
             oldFilePath = GetCaseSensitiveFileName(oldFilePath);
@@ -165,6 +166,16 @@ namespace RH.Core.Helpers
 
                 var ftpHelper = new FTPHelper(newFilePathDir);
                 ftpHelper.Upload(ms, newFileName);
+
+                if (zipStream != null)          // если нужно запаковать тоже
+                {
+                    ms.Seek(0, SeekOrigin.Begin);
+                    var newEntry = new ZipEntry(zipFileName);
+                    newEntry.DateTime = DateTime.Now;
+                    zipStream.PutNextEntry(newEntry);
+                    ms.CopyTo(zipStream);
+                    zipStream.CloseEntry();
+                }
             }
         }
 

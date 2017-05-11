@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Windows.Forms;
+using ICSharpCode.SharpZipLib.Zip;
 using Luxand;
 using OpenTK;
 using RH.Core;
@@ -238,7 +240,8 @@ namespace RH.WebCore
         /// <param name="hairMaterialPath"></param>
         /// <param name="accessoryPath"></param>
         /// <param name="accessoryMaterialPath"></param>
-        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue)
+        /// <param name="size">96% (3.2"), 113%(3.8"), 134%(4.5") ( 1 это 3.2, 2 - 3.8 дюйма и т.п.</param>
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -248,6 +251,19 @@ namespace RH.WebCore
                     break;
                 case 2:
                     manType = ManType.Child;
+                    break;
+            }
+
+            switch (size)
+            {
+                case 0:
+                    size = 96;
+                    break;
+                case 1:
+                    size = 113;
+                    break;
+                case 2:
+                    size = 134;
                     break;
             }
 
@@ -365,6 +381,14 @@ namespace RH.WebCore
             ProgramCore.Project.RenderMainHelper.InitializeHairPositions();
             ProgramCore.Project.RenderMainHelper.InitializeAccessoryPositions();
 
+            MemoryStream outputMemStream = new MemoryStream();
+            ZipOutputStream zipStream = new ZipOutputStream(outputMemStream);       // заодно все будем паковать в архивчик
+            zipStream.SetLevel(3);
+
+            var newEntry = new ZipEntry(@"Textures\");
+            zipStream.PutNextEntry(newEntry);
+            zipStream.CloseEntry();
+
             #region Attach hair
 
             var hairObjPath = string.Empty;
@@ -395,10 +419,10 @@ namespace RH.WebCore
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(hairMaterialPath) + ".jpg";
 
-                FTPHelper.CopyFromFtpToFtp(hairMaterialPath, temp, fileName);
+                FTPHelper.CopyFromFtpToFtp(hairMaterialPath, temp, fileName, zipStream, @"Textures\" + fileName);
                 hairMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
 
-                ProgramCore.Project.RenderMainHelper.AttachHair(hairObjPath, hairMaterialPath, manType);
+                ProgramCore.Project.RenderMainHelper.AttachHair(hairObjPath, hairMaterialPath, manType, size);
             }
 
             #endregion
@@ -433,18 +457,18 @@ namespace RH.WebCore
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(accessoryMaterialPath) + ".jpg";
 
-                FTPHelper.CopyFromFtpToFtp(accessoryMaterialPath, temp, fileName);
+                FTPHelper.CopyFromFtpToFtp(accessoryMaterialPath, temp, fileName, zipStream, @"Textures\" + fileName);
                 accessoryMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
 
-                ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType);
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType, size);
             }
 
             #region Addon
 
-           var addonObjPath = GetParcedHairAccessoriesLink(addonPath, ".obj");
+            var addonObjPath = GetParcedHairAccessoriesLink(addonPath, ".obj");
             if (!string.IsNullOrEmpty(addonObjPath) && FTPHelper.IsFileExists(addonObjPath))
             {
-               // var addonObjPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Add-on/GF.obj";
+                // var addonObjPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Add-on/GF.obj";
 
                 addonMaterialPath = GetParcedHairAccessoriesLink(addonMaterialPath, ".jpg");
                 if (!string.IsNullOrEmpty(addonMaterialPath))
@@ -452,27 +476,42 @@ namespace RH.WebCore
                     var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                     var fileName = Path.GetFileNameWithoutExtension(addonMaterialPath) + ".jpg";
 
-                    FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName);
+                    FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName, zipStream, @"Textures\" + fileName);
                 }
 
-                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType);
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType, size);
             }
 
             #endregion
 
             #endregion
 
-            ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID);
-            ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures();
+            ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID, size, zipStream);
+            ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures(zipStream);
 
 
             var address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures";
-            var ftpHelper = new FTPHelper(address);
+            var profileImgPath = sessionID + ".jpeg";
 
+            var ftpHelper = new FTPHelper(address);
             var stream = new MemoryStream();
             templateImage.Save(stream, ImageFormat.Jpeg);
-            ftpHelper.Upload(stream, sessionID + ".jpeg");
+            ftpHelper.Upload(stream, profileImgPath);
+            
+            ms.Seek(0, SeekOrigin.Begin);
+            newEntry = new ZipEntry(@"Textures\" + profileImgPath);
+            zipStream.PutNextEntry(newEntry);
+            ms.CopyTo(zipStream);
+            zipStream.CloseEntry();
 
+            zipStream.IsStreamOwner = false;    // False stops the Close also Closing the underlying stream.
+            zipStream.Close();          // Must finish the ZipOutputStream before using outputMemStream.
+
+            outputMemStream.Position = 0;
+
+            address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName;
+            ftpHelper = new FTPHelper(address);
+            ftpHelper.Upload(outputMemStream, "test.zip");
         }
     }
 }

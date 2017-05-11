@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using ICSharpCode.SharpZipLib.Zip;
 using OpenTK;
 using RH.Core.Render.Controllers;
 using RH.Core.Render.Helpers;
@@ -66,11 +67,11 @@ namespace RH.Core.Helpers
                         {
                             var path = sr.ReadLine();
                             var position = sr.ReadLine();
-                            var  size= sr.ReadLine();
+                            var size = sr.ReadLine();
 
                             if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(size) || string.IsNullOrEmpty(position)) continue;
 
-                            HairPositions.Add(Path.GetFileNameWithoutExtension(path.Remove(0,1)), new Tuple<Vector3, float>(Vector3Ex.FromString(position.Split('=')[1]), StringConverter.ToFloat(size.Split('=')[1])));
+                            HairPositions.Add(Path.GetFileNameWithoutExtension(path.Remove(0, 1)), new Tuple<Vector3, float>(Vector3Ex.FromString(position.Split('=')[1]), StringConverter.ToFloat(size.Split('=')[1])));
                         }
                     }
                 }
@@ -573,7 +574,7 @@ namespace RH.Core.Helpers
             SaveHead(fiName, true);
         }
 
-        public void SaveSmoothedTextures()
+        public void SaveSmoothedTextures(ZipOutputStream zipStream)
         {
 #if (WEB_APP)
             var frontTexture = ProgramCore.Project.FrontImage;
@@ -587,12 +588,21 @@ namespace RH.Core.Helpers
                 if (bitmap == null)
                     continue;
 
-                var stream = new MemoryStream();
-                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                var ms = new MemoryStream();
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
                 var fileName = Path.GetFileNameWithoutExtension(oldTexturePath) + "_smoothed" +
                                Path.GetExtension(oldTexturePath);
 
-                ftpHelper.Upload(stream, fileName);
+                ftpHelper.Upload(ms, fileName);
+
+                if (zipStream != null)
+                {
+                    ms.Seek(0, SeekOrigin.Begin);
+                    var newEntry = new ZipEntry(@"Textures\" + fileName);
+                    zipStream.PutNextEntry(newEntry);
+                    ms.CopyTo(zipStream);
+                    zipStream.CloseEntry();
+                }
             }
 #else
 
@@ -890,7 +900,7 @@ namespace RH.Core.Helpers
             }
         }
 
-        public void SaveMergedHead(string path)
+        public void SaveMergedHead(string path, int size, ZipOutputStream zipStream)
         {
             var meshInfos = new List<MeshInfo>();
 
@@ -898,7 +908,7 @@ namespace RH.Core.Helpers
                 meshInfos.Add(new MeshInfo(part, headMeshesController.RenderMesh.MorphScale));
 
 
-            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName);
+            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName, false, false, size, zipStream);
         }
 
 
@@ -1001,14 +1011,14 @@ namespace RH.Core.Helpers
         //                       ProgramCore.Project.NoseUserCenter.Y * ImageTemplateHeight + ImageTemplateOffsetY);
         //}
 
-        public void AttachHair(string hairObjPath, string materialPath, ManType manType)
+        public void AttachHair(string hairObjPath, string materialPath, ManType manType, int size)
         {
             var objModel = ObjLoader.LoadObjFile(hairObjPath, false);
             if (objModel == null)
                 return;
 
             var temp = 0;
-            var meshes = PickingController.LoadHairMeshes(objModel, null, true, manType, MeshType.Hair, ref temp);
+            var meshes = PickingController.LoadHairMeshes(objModel, null, true, manType, MeshType.Hair,size, ref temp);
             foreach (var mesh in meshes)
             {
                 if (mesh == null || mesh.vertexArray.Length == 0) //ТУТ!
@@ -1042,13 +1052,13 @@ namespace RH.Core.Helpers
             ProgramCore.Project.RenderMainHelper.pickingController.HairMeshes.AddRange(meshes);
         }
 
-        public void AttachAccessory(string accessoryObjPath, string accessoryMaterialPath, ManType manType)
+        public void AttachAccessory(string accessoryObjPath, string accessoryMaterialPath, ManType manType, int size)
         {
             var objModel = ObjLoader.LoadObjFile(accessoryObjPath, false);
             if (objModel == null)
                 return;
 
-            var mesh = PickingController.LoadAccessoryMesh(objModel);
+            var mesh = PickingController.LoadAccessoryMesh(objModel, size);
             if (string.IsNullOrEmpty(accessoryMaterialPath))
                 mesh.Material.DiffuseColor = new Vector4(0.5f, 0.4f, 0.3f, 1);
             else
