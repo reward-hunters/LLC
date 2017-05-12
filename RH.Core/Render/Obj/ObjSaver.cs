@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Assimp;
 using ICSharpCode.SharpZipLib.Zip;
 using OpenTK;
 using RH.Core.Helpers;
@@ -502,11 +503,31 @@ namespace RH.Core.Render.Obj
 
                     if (zipStream != null)
                     {
+                        var importer = new AssimpImporter();
                         ms.Seek(0, SeekOrigin.Begin);
-                        var newEntry = new ZipEntry(filePath + ".obj");
+                        //   importer.ConvertFromStreamToFile(ms, "obj", @"C:\Users\Kulikov\Documents\maya\1.dae", "collada");
+                        var blob = importer.ConvertFromStreamToBlob(ms, "obj", PostProcessSteps.None, "collada", PostProcessSteps.None);
+
+                        /*          using (FileStream fs = new FileStream(Path.Combine(@"C:\Users\Kulikov\Documents\maya\", "2.dae"), FileMode.CreateNew, FileAccess.Write))
+                                  {
+                                      var arr = blob.Data;
+                                      fs.Write(arr, 0, (int)arr.Length);
+                                      fs.Close();
+                                  }*/
+
+
+
+                        var newEntry = new ZipEntry(filePath + ".dae");
                         zipStream.PutNextEntry(newEntry);
-                        ms.CopyTo(zipStream);
+                        var arr = blob.Data;
+                        zipStream.Write(arr, 0, arr.Length);
                         zipStream.CloseEntry();
+
+                        /*    ms.Seek(0, SeekOrigin.Begin);
+                            var newEntry = new ZipEntry(filePath + ".obj");
+                            zipStream.PutNextEntry(newEntry);
+                            ms.CopyTo(zipStream);
+                            zipStream.CloseEntry();*/
                     }
                 }
             }

@@ -598,7 +598,7 @@ namespace RH.Core.Helpers
                 if (zipStream != null)
                 {
                     ms.Seek(0, SeekOrigin.Begin);
-                    var newEntry = new ZipEntry(@"Textures\" + fileName);
+                    var newEntry = new ZipEntry(fileName);
                     zipStream.PutNextEntry(newEntry);
                     ms.CopyTo(zipStream);
                     zipStream.CloseEntry();
@@ -907,8 +907,8 @@ namespace RH.Core.Helpers
             foreach (var part in headMeshesController.RenderMesh.Parts)
                 meshInfos.Add(new MeshInfo(part, headMeshesController.RenderMesh.MorphScale));
 
-
-            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName, false, false, size, zipStream);
+            var isCollada = zipStream != null;
+            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName, isCollada, isCollada, size, zipStream);
         }
 
 
@@ -1011,14 +1011,14 @@ namespace RH.Core.Helpers
         //                       ProgramCore.Project.NoseUserCenter.Y * ImageTemplateHeight + ImageTemplateOffsetY);
         //}
 
-        public void AttachHair(string hairObjPath, string materialPath, ManType manType, int size)
+        public void AttachHair(string hairObjPath, string materialPath, ManType manType)
         {
             var objModel = ObjLoader.LoadObjFile(hairObjPath, false);
             if (objModel == null)
                 return;
 
             var temp = 0;
-            var meshes = PickingController.LoadHairMeshes(objModel, null, true, manType, MeshType.Hair,size, ref temp);
+            var meshes = PickingController.LoadHairMeshes(objModel, null, true, manType, MeshType.Hair, ref temp);
             foreach (var mesh in meshes)
             {
                 if (mesh == null || mesh.vertexArray.Length == 0) //ТУТ!
@@ -1052,13 +1052,13 @@ namespace RH.Core.Helpers
             ProgramCore.Project.RenderMainHelper.pickingController.HairMeshes.AddRange(meshes);
         }
 
-        public void AttachAccessory(string accessoryObjPath, string accessoryMaterialPath, ManType manType, int size)
+        public void AttachAccessory(string accessoryObjPath, string accessoryMaterialPath, ManType manType)
         {
             var objModel = ObjLoader.LoadObjFile(accessoryObjPath, false);
             if (objModel == null)
                 return;
 
-            var mesh = PickingController.LoadAccessoryMesh(objModel, size);
+            var mesh = PickingController.LoadAccessoryMesh(objModel);
             if (string.IsNullOrEmpty(accessoryMaterialPath))
                 mesh.Material.DiffuseColor = new Vector4(0.5f, 0.4f, 0.3f, 1);
             else

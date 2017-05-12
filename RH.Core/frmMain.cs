@@ -1805,6 +1805,7 @@ namespace RH.Core
 
             var importer = new AssimpImporter();
             importer.ConvertFromFileToFile(fiName, daeName, "collada");
+    
 
             if (ProgramCore.Project.FrontImage != null)
                 ProgramCore.Project.FrontImage.Save(Path.Combine(newDirectory, "tempHaarImage.jpg"));

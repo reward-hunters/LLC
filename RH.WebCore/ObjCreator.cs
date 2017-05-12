@@ -241,7 +241,7 @@ namespace RH.WebCore
         /// <param name="accessoryPath"></param>
         /// <param name="accessoryMaterialPath"></param>
         /// <param name="size">96% (3.2"), 113%(3.8"), 134%(4.5") ( 1 это 3.2, 2 - 3.8 дюйма и т.п.</param>
-        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size)
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size, string ftpOutputName)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -381,13 +381,14 @@ namespace RH.WebCore
             ProgramCore.Project.RenderMainHelper.InitializeHairPositions();
             ProgramCore.Project.RenderMainHelper.InitializeAccessoryPositions();
 
-            MemoryStream outputMemStream = new MemoryStream();
-            ZipOutputStream zipStream = new ZipOutputStream(outputMemStream);       // заодно все будем паковать в архивчик
-            zipStream.SetLevel(3);
+            ZipOutputStream zipStream = null;
 
-            var newEntry = new ZipEntry(@"Textures\");
-            zipStream.PutNextEntry(newEntry);
-            zipStream.CloseEntry();
+            MemoryStream outputMemStream = new MemoryStream();
+            if (!string.IsNullOrEmpty(ftpOutputName))
+            {
+                zipStream = new ZipOutputStream(outputMemStream); // заодно все будем паковать в архивчик
+                zipStream.SetLevel(3);
+            }
 
             #region Attach hair
 
@@ -419,10 +420,10 @@ namespace RH.WebCore
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(hairMaterialPath) + ".jpg";
 
-                FTPHelper.CopyFromFtpToFtp(hairMaterialPath, temp, fileName, zipStream, @"Textures\" + fileName);
+                FTPHelper.CopyFromFtpToFtp(hairMaterialPath, temp, fileName, zipStream, fileName);
                 hairMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
 
-                ProgramCore.Project.RenderMainHelper.AttachHair(hairObjPath, hairMaterialPath, manType, size);
+                ProgramCore.Project.RenderMainHelper.AttachHair(hairObjPath, hairMaterialPath, manType);
             }
 
             #endregion
@@ -457,10 +458,10 @@ namespace RH.WebCore
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(accessoryMaterialPath) + ".jpg";
 
-                FTPHelper.CopyFromFtpToFtp(accessoryMaterialPath, temp, fileName, zipStream, @"Textures\" + fileName);
+                FTPHelper.CopyFromFtpToFtp(accessoryMaterialPath, temp, fileName, zipStream,  fileName);
                 accessoryMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
 
-                ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType, size);
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType);
             }
 
             #region Addon
@@ -476,10 +477,10 @@ namespace RH.WebCore
                     var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                     var fileName = Path.GetFileNameWithoutExtension(addonMaterialPath) + ".jpg";
 
-                    FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName, zipStream, @"Textures\" + fileName);
+                    FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName, zipStream, fileName);
                 }
 
-                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType, size);
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType);
             }
 
             #endregion
@@ -497,21 +498,23 @@ namespace RH.WebCore
             var stream = new MemoryStream();
             templateImage.Save(stream, ImageFormat.Jpeg);
             ftpHelper.Upload(stream, profileImgPath);
-            
-            ms.Seek(0, SeekOrigin.Begin);
-            newEntry = new ZipEntry(@"Textures\" + profileImgPath);
-            zipStream.PutNextEntry(newEntry);
-            ms.CopyTo(zipStream);
-            zipStream.CloseEntry();
 
-            zipStream.IsStreamOwner = false;    // False stops the Close also Closing the underlying stream.
-            zipStream.Close();          // Must finish the ZipOutputStream before using outputMemStream.
+            if (zipStream != null)
+            {
+                ms.Seek(0, SeekOrigin.Begin);
+                var newEntry = new ZipEntry(profileImgPath);
+                zipStream.PutNextEntry(newEntry);
+                ms.CopyTo(zipStream);
+                zipStream.CloseEntry();
 
-            outputMemStream.Position = 0;
+                zipStream.IsStreamOwner = false;    // False stops the Close also Closing the underlying stream.
+                zipStream.Close();          // Must finish the ZipOutputStream before using outputMemStream.
 
-            address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName;
-            ftpHelper = new FTPHelper(address);
-            ftpHelper.Upload(outputMemStream, "test.zip");
+                outputMemStream.Position = 0;
+                address = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_output/";
+                ftpHelper = new FTPHelper(address);
+                ftpHelper.Upload(outputMemStream, ftpOutputName + ".zip");
+            }
         }
     }
 }
