@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Assimp;
 using ICSharpCode.SharpZipLib.Zip;
 using OpenTK;
@@ -206,6 +207,7 @@ namespace RH.Core.Render.Obj
             var materials = new Dictionary<string, ObjMaterial>();         // group title, diffuse color, texture path
 
 #if WEB_APP
+
             var mtlPath = filePath + ".mtl";
             var mtlName = mtlPath;
             using (MemoryStream ms = new MemoryStream())
@@ -503,35 +505,33 @@ namespace RH.Core.Render.Obj
 
                     if (zipStream != null)
                     {
-                        var importer = new AssimpImporter();
-                        ms.Seek(0, SeekOrigin.Begin);
-                        //   importer.ConvertFromStreamToFile(ms, "obj", @"C:\Users\Kulikov\Documents\maya\1.dae", "collada");
-                        var blob = importer.ConvertFromStreamToBlob(ms, "obj", PostProcessSteps.None, "collada", PostProcessSteps.None);
+                        ms.Position = 0;
+                        ms.Flush();
+                        var path = @"C:\test";
+                        FolderEx.CreateDirectory(path);
 
-                        /*          using (FileStream fs = new FileStream(Path.Combine(@"C:\Users\Kulikov\Documents\maya\", "2.dae"), FileMode.CreateNew, FileAccess.Write))
-                                  {
-                                      var arr = blob.Data;
-                                      fs.Write(arr, 0, (int)arr.Length);
-                                      fs.Close();
-                                  }*/
-
-
-
-                        var newEntry = new ZipEntry(filePath + ".dae");
-                        zipStream.PutNextEntry(newEntry);
-                        var arr = blob.Data;
-                        zipStream.Write(arr, 0, arr.Length);
-                        zipStream.CloseEntry();
-
-                        /*    ms.Seek(0, SeekOrigin.Begin);
-                            var newEntry = new ZipEntry(filePath + ".obj");
-                            zipStream.PutNextEntry(newEntry);
-                            ms.CopyTo(zipStream);
-                            zipStream.CloseEntry();*/
+                        using (var fs = new FileStream(Path.Combine(path, sessionId + ".obj"), FileMode.Create, FileAccess.Write))
+                        {
+                            var arr = ms.ToArray();
+                            fs.Write(arr, 0, (int)arr.Length);
+                            fs.Close();
+                        }
                     }
                 }
             }
             SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId, zipStream);
+
+            if (zipStream != null)
+            {
+                var importer = new AssimpImporter();
+                var blob = importer.ConvertFromFileToBlob(Path.Combine(@"C:\test", sessionId + ".obj"), "collada", PostProcessSteps.None);
+
+                var newEntry = new ZipEntry(filePath + ".dae");
+                zipStream.PutNextEntry(newEntry);
+                var arr = blob.Data;
+                zipStream.Write(arr, 0, arr.Length);
+                zipStream.CloseEntry();
+            }
 #else
                 }
             SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, sessionId);
@@ -606,8 +606,18 @@ namespace RH.Core.Render.Obj
                     var ftpHelper = new FTPHelper(@"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionId);
                     ftpHelper.Upload(ms, mtlPath);
 
+                    var path = @"C:\test";
+                    FolderEx.CreateDirectory(path);
+
                     if (zipStream != null)
                     {
+                        using (FileStream fs = new FileStream(Path.Combine(path, sessionId + ".mtl"), FileMode.Create, FileAccess.Write))
+                        {
+                            var arr = ms.ToArray();
+                            fs.Write(arr, 0, (int)arr.Length);
+                            fs.Close();
+                        }
+
                         ms.Seek(0, SeekOrigin.Begin);
                         var newEntry = new ZipEntry(mtlPath);
                         zipStream.PutNextEntry(newEntry);

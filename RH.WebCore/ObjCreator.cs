@@ -55,6 +55,10 @@ namespace RH.WebCore
         public Dictionary<Guid, PartMorphInfo> FatMorphing = null;
         #endregion
 
+        public ObjCreator()
+        {
+        }
+
         private static FSDK.TPoint[] GetFeaturePoints(Image sourceImage)
         {
             FSDK.TPoint[] pointFeature = null;
@@ -229,7 +233,22 @@ namespace RH.WebCore
             }
         }
 
+        public string Test()
+        {
+            string result = "";
 
+            var path = Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), "bin");
+
+            foreach (var file in Directory.GetDirectories(path))
+                result += file + Environment.NewLine;
+            result += "_____";
+
+            foreach (var file in Directory.GetFiles(path))
+                result += file + Environment.NewLine;
+
+            return Environment.GetEnvironmentVariable("Path");
+            //  return  Environment.GetEnvironmentVariable("Path"); //System.Reflection.Assembly.GetExecutingAssembly().Location;
+        }
         /// <summary>
         ///  Путь на волосы и аксессуары приходит в виде ссылке на картинку, Там же с тем же названием должен лежать обж.
         /// Мне проще обработать такие ссылки тут, чем в яве
@@ -458,7 +477,7 @@ namespace RH.WebCore
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(accessoryMaterialPath) + ".jpg";
 
-                FTPHelper.CopyFromFtpToFtp(accessoryMaterialPath, temp, fileName, zipStream,  fileName);
+                FTPHelper.CopyFromFtpToFtp(accessoryMaterialPath, temp, fileName, zipStream, fileName);
                 accessoryMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
 
                 ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType);
