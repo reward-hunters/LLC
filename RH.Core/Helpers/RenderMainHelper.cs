@@ -15,6 +15,7 @@ using RH.Core.Render.Obj;
 using RH.MeshUtils;
 using RH.MeshUtils.Data;
 using RH.MeshUtils.Helpers;
+using Assimp;
 
 namespace RH.Core.Helpers
 {
@@ -900,15 +901,79 @@ namespace RH.Core.Helpers
             }
         }
 
-        public void SaveMergedHead(string path, ZipOutputStream zipStream)
+        private static float GetFinalHeight(int size)
         {
+            switch(size)
+            {
+                case 0:
+                    return 3.2f;
+                case 1:
+                    return 3.8f;
+                case 2:
+                    return 4.5f;
+            }
+            return 8.0f;
+        }
+
+        private static float GetFakeScale(int size)
+        {
+            switch (size)
+            {
+                case 0:
+                    return 0.69084628670120898100172711571675f;
+                case 1:
+                    return 0.69078349391019814579167424104708f;
+                case 2:
+                    return 0.69081977279705250230273257599018f;
+            }
+            return 1.0f;
+        }
+
+        private float GetRealScale(int size, DynamicRenderMeshes hairMeshes, DynamicRenderMeshes accesoryMeshes, List<MeshInfo> headMeshInfos)
+        {
+            if(size < 0)
+                return headMeshesController.RenderMesh.RealScale;
+            else
+            {
+                var meshInfos = new List<MeshInfo>(headMeshInfos);
+                float finalHeight = GetFinalHeight(size);
+                float minY = float.MaxValue, maxY = float.MinValue;
+                foreach(var mesh in hairMeshes)
+                {
+                    meshInfos.Add(mesh.GetMeshInfo(1.0f, ManType.Custom));
+                }
+                foreach (var mesh in accesoryMeshes)
+                {
+                    meshInfos.Add(mesh.GetMeshInfo(1.0f, ManType.Custom));
+                }
+                foreach(var meshInfo in meshInfos)
+                {
+                    foreach(var position in meshInfo.Positions)
+                    {
+                        maxY = Math.Max(maxY, position.Y);
+                        minY = Math.Min(minY, position.Y);
+                    }
+                }
+                var height = maxY - minY;
+                const float fakeScale = 0.6908f;
+                return fakeScale * (finalHeight / height);
+            }
+        }
+
+        public void SaveMergedHead(string path, ZipOutputStream zipStream, int size)
+        {
+            //var importer = new AssimpImporter(); // assimp doesn't work 
+            //importer.ConvertFromFileToFile(Path.Combine(@"C:\elance\github\test\1\optsplvukfnc3tovb5pwdlq0_1\optsplvukfnc3tovb5pwdlq0.obj"), Path.Combine(@"C:\elance\github\test\1\1.dae"), "collada");
+
             var meshInfos = new List<MeshInfo>();
 
             foreach (var part in headMeshesController.RenderMesh.Parts)
                 meshInfos.Add(new MeshInfo(part, headMeshesController.RenderMesh.MorphScale));
 
+            var realScale = GetRealScale(size, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos);
+
             var isCollada = zipStream != null;
-            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName, isCollada, isCollada,  zipStream);
+            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, realScale, ProgramCore.Project.ProjectName, isCollada, isCollada,  zipStream);
         }
 
 

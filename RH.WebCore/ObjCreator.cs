@@ -493,20 +493,20 @@ namespace RH.WebCore
 
             #endregion
 
-            switch (size)
-            {
-                case 0:
-                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.2f;
-                    break;
-                case 1:
-                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.8f;
-                    break;
-                case 2:
-                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 4.5f;
-                    break;
-            }
+            //switch (size)
+            //{
+            //    case 0:
+            //        ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.2f;
+            //        break;
+            //    case 1:
+            //        ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.8f;
+            //        break;
+            //    case 2:
+            //        ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 4.5f;
+            //        break;
+            //}
 
-            ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID, zipStream);
+            ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID, zipStream, size);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures(zipStream);
 
 
