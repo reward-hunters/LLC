@@ -900,7 +900,7 @@ namespace RH.Core.Helpers
             }
         }
 
-        public void SaveMergedHead(string path, int size, ZipOutputStream zipStream)
+        public void SaveMergedHead(string path, ZipOutputStream zipStream)
         {
             var meshInfos = new List<MeshInfo>();
 
@@ -908,7 +908,7 @@ namespace RH.Core.Helpers
                 meshInfos.Add(new MeshInfo(part, headMeshesController.RenderMesh.MorphScale));
 
             var isCollada = zipStream != null;
-            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName, isCollada, isCollada, size, zipStream);
+            ObjSaver.ExportMergedModel(path, pickingController.HairMeshes, pickingController.AccesoryMeshes, meshInfos, headMeshesController.RenderMesh.RealScale, ProgramCore.Project.ProjectName, isCollada, isCollada,  zipStream);
         }
 
 

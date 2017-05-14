@@ -273,19 +273,6 @@ namespace RH.WebCore
                     break;
             }
 
-            switch (size)
-            {
-                case 0:
-                    size = 96;
-                    break;
-                case 1:
-                    size = 113;
-                    break;
-                case 2:
-                    size = 134;
-                    break;
-            }
-
             #region Создание проекта
 
             var templateImage = default(Bitmap);
@@ -506,7 +493,20 @@ namespace RH.WebCore
 
             #endregion
 
-            ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID, size, zipStream);
+            switch (size)
+            {
+                case 0:
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.2f;
+                    break;
+                case 1:
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.8f;
+                    break;
+                case 2:
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 4.5f;
+                    break;
+            }
+
+            ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID, zipStream);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures(zipStream);
 
 
