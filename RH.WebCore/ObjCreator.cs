@@ -127,7 +127,7 @@ namespace RH.WebCore
             RightMiddleFace2 = new Vector2(RightMiddleFace2.X / (sourceImage.Width * 1f), RightMiddleFace2.Y / (sourceImage.Height * 1f));
 
 
-            var distance = facialFeatures[2].Y - facialFeatures[11].Y;
+            var distance = facialFeatures[2].Y - facialFeatures[11].Y;     // а хз. старикан попросил чуть ниже брать, но не объяснил как.
             var topPoint = facialFeatures[16].Y + distance;
 
             var minX = GetMinX(TopFace, MiddleFace1, MiddleFace2);
@@ -534,6 +534,45 @@ namespace RH.WebCore
                 ftpHelper = new FTPHelper(address);
                 ftpHelper.Upload(outputMemStream, ftpOutputName + ".zip");
             }
+        }
+
+
+
+        public static double GetFaceAngle(string sessionId)
+        {
+            using (WebClient client = new WebClient())
+            {
+                var imagePath = "http://printahead.net/printahead.online/PrintAhead_images/" + sessionId + ".jpeg";
+                byte[] imageBytes = client.DownloadData(imagePath);
+
+                using (var ms = new MemoryStream(imageBytes))
+                {
+
+                    var img = new Bitmap(ms);
+
+                    CropHelper.ActivateRecognition();
+
+                    var points = GetFeaturePoints(img);
+                    var detectedNosePoints = new List<Vector2>();
+                    detectedNosePoints.Add(new Vector2(points[45].x / (img.Width * 1f), points[45].y / (img.Height * 1f)));
+                    detectedNosePoints.Add(new Vector2(points[46].x / (img.Width * 1f), points[46].y / (img.Height * 1f)));
+                    detectedNosePoints.Add(new Vector2(points[2].x / (img.Width * 1f), points[2].y / (img.Height * 1f)));
+                    detectedNosePoints.Add(new Vector2(points[22].x / (img.Width * 1f), points[22].y / (img.Height * 1f)));
+                    detectedNosePoints.Add(new Vector2(points[49].x / (img.Width * 1f), points[49].y / (img.Height * 1f)));
+
+                    /*    var noseTip = MirroredHeadPoint.GetFrontWorldPoint(detectedNosePoints[2], ProgramCore.CurrentProgram);
+
+                        var noseTop = MirroredHeadPoint.GetFrontWorldPoint(detectedNosePoints[3], ProgramCore.CurrentProgram);*/
+                    var noseTop = detectedNosePoints[3];
+                    var noseTip = detectedNosePoints[2];
+                    var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
+                    var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
+
+                    angle = angle*(180d/Math.PI);
+                    return Math.Abs(angle);
+                }
+            }
+
         }
     }
 }
