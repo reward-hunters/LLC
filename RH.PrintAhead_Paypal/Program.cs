@@ -28,14 +28,12 @@ namespace RH.OneClick
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
-                ObjCreator.GetFaceAngle("zzx5rygtck4xehmui1eem0hv");
-            /*   
+              
                 var objectCreator = new ObjCreator();
-                //   objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "  							<img src=\"http://printahead.net/printahead.online/Library/Hair/Standard/20.jpg\"", "", "  							<img src=\" http://printahead.net/printahead.online/Library/Accessory/Standard/HF.jpg\"", "");
-           //    objectCreator.CreateObj(0, "jr1u2klohh5kszoo250lcj1t", "", "", "", "", 60,0,0,false);
-           objectCreator.CreateObj(0, "optsplvukfnc3tovb5pwdlq0", "", "", "","", "", "", 20,0,0, 1, "");
-           */
-                ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
+                objectCreator.CreateObj(0, "00qngkqihrgdjfm13i35nwiw", "", "", "", "", "                           < img src = \"http://printahead.net/printahead.online/Library/Accessory/Add-on/GF.jpg\" >", " 							<img src=\"http://printahead.net/printahead.online/Library/Accessory/Add-on/Cone.jpg\"> ","","", " 							<img src=\"http://printahead.net/printahead.online/Library/Accessory/Materials/blue.jpg\"> ", 20, 0, 0, 1, "");
+
+
+                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);
             }
             catch (Exception e)

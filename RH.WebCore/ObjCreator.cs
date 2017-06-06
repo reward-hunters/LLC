@@ -260,7 +260,7 @@ namespace RH.WebCore
         /// <param name="accessoryPath"></param>
         /// <param name="accessoryMaterialPath"></param>
         /// <param name="size">96% (3.2"), 113%(3.8"), 134%(4.5") ( 1 это 3.2, 2 - 3.8 дюйма и т.п.</param>
-        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size, string ftpOutputName)
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath1, string addonPath2, string addonPath3, string addonPath4, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size, string ftpOutputName)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -470,24 +470,19 @@ namespace RH.WebCore
                 ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType);
             }
 
-            #region Addon
+            #region Addons
 
-            var addonObjPath = GetParcedHairAccessoriesLink(addonPath, ".obj");
-            if (!string.IsNullOrEmpty(addonObjPath) && FTPHelper.IsFileExists(addonObjPath))
-            {
-                // var addonObjPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Add-on/GF.obj";
+            var addonObjPath = GetParcedHairAccessoriesLink(addonPath1, ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
-                addonMaterialPath = GetParcedHairAccessoriesLink(addonMaterialPath, ".jpg");
-                if (!string.IsNullOrEmpty(addonMaterialPath))
-                {
-                    var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
-                    var fileName = Path.GetFileNameWithoutExtension(addonMaterialPath) + ".jpg";
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath2, ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
-                    FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName, zipStream, fileName);
-                }
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath3, ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
-                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType);
-            }
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath4, ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
             #endregion
 
@@ -536,7 +531,28 @@ namespace RH.WebCore
             }
         }
 
+        private bool isAddonMaterialActivated = false;
+        private void AttachAddon(string addonObjPath, ref string addonMaterialPath, string sessionID, ManType manType, ref ZipOutputStream zipStream)
+        {
+            if (!string.IsNullOrEmpty(addonObjPath) && FTPHelper.IsFileExists(addonObjPath))
+            {
+                if (!isAddonMaterialActivated)
+                {
+                    addonMaterialPath = GetParcedHairAccessoriesLink(addonMaterialPath, ".jpg");
+                    if (!string.IsNullOrEmpty(addonMaterialPath))
+                    {
+                        var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
+                        var fileName = Path.GetFileNameWithoutExtension(addonMaterialPath) + ".jpg";
 
+                        FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName, zipStream, fileName);
+                        addonMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
+                        isAddonMaterialActivated = true;
+                    }
+                }
+
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType);
+            }
+        }
 
         public static double GetFaceAngle(string sessionId)
         {
@@ -568,7 +584,7 @@ namespace RH.WebCore
                     var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
                     var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
 
-                    angle = angle*(180d/Math.PI);
+                    angle = angle * (180d / Math.PI);
                     return Math.Abs(angle);
                 }
             }
