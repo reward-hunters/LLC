@@ -404,7 +404,7 @@ namespace RH.WebCore
                 switch (manType)
                 {
                     case ManType.Child:
-                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/10.obj";
+                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/10C.obj";
                         break;
                     case ManType.Female:
                         hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/3.obj";
@@ -415,7 +415,7 @@ namespace RH.WebCore
                 }
             }
             else
-                hairObjPath = GetParcedHairAccessoriesLink(hairPath, ".obj");
+                hairObjPath = GetParcedHairAccessoriesLink(hairPath, manType == ManType.Child ? "C.obj" : ".obj");
 
             if (!string.IsNullOrEmpty(hairObjPath) && FTPHelper.IsFileExists(hairObjPath))
             {
@@ -453,7 +453,7 @@ namespace RH.WebCore
                 }
             }
             else
-                accessoryObjPath = GetParcedHairAccessoriesLink(accessoryPath, ".obj");
+                accessoryObjPath = GetParcedHairAccessoriesLink(accessoryPath, manType == ManType.Child ? "C.obj" : ".obj");
 
             if (!string.IsNullOrEmpty(accessoryObjPath) && FTPHelper.IsFileExists(accessoryObjPath))
             {
@@ -472,16 +472,16 @@ namespace RH.WebCore
 
             #region Addons
 
-            var addonObjPath = GetParcedHairAccessoriesLink(addonPath1, ".obj");
+            var addonObjPath = GetParcedHairAccessoriesLink(addonPath1, manType == ManType.Child ? "C.obj" : ".obj");
             AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
-            addonObjPath = GetParcedHairAccessoriesLink(addonPath2, ".obj");
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath2, manType == ManType.Child ? "C.obj" : ".obj");
             AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
-            addonObjPath = GetParcedHairAccessoriesLink(addonPath3, ".obj");
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath3, manType == ManType.Child ? "C.obj" : ".obj");
             AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
-            addonObjPath = GetParcedHairAccessoriesLink(addonPath4, ".obj");
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath4, manType == ManType.Child ? "C.obj" : ".obj");
             AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
             #endregion
