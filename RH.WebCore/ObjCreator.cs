@@ -260,7 +260,7 @@ namespace RH.WebCore
         /// <param name="accessoryPath"></param>
         /// <param name="accessoryMaterialPath"></param>
         /// <param name="size">96% (3.2"), 113%(3.8"), 134%(4.5") ( 1 это 3.2, 2 - 3.8 дюйма и т.п.</param>
-        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath1, string addonPath2, string addonPath3, string addonPath4, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size, string ftpOutputName)
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string basePath, string baseMaterialPath, string addonPath1, string addonPath2, string addonPath3, string addonPath4, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size, string ftpOutputName)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -469,6 +469,29 @@ namespace RH.WebCore
 
                 ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType);
             }
+
+            #region Base
+
+            var baseObjPath = string.Empty;
+            if (!string.IsNullOrEmpty(basePath))
+                baseObjPath = GetParcedHairAccessoriesLink(basePath, manType == ManType.Child ? "C.obj" : ".obj");
+
+            if (!string.IsNullOrEmpty(baseObjPath) && FTPHelper.IsFileExists(baseObjPath))
+            {
+                baseMaterialPath = GetParcedHairAccessoriesLink(baseMaterialPath, ".jpg");
+                if (string.IsNullOrEmpty(baseMaterialPath))
+                    baseMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Materials/greenbase.jpg";
+
+                var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
+                var fileName = Path.GetFileNameWithoutExtension(baseMaterialPath) + ".jpg";
+
+                FTPHelper.CopyFromFtpToFtp(baseMaterialPath, temp, fileName, zipStream, fileName);
+                baseMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
+
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(baseObjPath, baseMaterialPath, manType);
+            }
+
+            #endregion
 
             #region Addons
 

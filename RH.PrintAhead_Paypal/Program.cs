@@ -29,8 +29,8 @@ namespace RH.OneClick
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
               
-                var objectCreator = new ObjCreator();
-                objectCreator.CreateObj(0, "00qngkqihrgdjfm13i35nwiw", "", "", "", "", "                           < img src = \"http://printahead.net/printahead.online/Library/Accessory/Add-on/GF.jpg\" >", " 							<img src=\"http://printahead.net/printahead.online/Library/Accessory/Add-on/Cone.jpg\"> ","","", " 							<img src=\"http://printahead.net/printahead.online/Library/Accessory/Materials/blue.jpg\"> ", 20, 0, 0, 1, "");
+     //           var objectCreator = new ObjCreator();
+    //            objectCreator.CreateObj(0, "00qngkqihrgdjfm13i35nwiw", "", "", "", "", "                           < img src = \"http://printahead.net/printahead.online/Library/Accessory/Add-on/GF.jpg\" >", " 							<img src=\"http://printahead.net/printahead.online/Library/Accessory/Add-on/Cone.jpg\"> ","","", " 							<img src=\"http://printahead.net/printahead.online/Library/Accessory/Materials/blue.jpg\"> ", 20, 0, 0, 1, "");
 
 
                  ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
