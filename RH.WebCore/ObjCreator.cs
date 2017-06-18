@@ -260,7 +260,7 @@ namespace RH.WebCore
         /// <param name="accessoryPath"></param>
         /// <param name="accessoryMaterialPath"></param>
         /// <param name="size">96% (3.2"), 113%(3.8"), 134%(4.5") ( 1 это 3.2, 2 - 3.8 дюйма и т.п.</param>
-        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string addonPath, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size, string ftpOutputName)
+        public void CreateObj(int manTypeInt, string sessionID, string hairPath, string hairMaterialPath, string accessoryPath, string accessoryMaterialPath, string basePath, string baseMaterialPath, string addonPath1, string addonPath2, string addonPath3, string addonPath4, string addonMaterialPath, int oldMorphingValue, int fatMorphingValue, int smoothingValue, int size, string ftpOutputName)
         {
             var manType = ManType.Male;
             switch (manTypeInt)
@@ -404,7 +404,7 @@ namespace RH.WebCore
                 switch (manType)
                 {
                     case ManType.Child:
-                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/10.obj";
+                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/10C.obj";
                         break;
                     case ManType.Female:
                         hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/3.obj";
@@ -415,13 +415,13 @@ namespace RH.WebCore
                 }
             }
             else
-                hairObjPath = GetParcedHairAccessoriesLink(hairPath, ".obj");
+                hairObjPath = GetParcedHairAccessoriesLink(hairPath, manType == ManType.Child ? "C.obj" : ".obj");
 
             if (!string.IsNullOrEmpty(hairObjPath) && FTPHelper.IsFileExists(hairObjPath))
             {
-                hairMaterialPath = GetParcedHairAccessoriesLink(hairMaterialPath, ".jpg");
+                hairMaterialPath = GetParcedHairAccessoriesLink(hairMaterialPath, "T.jpg").Replace("/Icons/", "/Materials/");
                 if (string.IsNullOrEmpty(hairMaterialPath))
-                    hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/Blonde_Highlight.jpg";
+                    hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/BlondyT.jpg";
 
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(hairMaterialPath) + ".jpg";
@@ -453,13 +453,13 @@ namespace RH.WebCore
                 }
             }
             else
-                accessoryObjPath = GetParcedHairAccessoriesLink(accessoryPath, ".obj");
+                accessoryObjPath = GetParcedHairAccessoriesLink(accessoryPath, manType == ManType.Child ? "C.obj" : ".obj");
 
             if (!string.IsNullOrEmpty(accessoryObjPath) && FTPHelper.IsFileExists(accessoryObjPath))
             {
-                accessoryMaterialPath = GetParcedHairAccessoriesLink(accessoryMaterialPath, ".jpg");
+                accessoryMaterialPath = GetParcedHairAccessoriesLink(accessoryMaterialPath, "T.jpg").Replace("/Icons/", "/Materials/"); ;
                 if (string.IsNullOrEmpty(accessoryMaterialPath))
-                    accessoryMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Materials/greenbase.jpg";
+                    accessoryMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Materials/lgreenT.jpg";
 
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(accessoryMaterialPath) + ".jpg";
@@ -470,24 +470,42 @@ namespace RH.WebCore
                 ProgramCore.Project.RenderMainHelper.AttachAccessory(accessoryObjPath, accessoryMaterialPath, manType);
             }
 
-            #region Addon
+            #region Base
 
-            var addonObjPath = GetParcedHairAccessoriesLink(addonPath, ".obj");
-            if (!string.IsNullOrEmpty(addonObjPath) && FTPHelper.IsFileExists(addonObjPath))
+            var baseObjPath = string.Empty;
+            if (!string.IsNullOrEmpty(basePath))
+                baseObjPath = GetParcedHairAccessoriesLink(basePath, manType == ManType.Child ? "C.obj" : ".obj");
+
+            if (!string.IsNullOrEmpty(baseObjPath) && FTPHelper.IsFileExists(baseObjPath))
             {
-                // var addonObjPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Add-on/GF.obj";
+                baseMaterialPath = GetParcedHairAccessoriesLink(baseMaterialPath, "T.jpg").Replace("/Icons/", "/Materials/"); ;
+                if (string.IsNullOrEmpty(baseMaterialPath))
+                    baseMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Materials/lgreenT.jpg";
 
-                addonMaterialPath = GetParcedHairAccessoriesLink(addonMaterialPath, ".jpg");
-                if (!string.IsNullOrEmpty(addonMaterialPath))
-                {
-                    var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
-                    var fileName = Path.GetFileNameWithoutExtension(addonMaterialPath) + ".jpg";
+                var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
+                var fileName = Path.GetFileNameWithoutExtension(baseMaterialPath) + ".jpg";
 
-                    FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName, zipStream, fileName);
-                }
+                FTPHelper.CopyFromFtpToFtp(baseMaterialPath, temp, fileName, zipStream, fileName);
+                baseMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
 
-                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType);
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(baseObjPath, baseMaterialPath, manType);
             }
+
+            #endregion
+
+            #region Addons
+
+            var addonObjPath = GetParcedHairAccessoriesLink(addonPath1, manType == ManType.Child ? "C.obj" : ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
+
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath2, manType == ManType.Child ? "C.obj" : ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
+
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath3, manType == ManType.Child ? "C.obj" : ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
+
+            addonObjPath = GetParcedHairAccessoriesLink(addonPath4, manType == ManType.Child ? "C.obj" : ".obj");
+            AttachAddon(addonObjPath, ref addonMaterialPath, sessionID, manType, ref zipStream);
 
             #endregion
 
@@ -536,7 +554,28 @@ namespace RH.WebCore
             }
         }
 
+        private bool isAddonMaterialActivated = false;
+        private void AttachAddon(string addonObjPath, ref string addonMaterialPath, string sessionID, ManType manType, ref ZipOutputStream zipStream)
+        {
+            if (!string.IsNullOrEmpty(addonObjPath) && FTPHelper.IsFileExists(addonObjPath))
+            {
+                if (!isAddonMaterialActivated)
+                {
+                    addonMaterialPath = GetParcedHairAccessoriesLink(addonMaterialPath, "T.jpg").Replace("/Icons/", "/Materials/"); ;
+                    if (!string.IsNullOrEmpty(addonMaterialPath))
+                    {
+                        var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
+                        var fileName = Path.GetFileNameWithoutExtension(addonMaterialPath) + ".jpg";
 
+                        FTPHelper.CopyFromFtpToFtp(addonMaterialPath, temp, fileName, zipStream, fileName);
+                        addonMaterialPath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures/" + fileName;
+                        isAddonMaterialActivated = true;
+                    }
+                }
+
+                ProgramCore.Project.RenderMainHelper.AttachAccessory(addonObjPath, addonMaterialPath, manType);
+            }
+        }
 
         public static double GetFaceAngle(string sessionId)
         {
@@ -568,7 +607,7 @@ namespace RH.WebCore
                     var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
                     var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
 
-                    angle = angle*(180d/Math.PI);
+                    angle = angle * (180d / Math.PI);
                     return Math.Abs(angle);
                 }
             }

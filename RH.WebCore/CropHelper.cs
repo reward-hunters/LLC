@@ -63,7 +63,7 @@ namespace RH.WebCore
         }
 
 
-        private static void CropImage(Image sourceImage, string imageName)
+        private static void CropImage(Image sourceImage, string imageName, bool needCrop = true, int angleCount = 0)
         {
 
             FSDK.TPoint[] pointFeature;
@@ -98,7 +98,8 @@ namespace RH.WebCore
             faceRectangle = new Rectangle(left, top, newWidth,
                 BottomFace.Y + 15 < image.Height ? (int)(BottomFace.Y + 15) - top : image.Height - top - 1);
 
-            sourceImage = ImageEx.Crop(new Bitmap(sourceImage), faceRectangle);
+            if (needCrop)
+                sourceImage = ImageEx.Crop(new Bitmap(sourceImage), faceRectangle);
 
 
             // по новой картинке еще раз распознаемм все
@@ -128,15 +129,20 @@ namespace RH.WebCore
             var yDiff = xVector.Y - v.Y;
             var angle = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
 
-            if (Math.Abs(angle) > 1) // поворачиваем наклоненные головы
+            if (Math.Abs(angle) > 1 && angleCount <= 5) // поворачиваем наклоненные головы
+            {
+                ++angleCount;
                 sourceImage = ImageEx.RotateImage(new Bitmap(sourceImage), (float)-angle);
+                CropImage(sourceImage, imageName, false, angleCount);
+                return;
+            }
 
             #endregion
 
             #region Корректируем размер фотки
 
             const int selectedSize = 1024;              // вызывается уже при создании проекта
-            var max = (float)Math.Max(sourceImage.Width, sourceImage.Height);           
+            var max = (float)Math.Max(sourceImage.Width, sourceImage.Height);
             if (max != selectedSize)
             {
                 var k = selectedSize / max;
