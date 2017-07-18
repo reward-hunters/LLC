@@ -18,6 +18,7 @@ using RH.MeshUtils.Helpers;
 
 namespace RH.WebCore
 {
+    /// <summary> ДЛЯ правильной работы с сайтом, требуется выставить директиву WEB_APP у сборок MeshUtils и Core в свойствах. </summary>
     public class ObjCreator
     {
 

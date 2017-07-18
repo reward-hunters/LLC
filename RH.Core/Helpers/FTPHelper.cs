@@ -10,7 +10,7 @@ namespace RH.Core.Helpers
     public class FTPHelper
     {
         public static string Login = "i2q1d8b1";
-        public static string Password = "qXzCmM9PJaJH@Ee";
+        public static string Password = "Ederics2017";
 
         public static readonly HashSet<string> AddedAddreses = new HashSet<string>();
         public FTPHelper(string address)
