@@ -22,8 +22,7 @@ http://stackoverflow.com/questions/28708471/web-publish-password-not-the-same-as
 Физически сами файлы сайта лежат на фтп:
 108.167.164.209
 Логин: i2q1d8b1
-Пароль: B45B2nnFv$!j6V
-Новый пароль: qXzCmM9PJaJH@Ee
+Пароль: Ederics2017
 
 printahead@printahead.online
 u~u~p5I(XxNH

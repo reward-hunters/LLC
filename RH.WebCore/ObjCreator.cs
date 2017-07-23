@@ -18,6 +18,7 @@ using RH.MeshUtils.Helpers;
 
 namespace RH.WebCore
 {
+    /// <summary> ДЛЯ правильной работы с сайтом, требуется выставить директиву WEB_APP у сборок MeshUtils и Core в свойствах. </summary>
     public class ObjCreator
     {
 
@@ -205,6 +206,8 @@ namespace RH.WebCore
                 hairObjPath = hairObjPath.Replace(@"\", "/");
                 if (hairObjPath.StartsWith(@"http:/printahead.net/"))
                     hairObjPath = hairObjPath.Replace(@"http:/printahead.net/", @"ftp://108.167.164.209/public_html/");
+                if (hairObjPath.StartsWith(@"https:/printahead.net/"))
+                    hairObjPath = hairObjPath.Replace(@"https:/printahead.net/", @"ftp://108.167.164.209/public_html/");
 
                 return hairObjPath;
             }
@@ -278,7 +281,7 @@ namespace RH.WebCore
             var templateImage = default(Bitmap);
             WebClient client = new WebClient();
 
-            var imagePath = "http://printahead.net/printahead.online/PrintAhead_images/" + sessionID + ".jpeg";
+            var imagePath = "https://printahead.net/printahead.online/PrintAhead_images/" + sessionID + ".jpeg";
             byte[] imageBytes = client.DownloadData(imagePath);
 
             var ms = new MemoryStream(imageBytes);
@@ -581,7 +584,7 @@ namespace RH.WebCore
         {
             using (WebClient client = new WebClient())
             {
-                var imagePath = "http://printahead.net/printahead.online/PrintAhead_images/" + sessionId + ".jpeg";
+                var imagePath = "https://printahead.net/printahead.online/PrintAhead_images/" + sessionId + ".jpeg";
                 byte[] imageBytes = client.DownloadData(imagePath);
 
                 using (var ms = new MemoryStream(imageBytes))
