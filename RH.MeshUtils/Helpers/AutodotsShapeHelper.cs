@@ -165,6 +165,8 @@ namespace RH.MeshUtils.Helpers
                 new Vector2(-8.935152f, -2.162611f),           //43
                 new Vector2(-1.636339f, -6.415571f),            //44 //lip center
                 new Vector2(-0.9124852f, -6.303484f),           //45
+                new Vector2(-1.636339f, -6.5f),                 //46 //lip center
+                new Vector2(-0.9124852f, -6.4f),                //47
             };
         #endregion
 
@@ -218,6 +220,8 @@ namespace RH.MeshUtils.Helpers
                 new Vector2(-8.973386f, -1.763392f),              //43   
                 new Vector2(-1.723354f, -6.020386f),             //44 //lip center
                 new Vector2(-0.9995f, -5.908299f),             //45
+                new Vector2(-1.723354f, -6.1f),             //46 //lip center
+                new Vector2(-0.9995f, -6.0f),             //47
             };
         #endregion
 
@@ -271,6 +275,8 @@ namespace RH.MeshUtils.Helpers
                 new Vector2(-8.422139f, -2.20578f),         //43
                 new Vector2(-1.235657f, -6.23f),         //44 //lip center
                 new Vector2(-0.6401863f, -6.080235f),         //45
+                 new Vector2(-1.235657f, -6.3f),         //44 //lip center
+                new Vector2(-0.6401863f, -6.1f),         //45
             };
         #endregion
         #endregion
@@ -645,8 +651,7 @@ namespace RH.MeshUtils.Helpers
             4,56,55,
             4,55,54,
             //губы
-            124,125,132,
-            124,132,123,
+            124,125,132,            
             125,126,132,
             126,133,132,
             126,127,133,
@@ -658,6 +663,31 @@ namespace RH.MeshUtils.Helpers
             130,136,135,
             130,131,136,
             131,114,136,
+
+            //124, 138, 125,
+            //124, 138, 132,
+            //125, 126, 138,
+            //126, 139, 138,
+            //132, 138, 139,
+            //132, 139, 133,
+            //133, 139, 134,
+            //139, 140, 134,
+            //126, 127, 139,
+            //139, 127, 140,
+            //127, 128, 140,
+            //128, 141, 140,
+            //128, 129, 141,
+            //134, 140, 141,
+            //134, 141, 135,
+            //129, 130, 141,
+            //130, 142, 141,
+            //135, 141, 136,
+            //141, 142, 136,
+            //114, 136, 142,
+            //130, 131, 142,
+            //131, 114, 142,
+
+            124,132,123,
             114,115,136,
             136,115,116,
             116,135,136,
@@ -1617,7 +1647,7 @@ namespace RH.MeshUtils.Helpers
             }.Initialise(new[] { baseDots[51].Value, GetMirrored(45), GetMirrored(44), baseDots[37].Value }, ref shapePoints, true));
 
             dotsDictionary.Add(46, Rects.Last().ShapeIndices[1]);
-            dotsDictionary.Add(47, Rects.Last().ShapeIndices[2]);
+            dotsDictionary.Add(47, Rects.Last().ShapeIndices[2]);           
 
             Rects.Add(new AutodotsShapeRect
             {
@@ -1625,6 +1655,27 @@ namespace RH.MeshUtils.Helpers
                 B = 52,
                 Type = MeshPartType.None
             }.Initialise(new[] { baseDots[52].Value }, ref shapePoints, true));
+
+            //lips bottom
+            /*Rects.Add(new AutodotsShapeRect
+            {
+                A = 15,
+                B = 53,
+                Type = MeshPartType.Lip
+            }.Initialise(new[] { baseDots[15].Value, ShapeDots[46], ShapeDots[47], baseDots[53].Value }, ref shapePoints));
+            //temp
+            dotsDictionary.Add(48, Rects.Last().ShapeIndices[1]);
+            dotsDictionary.Add(49, Rects.Last().ShapeIndices[2]);
+            //temp
+            Rects.Add(new AutodotsShapeRect
+            {
+                A = 53,
+                B = 37,
+                Type = MeshPartType.Lip
+            }.Initialise(new[] { baseDots[53].Value, GetMirrored(47), GetMirrored(46), baseDots[37].Value }, ref shapePoints, true));
+
+            dotsDictionary.Add(50, Rects.Last().ShapeIndices[1]);
+            dotsDictionary.Add(51, Rects.Last().ShapeIndices[2]);*/
 
             if (isNew)
             {

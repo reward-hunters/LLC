@@ -751,10 +751,8 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(7.771821f, -4.666965f)    { Visible = false },    //50 - 30
                 new HeadPoint(0f, -6.405003f),                                  //51            //центр рта
                 
-                new HeadPoint(0f, -3.303351f)                                   //52         //nose bulb                    //  new HeadPoint(0f, -3.503351f)  - чуть чуть приподнять
-                //new HeadPoint(-0.53173f, -3.703351f),                           //53         //nose bulb  1
-                //new HeadPoint(0.53173f, -3.703351f),                            //54         //nose bulb  2
-                //new HeadPoint(0f, -3.003351f)                                   //55         //nose bulb  2
+                new HeadPoint(0f, -3.303351f),                               //52         //nose bulb  
+               // new HeadPoint(0f, -6.5f)                              //53                 //центр рта низ
             };
 
             newPoints[10].LinkedPoints.Add(12);
@@ -833,7 +831,8 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(7.651234f, -4.290586f)  { Visible = false },  //50 - 30
                 new HeadPoint(0f, -6.009818f),                              //51                 //центр рта
 
-                new HeadPoint(0f, -3.303351f)                               //52         //nose bulb  
+                new HeadPoint(0f, -3.303351f),                               //52         //nose bulb  
+                //new HeadPoint(0f, -6.1f)                              //53                 //центр рта низ
             };
 
             newPoints[10].LinkedPoints.Add(12);
@@ -913,7 +912,8 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(6.888096f, -4.781533f)   { Visible = false },     //50 - 30
                 new HeadPoint(0f, -6.046123f),                                  //51            //центр рта
 
-                new HeadPoint(0f, -3.303351f)                                   //52         //nose bulb  
+                new HeadPoint(0f, -3.303351f) ,                               //52         //nose bulb  
+                //new HeadPoint(0f, -6.1f)                              //53                 //центр рта низ
             };
 
             newPoints[10].LinkedPoints.Add(12);

@@ -509,6 +509,81 @@ namespace RH.MeshUtils.Helpers
 #endif
         }
 
+        public void FindLipsEdges()
+        {
+            var verticesDictionary = new Dictionary<Vector3, int>(new VectorEqualityComparer());
+            var points = new List<Vector3>();
+            var edgesDictionary = new Dictionary<Line, int>(new VectorEqualityComparer());
+            var triangle = new int[3];
+
+            for (var i = 0; i < Indices.Count; i += 3)
+            {
+                for (var j = 0; j < 3; ++j)
+                {
+                    var point = Points[Vertices[(int)Indices[i + j]].PointIndex];
+                    int index;
+                    if (!verticesDictionary.TryGetValue(point.Position, out index))
+                    {
+                        index = points.Count;
+                        points.Add(point.Position);
+                        verticesDictionary.Add(point.Position, index);
+                    }
+                    //points[index].Add(point);
+                    triangle[j] = index;
+                }
+                for (int j = 0, l = 2; j < 3; l = j, ++j)
+                {
+                    var edge = new Line(triangle[j], triangle[l]);
+                    if (!edgesDictionary.ContainsKey(edge))
+                        edgesDictionary.Add(edge, 1);
+                    else
+                        edgesDictionary[edge]++;
+                }
+            }
+
+            var edges = edgesDictionary.Where(e => e.Value == 1).Select(e => e.Key).ToList();
+            var edges0 = new List<Line>();
+            if(edges.Count > 0)
+            {
+                var currentEdge = edges[0];
+                while (currentEdge != null)
+                {
+                    if (currentEdge != null)
+                    {
+                        edges.Remove(currentEdge);
+                        edges0.Add(currentEdge);
+                    }
+                    currentEdge = edges.FirstOrDefault(e => e.A == currentEdge.A || e.B == currentEdge.A || e.A == currentEdge.B || e.B == currentEdge.B);                    
+                }
+                if(edges.Count > 0 && edges0.Count > 0)
+                {
+                    Vector2 A = new Vector2(float.MaxValue, float.MaxValue), B = new Vector2(float.MinValue, float.MinValue);
+                    Vector2 A0 = A, B0 = B;
+                    foreach(var edge in edges)
+                    {
+                        var a = points[edge.A];
+                        var b = points[edge.B];
+
+                        A.X = Math.Min(A.X, Math.Min(a.X, b.X));
+                        B.X = Math.Max(B.X, Math.Max(a.X, b.X));
+                        A.Y = Math.Min(A.Y, Math.Min(a.Y, b.Y));
+                        B.Y = Math.Max(B.Y, Math.Max(a.Y, b.Y));
+                    }
+
+                    foreach (var edge in edges0)
+                    {
+                        var a = points[edge.A];
+                        var b = points[edge.B];
+
+                        A0.X = Math.Min(A0.X, Math.Min(a.X, b.X));
+                        B0.X = Math.Max(B0.X, Math.Max(a.X, b.X));
+                        A0.Y = Math.Min(A0.Y, Math.Min(a.Y, b.Y));
+                        B0.Y = Math.Max(B0.Y, Math.Max(a.Y, b.Y));
+                    }
+                }
+            }
+        }
+
         public void FindFixedPoints()
         {
             var verticesDictionary = new Dictionary<Vector3, int>(new VectorEqualityComparer());

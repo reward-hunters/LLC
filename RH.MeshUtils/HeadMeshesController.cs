@@ -104,11 +104,12 @@ namespace RH.MeshUtils
         public bool CreateMeshPart(MeshPartInfo info)
         {
             var part = new RenderMeshPart();
+            
             if (part.Create(info))
             {
                 RenderMesh.AddPart(part);
                 return true;
-            }
+            }            
             return false;
         }
 
