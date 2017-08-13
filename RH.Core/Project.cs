@@ -728,6 +728,7 @@ namespace RH.Core
         Child = 2,
         Custom = 3         // произвольный тип ебала
     }
+
     public static class ManTypeEx
     {
         public static string GetCaption(this ManType manType)
@@ -766,7 +767,7 @@ namespace RH.Core
                 case ManType.Male:
                     return "Male\\Male.obj";
                 case ManType.Female:
-                    return "Fem\\Fem.obj";
+                    return "Fem\\Fem2.obj";
                 case ManType.Child:
                     return "Child\\Child.obj";
                 default:
