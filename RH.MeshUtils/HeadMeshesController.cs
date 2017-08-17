@@ -66,6 +66,7 @@ namespace RH.MeshUtils
         public void FinishCreating()
         {
             UpdateBuffers(true);
+            return;
             RenderMesh.FindFixedPoints();
         }
 

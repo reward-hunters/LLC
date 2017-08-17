@@ -204,15 +204,19 @@ namespace RH.MeshUtils.Helpers
                 new Vector2(-2.714598f, -10.20871f),             //22
                 new Vector2(-1.797196f, -10.65479f),             //23
                 new Vector2(-0.3768088f, -10.9833f),             //24
-                new Vector2(-0.02504795f, -5.156488f),            //25 //lip
-                new Vector2(-0.7600341f, -5.003549f),            //26
-                new Vector2(-1.866868f, -5.363205f),             //27
-                new Vector2(-2.27355f, -5.648803f),             //28
-                new Vector2(-2.242563f, -6.579151f),             //29
-                new Vector2(-0.8518612f, -6.949043f),            //30
-                new Vector2(-1.45163f, -2.309675f),             //31 //nose
-                new Vector2(-1.836815f, -3.002033f),           //32
-                new Vector2(-0.5791314f, -3.872578f),            //33
+
+                new Vector2(-0.02504795f, -5.0f),            //25 //lip
+                new Vector2(-0.7600341f, -4.9f),            //26
+                new Vector2(-1.866868f, -5.0f),             //27
+                new Vector2(-2.27355f, -5.1f),             //28
+
+                new Vector2(-2.242563f, -6.15f),             //29
+                new Vector2(-0.8518612f, -6.75f),            //30
+
+                new Vector2(-1.45163f, -2.1f),             //31 //nose
+                new Vector2(-1.836815f, -2.65f),           //32
+                new Vector2(-0.5791314f, -3.7f),            //33
+
                 new Vector2(-3.80265f, 0.8633401f),             //34 //eyes
                 new Vector2(-4.1408f, 0.72409f),             //35    
                 new Vector2(-4.18644f, 0.3733242f),             //36
@@ -223,9 +227,9 @@ namespace RH.MeshUtils.Helpers
                 new Vector2(-2.794708f, 0.9457021f),             //41
                 new Vector2(-9.126692f, 1.054292f),              //42 //ear
                 new Vector2(-8.973386f, -1.763392f),              //43   
-                new Vector2(-1.723354f, -6.020386f),             //44 //lip center
-                new Vector2(-0.9995f, -5.908299f),             //45
-                new Vector2(-1.723354f, -6.1f),             //46 //lip center
+                new Vector2(-1.723354f, -5.4f),             //44 //lip center
+                new Vector2(-0.9995f, -5.45f),             //45
+                new Vector2(-1.723354f, -5.8f),             //46 //lip center
                 new Vector2(-0.9995f, -6.0f),             //47
             };
         #endregion
@@ -259,29 +263,39 @@ namespace RH.MeshUtils.Helpers
                 new Vector2(-2.605252f, -8.839181f),         //22
                 new Vector2(-1.801535f, -9.258749f),         //23
                 new Vector2(-0.337695f, -9.527775f),         //24
-                new Vector2(-0.003081355f, -5.305363f),         //25 //lip
-                new Vector2(-0.3499262f, -5.177298f),         //26
-                new Vector2(-1.201072f, -5.573816f),         //27
-                new Vector2(-1.554831f, -5.845824f),         //28
-                new Vector2(-1.590009f, -6.540767f),         //29
-                new Vector2(-0.6297784f, -6.92204f),         //30
-                new Vector2(-0.8569124f, -2.931683f),         //31 //nose
-                new Vector2(-1.21079f, -3.357552f),         //32
-                new Vector2(-0.5662344f, -4.286056f),         //33
+
+                new Vector2(-0.003081355f, -5.025f),         //25 //lip
+                new Vector2(-0.3499262f, -4.95f),         //26
+                new Vector2(-1.201072f, -5.05f),         //27
+                new Vector2(-1.554831f, -5.1f),         //28
+
+                new Vector2(-1.590009f, -6.1f),         //29
+                new Vector2(-0.6297784f, -6.6f),         //30
+
+                new Vector2(-0.8569124f, -2.75f),         //31 //nose
+                new Vector2(-1.21079f, -3.0f),         //32
+                new Vector2(-0.5662344f, -4.05f),         //33
+
                 new Vector2(-3.337825f, -0.6208684f),         //34 //eyes
                 new Vector2(-3.656225f, -0.8574543f),         //35
-                new Vector2(-3.610779f, -1.224549f),         //36
-                new Vector2(-3.247605f, -1.317623f),         //37
-                new Vector2(-2.327342f, -1.311511f),         //38
-                new Vector2(-1.949978f, -1.202075f),         //39
-                new Vector2(-1.995026f, -0.8328779f),         //40
-                new Vector2(-2.437889f, -0.5761855f),         //41    
+
+                new Vector2(-3.610779f, -1.1f),         //36
+                new Vector2(-3.247605f, -1.15f),         //37
+
+                new Vector2(-2.327342f, -1.17f),         //38
+                new Vector2(-1.949978f, -1.15f),         //39
+
+                new Vector2(-1.995026f, -0.75f),         //40
+                new Vector2(-2.437889f, -0.52f),         //41
+
                 new Vector2(-8.395151f, -0.02544679f),         //42 //ear
                 new Vector2(-8.422139f, -2.20578f),         //43
-                new Vector2(-1.235657f, -6.23f),         //44 //lip center
-                new Vector2(-0.6401863f, -6.080235f),         //45
-                 new Vector2(-1.235657f, -6.3f),         //44 //lip center
-                new Vector2(-0.6401863f, -6.1f),         //45
+
+                new Vector2(-1.235657f, -5.43f),         //44 //lip center
+                new Vector2(-0.6401863f, -5.45f),         //45
+
+                 new Vector2(-1.235657f, -5.7f),         //44 //lip center
+                new Vector2(-0.6401863f, -5.925f),         //45
             };
         #endregion
         #endregion
@@ -1643,6 +1657,7 @@ namespace RH.MeshUtils.Helpers
             //temp
             dotsDictionary.Add(44, Rects.Last().ShapeIndices[1]);
             dotsDictionary.Add(45, Rects.Last().ShapeIndices[2]);
+            LipsRects.Add(Rects.Last());
             //temp
             Rects.Add(new AutodotsShapeRect
             {
@@ -1652,7 +1667,8 @@ namespace RH.MeshUtils.Helpers
             }.Initialise(new[] { baseDots[51].Value, GetMirrored(45), GetMirrored(44), baseDots[37].Value }, ref shapePoints, true));
 
             dotsDictionary.Add(46, Rects.Last().ShapeIndices[1]);
-            dotsDictionary.Add(47, Rects.Last().ShapeIndices[2]);           
+            dotsDictionary.Add(47, Rects.Last().ShapeIndices[2]);
+            LipsRects.Add(Rects.Last());
 
             Rects.Add(new AutodotsShapeRect
             {
@@ -1671,6 +1687,7 @@ namespace RH.MeshUtils.Helpers
             //temp
             dotsDictionary.Add(48, Rects.Last().ShapeIndices[1]);
             dotsDictionary.Add(49, Rects.Last().ShapeIndices[2]);
+            LipsRects.Add(Rects.Last());
             //temp
             Rects.Add(new AutodotsShapeRect
             {
@@ -1681,6 +1698,7 @@ namespace RH.MeshUtils.Helpers
 
             dotsDictionary.Add(50, Rects.Last().ShapeIndices[1]);
             dotsDictionary.Add(51, Rects.Last().ShapeIndices[2]);
+            LipsRects.Add(Rects.Last());
 
             if (isNew)
             {
@@ -1689,6 +1707,27 @@ namespace RH.MeshUtils.Helpers
 
                 ShapeInfo.Indices = ShapeIndices.ToArray();
             }
+        }
+
+        private List<AutodotsShapeRect> LipsRects = new List<AutodotsShapeRect>();
+
+        private void TransformLip(AutodotsShapeRect rect, Vector2 point)
+        {
+            var center = (rect.Points[1] + rect.Points[2]) * 0.5f;
+            var delta = point - center;
+            for(int i = 1; i < 3; ++i)
+            {
+                var pos = rect.Points[i] + delta;
+                rect.Points[i] = pos;
+                var index = rect.ShapeIndices[i];
+                ShapeInfo.Points[index].Value = pos;
+            }
+        }
+
+        public void TransformLips(List<Vector2> points)
+        {
+            for(int i = 0; i< 4; ++i)
+                TransformLip(LipsRects[i], points[i]);
         }
 
         public List<int> InitializeProfile(List<Vector2> baseDots, bool isNew)
