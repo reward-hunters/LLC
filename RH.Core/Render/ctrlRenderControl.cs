@@ -726,6 +726,21 @@ namespace RH.Core.Render
                 lipsPoints.Add(MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedLipsPoints[j], ProgramCore.CurrentProgram));
             }
             autodotsShapeHelper.TransformLips(lipsPoints);
+
+            var aIndex = indices[indices.Length - 2];
+            var a = points[aIndex];
+            var bIndex = indices[indices.Length - 1];
+            var b = points[bIndex];
+            const float minLipsDist = 0.3f;
+            if (a.Value.Y - b.Value.Y < minLipsDist)
+            {
+                var centerY = (a.Value.Y + b.Value.Y) * 0.5f;
+                a.Value.Y = centerY - minLipsDist * 0.5f;
+                b.Value.Y = centerY + minLipsDist * 0.5f;
+            }
+
+            autodotsShapeHelper.Transform(a.Value, aIndex);
+            autodotsShapeHelper.Transform(b.Value, bIndex);
         }
 
         private void SpecialBottomPointsUpdate(List<HeadPoint> points)
