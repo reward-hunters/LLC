@@ -1,0 +1,39 @@
+Well, I made a great research, and now can tell, that as I understand, all troubles in mono framework.
+We have two different solutions for usual Mac and for Mac with El Capitan.
+For both variants first you should do licensing and setup our program, as usual.
+Next we should install mono framework.
+For first variant use this manual:
+1. Download Mono.framework  using this link:
+ http://www.mono-project.com/download/
+And button: " Download Mono MDK"
+2. Setup this package
+3. Reboot your mac
+4. Open terminal and execute command (please be carefull. If it says that command not correct - recheck it please):
+
+sudo ln -s /Library/Frameworks/Mono.framework/Commands/mono /usr/bin/mono
+
+Type your admin password and press enter.
+
+5. Reboot your mac - and all works!
+
+
+For Mac with El Capitan follow this instructions:
+1. Download Mono.framework for El Capitan using this link:
+ http://www.mono-project.com/download/
+And button: "Download Mono MDK (El Capitan Preview)"
+2. Setup this package
+3. Reboot your mac
+4. Open terminal and try to execute this command (please be carefull. If it says that command not correct - recheck it please):
+
+sudo ln -s /Library/Frameworks/Mono.framework/Commands/mono /usr/bin/
+
+Type your admin password and press enter.
+
+5. IF you got an exeption ("Operation not permitted") - trouble with El Capitan security.
+You should disable it using this link:
+
+http://www.imore.com/el-capitan-system-integrity-protection-helps-keep-malware-away
+
+6. After step 5 - again do step 4, reboot - and all works!
+
+

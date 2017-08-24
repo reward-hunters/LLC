@@ -494,7 +494,7 @@ namespace RH.Core.Render
                 var oldTexture = GetTexture(part.DefaultTextureName);
                 if (!SmoothedTextures.ContainsKey(oldTexture))
                 {
-                    if (part.Texture == 0 || part.IsBaseTexture)
+                    if (part.Texture == 0 || part.IsBaseTexture || (ProgramCore.Project.ManType == ManType.Child && part.DefaultTextureName.Contains("v5breeinmouthm")))
                     {
                         part.IsBaseTexture = true;
                         part.Texture = 0;

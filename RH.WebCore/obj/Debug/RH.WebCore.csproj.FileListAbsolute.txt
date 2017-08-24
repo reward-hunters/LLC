@@ -3,3 +3,8 @@ C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\Abalone
 C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.WebCore\obj\Debug\RH.WebCore.dll
 C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.WebCore\obj\Debug\RH.WebCore.pdb
 C:\Users\Kulikov\Documents\Visual Studio 2015\Projects\Laslo\AballoneLLC\RH.WebCore\obj\Debug\RH.WebCore.csprojResolveAssemblyReference.cache
+D:\Develop\Фриланс\Laslo\LLC\AbaloneLLC\Libraries\RH.WebCore.dll
+D:\Develop\Фриланс\Laslo\LLC\AbaloneLLC\Libraries\RH.WebCore.pdb
+D:\Develop\Фриланс\Laslo\LLC\RH.WebCore\obj\Debug\RH.WebCore.csprojResolveAssemblyReference.cache
+D:\Develop\Фриланс\Laslo\LLC\RH.WebCore\obj\Debug\RH.WebCore.dll
+D:\Develop\Фриланс\Laslo\LLC\RH.WebCore\obj\Debug\RH.WebCore.pdb

@@ -292,30 +292,13 @@ namespace RH.Core.Helpers
                     {
                         var path = part.DefaultTextureName;//GetTexturePath(part.Texture);                        
                         var newImagePath = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + ProgramCore.Project.ProjectName + "/Textures/";
-                        //var ftpHelper = new FTPHelper();
-                        //var di = new DirectoryInfo(newImagePath);
-                        // if (!di.Exists)
-                        //    di.Create();
-
-                        //var brushImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + "_brush.png");
+          
                         var smoothedImagePath = newImagePath + Path.GetFileNameWithoutExtension(path) + "_smoothed" + Path.GetExtension(path);
-                        //if (!File.Exists(smoothedImagePath))
-                        //File.Copy(path, smoothedImagePath, true);
-
-                        //newImagePath = Path.Combine(newImagePath, Path.GetFileNameWithoutExtension(path) + Path.GetExtension(path));
-                        //File.Copy(path, newImagePath, true);                        
+          
                         var smoothedTexture = GetTexture(smoothedImagePath);// GetTexture(smoothedImagePath); // по старому пути у нас будут храниться сглаженные текстуры (что бы сохранение модельки сильно не менять)
                         part.Texture = oldTexture;
                         SmoothedTextures.Add(oldTexture, smoothedTexture); // связка - айди старой-новой текстур
 
-                        //if (File.Exists(brushImagePath) && !brushTextures.ContainsKey(part.Texture))
-                        //{
-                        //    var texture = GetTexture(brushImagePath);
-                        //    Bitmap bitmap;
-                        //    using (var ms = new MemoryStream(File.ReadAllBytes(brushImagePath)))
-                        //        bitmap = (Bitmap)Image.FromStream(ms);
-                        //    brushTextures.Add(smoothedTexture, new BrushTextureInfo { Texture = texture, TextureData = bitmap, LinkedTextureName = smoothedImagePath });
-                        //}
                     }
                 }
                 else
@@ -342,13 +325,6 @@ namespace RH.Core.Helpers
 
                     autodotsShapeHelper.TransformRects();
                     autodotsShapeHelper.InitializeShaping();
-
-                    //switch (ProgramCore.CurrentProgram)
-                    //{
-                    //    case ProgramCore.ProgramMode.HeadShop_Rotator:
-                    //        DetectFaceRotation();
-                    //        break;
-                    //}
 
                     var points = autodotsShapeHelper.GetBaseDots();
 
