@@ -550,7 +550,7 @@ namespace RH.Core.Render
                     var scaleX = UpdateMeshProportions(aabb);
                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);
 
-                    autodotsShapeHelper.TransformRects();
+                   autodotsShapeHelper.TransformRects();
                     autodotsShapeHelper.InitializeShaping();
 
                     switch (ProgramCore.CurrentProgram)
@@ -559,7 +559,7 @@ namespace RH.Core.Render
                             DetectFaceRotation();
                             break;
                     }
-
+                    
                     var points = autodotsShapeHelper.GetBaseDots();
 
                     SpecialEyePointsUpdate(points, true);
@@ -707,7 +707,7 @@ namespace RH.Core.Render
                 p.Value = new Vector2(center.X + dx + delta2.X, p.Value.Y + delta2.Y);
             }
             //Проставляем фиксированные точки
-            var indices = new int[] { 15, 17, 1, 39, 37, 38, 16, 51 };
+            var indices = new int[] { 15, 17, 1, 39, 37, 38, 16, 51, 53 };
             var i = 0;
             foreach (var index in indices)
             {
@@ -720,6 +720,27 @@ namespace RH.Core.Render
                 var p = points[index];
                 autodotsShapeHelper.Transform(p.Value, index);
             }
+            var lipsPoints = new List<Vector2>();
+            for(int j = 9; j < 13; ++j)
+            {
+                lipsPoints.Add(MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedLipsPoints[j], ProgramCore.CurrentProgram));
+            }
+            autodotsShapeHelper.TransformLips(lipsPoints);
+
+            var aIndex = indices[indices.Length - 2];
+            var a = points[aIndex];
+            var bIndex = indices[indices.Length - 1];
+            var b = points[bIndex];
+            const float minLipsDist = 0.3f;
+            if (a.Value.Y - b.Value.Y < minLipsDist)
+            {
+                var centerY = (a.Value.Y + b.Value.Y) * 0.5f;
+                a.Value.Y = centerY - minLipsDist * 0.5f;
+                b.Value.Y = centerY + minLipsDist * 0.5f;
+            }
+
+            autodotsShapeHelper.Transform(a.Value, aIndex);
+            autodotsShapeHelper.Transform(b.Value, bIndex);
         }
 
         private void SpecialBottomPointsUpdate(List<HeadPoint> points)
@@ -2417,7 +2438,7 @@ namespace RH.Core.Render
 
         public void DrowPointsInfo()
         {
-            const float scale = 0.015f;
+            const float scale = 0.01f;
             if (IsFullPointsInfo)
             {
                 if (TextRenderHelpers == null)
@@ -2453,6 +2474,7 @@ namespace RH.Core.Render
 
             foreach (var text in TextRenderHelpers)
             {
+                text.Scale = scale;
                 GL.Translate(text.Position.X, text.Position.Y, 0);
                 text.Render();
                 GL.Translate(-text.Position.X, -text.Position.Y, 0);

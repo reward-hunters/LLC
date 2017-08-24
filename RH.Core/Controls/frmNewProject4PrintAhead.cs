@@ -257,7 +257,16 @@ namespace RH.Core.Controls
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[4]);
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[57]);
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[56]);
-            ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[61]);
+    
+            ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[61]);//Центр рта верх
+            ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[64]);//Центр рта низ
+
+            ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[60]);  //9
+            ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[62]);  //10
+                        
+            ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[63]);  //11
+            ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[65]);  //12
+
 
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[45]);           // точки носа
             ProgramCore.Project.DetectedNosePoints.Add(fcr.FacialFeatures[46]);

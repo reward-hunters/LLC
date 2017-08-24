@@ -221,12 +221,12 @@ namespace RH.Core.Render.Controllers
                 SelectedMeshes.Clear();
         }
 
-        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, bool needExporter)
+        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, bool needExporter, float smilePercent = 0.0f)
         {
-            return AddMehes(path, type, fromDragAndDrop, manType, string.Empty, needExporter);
+            return AddMehes(path, type, fromDragAndDrop, manType, string.Empty, needExporter, smilePercent);
         }
 
-        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, string animationPath, bool needExporter)
+        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, string animationPath, bool needExporter, float smilePercent)
         {
             var result = new List<DynamicRenderMesh>();
 

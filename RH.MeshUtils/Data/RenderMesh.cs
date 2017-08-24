@@ -268,6 +268,10 @@ namespace RH.MeshUtils.Data
             {
                 if (part.Type == HeadMeshType.Torso)
                     continue;
+                //if (part.Type == HeadMeshType.Lip)
+                //{
+                //    part.FindLipsEdges();
+                //}
                 part.FindFixedPoints();
                 var isEyelash = part.Name.ToLower().Contains("eyelash");
                 for (var i = 0; i < part.Indices.Count; i += 3)

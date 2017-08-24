@@ -29,8 +29,8 @@ namespace RH.OneClick
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
               
-               var objectCreator = new ObjCreator();
-                objectCreator.CreateObj(0, "pwjvfk1qudd22l024o5mhuea", "", "", "", "","","", "", "","","", "", 20, 0, 0, 1, "");
+               //var objectCreator = new ObjCreator();
+                //objectCreator.CreateObj(0, "pwjvfk1qudd22l024o5mhuea", "", "", "", "","","", "", "","","", "", 20, 0, 0, 1, "");
 
 
                  ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);

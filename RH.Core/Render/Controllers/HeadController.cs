@@ -569,13 +569,25 @@ namespace RH.Core.Render.Controllers
 
                 40, 41, 45,
                 45, 41, 46,
-                15, 51, 16,
+
+                //Рот
+                15, 16, 51,
+                15, 51, 53,
+                15, 53, 17,
+                17, 53, 1,
+                1, 53, 39,
+                39, 53, 37,
+                37, 53, 51,
+                37, 51, 38,
+                38, 51, 16,
+                /*15, 51, 16,
                 15, 17, 51,
                 17, 1, 39,
                 39, 51, 17,
                 51, 39, 37,
                 51, 37, 38,
-                16, 51, 38,
+                16, 51, 38,*/
+
                 23, 22, 21,
                 23, 21, 24,
                 43, 44, 45,
@@ -699,8 +711,9 @@ namespace RH.Core.Render.Controllers
             var newPoints = new HeadPoints<HeadPoint>
             {
                 new HeadPoint(0f, 11.67331f),                               //0        // центр лба
-                new HeadPoint(0f, -7.552899f),                              //1        // Рот
-                new HeadPoint(0f, -4.508208f) {Visible = false },                              //2        // Центр носа
+                new HeadPoint(0f, -7.35f),                              //1        // Рот
+                new HeadPoint(0f, -4.308208f) {Visible = false },                              //2        // Центр носа
+
                 new HeadPoint(-2.786755f, 11.16117f),                       //3        // Левые верхние точки головы
                 new HeadPoint(-5.709689f, 9.299875f),                       //4        // Левые верхние точки головы
                 new HeadPoint(-6.909634f, 7.514232f),                       //5        // Левые верхние точки головы    
@@ -713,12 +726,15 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(-4.741577f, -9.973206f)   { Visible = false },                      //12       // Левая нижняя часть (шея и подбородок)
                 new HeadPoint(-2.835503f, -11.6133f)   { Visible = false },                       //13       // Левая нижняя часть (шея и подбородок)
                 new HeadPoint(-0.9294291f, -12.60291f)   { Visible = false },                     //14       // Левая нижняя часть (шея и подбородок)
-                new HeadPoint(-2.505571f, -6.369632f),                      //15        // Рот    
-                new HeadPoint(-1.022702f, -5.397916f),                      //16        // Рот  
-                new HeadPoint(-1.616331f, -7.183366f),                      //17        // Рот 
+
+                new HeadPoint(-2.635571f, -5.845f),                      //15        // Рот    
+                new HeadPoint(-1.022702f, -5.227916f),                      //16        // Рот  
+                new HeadPoint(-1.616331f, -6.95f),                      //17        // Рот 
+
                 new HeadPoint(-0.9193307f, 0.1962141f),                     //18        // Верхняя левая часть носа  
-                new HeadPoint(-1.713433f, -3.870751f) ,                      //19        // Нижняя левая часть носа
-                new HeadPoint(-1.23173f, -4.339445f) {Visible = false },      //20        // Нижняя левая часть носа    
+
+                new HeadPoint(-1.713433f, -3.670751f) ,                      //19        // Нижняя левая часть носа
+                new HeadPoint(-1.23173f, -4.039445f) {Visible = false },      //20        // Нижняя левая часть носа    
                 new HeadPoint(-4.48324f, 0.133942f),                        //21        // Левый глаз
                 new HeadPoint(-3.237061f, 0.6147068f),                      //22        // Левый глаз
                 new HeadPoint(-1.940786f, -0.04412243f),                    //23        // Левый глаз
@@ -735,12 +751,16 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(4.741577f, -9.973206f)   { Visible = false },                           //34        // Правая нижняя часть (шея и подбородок)
                 new HeadPoint(2.835503f, -11.6133f)   { Visible = false },                            //35        // Правая нижняя часть (шея и подбородок)
                 new HeadPoint(0.9294291f, -12.60291f)   { Visible = false },                          //36        // Правая нижняя часть (шея и подбородок)
-                new HeadPoint(2.505571f, -6.369632f),                           //37        // Рот
-                new HeadPoint(1.022702f, -5.397916f),                           //38        // Рот
-                new HeadPoint(1.616331f, -7.183366f),                           //39        // Рот
+
+                new HeadPoint(2.635571f, -5.845f),                           //37        // Рот
+                new HeadPoint(1.022702f, -5.227916f),                           //38        // Рот
+                new HeadPoint(1.616331f, -6.95f),                           //39        // Рот
+
                 new HeadPoint(0.9193307f, 0.1962141f),                          //40        // Верхняя правая часть носа  
-                new HeadPoint(1.713433f, -3.870751f),                           //41        // Нижняя правая часть носа
-                new HeadPoint(1.23173f, -4.339445f) {Visible = false },          //42        // Нижняя правая часть носа
+
+                new HeadPoint(1.713433f, -3.670751f),                           //41        // Нижняя правая часть носа
+                new HeadPoint(1.23173f, -4.039445f) {Visible = false },          //42        // Нижняя правая часть носа
+
                 new HeadPoint(4.48324f, 0.133942f),                             //43        // Правый глаз
                 new HeadPoint(3.237061f, 0.6147068f),                           //44        // Правый глаз
                 new HeadPoint(1.940786f, -0.04412243f),                         //45        // Правый глаз
@@ -749,12 +769,12 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(-7.771821f, -4.666965f)   { Visible = false },    //48 - 8
                 new HeadPoint(8.405126f, 1.408247f)     { Visible = false },    //49 - 29
                 new HeadPoint(7.771821f, -4.666965f)    { Visible = false },    //50 - 30
-                new HeadPoint(0f, -6.405003f),                                  //51            //центр рта
+
+                new HeadPoint(0f, -6.005003f),                                  //51            //центр рта
                 
-                new HeadPoint(0f, -3.303351f)                                   //52         //nose bulb                    //  new HeadPoint(0f, -3.503351f)  - чуть чуть приподнять
-                //new HeadPoint(-0.53173f, -3.703351f),                           //53         //nose bulb  1
-                //new HeadPoint(0.53173f, -3.703351f),                            //54         //nose bulb  2
-                //new HeadPoint(0f, -3.003351f)                                   //55         //nose bulb  2
+                new HeadPoint(0f, -3.303351f),                               //52         //nose bulb  
+
+                new HeadPoint(0f, -6.4f)                              //53                 //центр рта низ
             };
 
             newPoints[10].LinkedPoints.Add(12);
@@ -781,8 +801,9 @@ namespace RH.Core.Render.Controllers
             var newPoints = new HeadPoints<HeadPoint>
             {
                 new HeadPoint(0f, 12.13549f),                               //0        // центр лба
-                new HeadPoint(0f, -6.953846f),                              //1        // Рот
-                new HeadPoint(0f, -3.985388f) {Visible = false },                              //2        // Центр носа
+                new HeadPoint(0f, -6.85f),                              //1        // Рот
+                new HeadPoint(0f, -3.75f) {Visible = false },                              //2        // Центр носа
+
                 new HeadPoint(-2.735909f, 11.61245f),                       //3        // Левые верхние точки головы
                 new HeadPoint(-5.541705f, 9.890492f),                       //4        // Левые верхние точки головы
                 new HeadPoint(-6.81637f, 8.060863f),                        //5        // Левые верхние точки головы
@@ -795,12 +816,16 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(-4.741577f, -9.973206f)   { Visible = false },                      //12       // Левая нижняя часть (шея и подбородок)
                 new HeadPoint(-2.835503f, -11.6133f)   { Visible = false },                       //13       // Левая нижняя часть (шея и подбородок)
                 new HeadPoint(-0.9294291f, -12.60291f)   { Visible = false },                     //14       // Левая нижняя часть (шея и подбородок)
-                new HeadPoint(-2.718971f, -6.03537f),                       //15        // Рот    
-                new HeadPoint(-1.26607f, -5.090575f),                       //16        // Рот  
-                new HeadPoint(-1.703346f, -6.788739f),                      //17        // Рот 
+
+                new HeadPoint(-3.1f, -5.2f),                       //15        // Рот    
+                new HeadPoint(-1.26607f, -4.92f),                       //16        // Рот  
+                new HeadPoint(-1.703346f, -6.45f),                      //17        // Рот 
+
                 new HeadPoint(-0.8480585f, 1.063481f),                      //18        // Верхняя левая часть носа  
-                new HeadPoint(-1.7f, -3.35f),                        //19        // Нижняя левая часть носа
-                new HeadPoint(-1.221782f, -4.016049f)   { Visible = false },                      //20        // Нижняя левая часть носа
+
+                new HeadPoint(-1.7f, -3.25f),                        //19        // Нижняя левая часть носа
+                new HeadPoint(-1.221782f, -3.8f)   { Visible = false },                      //20        // Нижняя левая часть носа
+
                 new HeadPoint(-4.423392f, 0.5407493f),                      //21        // Левый глаз
                 new HeadPoint(-3.348277f, 0.990295f),                       //22        // Левый глаз
                 new HeadPoint(-2.00215f, 0.3559156f),                       //23        // Левый глаз
@@ -817,12 +842,16 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(4.741577f, -9.973206f)   { Visible = false },                       //34
                 new HeadPoint(2.835503f, -11.6133f)   { Visible = false },                        //35
                 new HeadPoint(0.9294291f, -12.60291f)   { Visible = false },                      //36
-                new HeadPoint(2.718971f, -6.03537f),                        //37        // Рот
-                new HeadPoint(1.26607f, -5.090575f),                        //38        // Рот
-                new HeadPoint(1.703346f, -6.788739f),                       //39        // Рот
+
+                new HeadPoint(3.1f, -5.2f),                        //37        // Рот
+                new HeadPoint(1.26607f, -4.92f),                        //38        // Рот
+                new HeadPoint(1.703346f, -6.45f),                       //39        // Рот
+
                 new HeadPoint(0.8480585f, 1.063481f),                       //40        // Верхняя правая часть носа  
-                new HeadPoint(1.7f, -3.35f),                         //41        // Нижняя правая часть носа
-                new HeadPoint(1.221782f, -4.016049f)   { Visible = false },                       //42        // Нижняя правая часть носа
+
+                new HeadPoint(1.7f, -3.25f),                         //41        // Нижняя правая часть носа
+                new HeadPoint(1.221782f, -3.8f)   { Visible = false },                       //42        // Нижняя правая часть носа
+
                 new HeadPoint(4.423392f, 0.5407493f),                       //43        // Правый глаз
                 new HeadPoint(3.348277f, 0.990295f),                        //44        // Правый глаз
                 new HeadPoint(2.00215f, 0.3559156f),                        //45        // Правый глаз
@@ -831,9 +860,11 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(-7.651234f, -4.290586f) { Visible = false },  //48 - 8
                 new HeadPoint(8.3811f, 1.760967f)     { Visible = false },  //49 - 29
                 new HeadPoint(7.651234f, -4.290586f)  { Visible = false },  //50 - 30
-                new HeadPoint(0f, -6.009818f),                              //51                 //центр рта
+                new HeadPoint(0f, -5.45f),                              //51                 //центр рта
 
-                new HeadPoint(0f, -3.303351f)                               //52         //nose bulb  
+                new HeadPoint(0f, -3.15f),                               //52         //nose bulb  
+
+                new HeadPoint(0f, -6.1f)                              //53                 //центр рта низ
             };
 
             newPoints[10].LinkedPoints.Add(12);
@@ -860,8 +891,10 @@ namespace RH.Core.Render.Controllers
             var newPoints = new HeadPoints<HeadPoint>
             {
                new HeadPoint(0f, 9.876677f),                                    //0        // центр лба
-               new HeadPoint(0f, -6.956298f),                                   //1        // Рот
-               new HeadPoint(0f, -4.286997f) {Visible = false },                                   //2        // Центр носа
+               new HeadPoint(0f, -6.7f),                                   //1        // Рот
+
+               new HeadPoint(0f, -4.1f) {Visible = false },                                   //2        // Центр носа
+
                new HeadPoint(-2.436944f, 9.44833f),                             //3        // Левые верхние точки головы
                new HeadPoint(-5.149078f, 7.737719f),                            //4        // Левые верхние точки головы
                new HeadPoint(-6.353214f, 5.951503f),                            //5        // Левые верхние точки головы
@@ -874,16 +907,21 @@ namespace RH.Core.Render.Controllers
                new HeadPoint(-4.741577f, -9.973206f)   { Visible = false },                           //12       // Левая нижняя часть (шея и подбородок)
                new HeadPoint(-2.835503f, -11.6133f)   { Visible = false },                            //13       // Левая нижняя часть (шея и подбородок)
                new HeadPoint(-0.9294291f, -12.60291f)   { Visible = false },                          //14       // Левая нижняя часть (шея и подбородок)
-               new HeadPoint(-1.865658f, -6.201596f),                           //15        // Рот    
-               new HeadPoint(-0.8154634f, -5.328717f),                          //16        // Рот  
-               new HeadPoint(-1.162038f, -6.793632f),                           //17        // Рот 
+
+               new HeadPoint(-1.865658f, -5.4f),                           //15        // Рот    
+               new HeadPoint(-0.8154634f, -5.0f),                          //16        // Рот  
+               new HeadPoint(-1.162038f, -6.45f),                           //17        // Рот 
+
                new HeadPoint(-0.6773607f, -0.6424349f),                         //18        // Верхняя левая часть носа  
-               new HeadPoint(-1.328793f, -3.7f),                           //19        // Нижняя левая часть носа
-               new HeadPoint(-1.063392f, -4.242681f)   { Visible = false },                           //20        // Нижняя левая часть носа    
-               new HeadPoint(-3.91729f, -1.073645f),                            //21        // Левый глаз
+
+               new HeadPoint(-1.328793f, -3.5f),                           //19        // Нижняя левая часть носа
+               new HeadPoint(-1.063392f, -4.0f)   { Visible = false },                           //20        // Нижняя левая часть носа    
+
+               new HeadPoint(-3.91729f, -1.0f),                            //21        // Левый глаз
                new HeadPoint(-2.92597f, -0.5019711f),                           //22        // Левый глаз
-               new HeadPoint(-1.645102f, -1.109842f),                           //23        // Левый глаз
-               new HeadPoint(-2.791351f, -1.376829f),                           //24        // Левый глаз
+               new HeadPoint(-1.645102f, -1.05f),                           //23        // Левый глаз
+               new HeadPoint(-2.791351f, -1.2f),                           //24        // Левый глаз
+
                 new HeadPoint(2.436944f, 9.44833f),                             //25        // тоже самое для правой части
                 new HeadPoint(5.149078f, 7.737719f),                            //26
                 new HeadPoint(6.353214f, 5.951503f),                            //27
@@ -896,24 +934,30 @@ namespace RH.Core.Render.Controllers
                 new HeadPoint(4.741577f, -9.973206f)   { Visible = false },                           //34
                 new HeadPoint(2.835503f, -11.6133f)   { Visible = false },                            //35
                 new HeadPoint(0.9294291f, -12.60291f)   { Visible = false },                          //36
-                new HeadPoint(1.865658f, -6.201596f),                           //37        // Рот
-                new HeadPoint(0.8154634f, -5.328717f),                          //38        // Рот
-                new HeadPoint(1.162038f, -6.793632f),                           //39        // Рот
+
+                new HeadPoint(1.865658f, -5.4f),                           //37        // Рот
+                new HeadPoint(0.8154634f, -5.0f),                          //38        // Рот
+                new HeadPoint(1.162038f, -6.45f),                           //39        // Рот
+
                 new HeadPoint(0.6773607f, -0.6424349f),                         //40        // Верхняя правая часть носа  
-                new HeadPoint(1.328793f, -3.7f),                           //41        // Нижняя правая часть носа
-                new HeadPoint(1.063392f, -4.242681f)   { Visible = false },                           //42        // Нижняя правая часть носа
-                new HeadPoint(3.91729f, -1.073645f),                            //43        // Правый глаз
+                new HeadPoint(1.328793f, -3.5f),                           //41        // Нижняя правая часть носа
+                new HeadPoint(1.063392f, -4.0f)   { Visible = false },                           //42        // Нижняя правая часть носа
+
+                new HeadPoint(3.91729f, -1.0f),                            //43        // Правый глаз
                 new HeadPoint(2.92597f, -0.5019711f),                           //44        // Правый глаз
-                new HeadPoint(1.645102f, -1.109842f),                           //45        // Правый глаз
-                new HeadPoint(2.791351f, -1.376829f),                           //46        // Правый глаз
+                new HeadPoint(1.645102f, -1.05f),                           //45        // Правый глаз
+                new HeadPoint(2.791351f, -1.2f),                           //46        // Правый глаз
 
                 new HeadPoint(-7.784023f, 0.5661672f)  { Visible = false },     //47 - 7
                 new HeadPoint(-6.888096f, -4.781533f)  { Visible = false },     //48 - 8
                 new HeadPoint(7.784023f, 0.5661672f)   { Visible = false },     //49 - 29
                 new HeadPoint(6.888096f, -4.781533f)   { Visible = false },     //50 - 30
-                new HeadPoint(0f, -6.046123f),                                  //51            //центр рта
 
-                new HeadPoint(0f, -3.303351f)                                   //52         //nose bulb  
+                new HeadPoint(0f, -5.4f),                                  //51            //центр рта
+
+                new HeadPoint(0f, -3.303351f) ,                               //52         //nose bulb  
+
+                new HeadPoint(0f, -5.95f)                              //53                 //центр рта низ
             };
 
             newPoints[10].LinkedPoints.Add(12);
@@ -942,7 +986,7 @@ namespace RH.Core.Render.Controllers
         }
         public List<int> GetMouthIndexes()
         {
-            return new List<int> { 1, 15, 16, 17, 37, 38, 39, 51 };
+            return new List<int> { 1, 15, 16, 17, 37, 38, 39, 51, 53 };
         }
         public List<int> GetLeftEyeIndexes()
         {
