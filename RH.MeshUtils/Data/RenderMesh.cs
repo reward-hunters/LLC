@@ -266,7 +266,7 @@ namespace RH.MeshUtils.Data
             var triangle = new int[3];
             foreach (var part in Parts)
             {
-                if (part.Type == HeadMeshType.Torso)
+                if (part.Type == HeadMeshType.Torso || part.Type == HeadMeshType.Lip)
                     continue;
                 //if (part.Type == HeadMeshType.Lip)
                 //{
