@@ -765,11 +765,11 @@ namespace RH.Core
             switch (manType)
             {
                 case ManType.Male:
-                    return "Male\\Male2.obj";
+                    return "Male\\Male.obj";
                 case ManType.Female:
-                    return "Fem\\Fem2.obj";
+                    return "Fem\\Fem.obj";
                 case ManType.Child:
-                    return "Child\\Child2.obj";
+                    return "Child\\Child.obj";
                 default:
                     return string.Empty;
             }

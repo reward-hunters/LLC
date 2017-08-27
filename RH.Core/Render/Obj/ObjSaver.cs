@@ -713,7 +713,7 @@ namespace RH.Core.Render.Obj
                     }
                 }
 #endif
-                res += mapTitle + " /Textures/" + textureName + "\n";
+                res += mapTitle + (isCollada? " " : " /Textures/") + textureName + "\n";
             }
         }
 
