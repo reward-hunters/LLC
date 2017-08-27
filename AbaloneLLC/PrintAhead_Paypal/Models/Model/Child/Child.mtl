@@ -320,17 +320,7 @@ Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
-map_Kd /Maps/v5breeinmouthm.jpg
-
-newmtl Tongue_Child1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/v5breeinmouthm.jpg
+map_Kd /Maps/v5breeheadm.jpg
 
 newmtl Sclera_Child1
 d 1
@@ -370,7 +360,7 @@ Ka 0 0 0
 Kd 0.80000001 0.80000001 0.80000001
 Ks 1 1 1
 Km 0
-map_Kd /Maps/v5breeeyesm.jpg
+map_Kd /Maps/v5breeheadm.jpg
 
 newmtl Cornea_Child1
 d 0
@@ -380,7 +370,7 @@ Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
-map_Kd /Maps/v5breeeyesm.jpg
+map_Kd /Maps/v5breeheadm.jpg
 
 newmtl Torso_Child1
 d 1
@@ -420,7 +410,7 @@ Ka 0 0 0
 Kd 0.80000001 0.80000001 0.80000001
 Ks 1 1 1
 Km 0
-map_Kd /Maps/v5breeeyesm.jpg
+map_Kd /Maps/v5breeheadm.jpg
 
 newmtl Nostrils_Child1
 d 1
@@ -430,7 +420,7 @@ Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
-map_Kd /Maps/v5breeeyesm.jpg
+map_Kd /Maps/v5breelimbsm.jpg
 
 newmtl Lips_Child1
 d 1
@@ -450,7 +440,7 @@ Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
-map_Kd /Maps/v5breeeyesm.jpg
+map_Kd /Maps/v5breeheadm.jpg
 
 newmtl Face_Child1
 d 1
@@ -472,124 +462,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breetorsom.jpg
 
-newmtl default
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Sclera_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Pupils_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Irises_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl EyeReflection_Child
-d 0
-Ns 0.75
-Ni 1.3
-Ka 0 0 0
-Kd 0.80000001 0.80000001 0.80000001
-Ks 1 1 1
-Km 1.6000001e-07
-
-newmtl Cornea_Child
-d 0
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Tear_Child
-d 0
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 0.80000001 0.80000001 0.80000001
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Nostrils_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Lips_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Lacrimals_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Head_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Face_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Ears_Child
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 0.60000002 0.60000002 0.60000002
-Km 0
-
-newmtl Teeth_R2
+newmtl Teeth_Child2
 d 1
 Ns 0
 Ni 0
@@ -599,7 +472,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeinmouthm.jpg
 
-newmtl Gums_R2
+newmtl Gums_Child2
 d 1
 Ns 0
 Ni 0
@@ -609,17 +482,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeinmouthm.jpg
 
-newmtl Tongue_R2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/v5breeinmouthm.jpg
-
-newmtl Sclera_R2
+newmtl Sclera_Child2
 d 1
 Ns 0
 Ni 0
@@ -629,7 +492,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeeyesm.jpg
 
-newmtl Pupils_R2
+newmtl Pupils_Child2
 d 1
 Ns 0
 Ni 0
@@ -639,7 +502,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeeyesm.jpg
 
-newmtl Irises_R2
+newmtl Irises_Child2
 d 1
 Ns 0
 Ni 0
@@ -649,7 +512,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeeyesm.jpg
 
-newmtl EyeReflection_R2
+newmtl EyeReflection_Child2
 d 0
 Ns 1
 Ni 0
@@ -657,10 +520,8 @@ Ka 0 0 0
 Kd 0.80000001 0.80000001 0.80000001
 Ks 1 1 1
 Km 0
-map_Kd /Maps/v5breeeyesm.jpg
-map_Ks /Maps/v5breeeyesm.jpg
 
-newmtl Cornea_R2
+newmtl Cornea_Child2
 d 0
 Ns 0
 Ni 0
@@ -670,7 +531,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeeyesm.jpg
 
-newmtl Torso_R2
+newmtl Torso_Child2
 d 1
 Ns 0
 Ni 0
@@ -680,7 +541,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breetorsom.jpg
 
-newmtl Neck_R2
+newmtl Neck_Child2
 d 1
 Ns 0
 Ni 0
@@ -690,7 +551,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breetorsom.jpg
 
-newmtl Head_R2
+newmtl Head_Child2
 d 1
 Ns 0
 Ni 0
@@ -700,7 +561,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breetorsom.jpg
 
-newmtl Tear_R2
+newmtl Tear_Child2
 d 0
 Ns 0
 Ni 0
@@ -710,7 +571,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeeyesm.jpg
 
-newmtl Nostrils_R2
+newmtl Nostrils_Child2
 d 1
 Ns 0
 Ni 0
@@ -720,7 +581,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeeyesm.jpg
 
-newmtl Lips_R2
+newmtl Lips_Child2
 d 1
 Ns 0
 Ni 0
@@ -730,7 +591,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeheadm.jpg
 
-newmtl Lacrimals_R2
+newmtl Lacrimals_Child2
 d 1
 Ns 0
 Ni 0
@@ -740,7 +601,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeeyesm.jpg
 
-newmtl Face_R2
+newmtl Face_Child2
 d 1
 Ns 0
 Ni 0
@@ -750,7 +611,7 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/v5breeheadm.jpg
 
-newmtl Ears_R2
+newmtl Ears_Child2
 d 1
 Ns 0
 Ni 0

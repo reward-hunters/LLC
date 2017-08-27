@@ -260,6 +260,8 @@ namespace RH.MeshUtils.Data
 
         public void FindFixedPoints()
         {
+            return;
+
             var verticesDictionary = new Dictionary<Vector3, int>(new VectorEqualityComparer());
             var points = new List<List<Point3d>>();
             var edgesDictionary = new Dictionary<Line, int>(new VectorEqualityComparer());
