@@ -152,7 +152,15 @@ namespace RH.WebCore
             ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[4]);
             ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[57]);
             ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[56]);
-            ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[61]);
+
+            ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[61]);//Центр рта верх
+            ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[64]);//Центр рта низ
+
+            ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[60]);  //9
+            ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[62]);  //10
+
+            ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[63]);  //11
+            ProgramCore.Project.DetectedLipsPoints.Add(facialFeatures[65]);  //12
 
             ProgramCore.Project.DetectedNosePoints.Add(facialFeatures[45]);           // точки носа
             ProgramCore.Project.DetectedNosePoints.Add(facialFeatures[46]);
