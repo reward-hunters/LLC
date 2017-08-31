@@ -28,7 +28,10 @@ namespace RH.OneClick
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
-                               ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
+                var objectCreator = new ObjCreator();
+                objectCreator.CreateObj(2, "ph4ea4veilnuswyq2viwbm1m","","", "", "", "", "", "", "", "", "", "",0,0,0,0, "test");
+
+                           ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);
             }
             catch (Exception e)
