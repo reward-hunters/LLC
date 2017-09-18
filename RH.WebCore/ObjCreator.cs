@@ -412,16 +412,19 @@ namespace RH.WebCore
             var hairObjPath = string.Empty;
             if (string.IsNullOrEmpty(hairPath))
             {
-                switch (manType)
+                switch (manTypeInt)
                 {
-                    case ManType.Child:
-                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/10C.obj";
+                    case 0:
+                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/20.obj";      // мужик
                         break;
-                    case ManType.Female:
-                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/3.obj";
+                    case 1:
+                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/3.obj";       // баба
                         break;
-                    default:
-                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/20.obj";
+                    case 2:
+                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/10C.obj";     // мальчик
+                        break;
+                    case 3:
+                        hairObjPath = @"ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Standard/12C.obj";     // девочка
                         break;
                 }
             }
@@ -432,7 +435,7 @@ namespace RH.WebCore
             {
                 hairMaterialPath = GetParcedHairAccessoriesLink(hairMaterialPath, "T.jpg").Replace("/Icons/", "/Materials/");
                 if (string.IsNullOrEmpty(hairMaterialPath))
-                    hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/BlondyT.jpg";
+                    hairMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Hair/Materials/H7T.jpg";
 
                 var temp = @"ftp://108.167.164.209/public_html/printahead.online/PrintAhead_models/" + sessionID + "/Textures";
                 var fileName = Path.GetFileNameWithoutExtension(hairMaterialPath) + ".jpg";
@@ -522,18 +525,6 @@ namespace RH.WebCore
 
             #endregion
 
-            //switch (size)
-            //{
-            //    case 0:
-            //        ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.2f;
-            //        break;
-            //    case 1:
-            //        ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 3.8f;
-            //        break;
-            //    case 2:
-            //        ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.MorphScale = 4.5f;
-            //        break;
-            //}
 
             ProgramCore.Project.RenderMainHelper.SaveMergedHead(sessionID, zipStream, size);
             ProgramCore.Project.RenderMainHelper.SaveSmoothedTextures(zipStream);

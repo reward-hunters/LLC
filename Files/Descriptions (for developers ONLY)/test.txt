@@ -1,0 +1,51 @@
+"_____C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\root\26676eb7\92c7e946\assembly\dl3\4efbbc61\0032347a_57cbd201\RH.WebCore.DLL
+
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\root\26676eb7\92c7e946\assembly\dl3\4efbbc61\0032347a_57cbd201\__AssemblyInfo__.ini
+
+"
+
+
+AppDomain.CurrentDomain.BaseDirectory;
+
+C:\inetpub\wwwroot\bin
+C:\inetpub\wwwroot\images
+C:\inetpub\wwwroot\styles
+_____C:\inetpub\wwwroot\ajax_filescan.js
+C:\inetpub\wwwroot\ajax_filescan_new.js
+C:\inetpub\wwwroot\Default.aspx
+C:\inetpub\wwwroot\DosLoader.js
+C:\inetpub\wwwroot\Global.asax
+C:\inetpub\wwwroot\jquery_form.js
+C:\inetpub\wwwroot\MTLLoader.js
+C:\inetpub\wwwroot\OBJLoader.js
+C:\inetpub\wwwroot\OrbitControls.js
+C:\inetpub\wwwroot\three.min.js
+C:\inetpub\wwwroot\Web.config
+
+
+
+"_____C:\inetpub\wwwroot\bin\Assimp32.dll
+C:\inetpub\wwwroot\bin\AWSSDK.Core.dll
+C:\inetpub\wwwroot\bin\AWSSDK.EC2.dll
+C:\inetpub\wwwroot\bin\AWSSDK.S3.dll
+C:\inetpub\wwwroot\bin\AWSSDK.SimpleDB.dll
+C:\inetpub\wwwroot\bin\AwsWebApp1.dll
+C:\inetpub\wwwroot\bin\AwsWebApp1.pdb
+C:\inetpub\wwwroot\bin\Emgu.CV.dll
+C:\inetpub\wwwroot\bin\Emgu.Util.dll
+C:\inetpub\wwwroot\bin\FaceSDK.NET.dll
+C:\inetpub\wwwroot\bin\ICSharpCode.SharpZipLib.dll
+C:\inetpub\wwwroot\bin\Ionic.Zip.dll
+C:\inetpub\wwwroot\bin\OpenTK.dll
+C:\inetpub\wwwroot\bin\OpenTK.GLControl.dll
+C:\inetpub\wwwroot\bin\RH.AssimpNet.dll
+C:\inetpub\wwwroot\bin\RH.Core.dll
+C:\inetpub\wwwroot\bin\RH.Core.pdb
+C:\inetpub\wwwroot\bin\RH.ImageListView.dll
+C:\inetpub\wwwroot\bin\RH.MeshUtils.dll
+C:\inetpub\wwwroot\bin\RH.WebCore.dll
+C:\inetpub\wwwroot\bin\RH.WebCore.pdb
+"
+=====
+Переменная Path
+"C:\inetpub\wwwroot\;C:\inetpub\wwwroot\bin;C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\root\26676eb7\92c7e946\assembly\dl3\09616740\00c53ec0_5acbd201;C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\root\26676eb7\92c7e946\assembly\dl3\09616740\00c53ec0_5acbd201\bin;C:\Windows\SysWOW64\inetsrv;C:\Windows\system32\inetsrv;C:\Windows\SysWOW64\inetsrv\bin;C:\Windows\system32\inetsrv\bin
