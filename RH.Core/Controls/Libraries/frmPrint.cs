@@ -88,6 +88,7 @@ namespace RH.Core.Controls.Libraries
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
@@ -106,6 +107,7 @@ namespace RH.Core.Controls.Libraries
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:

@@ -510,41 +510,10 @@ namespace RH.Core.Render.Obj
                         ms.CopyTo(zipStream);
                         zipStream.CloseEntry();
                     }
-
-                    /*  if (zipStream != null)
-                          {
-                              ms.Position = 0;
-                              ms.Flush();
-                              var path = @"C:\test";
-                              FolderEx.CreateDirectory(path);
-
-                              using (var fs = new FileStream(Path.Combine(path, sessionId + ".obj"), FileMode.Create, FileAccess.Write))
-                              {
-                                  var arr = ms.ToArray();
-                                  fs.Write(arr, 0, (int)arr.Length);
-                                  fs.Close();
-                              }
-                          }*/
                 }
             }
             SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId, zipStream);
 
-            /*   if (zipStream != null)
-               {
-                   var newEntry = new ZipEntry(filePath + ".obj");
-                   zipStream.PutNextEntry(newEntry);
-                   ms.CopyTo(zipStream);
-                   zipStream.CloseEntry();
-
-                   var importer = new AssimpImporter();         // assimp doesn't work
-                  var blob = importer.ConvertFromFileToBlob(Path.Combine(@"C:\test", sessionId + ".obj"), "collada", PostProcessSteps.None);
-
-                    var newEntry = new ZipEntry(filePath + ".dae");
-                    zipStream.PutNextEntry(newEntry);
-                    var arr = blob.Data;
-                    zipStream.Write(arr, 0, arr.Length);
-                    zipStream.CloseEntry();
-               }*/
 #else
                 }
             SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, sessionId);
@@ -629,25 +598,6 @@ namespace RH.Core.Render.Obj
                         zipStream.CloseEntry();
                     }
 
-
-                    /*   var path = @"C:\test";                // assimp пока не работает
-                       FolderEx.CreateDirectory(path);
-
-                       if (zipStream != null)
-                       {
-                           using (FileStream fs = new FileStream(Path.Combine(path, sessionId + ".mtl"), FileMode.Create, FileAccess.Write))
-                           {
-                               var arr = ms.ToArray();
-                               fs.Write(arr, 0, (int)arr.Length);
-                               fs.Close();
-                           }
-
-                           ms.Seek(0, SeekOrigin.Begin);
-                           var newEntry = new ZipEntry(mtlPath);
-                           zipStream.PutNextEntry(newEntry);
-                           ms.CopyTo(zipStream);
-                           zipStream.CloseEntry();
-                       }*/
                 }
             }
 #else

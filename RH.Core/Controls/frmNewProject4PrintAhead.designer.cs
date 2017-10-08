@@ -39,7 +39,9 @@ namespace RH.Core.Controls
             this.label5 = new System.Windows.Forms.Label();
             this.pictureTemplate = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.labelNotes1 = new System.Windows.Forms.Label();
+            this.labelNotes = new System.Windows.Forms.Label();
+            this.pictureExample = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.rbImportObj = new System.Windows.Forms.RadioButton();
@@ -55,13 +57,10 @@ namespace RH.Core.Controls
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.RenderTimer = new System.Windows.Forms.Timer(this.components);
-            this.CheekTimer = new System.Windows.Forms.Timer(this.components);
             this.labelHelp = new System.Windows.Forms.Label();
-            this.labelNotes = new System.Windows.Forms.Label();
-            this.labelNotes1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureTemplate)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureExample)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnChild)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnFemale)).BeginInit();
@@ -135,7 +134,7 @@ namespace RH.Core.Controls
             // 
             this.groupBox1.Controls.Add(this.labelNotes1);
             this.groupBox1.Controls.Add(this.labelNotes);
-            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Controls.Add(this.pictureExample);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textTemplateImage);
             this.groupBox1.Controls.Add(this.label5);
@@ -147,15 +146,36 @@ namespace RH.Core.Controls
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Create new project";
             // 
-            // pictureBox1
+            // labelNotes1
             // 
-            this.pictureBox1.Image = global::RH.Core.Properties.Resources.lol;
-            this.pictureBox1.Location = new System.Drawing.Point(9, 75);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(421, 106);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 13;
-            this.pictureBox1.TabStop = false;
+            this.labelNotes1.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNotes1.Location = new System.Drawing.Point(6, 283);
+            this.labelNotes1.Name = "labelNotes1";
+            this.labelNotes1.Size = new System.Drawing.Size(433, 63);
+            this.labelNotes1.TabIndex = 15;
+            this.labelNotes1.Text = "For B/W files (STL) there will be a $5 charge per save, for full color prints $8." +
+    "";
+            // 
+            // labelNotes
+            // 
+            this.labelNotes.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNotes.Location = new System.Drawing.Point(6, 220);
+            this.labelNotes.Name = "labelNotes";
+            this.labelNotes.Size = new System.Drawing.Size(433, 63);
+            this.labelNotes.TabIndex = 14;
+            this.labelNotes.Text = "Use of PrintAhead 2.0 is free. Build a statue using the Front, Style, Color and P" +
+    "rint tabs. If you are satisfied with your statue, you may use the print buttons " +
+    "to generate a printready file.";
+            // 
+            // pictureExample
+            // 
+            this.pictureExample.Image = global::RH.Core.Properties.Resources.lol;
+            this.pictureExample.Location = new System.Drawing.Point(9, 75);
+            this.pictureExample.Name = "pictureExample";
+            this.pictureExample.Size = new System.Drawing.Size(421, 106);
+            this.pictureExample.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureExample.TabIndex = 13;
+            this.pictureExample.TabStop = false;
             // 
             // panel1
             // 
@@ -332,11 +352,6 @@ namespace RH.Core.Controls
             this.RenderTimer.Interval = 40;
             this.RenderTimer.Tick += new System.EventHandler(this.RenderTimer_Tick);
             // 
-            // CheekTimer
-            // 
-            this.CheekTimer.Interval = 600;
-            this.CheekTimer.Tick += new System.EventHandler(this.CheekTimer_Tick);
-            // 
             // labelHelp
             // 
             this.labelHelp.Font = new System.Drawing.Font("Times New Roman", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -348,27 +363,6 @@ namespace RH.Core.Controls
             this.labelHelp.Text = "Click Here to Load Frontal photo";
             this.labelHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelHelp.Click += new System.EventHandler(this.pictureTemplate_Click);
-            // 
-            // labelNotes
-            // 
-            this.labelNotes.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNotes.Location = new System.Drawing.Point(6, 220);
-            this.labelNotes.Name = "labelNotes";
-            this.labelNotes.Size = new System.Drawing.Size(433, 63);
-            this.labelNotes.TabIndex = 14;
-            this.labelNotes.Text = "Use of PrintAhead 2.0 is free. Build a statue using the Front, Style, Color and P" +
-    "rint tabs. If you are satisfied with your statue, you may use the print buttons " +
-    "to generate a printready file.";
-            // 
-            // labelNotes1
-            // 
-            this.labelNotes1.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNotes1.Location = new System.Drawing.Point(6, 283);
-            this.labelNotes1.Name = "labelNotes1";
-            this.labelNotes1.Size = new System.Drawing.Size(433, 63);
-            this.labelNotes1.TabIndex = 15;
-            this.labelNotes1.Text = "For B/W files (STL) there will be a $5 charge per save, for full color prints $8." +
-    "";
             // 
             // frmNewProject4PrintAhead
             // 
@@ -394,7 +388,7 @@ namespace RH.Core.Controls
             ((System.ComponentModel.ISupportInitialize)(this.pictureTemplate)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureExample)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnChild)).EndInit();
@@ -417,7 +411,7 @@ namespace RH.Core.Controls
         private TextBox textTemplateImage;
         private Label label5;
         private GroupBox groupBox1;
-        private PictureBox pictureBox1;
+        private PictureBox pictureExample;
         private Panel panel1;
         private PictureBox btnChild;
         private PictureBox btnFemale;
@@ -431,7 +425,6 @@ namespace RH.Core.Controls
         private Label label9;
         private Label label10;
         public Timer RenderTimer;
-        public Timer CheekTimer;
         private RadioButton rbImportObj;
         private Label label11;
         private Label labelHelp;

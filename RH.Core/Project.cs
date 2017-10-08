@@ -534,7 +534,19 @@ namespace RH.Core
                 var textureFlip = (FlipType)br.ReadInt32();
                 var shapeFlip = (FlipType)br.ReadInt32();
 
-                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick ? 2048 : 1024);
+                var textureSize = 1024;
+                switch (ProgramCore.CurrentProgram)
+                {
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
+                    case ProgramCore.ProgramMode.HeadShop_Rotator:
+                        textureSize = 2048;          // если поставит ьу нас в проге 4096 - то все крашится к хуям. Пусть уж только на экспорте будет.
+                        break;
+           
+                     /*   textureSize = 4096;
+                        break;*/
+                }
+
+                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, textureSize);
                 result.LoadMeshes();
                 result.TextureFlip = textureFlip;
                 result.ShapeFlip = shapeFlip;

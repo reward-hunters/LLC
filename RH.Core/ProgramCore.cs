@@ -29,7 +29,7 @@ namespace RH.Core
             get;
             private set;
         }
-        
+
         public static Project Project
         {
             get;
@@ -50,9 +50,9 @@ namespace RH.Core
             PrintAhead,                 // обычный PrintAhead
             PrintAhead_PayPal,          // PrintAhead с интеграцией PayPal. Нет возможности сохранения, экспорта. Только печать за деньги
             PrintAhead_Online,          // Онлайн версия (незначительные изменение с paypal версией: загружается ряд аксессуаров по дефолту, добавлены АПИ вызовы для сайта)
-            HeadShop,
-            HeadShop_OneClick,            // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
-            HeadShop_Rotator             // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях.
+            HeadShop,                   // HeadShop 10.2
+            HeadShop_OneClick,          // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
+            HeadShop_Rotator            // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях.
         }
         public static string ProgramCaption
         {
@@ -61,7 +61,9 @@ namespace RH.Core
                 switch (CurrentProgram)
                 {
                     case ProgramMode.HeadShop:
-                        return "HeadShop 10";
+                        return "HeadShop 10.2";
+                    case ProgramMode.HeadShop_Rotator:
+                        return "HeadShop 11";
                     case ProgramMode.PrintAhead:
                         return "PrintAhead";
                     case ProgramMode.PrintAhead_PayPal:
@@ -81,6 +83,7 @@ namespace RH.Core
                 switch (CurrentProgram)
                 {
                     case ProgramMode.HeadShop:
+                    case ProgramMode.HeadShop_Rotator:
                     case ProgramMode.HeadShop_OneClick:
                         return "HeadShop";
                     case ProgramMode.PrintAhead:

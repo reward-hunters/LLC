@@ -550,7 +550,7 @@ namespace RH.Core.Render
                     var scaleX = UpdateMeshProportions(aabb);
                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);
 
-                   autodotsShapeHelper.TransformRects();
+                    autodotsShapeHelper.TransformRects();
                     autodotsShapeHelper.InitializeShaping();
 
                     switch (ProgramCore.CurrentProgram)
@@ -559,7 +559,7 @@ namespace RH.Core.Render
                             DetectFaceRotation();
                             break;
                     }
-                    
+
                     var points = autodotsShapeHelper.GetBaseDots();
 
                     SpecialEyePointsUpdate(points, true);
@@ -721,7 +721,7 @@ namespace RH.Core.Render
                 autodotsShapeHelper.Transform(p.Value, index);
             }
             var lipsPoints = new List<Vector2>();
-            for(int j = 9; j < 13; ++j)
+            for (int j = 9; j < 13; ++j)
             {
                 lipsPoints.Add(MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedLipsPoints[j], ProgramCore.CurrentProgram));
             }

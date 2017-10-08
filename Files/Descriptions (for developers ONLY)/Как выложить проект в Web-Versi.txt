@@ -1,0 +1,3 @@
+У проектов Rh.Core и RH.MeshUtils выставить во вкладке Build - Conditional comp symbols 
+переменную: WEB_APP
+Запускаемый проект - PrintAhead

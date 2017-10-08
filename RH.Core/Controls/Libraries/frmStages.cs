@@ -24,6 +24,17 @@ namespace RH.Core.Controls.Libraries
             if (!float.IsNaN(ProgramCore.Project.MorphingScale))
                 trackBarPose.Value = (int)(ProgramCore.Project.MorphingScale * 100);
 
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop:              // HeadShop 10-11, отключить возможность 3д print.
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    btnColor3DPrint.Visible = false;
+                    break;
+                default:
+                    btnColor3DPrint.Visible = true;
+                    break;
+            }
+
            Sizeble = false;
         }
 
@@ -337,6 +348,7 @@ namespace RH.Core.Controls.Libraries
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
@@ -352,6 +364,7 @@ namespace RH.Core.Controls.Libraries
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:

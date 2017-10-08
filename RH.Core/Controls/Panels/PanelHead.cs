@@ -45,13 +45,6 @@ namespace RH.Core.Controls.Panels
             }
 
 
-            /*
-            if (ProgramCore.PluginMode)
-            {
-                btnFlipLeft.Visible = false;
-                btnFlipRight.Visible = false;
-            }*/
-
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnShapeTool.Visible = btnPolyLine.Visible = false;
 
@@ -67,10 +60,6 @@ namespace RH.Core.Controls.Panels
 
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnPolyLine.Visible = !isFrontTab;
-
-
-            //TODO: uncomment if need return  
-            //  btnDots.Visible = isFrontTab;
 
         }
 
@@ -91,16 +80,8 @@ namespace RH.Core.Controls.Panels
             if (btnAutodots.Tag.ToString() == "1")
                 btnAutodots_Click(null, EventArgs.Empty);
 
-            /*     if (btnDots.Tag.ToString() == "1")
-                     btnDots_Click(null, EventArgs.Empty);*/
-
             if (btnPolyLine.Tag.ToString() == "1")
                 btnPolyLine_Click(null, EventArgs.Empty);
-
-            /*      if (btnFlipLeft.Tag.ToString() == "1")
-                      btnFlipLeft_Click(null, EventArgs.Empty);
-                  if (btnFlipRight.Tag.ToString() == "1")
-                      btnFlipRight_Click(null, EventArgs.Empty);*/
 
             ResetButtons();
         }
@@ -422,6 +403,7 @@ namespace RH.Core.Controls.Panels
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.PrintAhead:
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     case ProgramCore.ProgramMode.PrintAhead_Online:

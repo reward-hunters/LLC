@@ -32,11 +32,12 @@ namespace RH.Core.Controls
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
                     image = Resources.logo_HeadShop_OneClick;
                     break;
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    image = Resources.logo_HeadShop;            // TODO даст иконку - заюзать
+                    break;
             }
 
             image = new Bitmap(image, new Size(image.Width, image.Height));
-            //   Left = 353;
-            //    Top = 422;
             SetBitmap(image);
             image.Dispose();
         }

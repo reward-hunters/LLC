@@ -24,12 +24,12 @@ namespace RH.OneClick
                 var currentDomain = AppDomain.CurrentDomain;
                 currentDomain.AssemblyResolve += LoadSubLibs;
 
-                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.PrintAhead_Online;
+                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.PrintAhead;
                 ProgramCore.paypalHelper = new TruePaypalHelper();
                 ProgramCore.IsFreeVersion = File.Exists(Path.Combine(Application.StartupPath, "bin", "rh_Saqr.dlib"));
 
-                var objectCreator = new ObjCreator();
-                objectCreator.CreateObj(2, "ph4ea4veilnuswyq2viwbm1m","","", "", "", "", "", "", "", "", "", "",0,0,0,0, "test");
+             //   var objectCreator = new ObjCreator();
+             //   objectCreator.CreateObj(2, "ph4ea4veilnuswyq2viwbm1m","","", "", "", "", "", "", "", "", "", "",0,0,0,0, "test");
 
                            ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);

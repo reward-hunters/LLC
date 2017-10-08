@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using RH.Core.Helpers;
 using RH.Core.IO;
 using RH.Core.Properties;
@@ -33,6 +34,7 @@ namespace RH.Core.Controls
         }
         public string CustomModelPath;
 
+        private string templateImage;
         public string TemplateImage
         {
             get
@@ -45,11 +47,24 @@ namespace RH.Core.Controls
         private readonly bool atStartup;
 
         private LuxandFaceRecognition fcr;
-        private readonly int videoCardSize;
 
         public int SelectedSize
         {
-            get { return ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick ? 2048 : 1024; }
+            get
+            {
+                switch (ProgramCore.CurrentProgram)
+                {
+                    case ProgramCore.ProgramMode.HeadShop_OneClick:
+                        return 2048;
+                    case ProgramCore.ProgramMode.HeadShop_Rotator:
+                        int videoCardSize;
+                        GL.GetInteger(GetPName.MaxTextureSize, out videoCardSize);
+                        //   return videoCardSize > 2048 ? 4096 : 2048;
+                        return 2048;            // если поставит ьу нас в проге 4096 - то все крашится к хуям. Пусть уж только на экспорте будет.
+                    default:
+                        return 1024;
+                }
+            }
         }
         private Pen edgePen;
         private Pen arrowPen;
@@ -71,6 +86,10 @@ namespace RH.Core.Controls
 
         //      private RectangleF centerFace;
         private RectangleF startCenterFaceRect;
+        private float centerX(RectangleF rect)
+        {
+            return rect.Left + rect.Width / 2;
+        }
 
         private bool leftMousePressed;
         private Point startMousePoint;
@@ -94,8 +113,6 @@ namespace RH.Core.Controls
             eWidth = pictureTemplate.Width - 100;
             TopEdgeTransformed = new RectangleF(pictureTemplate.Width / 2f - eWidth / 2f, 30, eWidth, eWidth);
 
-            label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;
-
             ShowInTaskbar = atStartup;
 
             switch (ProgramCore.CurrentProgram)
@@ -105,8 +122,14 @@ namespace RH.Core.Controls
                     break;
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     labelNotes.Visible = labelNotes1.Visible = !ProgramCore.IsFreeVersion;
+                    label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;
+                    break;
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    pictureExample.Visible = labelNotes.Visible = labelNotes1.Visible = false;
+                    rbImportObj.Visible = label11.Visible = true;
                     break;
                 default:
+                    label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;
                     labelNotes.Visible = labelNotes1.Visible = false;
                     break;
             }
@@ -128,9 +151,215 @@ namespace RH.Core.Controls
             dialogResult = DialogResult.OK;
             Close();
         }
+        private void frmNewProject4PrintAhead_Resize(object sender, EventArgs e)
+        {
+            RecalcRealTemplateImagePosition();
+        }
+        private void rbImportObj_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbImportObj.Checked)
+            {
+                btnFemale.Tag = btnChild.Tag = btnMale.Tag = "2";
+                btnChild.Image = Resources.btnChildGray;
+                btnMale.Image = Resources.btnMaleGray;
+                btnFemale.Image = Resources.btnFemaleGray;
 
-        private string templateImage;
+                if (!ProgramCore.PluginMode)
+                {
+                    using (var ofd = new OpenFileDialogEx("Select obj file", "OBJ Files|*.obj"))
+                    {
+                        ofd.Multiselect = false;
+                        if (ofd.ShowDialog() != DialogResult.OK)
+                        {
+                            btnMale_Click(this, new EventArgs());
+                            return;
+                        }
 
+                        //btnNext.Enabled = true;
+                        CustomModelPath = ofd.FileName;
+                    }
+                }
+            }
+        }
+
+        private void pictureTemplate_Paint(object sender, PaintEventArgs e)
+        {
+            if (string.IsNullOrEmpty(templateImage))
+                return;
+
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+
+            foreach (var point in facialFeaturesTransformed)
+                e.Graphics.FillEllipse(DrawingTools.BlueSolidBrush, point.X - 2, point.Y - 2, 4, 4);
+
+            e.Graphics.DrawArc(edgePen, TopEdgeTransformed, 220, 100);
+            e.Graphics.DrawLine(arrowPen, centerX(TopEdgeTransformed), TopEdgeTransformed.Top, centerX(TopEdgeTransformed), TopEdgeTransformed.Top + 20);
+        }
+        private void pictureTemplate_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+
+            if (e.Button == MouseButtons.Left)
+            {
+                leftMousePressed = true;
+
+                headHandPoint.X = (ImageTemplateOffsetX + e.X) / (ImageTemplateWidth * 1f);
+                headHandPoint.Y = (ImageTemplateOffsetY + e.Y) / (ImageTemplateHeight * 1f);
+
+                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 20)
+                {
+                    currentSelection = Selection.TopEdge;
+                    startEdgeRect = TopEdgeTransformed;
+                    startMousePoint = new Point(e.X, e.Y);
+
+                    Cursor = ProgramCore.MainForm.GrabbingCursor;
+                }
+
+            }
+        }
+        private void pictureTemplate_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+
+            if (startMousePoint == Point.Empty)
+                startMousePoint = new Point(e.X, e.Y);
+
+            if (leftMousePressed && currentSelection != Selection.Empty)
+            {
+                Vector2 newPoint;
+                Vector2 delta2;
+                newPoint.X = (ImageTemplateOffsetX + e.X) / (ImageTemplateWidth * 1f);
+                newPoint.Y = (ImageTemplateOffsetY + e.Y) / (ImageTemplateHeight * 1f);
+
+                delta2 = newPoint - headHandPoint;
+                switch (currentSelection)
+                {
+
+                    case Selection.TopEdge:
+                        TopEdgeTransformed.Y = startEdgeRect.Y + (e.Y - startMousePoint.Y);
+                        RecalcRealTemplateImagePosition();
+                        break;
+
+                }
+            }
+            else
+            {
+                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 20)
+                    Cursor = ProgramCore.MainForm.GrabCursor;
+                else
+                    Cursor = Cursors.Arrow;
+            }
+
+        }
+        private void pictureTemplate_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+
+            if (leftMousePressed && currentSelection != Selection.Empty)
+                RecalcRealTemplateImagePosition();
+
+            startMousePoint = Point.Empty;
+            currentSelection = Selection.Empty;
+            leftMousePressed = false;
+
+            headHandPoint = Vector2.Zero;
+            tempSelectedPoint = Vector2.Zero;
+            tempSelectedPoint2 = Vector2.Zero;
+            Cursor = Cursors.Arrow;
+        }
+        private void pictureTemplate_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textTemplateImage.Text))
+                return;
+
+            using (var ofd = new OpenFileDialogEx("Select template file", "Image Files|*.jpg;*.png;*.jpeg;*.bmp"))
+            {
+                ofd.Multiselect = false;
+                if (ofd.ShowDialog() != DialogResult.OK)
+                {
+                    btnApply.Enabled = false;
+                    return;
+                }
+
+                labelHelp.Visible = false;
+                textTemplateImage.Text = ofd.FileName;
+
+                templateImage = ofd.FileName;
+                fcr = new LuxandFaceRecognition();
+                if (!fcr.Recognize(ref templateImage, true))
+                {
+                    textTemplateImage.Text = templateImage = string.Empty;
+                    pictureTemplate.Image = null;
+                    labelHelp.Visible = true;
+
+                    return;                     // это ОЧЕНЬ! важно. потому что мы во время распознавания можем создать обрезанную фотку и использовать ее как основную в проекте.
+                }
+                if (fcr.IsMale)
+                    btnMale_Click(null, null);
+                else btnFemale_Click(null, null);
+
+                using (var ms = new MemoryStream(File.ReadAllBytes(templateImage))) // Don't use using!!
+                {
+                    var img = (Bitmap)Image.FromStream(ms);
+                    pictureTemplate.Image = (Bitmap)img.Clone();
+                    img.Dispose();
+                }
+
+                RecalcRealTemplateImagePosition();
+
+
+
+                Single distance;
+                if (fcr.IsMale)
+                    distance = facialFeaturesTransformed[22].Y - facialFeaturesTransformed[11].Y;           // раньше использовалась 2 точка.но согласно ТЗ от 27.3.2017 используем теперь эту точку
+                else
+                    distance = facialFeaturesTransformed[2].Y - facialFeaturesTransformed[11].Y;
+
+                TopEdgeTransformed.Y = facialFeaturesTransformed[16].Y + distance;          // определение высоты по алгоритму старикана
+
+                RenderTimer.Start();
+
+                if (ProgramCore.PluginMode)
+                {
+                    var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    var dazPath = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\", "fs3d.obj");
+                    if (File.Exists(dazPath))
+                    {
+                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick)
+                            rbImportObj.Checked = true;
+
+                        CustomModelPath = dazPath;
+                    }
+                    else
+                        MessageBox.Show("Daz model not found.", "HeadShop", MessageBoxButtons.OK);
+                }
+
+                var detectedNosePoints = new List<Vector2>();
+                detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[22].X, facialFeaturesTransformed[22].Y));
+                detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[2].X, facialFeaturesTransformed[2].Y));
+
+                var noseTop = detectedNosePoints[0];
+                var noseTip = detectedNosePoints[1];
+                var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
+                var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
+
+                angle = angle * (180d / Math.PI);
+
+                if (angle > 20)
+                    MessageBox.Show("The head rotated more than 20 degrees. Please select an other photo...");
+                else
+                    btnApply.Enabled = true;
+            }
+        }
+        private void pictureTemplate_DoubleClick(object sender, EventArgs e)
+        {
+            textTemplateImage.Text = string.Empty;
+            pictureTemplate_Click(sender, e);
+        }
 
         private void btnQuestion_MouseDown(object sender, MouseEventArgs e)
         {
@@ -204,8 +433,6 @@ namespace RH.Core.Controls
 
         #endregion
 
-
-
         public void CreateProject()
         {
             #region Корректируем размер фотки
@@ -257,13 +484,13 @@ namespace RH.Core.Controls
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[4]);
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[57]);
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[56]);
-    
+
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[61]);//Центр рта верх
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[64]);//Центр рта низ
 
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[60]);  //9
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[62]);  //10
-                        
+
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[63]);  //11
             ProgramCore.Project.DetectedLipsPoints.Add(fcr.FacialFeatures[65]);  //12
 
@@ -359,377 +586,18 @@ namespace RH.Core.Controls
                 TopEdgeTransformed.Y = 0;
 
         }
-
-        private float centerX(RectangleF rect)
-        {
-            return rect.Left + rect.Width / 2;
-        }
-
-        private void rbImportObj_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbImportObj.Checked)
-            {
-                btnFemale.Tag = btnChild.Tag = btnMale.Tag = "2";
-                btnChild.Image = Resources.btnChildGray;
-                btnMale.Image = Resources.btnMaleGray;
-                btnFemale.Image = Resources.btnFemaleGray;
-
-                if (!ProgramCore.PluginMode)
-                {
-                    using (var ofd = new OpenFileDialogEx("Select obj file", "OBJ Files|*.obj"))
-                    {
-                        ofd.Multiselect = false;
-                        if (ofd.ShowDialog() != DialogResult.OK)
-                        {
-                            btnMale_Click(this, new EventArgs());
-                            return;
-                        }
-
-                        //btnNext.Enabled = true;
-                        CustomModelPath = ofd.FileName;
-                    }
-                }
-            }
-        }
-
-        private void pictureTemplate_Paint(object sender, PaintEventArgs e)
-        {
-            if (string.IsNullOrEmpty(templateImage))
-                return;
-
-            foreach (var point in facialFeaturesTransformed)
-                e.Graphics.FillEllipse(DrawingTools.BlueSolidBrush, point.X - 2, point.Y - 2, 4, 4);
-
-            e.Graphics.DrawArc(edgePen, TopEdgeTransformed, 220, 100);
-            e.Graphics.DrawLine(arrowPen, centerX(TopEdgeTransformed), TopEdgeTransformed.Top, centerX(TopEdgeTransformed), TopEdgeTransformed.Top + 20);
-        }
-        private void pictureTemplate_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                leftMousePressed = true;
-
-                headHandPoint.X = (ImageTemplateOffsetX + e.X) / (ImageTemplateWidth * 1f);
-                headHandPoint.Y = (ImageTemplateOffsetY + e.Y) / (ImageTemplateHeight * 1f);
-
-                /*  if (e.X >= LeftEyeTransformed.X - HalfCircleRadius && e.X <= LeftEyeTransformed.X + HalfCircleRadius && e.Y >= LeftEyeTransformed.Y - HalfCircleRadius && e.Y <= LeftEyeTransformed.Y + HalfCircleRadius)
-                  {
-                      currentSelection = Selection.LeftEye;
-                      tempSelectedPoint = fcr.LeftEyeCenter;
-                      Cursor = ProgramCore.MainForm.GrabbingCursor;
-                  }
-                  else if (e.X >= RightEyeTransformed.X - HalfCircleRadius && e.X <= RightEyeTransformed.X + HalfCircleRadius && e.Y >= RightEyeTransformed.Y - HalfCircleRadius && e.Y <= RightEyeTransformed.Y + HalfCircleRadius)
-                  {
-                      currentSelection = Selection.RightEye;
-                      tempSelectedPoint = fcr.RightEyeCenter;
-                      Cursor = ProgramCore.MainForm.GrabbingCursor;
-                  }
-                  else if (e.X >= MouthTransformed.X - HalfCircleRadius && e.X <= MouthTransformed.X + HalfCircleRadius && e.Y >= MouthTransformed.Y - HalfCircleRadius && e.Y <= MouthTransformed.Y + HalfCircleRadius)
-                  {
-                      currentSelection = Selection.Mouth;
-                      tempSelectedPoint = fcr.MouthCenter;
-                      Cursor = ProgramCore.MainForm.GrabbingCursor;
-                  }
-                  else
-                  {
-                      var leftSelection = LeftCheek != null ? LeftCheek.CheckGrab(e.X, e.Y, true) : -1;
-                      var rightSelection = RightCheek != null ? RightCheek.CheckGrab(e.X, e.Y, true) : -1;
-                      if (leftSelection != -1)
-                      {
-                          switch (leftSelection)
-                          {
-                              case 0:
-                                  currentSelection = Selection.LeftTopCheek;
-                                  tempSelectedPoint = new Vector2(LeftCheek.TopCheek.X, LeftCheek.TopCheek.Y);
-                                  tempSelectedPoint2 = new Vector2(RightCheek.TopCheek.X, RightCheek.TopCheek.Y);
-                                  break;
-                              case 1:
-                                  currentSelection = Selection.LeftCenterCheek;
-                                  tempSelectedPoint = new Vector2(LeftCheek.CenterCheek.X, LeftCheek.CenterCheek.Y);
-                                  tempSelectedPoint2 = new Vector2(RightCheek.CenterCheek.X, RightCheek.CenterCheek.Y);
-                                  break;
-                              case 2:
-                                  currentSelection = Selection.LeftBottomCheek;
-                                  tempSelectedPoint = new Vector2(LeftCheek.DownCheek.X, LeftCheek.DownCheek.Y);
-                                  tempSelectedPoint2 = new Vector2(RightCheek.DownCheek.X, RightCheek.DownCheek.Y);
-                                  break;
-                          }
-                          Cursor = ProgramCore.MainForm.GrabbingCursor;
-                          startMousePoint = new Point(e.X, e.Y);
-
-                      }
-                      else if (rightSelection != -1)
-                      {
-                          switch (rightSelection)
-                          {
-                              case 0:
-                                  currentSelection = Selection.RightTopCheek;
-                                  tempSelectedPoint = new Vector2(RightCheek.TopCheek.X, RightCheek.TopCheek.Y);
-                                  tempSelectedPoint2 = new Vector2(LeftCheek.TopCheek.X, LeftCheek.TopCheek.Y);
-                                  break;
-                              case 1:
-                                  currentSelection = Selection.RightCenterCheek;
-                                  tempSelectedPoint = new Vector2(RightCheek.CenterCheek.X, RightCheek.CenterCheek.Y);
-                                  tempSelectedPoint2 = new Vector2(LeftCheek.CenterCheek.X, LeftCheek.CenterCheek.Y);
-                                  break;
-                              case 2:
-                                  currentSelection = Selection.RightBottomCheek;
-                                  tempSelectedPoint = new Vector2(RightCheek.DownCheek.X, RightCheek.DownCheek.Y);
-                                  tempSelectedPoint2 = new Vector2(LeftCheek.DownCheek.X, LeftCheek.DownCheek.Y);
-                                  break;
-                          }
-                          Cursor = ProgramCore.MainForm.GrabbingCursor;
-                          startMousePoint = new Point(e.X, e.Y);
-                      }
-                      else*/
-                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 20)
-                {
-                    currentSelection = Selection.TopEdge;
-                    startEdgeRect = TopEdgeTransformed;
-                    startMousePoint = new Point(e.X, e.Y);
-                    //    tempSelectedPoint = new Vector2(0, nextHeadRect.Y);
-                    //      tempSelectedPoint2 = new Vector2(0, nextHeadRect.Height);
-                    Cursor = ProgramCore.MainForm.GrabbingCursor;
-                }
-
-                //   }
-            }
-        }
-        private void pictureTemplate_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (startMousePoint == Point.Empty)
-                startMousePoint = new Point(e.X, e.Y);
-
-            if (leftMousePressed && currentSelection != Selection.Empty)
-            {
-                Vector2 newPoint;
-                Vector2 delta2;
-                newPoint.X = (ImageTemplateOffsetX + e.X) / (ImageTemplateWidth * 1f);
-                newPoint.Y = (ImageTemplateOffsetY + e.Y) / (ImageTemplateHeight * 1f);
-
-                delta2 = newPoint - headHandPoint;
-                switch (currentSelection)
-                {
-                    /*     case Selection.LeftEye:
-
-                             fcr.LeftEyeCenter = tempSelectedPoint + delta2;
-                             RecalcRealTemplateImagePosition();
-                             break;
-                         case Selection.RightEye:
-                             fcr.RightEyeCenter = tempSelectedPoint + delta2;
-                             RecalcRealTemplateImagePosition();
-                             break;
-                         case Selection.Mouth:
-                             fcr.MouthCenter = tempSelectedPoint + delta2;
-                             RecalcRealTemplateImagePosition();
-                             break;*/
-                    case Selection.TopEdge:
-                        TopEdgeTransformed.Y = startEdgeRect.Y + (e.Y - startMousePoint.Y);
-                        RecalcRealTemplateImagePosition();
-                        break;
-                        /*    case Selection.BottomEdge:
-                                nextHeadRect.Height = (tempSelectedPoint2 + delta2).Y;
-                                TopEdgeTransformed.X = BottomEdgeTransformed.X = startEdgeRect.X + (e.X - startMousePoint.X);
-                                RecalcRealTemplateImagePosition();
-                                break;
-                            case Selection.LeftTopCheek:
-                                var newCheekPoint = tempSelectedPoint + delta2;
-                                LeftCheek.TopCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-
-                                newCheekPoint = new Vector2(tempSelectedPoint2.X - delta2.X, tempSelectedPoint2.Y + delta2.Y);
-                                RightCheek.TopCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-                                RecalcRealTemplateImagePosition();
-                                break;
-                            case Selection.LeftCenterCheek:
-                                newCheekPoint = tempSelectedPoint + delta2;
-                                LeftCheek.CenterCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-
-                                newCheekPoint = new Vector2(tempSelectedPoint2.X - delta2.X, tempSelectedPoint2.Y + delta2.Y);
-                                RightCheek.CenterCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-                                RecalcRealTemplateImagePosition();
-                                break;
-                            case Selection.LeftBottomCheek:
-                                newCheekPoint = tempSelectedPoint + delta2;
-                                LeftCheek.DownCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-
-                                newCheekPoint = new Vector2(tempSelectedPoint2.X - delta2.X, tempSelectedPoint2.Y + delta2.Y);
-                                RightCheek.DownCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-                                RecalcRealTemplateImagePosition();
-                                break;
-                            case Selection.RightTopCheek:
-                                newCheekPoint = tempSelectedPoint + delta2;
-                                RightCheek.TopCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-
-                                newCheekPoint = new Vector2(tempSelectedPoint2.X - delta2.X, tempSelectedPoint2.Y + delta2.Y);
-                                LeftCheek.TopCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-                                RecalcRealTemplateImagePosition();
-                                break;
-                            case Selection.RightCenterCheek:
-                                newCheekPoint = tempSelectedPoint + delta2;
-                                RightCheek.CenterCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-
-                                newCheekPoint = new Vector2(tempSelectedPoint2.X - delta2.X, tempSelectedPoint2.Y + delta2.Y);
-                                LeftCheek.CenterCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-                                RecalcRealTemplateImagePosition();
-                                break;
-                            case Selection.RightBottomCheek:
-                                newCheekPoint = tempSelectedPoint + delta2;
-                                RightCheek.DownCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-
-                                newCheekPoint = new Vector2(tempSelectedPoint2.X - delta2.X, tempSelectedPoint2.Y + delta2.Y);
-                                LeftCheek.DownCheek = new PointF(newCheekPoint.X, newCheekPoint.Y);
-                                RecalcRealTemplateImagePosition();
-                                break;*/
-                }
-            }
-            else
-            {
-                /*  if (e.X >= LeftEyeTransformed.X - HalfCircleRadius && e.X <= LeftEyeTransformed.X + HalfCircleRadius && e.Y >= LeftEyeTransformed.Y - HalfCircleRadius && e.Y <= LeftEyeTransformed.Y + HalfCircleRadius)
-                      Cursor = ProgramCore.MainForm.GrabCursor;
-                  else if (e.X >= RightEyeTransformed.X - HalfCircleRadius && e.X <= RightEyeTransformed.X + HalfCircleRadius && e.Y >= RightEyeTransformed.Y - HalfCircleRadius && e.Y <= RightEyeTransformed.Y + HalfCircleRadius)
-                      Cursor = ProgramCore.MainForm.GrabCursor;
-                  else if (e.X >= MouthTransformed.X - HalfCircleRadius && e.X <= MouthTransformed.X + HalfCircleRadius && e.Y >= MouthTransformed.Y - HalfCircleRadius && e.Y <= MouthTransformed.Y + HalfCircleRadius)
-                      Cursor = ProgramCore.MainForm.GrabCursor;
-                  else*/
-                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 20)
-                    Cursor = ProgramCore.MainForm.GrabCursor;
-                /*  else if (e.X >= BottomEdgeTransformed.Left && e.X <= BottomEdgeTransformed.Right && e.Y >= BottomEdgeTransformed.Bottom - 20 && e.Y <= BottomEdgeTransformed.Bottom)
-                      Cursor = ProgramCore.MainForm.GrabCursor;
-                  else if (LeftCheek != null && LeftCheek.CheckGrab(e.X, e.Y, false) != -1)
-                      Cursor = ProgramCore.MainForm.GrabCursor;
-                  else if (RightCheek != null && RightCheek.CheckGrab(e.X, e.Y, false) != -1)
-                      Cursor = ProgramCore.MainForm.GrabCursor;*/
-                else
-                    Cursor = Cursors.Arrow;
-            }
-
-        }
-        private void pictureTemplate_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (leftMousePressed && currentSelection != Selection.Empty)
-                RecalcRealTemplateImagePosition();
-
-            startMousePoint = Point.Empty;
-            currentSelection = Selection.Empty;
-            leftMousePressed = false;
-
-            headHandPoint = Vector2.Zero;
-            tempSelectedPoint = Vector2.Zero;
-            tempSelectedPoint2 = Vector2.Zero;
-            Cursor = Cursors.Arrow;
-        }
-
-
-
-        public enum Selection
-        {
-            LeftEye,
-            RightEye,
-            Mouth,
-            TopEdge,
-            BottomEdge,
-            LeftTopCheek,
-            LeftCenterCheek,
-            LeftBottomCheek,
-            RightTopCheek,
-            RightCenterCheek,
-            RightBottomCheek,
-            //   Center,
-            Empty
-        }
-        private Selection currentSelection = Selection.Empty;
-
         private void RenderTimer_Tick(object sender, EventArgs e)
         {
             pictureTemplate.Refresh();
         }
 
-        private void frmNewProject4PrintAhead_Resize(object sender, EventArgs e)
+        public enum Selection
         {
-            RecalcRealTemplateImagePosition();
+            TopEdge,
+            BottomEdge,
+            Empty
         }
+        private Selection currentSelection = Selection.Empty;
 
-
-        private void CheekTimer_Tick(object sender, EventArgs e)
-        {
-            //    LeftCheek.UpdateVisibility();
-        }
-
-        private void pictureTemplate_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(textTemplateImage.Text))
-                return;
-
-            using (var ofd = new OpenFileDialogEx("Select template file", "Image Files|*.jpg;*.png;*.jpeg;*.bmp"))
-            {
-                ofd.Multiselect = false;
-                if (ofd.ShowDialog() != DialogResult.OK)
-                {
-                    btnApply.Enabled = false;
-                    return;
-                }
-
-                labelHelp.Visible = false;
-                textTemplateImage.Text = ofd.FileName;
-
-                templateImage = ofd.FileName;
-                fcr = new LuxandFaceRecognition();
-                if (!fcr.Recognize(ref templateImage, true))
-                {
-                    textTemplateImage.Text = templateImage = string.Empty;
-                    pictureTemplate.Image = null;
-                    labelHelp.Visible = true;
-
-                    return;                     // это ОЧЕНЬ! важно. потому что мы во время распознавания можем создать обрезанную фотку и использовать ее как основную в проекте.
-                }
-                if (fcr.IsMale)
-                    btnMale_Click(null, null);
-                else btnFemale_Click(null, null);
-
-                using (var ms = new MemoryStream(File.ReadAllBytes(templateImage))) // Don't use using!!
-                {
-                    var img = (Bitmap)Image.FromStream(ms);
-                    pictureTemplate.Image = (Bitmap)img.Clone();
-                    img.Dispose();
-                }
-
-                RecalcRealTemplateImagePosition();
-
-
-
-                Single distance;
-                if (fcr.IsMale)
-                    distance = facialFeaturesTransformed[22].Y - facialFeaturesTransformed[11].Y;           // раньше использовалась 2 точка.но согласно ТЗ от 27.3.2017 используем теперь эту точку
-                else
-                    distance = facialFeaturesTransformed[2].Y - facialFeaturesTransformed[11].Y;
-
-                TopEdgeTransformed.Y = facialFeaturesTransformed[16].Y + distance;          // определение высоты по алгоритму старикана
-
-                RenderTimer.Start();
-                CheekTimer.Start();
-
-                if (ProgramCore.PluginMode)
-                {
-                    var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    var dazPath = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\", "fs3d.obj");
-                    if (File.Exists(dazPath))
-                    {
-                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick)
-                            rbImportObj.Checked = true;
-
-                        CustomModelPath = dazPath;
-                    }
-                    else
-                        MessageBox.Show("Daz model not found.", "HeadShop", MessageBoxButtons.OK);
-                }
-                btnApply.Enabled = true;
-            }
-        }
-
-        private void pictureTemplate_DoubleClick(object sender, EventArgs e)
-        {
-            textTemplateImage.Text = string.Empty;
-            pictureTemplate_Click(sender, e);
-        }
     }
 }

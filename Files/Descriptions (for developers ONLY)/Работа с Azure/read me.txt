@@ -1,0 +1,96 @@
+AZURE:
+
+0. Накатить update 3 на студию
+1. Требуется обновить Azure SDk до послендней версии (VWDOrVs2015AzurePack). Иначе будут проблемы с деплоем.
+=====
+1. Создать пустой веб-проект. 
+2. Подключить нугет "Microsoft ASP.NET Web API" 
+3. В web.config добавить в элемент system.web строку: 
+<customErrors mode="Off"></customErrors> 
+чтобы нормально ошибки выводились 
+
+4. Во время publish установить галку Remove additional files at destination 
+
+5. Страница стартовая должна быть default.aspx!
+
+===
+
+Если потребует пароль при publish - посмотреть его можно так:
+http://stackoverflow.com/questions/28708471/web-publish-password-not-the-same-as-my-azure-admin-password
+
+====
+Физически сами файлы сайта лежат на фтп:
+108.167.164.209
+Логин: i2q1d8b1
+Пароль: Ederics2017
+
+printahead@printahead.online
+u~u~p5I(XxNH
+
+
+Удобнее работать через filezilla
+====
+https://279528467592.signin.aws.amazon.com/console
+
+Abalone LLC
+laslovespremi@gmail.com
+
+Pass: Menelaos12#
+
+
+======
+
+Т.к. у нас будет проходить переадресация с одного домена на другой, это надо настроить.
+Лезем в фтп, файл htaccess и добавляем это. если что-то криво будет - куча вариантов в инете
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font.css|css|js|php)$">
+    Header add Access-Control-Allow-Origin "http://printahead17.azurewebsites.net"
+    Header set Access-Control-Allow-Credentials true
+  </FilesMatch>
+</IfModule>
+====
+
+все самое интересное лежит в папе wp-content/themes/i-craft/js
+здесь ajax-filescan отвечает за клиентские функции
+jquery-form - за аякс запросы
+
+
+====
+для того, чтобы правильно отрабатывали webmethod важно добавить в форму менеджер:
+<form runat="server">
+<asp:ScriptManager ID="smMain" runat="server" EnablePageMethods="true" />
+    </form>
+
+Кроме того, отличный мануал тут:
+http://stackoverflow.com/questions/7089760/how-to-call-an-asp-net-c-sharp-method-using-javascript
+====
+
+
+
+
+
+======
+
+AZURE не работает с gdi+
+Как вариант - перенести на web role:https://social.msdn.microsoft.com/Forums/en-US/6ed5c738-390a-4ca7-81d0-370124a4fc88/azure-websites-faq?forum=windowsazurewebsitespreview
+
+Для создания web role - создаем новый проект.
+В cloud выбрать azure cloud service.  А там уже webrole
+
+============================
+============================
+============================
+AMAZON:
+0. Поставить в нугетах AWSSDK
+1. Создать новую приложуху как AWS web app. Иначе деплой убдет идти ебанутый
+2. В web.config добавить в элемент system.web строку: 
+<customErrors mode="Off"></customErrors> 
+чтобы нормально ошибки выводились 
+3. Создать  Environment в админке. В Конфигурациях настроить разрешение запуска х86 приложений-длл-к
+
+В случае вызова долгих процедур возможна ошибка 504 gateway timeout (это относится к Amazon)
+Тогда настроить конфигурацию сервера согласно мануалу: 
+http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html
+
+Не забыть выбрать более мощный инстанс при переносе. По умолчанию ставится t1-micro - он очень слабый. Сейчас работает на t2-micro, он гораздо лучше.
