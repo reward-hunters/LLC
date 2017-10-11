@@ -83,6 +83,8 @@ namespace RH.Core
 
         #region Face recognized position
 
+        public double RotatedAngle = 0;
+
         /// <summary> Прямоугольник лица, рассчитанный по точкам глаз и рта, определенных распознаванием. Относительные координаты.</summary>
         public RectangleF FaceRectRelative;
         public RectangleF nextHeadRectF = new RectangleF();
@@ -163,7 +165,7 @@ namespace RH.Core
         public Vector2 NoseUserCenter = new Vector2(0, 0);       // так мы его никак не определим. ждем первых автоточек, Тогда будет пересчет
 
         #endregion
-        
+
 
         /// <summary> Тип лица (мужское, женское, ребенок)</summary>
         public ManType ManType;
@@ -199,7 +201,7 @@ namespace RH.Core
                         headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPath());
 #endif
                     }
-                        
+
                     break;
                 case ManType.Custom:
                     {
@@ -233,7 +235,7 @@ namespace RH.Core
                         }
                     }
 
-#region Копируем модель
+                    #region Копируем модель
 
                     var directoryPath = Path.Combine(ProjectPath, "Model");
                     FolderEx.CreateDirectory(directoryPath);
@@ -244,7 +246,7 @@ namespace RH.Core
                     File.Copy(headModelPath, filePath, true); // сама модель
                     HeadModelPath = filePath;
 
-#region Обрабатываем mtl файл и папку с текстурами
+                    #region Обрабатываем mtl файл и папку с текстурами
 
                     var mtl = oldFileName + ".mtl";
                     using (var ms = new StreamReader(headModelPath))
@@ -269,9 +271,9 @@ namespace RH.Core
 
                     ObjLoader.CopyMtl(mtl, mtl, Path.GetDirectoryName(headModelPath), "", directoryPath, selectedSize);
 
-#endregion
+                    #endregion
 
-#endregion
+                    #endregion
                 }
                 catch
                 {
@@ -376,6 +378,8 @@ namespace RH.Core
 
                     bw.Write(AutodotsUsed);
 
+                    bw.Write(RotatedAngle);
+
                     // сохраняем прямоугольник лица
                     bw.Write(FaceRectRelative.X);
                     bw.Write(FaceRectRelative.Y);
@@ -410,11 +414,11 @@ namespace RH.Core
                     bw.Write(FaceColor.Y);
                     bw.Write(FaceColor.Z);
 
-#region Информация о модели головы
+                    #region Информация о модели головы
 
                     var rmPath = Path.Combine(ProjectPath, "Model", "MeshParts.rm");
 
-#region Сохранение RenderMesh
+                    #region Сохранение RenderMesh
 
                     if (ManType != ManType.Custom)
                     {
@@ -436,7 +440,7 @@ namespace RH.Core
                         ProgramCore.MainForm.ctrlRenderControl.DoMorth();
                     }
 
-#endregion
+                    #endregion
 
                     if (BaseDots != null)
                     {
@@ -471,7 +475,7 @@ namespace RH.Core
 
                     bw.Write(CustomHeadNeedProfileSetup);
 
-#endregion
+                    #endregion
 
                     bw.Write(ProfileEyeLocation.X);
                     bw.Write(ProfileEyeLocation.Y);
@@ -512,7 +516,7 @@ namespace RH.Core
 
                 var projectName = br.ReadString();
 
-#region template image
+                #region template image
 
                 var templateImagePath = br.ReadString();
                 if (!string.IsNullOrEmpty(templateImagePath))
@@ -526,7 +530,7 @@ namespace RH.Core
                     }
                 }
 
-#endregion
+                #endregion
 
                 var headModelPath = br.ReadString();
 
@@ -541,9 +545,9 @@ namespace RH.Core
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                         textureSize = 2048;          // если поставит ьу нас в проге 4096 - то все крашится к хуям. Пусть уж только на экспорте будет.
                         break;
-           
-                     /*   textureSize = 4096;
-                        break;*/
+
+                        /*   textureSize = 4096;
+                           break;*/
                 }
 
                 result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, textureSize);
@@ -583,6 +587,8 @@ namespace RH.Core
 
                 result.AutodotsUsed = br.ReadBoolean();
 
+                result.RotatedAngle = br.ReadDouble();
+
                 // загружаем прямоугольник лица (фронт)
                 result.FaceRectRelative = new RectangleF(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
 
@@ -601,7 +607,7 @@ namespace RH.Core
                 //Сохраняем цвет головы
                 result.FaceColor = new Vector4(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), 1.0f);
 
-#region Информация о модели головы
+                #region Информация о модели головы
 
                 var rmPath = Path.Combine(projectFi.DirectoryName, "Model", "MeshParts.rm");
                 ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Load(rmPath);
@@ -637,7 +643,7 @@ namespace RH.Core
 
                 result.CustomHeadNeedProfileSetup = br.ReadBoolean();
 
-#endregion
+                #endregion
 
                 result.ProfileEyeLocation = new Vector2(br.ReadSingle(), br.ReadSingle());
                 result.ProfileMouthLocation = new Vector2(br.ReadSingle(), br.ReadSingle());

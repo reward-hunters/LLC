@@ -58,6 +58,8 @@ namespace RH.Core.Helpers
         public List<Vector2> FacialFeatures;
         public bool IsMale;
 
+        /// <summary> Угол, на который повернута голова. </summary>
+        public double RotatedAngle;
 
         private int angleCount = 0;
 
@@ -112,12 +114,18 @@ namespace RH.Core.Helpers
             var faceRectangle = Rectangle.Empty;
             var mouthRectangle = Rectangle.Empty;
 
+            FSDK.SetFaceDetectionThreshold(5);
+            FSDK.SetFaceDetectionParameters(true, true, 512);
             var facePosition = image.DetectFace();
+
             if (0 == facePosition.w)
             {
                 MessageBox.Show("No faces detected", "Face Detection");
                 return false;
             }
+
+            if (needCrop)
+                RotatedAngle = facePosition.angle;      // угол, на который повернута голова.
 
             pointFeature = image.DetectFacialFeaturesInRegion(ref facePosition);
 
@@ -125,10 +133,12 @@ namespace RH.Core.Helpers
             FSDK.DetectFacialAttributeUsingFeatures(image.ImageHandle, ref pointFeature, "Gender", out AttributeValues, 1024);
             var ConfidenceMale = 0.0f;
             var ConfidenceFemale = 0.0f;
+            var Age = 0.0f;             // в этой версии распознавалки не работает.
             FSDK.GetValueConfidence(AttributeValues, "Male", ref ConfidenceMale);
             FSDK.GetValueConfidence(AttributeValues, "Female", ref ConfidenceFemale);
             IsMale = ConfidenceMale > ConfidenceFemale;
 
+            FSDK.DetectFacialAttributeUsingFeatures(image.ImageHandle, ref pointFeature, "Age", out AttributeValues, 1024);
 
             var left = facePosition.xc - (int)(facePosition.w * 0.6f);
             left = left < 0 ? 0 : left;

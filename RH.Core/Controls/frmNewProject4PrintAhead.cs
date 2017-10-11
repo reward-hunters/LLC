@@ -66,8 +66,8 @@ namespace RH.Core.Controls
                 }
             }
         }
-        private Pen edgePen;
-        private Pen arrowPen;
+        private readonly Pen edgePen;
+        private readonly Pen arrowPen;
 
         public int ImageTemplateWidth;
         public int ImageTemplateHeight;
@@ -76,15 +76,9 @@ namespace RH.Core.Controls
 
         public List<PointF> facialFeaturesTransformed = new List<PointF>();
 
-        private float eWidth;
+        private readonly float eWidth;
         public RectangleF TopEdgeTransformed;
 
-        private const int CircleRadius = 30;
-        private const int HalfCircleRadius = 15;
-        private const int CircleSmallRadius = 8;
-        private const int HalfCircleSmallRadius = 4;
-
-        //      private RectangleF centerFace;
         private RectangleF startCenterFaceRect;
         private float centerX(RectangleF rect)
         {
@@ -95,8 +89,6 @@ namespace RH.Core.Controls
         private Point startMousePoint;
         private RectangleF startEdgeRect;
         private Vector2 headHandPoint = Vector2.Zero;
-        private Vector2 tempSelectedPoint = Vector2.Zero;
-        private Vector2 tempSelectedPoint2 = Vector2.Zero;
 
         #endregion
 
@@ -187,8 +179,8 @@ namespace RH.Core.Controls
             if (string.IsNullOrEmpty(templateImage))
                 return;
 
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            //          if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+            //             return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
 
             foreach (var point in facialFeaturesTransformed)
                 e.Graphics.FillEllipse(DrawingTools.BlueSolidBrush, point.X - 2, point.Y - 2, 4, 4);
@@ -267,8 +259,6 @@ namespace RH.Core.Controls
             leftMousePressed = false;
 
             headHandPoint = Vector2.Zero;
-            tempSelectedPoint = Vector2.Zero;
-            tempSelectedPoint2 = Vector2.Zero;
             Cursor = Cursors.Arrow;
         }
         private void pictureTemplate_Click(object sender, EventArgs e)
@@ -335,21 +325,23 @@ namespace RH.Core.Controls
                         CustomModelPath = dazPath;
                     }
                     else
-                        MessageBox.Show("Daz model not found.", "HeadShop", MessageBoxButtons.OK);
+                        MessageBox.Show(@"Daz model not found.", @"HeadShop", MessageBoxButtons.OK);
                 }
 
-                var detectedNosePoints = new List<Vector2>();
-                detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[22].X, facialFeaturesTransformed[22].Y));
-                detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[2].X, facialFeaturesTransformed[2].Y));
+                /*   var detectedNosePoints = new List<Vector2>();
+                   detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[22].X, facialFeaturesTransformed[22].Y));
+                   detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[2].X, facialFeaturesTransformed[2].Y));
 
-                var noseTop = detectedNosePoints[0];
-                var noseTip = detectedNosePoints[1];
-                var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
-                var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
+                   var noseTop = detectedNosePoints[0];
+                   var noseTip = detectedNosePoints[1];
+                   var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
+                   var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
 
-                angle = angle * (180d / Math.PI);
+                   angle = angle * (180d / Math.PI);
 
-                if (angle > 20)
+                  */
+
+                if (Math.Abs(fcr.RotatedAngle) > 20)
                     MessageBox.Show("The head rotated more than 20 degrees. Please select an other photo...");
                 else
                     btnApply.Enabled = true;
@@ -526,6 +518,8 @@ namespace RH.Core.Controls
 
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[66]);
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[67]);
+
+            ProgramCore.Project.RotatedAngle = fcr.RotatedAngle;
 
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
             ProgramCore.MainForm.UpdateProjectControls(true, aabb);

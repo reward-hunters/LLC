@@ -280,20 +280,20 @@ namespace RH.WebCore
                     manType = ManType.Female;
                     break;
                 case 2:
+                case 3:
                     manType = ManType.Child;
                     break;
             }
 
             #region Создание проекта
 
-            var templateImage = default(Bitmap);
             WebClient client = new WebClient();
 
             var imagePath = "https://printahead.net/printahead.online/PrintAhead_images/" + sessionID + ".jpeg";
             byte[] imageBytes = client.DownloadData(imagePath);
 
             var ms = new MemoryStream(imageBytes);
-            templateImage = new Bitmap(ms);
+            var templateImage = new Bitmap(ms);
 
 
             ProgramCore.Project = new Project(sessionID, null, null, manType, null, false, 1024);
@@ -492,7 +492,7 @@ namespace RH.WebCore
 
             if (!string.IsNullOrEmpty(baseObjPath) && FTPHelper.IsFileExists(baseObjPath))
             {
-                baseMaterialPath = GetParcedHairAccessoriesLink(baseMaterialPath, "T.jpg").Replace("/Icons/", "/Materials/"); ;
+                baseMaterialPath = GetParcedHairAccessoriesLink(baseMaterialPath, "T.jpg").Replace("/Icons/", "/Materials/");
                 if (string.IsNullOrEmpty(baseMaterialPath))
                     baseMaterialPath = "ftp://108.167.164.209/public_html/printahead.online/Library/Accessory/Materials/lgreenT.jpg";
 
