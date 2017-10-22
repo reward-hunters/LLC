@@ -726,7 +726,7 @@ namespace RH.MeshUtils.Helpers
                     });
                     positions.Add(vertices.Last().Position);
 
-                    if (vertex.Position.X > axis == leftToRight)
+                    if (vertex.Position.X > axis - delta == leftToRight)
                         mirroredPoints.Add(index, index);
                     else
                     {
