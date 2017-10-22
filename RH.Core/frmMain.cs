@@ -24,6 +24,7 @@ using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
 using RH.Core.Render.Obj;
 using RH.MeshUtils.Data;
+using RH.Core.Render.Controllers;
 
 namespace RH.Core
 {
@@ -470,8 +471,15 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     {
                         ProgramCore.MainForm.HeadFront = true;
+                        ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);                        
                         ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
-                        ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
+
+                        if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                        {
+                            var headMeshesController = ProgramCore.MainForm.ctrlRenderControl.headMeshesController;
+                            var noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
+                            headMeshesController.Mirror(headMeshesController.RenderMesh.HeadAngle > 0.0f, noseBottom.X);
+                        }
                     }
                     break;
                 default:

@@ -264,11 +264,19 @@ namespace RH.MeshUtils.Data
         }
     }
 
+    public enum EMirrorType
+    {
+        None,
+        Left,
+        Right
+    }
+
     public class TexturingInfo
     {
         public HeadPoints<HeadPoint> Points;
         public Vector2[] TexCoords;
         public int[] Indices;
+        public EMirrorType MirrorType = EMirrorType.None;
 
         public void UpdatePointsInfo(Vector2 scale, Vector2 center)
         {
@@ -453,7 +461,17 @@ namespace RH.MeshUtils.Data
             }
 
             foreach (var position in vertexPositions)
-                result.Add(normalsDict[position].GetNormal());
+            {
+                Normal normal;
+                if(normalsDict.TryGetValue(position, out normal))
+                {
+                    result.Add(normalsDict[position].GetNormal());
+                }
+                else
+                {
+                    result.Add(Vector3.One);
+                }
+            }
 
             return result;
         }

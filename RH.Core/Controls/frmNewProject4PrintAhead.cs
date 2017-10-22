@@ -506,8 +506,8 @@ namespace RH.Core.Controls
             ProgramCore.Project.DetectedBottomPoints.Add(fcr.FacialFeatures[5]); //точки нижней части лица
             ProgramCore.Project.DetectedBottomPoints.Add(fcr.FacialFeatures[7]);// * 0.75f + fcr.FacialFeatures[9] * 0.25f);
             var p11 = fcr.FacialFeatures[11];
-            ProgramCore.Project.DetectedBottomPoints.Add(new Vector2((p11.X + fcr.FacialFeatures[9].X) * 0.5f, p11.Y));
-            ProgramCore.Project.DetectedBottomPoints.Add(new Vector2((p11.X + fcr.FacialFeatures[10].X) * 0.5f, p11.Y));
+            ProgramCore.Project.DetectedBottomPoints.Add(new Vector3((p11.X + fcr.FacialFeatures[9].X) * 0.5f, p11.Y, fcr.FacialFeatures[9].Z));
+            ProgramCore.Project.DetectedBottomPoints.Add(new Vector3((p11.X + fcr.FacialFeatures[10].X) * 0.5f, p11.Y, fcr.FacialFeatures[10].Z));
             ProgramCore.Project.DetectedBottomPoints.Add(fcr.FacialFeatures[8]);// * 0.75f + fcr.FacialFeatures[10] * 0.25f);
             ProgramCore.Project.DetectedBottomPoints.Add(fcr.FacialFeatures[6]);
 

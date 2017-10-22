@@ -660,7 +660,7 @@ namespace RH.Core.Controls.Panels
 
         public void btnFlipLeft_Click(object sender, EventArgs e)
         {
-            /*    if (btnFlipLeft.Tag.ToString() == "2")
+                if (btnFlipLeft.Tag.ToString() == "2")
                 {
                     btnFlipLeft.Tag = "1";
                     btnFlipRight.Tag = "2";
@@ -716,11 +716,11 @@ namespace RH.Core.Controls.Panels
                             ProgramCore.Project.TextureFlip = FlipType.None;
                             break;
                     }
-                }*/
+                }
         }
         public void btnFlipRight_Click(object sender, EventArgs e)
         {
-            /*  if (btnFlipRight.Tag.ToString() == "2")
+              if (btnFlipRight.Tag.ToString() == "2")
               {
                   btnFlipRight.Tag = "1";
                   btnFlipLeft.Tag = "2";
@@ -776,7 +776,7 @@ namespace RH.Core.Controls.Panels
                   }
 
                   SetPanelLogic();
-              }*/
+              }
         }
 
         #endregion

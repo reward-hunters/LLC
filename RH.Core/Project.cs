@@ -147,12 +147,12 @@ namespace RH.Core
             }
         }
 
-        public List<Vector2> DetectedTopPoints = new List<Vector2>();
-        public List<Vector2> DetectedBottomPoints = new List<Vector2>();
-        public List<Vector2> DetectedNosePoints = new List<Vector2>();
-        public List<Vector2> DetectedLipsPoints = new List<Vector2>();
-        public List<Vector2> DetectedLeftEyePoints = new List<Vector2>();
-        public List<Vector2> DetectedRightEyePoints = new List<Vector2>();
+        public List<Vector3> DetectedTopPoints = new List<Vector3>();
+        public List<Vector3> DetectedBottomPoints = new List<Vector3>();
+        public List<Vector3> DetectedNosePoints = new List<Vector3>();
+        public List<Vector3> DetectedLipsPoints = new List<Vector3>();
+        public List<Vector3> DetectedLeftEyePoints = new List<Vector3>();
+        public List<Vector3> DetectedRightEyePoints = new List<Vector3>();
 
         #endregion
 

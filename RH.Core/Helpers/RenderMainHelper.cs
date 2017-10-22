@@ -334,7 +334,7 @@ namespace RH.Core.Helpers
                     SpecialLipsPointsUpdate(points, ProgramCore.Project.MouthCenter);
                     SpecialNosePointsUpdate(points);
 
-                    SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3]);
+                    SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3].Xy);
                     SpecialBottomPointsUpdate(points);
                     SpecialTopHaedWidth(points);
                 }
@@ -431,7 +431,7 @@ namespace RH.Core.Helpers
         {
             var mouthIndices = headController.GetMouthIndexes();
 
-            var borders = new Vector2[] { ProgramCore.Project.DetectedLipsPoints[0], ProgramCore.Project.DetectedLipsPoints[4] };
+            var borders = new Vector3[] { ProgramCore.Project.DetectedLipsPoints[0], ProgramCore.Project.DetectedLipsPoints[4] };
 
             float maxX, minX;
             var center = GetCenter(points, mouthIndices, out minX, out maxX);

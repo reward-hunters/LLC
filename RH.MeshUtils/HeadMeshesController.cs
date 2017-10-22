@@ -34,6 +34,7 @@ namespace RH.MeshUtils
 
         public void UpdateTexCoors(IEnumerable<Vector2> texCoords)
         {
+
             TexturingInfo.TexCoords = texCoords.ToArray();
             foreach (var p in RenderMesh.Parts)
                 p.UpdateTexCoords(ref TexturingInfo);
@@ -48,7 +49,9 @@ namespace RH.MeshUtils
         public void InitializeShaping(ref TexturingInfo shapeInfo)
         {
             foreach (var p in RenderMesh.Parts)
+            {
                 p.FillPointsInfo(ref shapeInfo, true, false);
+            }
         }
 
         public void InitializeTexturing(IEnumerable<HeadPoint> points, IEnumerable<Int32> indices)
@@ -60,7 +63,9 @@ namespace RH.MeshUtils
 
             TexturingInfo.Indices = indices.ToArray();
             foreach (var p in RenderMesh.Parts)
+            {
                 p.FillPointsInfo(ref TexturingInfo, false, false);
+            }
         }
 
         public void FinishCreating()
@@ -109,7 +114,7 @@ namespace RH.MeshUtils
             {
                 RenderMesh.AddPart(part);
                 return true;
-            }            
+            }
             return false;
         }
 
@@ -121,7 +126,10 @@ namespace RH.MeshUtils
         public void Mirror(bool leftToRight, float axis)
         {
             foreach (var p in RenderMesh.Parts)
-                p.Mirror(leftToRight, axis);
+            {
+                p.Mirror(leftToRight, axis);                
+            }
+                             
         }
 
         public void UndoMirror()

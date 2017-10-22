@@ -45,20 +45,19 @@ namespace RH.Core.Controls.Panels
             this.btnFlipRight = new System.Windows.Forms.Button();
             this.btnProfile = new System.Windows.Forms.Button();
             this.lblProfileSmoothing = new System.Windows.Forms.Label();
-            this.trackProfileSmoothing = new TrackBarEx();
+            this.trackProfileSmoothing = new RH.Core.Controls.TrackBar.TrackBarEx();
             this.SuspendLayout();
             // 
             // btnMirror
             // 
             this.btnMirror.BackColor = System.Drawing.SystemColors.Control;
-            this.btnMirror.Location = new System.Drawing.Point(832, 11);
+            this.btnMirror.Location = new System.Drawing.Point(799, 11);
             this.btnMirror.Name = "btnMirror";
             this.btnMirror.Size = new System.Drawing.Size(63, 23);
             this.btnMirror.TabIndex = 1;
             this.btnMirror.Tag = "2";
             this.btnMirror.Text = "Mirror";
             this.btnMirror.UseVisualStyleBackColor = false;
-            this.btnMirror.Visible = false;
             this.btnMirror.Click += new System.EventHandler(this.btnMirror_Click);
             // 
             // btnAutodots
@@ -115,7 +114,7 @@ namespace RH.Core.Controls.Panels
             // btnDots
             // 
             this.btnDots.Enabled = false;
-            this.btnDots.Image =  global::RH.Core.Properties.Resources.btnDotsNormal;
+            this.btnDots.Image = global::RH.Core.Properties.Resources.btnDotsNormal;
             this.btnDots.Location = new System.Drawing.Point(580, 7);
             this.btnDots.Name = "btnDots";
             this.btnDots.Size = new System.Drawing.Size(30, 30);
@@ -128,7 +127,7 @@ namespace RH.Core.Controls.Panels
             // btnPolyLine
             // 
             this.btnPolyLine.Enabled = false;
-            this.btnPolyLine.Image =  global::RH.Core.Properties.Resources.btnPolyLineNormal;
+            this.btnPolyLine.Image = global::RH.Core.Properties.Resources.btnPolyLineNormal;
             this.btnPolyLine.Location = new System.Drawing.Point(619, 7);
             this.btnPolyLine.Name = "btnPolyLine";
             this.btnPolyLine.Size = new System.Drawing.Size(30, 30);
@@ -140,7 +139,7 @@ namespace RH.Core.Controls.Panels
             // btnShapeTool
             // 
             this.btnShapeTool.Enabled = false;
-            this.btnShapeTool.Image =  global::RH.Core.Properties.Resources.btnHandNormal1;
+            this.btnShapeTool.Image = global::RH.Core.Properties.Resources.btnHandNormal1;
             this.btnShapeTool.Location = new System.Drawing.Point(660, 7);
             this.btnShapeTool.Name = "btnShapeTool";
             this.btnShapeTool.Size = new System.Drawing.Size(30, 30);
@@ -163,26 +162,24 @@ namespace RH.Core.Controls.Panels
             // 
             // btnFlipLeft
             // 
-            this.btnFlipLeft.Image =  global::RH.Core.Properties.Resources.btnToRightNormal;
+            this.btnFlipLeft.Image = global::RH.Core.Properties.Resources.btnToRightNormal;
             this.btnFlipLeft.Location = new System.Drawing.Point(723, 7);
             this.btnFlipLeft.Name = "btnFlipLeft";
             this.btnFlipLeft.Size = new System.Drawing.Size(30, 30);
             this.btnFlipLeft.TabIndex = 10;
             this.btnFlipLeft.Tag = "2";
             this.btnFlipLeft.UseVisualStyleBackColor = true;
-            this.btnFlipLeft.Visible = false;
             this.btnFlipLeft.Click += new System.EventHandler(this.btnFlipLeft_Click);
             // 
             // btnFlipRight
             // 
-            this.btnFlipRight.Image =  global::RH.Core.Properties.Resources.btnToLeftNormal;
+            this.btnFlipRight.Image = global::RH.Core.Properties.Resources.btnToLeftNormal;
             this.btnFlipRight.Location = new System.Drawing.Point(763, 7);
             this.btnFlipRight.Name = "btnFlipRight";
             this.btnFlipRight.Size = new System.Drawing.Size(30, 30);
             this.btnFlipRight.TabIndex = 11;
             this.btnFlipRight.Tag = "2";
             this.btnFlipRight.UseVisualStyleBackColor = true;
-            this.btnFlipRight.Visible = false;
             this.btnFlipRight.Click += new System.EventHandler(this.btnFlipRight_Click);
             // 
             // btnProfile
@@ -203,7 +200,7 @@ namespace RH.Core.Controls.Panels
             this.lblProfileSmoothing.BackColor = System.Drawing.Color.Transparent;
             this.lblProfileSmoothing.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblProfileSmoothing.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lblProfileSmoothing.Location = new System.Drawing.Point(746, 5);
+            this.lblProfileSmoothing.Location = new System.Drawing.Point(886, 14);
             this.lblProfileSmoothing.Name = "lblProfileSmoothing";
             this.lblProfileSmoothing.Size = new System.Drawing.Size(84, 17);
             this.lblProfileSmoothing.TabIndex = 15;
@@ -217,7 +214,7 @@ namespace RH.Core.Controls.Panels
             this.trackProfileSmoothing.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackProfileSmoothing.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(125)))), ((int)(((byte)(123)))));
             this.trackProfileSmoothing.IndentHeight = 6;
-            this.trackProfileSmoothing.Location = new System.Drawing.Point(708, 18);
+            this.trackProfileSmoothing.Location = new System.Drawing.Point(976, 11);
             this.trackProfileSmoothing.Maximum = 100;
             this.trackProfileSmoothing.Minimum = 1;
             this.trackProfileSmoothing.Name = "trackProfileSmoothing";
@@ -239,7 +236,7 @@ namespace RH.Core.Controls.Panels
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage =  global::RH.Core.Properties.Resources.menuBackground;
+            this.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
             this.Controls.Add(this.lblProfileSmoothing);
             this.Controls.Add(this.trackProfileSmoothing);
             this.Controls.Add(this.btnProfile);
@@ -255,7 +252,7 @@ namespace RH.Core.Controls.Panels
             this.Controls.Add(this.btnMirror);
             this.Controls.Add(this.btnAutodots);
             this.Name = "PanelHead";
-            this.Size = new System.Drawing.Size(1093, 49);
+            this.Size = new System.Drawing.Size(1130, 49);
             this.ResumeLayout(false);
             this.PerformLayout();
 

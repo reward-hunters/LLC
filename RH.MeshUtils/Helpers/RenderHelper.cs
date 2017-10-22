@@ -58,6 +58,12 @@ namespace RH.MeshUtils.Helpers
     {
         public Int32 TrinagleIndex = -1;
         public float U, V, W;
+        public float ScaleX = 1;
+
+        public TrinagleInfo(float scaleX = 1.0f)
+        {
+            ScaleX = scaleX;
+        }
 
         public void ToStream(BinaryWriter bw)
         {
@@ -88,6 +94,10 @@ namespace RH.MeshUtils.Helpers
         public bool? IsFixedLocal = null;
         public TrinagleInfo TextureTrinagleInfo = new TrinagleInfo();
         public TrinagleInfo ShapeTrinagleInfo = new TrinagleInfo();
+
+        //public TrinagleInfo TextureTrinagleInfoMirror = new TrinagleInfo(-1.0f);
+        //public TrinagleInfo ShapeTrinagleInfoMirror = new TrinagleInfo(-1.0f);
+
         public TrinagleInfo ProfileShapeTrinagleInfo = new TrinagleInfo();
 
         public bool isFixedLocalBroken = false;
@@ -375,18 +385,19 @@ namespace RH.MeshUtils.Helpers
             return result;
         }
 
-        public void UpdateShape(ref TexturingInfo s)
+        public void UpdateShape(ref TexturingInfo t)
         {
             foreach (var p in Points)
             {
-                if (p.ShapeTrinagleInfo.TrinagleIndex < 0 || CheckFixed(p))
+                TrinagleInfo ShapeTrinagleInfo = GetTriangleInfo(ref t, p, false);
+                if (ShapeTrinagleInfo.TrinagleIndex < 0 || CheckFixed(p))
                     continue;
-                var ti = p.ShapeTrinagleInfo.TrinagleIndex * 3;
-                var v1 = s.Points[s.Indices[ti]].Value;
-                var v2 = s.Points[s.Indices[ti + 1]].Value;
-                var v3 = s.Points[s.Indices[ti + 2]].Value;
-                p.Position.X = p.ShapeTrinagleInfo.U * v1.X + p.ShapeTrinagleInfo.V * v2.X + p.ShapeTrinagleInfo.W * v3.X;
-                p.Position.Y = p.ShapeTrinagleInfo.U * v1.Y + p.ShapeTrinagleInfo.V * v2.Y + p.ShapeTrinagleInfo.W * v3.Y;
+                var ti = ShapeTrinagleInfo.TrinagleIndex * 3;
+                var v1 = t.Points[t.Indices[ti]].Value;
+                var v2 = t.Points[t.Indices[ti + 1]].Value;
+                var v3 = t.Points[t.Indices[ti + 2]].Value;
+                p.Position.X = (ShapeTrinagleInfo.U * v1.X + ShapeTrinagleInfo.V * v2.X + ShapeTrinagleInfo.W * v3.X) * ShapeTrinagleInfo.ScaleX;
+                p.Position.Y = ShapeTrinagleInfo.U * v1.Y + ShapeTrinagleInfo.V * v2.Y + ShapeTrinagleInfo.W * v3.Y;
                 foreach (var i in p.Indices)
                 {
                     var v = Vertices[i];
@@ -400,21 +411,32 @@ namespace RH.MeshUtils.Helpers
 #endif
         }
 
-        public void UpdateTexCoords(ref TexturingInfo t)
+        private TrinagleInfo GetTriangleInfo(ref TexturingInfo t, Point3d point, bool isTexture)
         {
+           /* var p = point.Position;// Vertices[point.Indices[0]].OriginalPosition;
+            if((t.MirrorType == EMirrorType.Left && p.X < 0.0f) ||(t.MirrorType == EMirrorType.Right && p.X > 0.0f))
+            {
+                return isTexture ? point.TextureTrinagleInfoMirror : point.ShapeTrinagleInfoMirror;
+            }*/
+            return isTexture ? point.TextureTrinagleInfo : point.ShapeTrinagleInfo;
+        }
+
+        public void UpdateTexCoords(ref TexturingInfo t)
+        {            
             foreach (var p in Points)
             {
-                if (p.TextureTrinagleInfo.TrinagleIndex < 0)
+                TrinagleInfo TextureTrinagleInfo = GetTriangleInfo(ref t, p, true);
+                if (TextureTrinagleInfo.TrinagleIndex < 0)
                     continue;
-                var ti = p.TextureTrinagleInfo.TrinagleIndex * 3;
+                var ti = TextureTrinagleInfo.TrinagleIndex * 3;
                 var v1 = t.TexCoords[t.Indices[ti]];
                 var v2 = t.TexCoords[t.Indices[ti + 1]];
                 var v3 = t.TexCoords[t.Indices[ti + 2]];
                 foreach (var i in p.Indices)
                 {
                     var v = Vertices[i];
-                    v.AutodotsTexCoord.X = p.TextureTrinagleInfo.U * v1.X + p.TextureTrinagleInfo.V * v2.X + p.TextureTrinagleInfo.W * v3.X;
-                    v.AutodotsTexCoord.Y = p.TextureTrinagleInfo.U * v1.Y + p.TextureTrinagleInfo.V * v2.Y + p.TextureTrinagleInfo.W * v3.Y;
+                    v.AutodotsTexCoord.X = TextureTrinagleInfo.U * v1.X + TextureTrinagleInfo.V * v2.X + TextureTrinagleInfo.W * v3.X;
+                    v.AutodotsTexCoord.Y = TextureTrinagleInfo.U * v1.Y + TextureTrinagleInfo.V * v2.Y + TextureTrinagleInfo.W * v3.Y;
                     if (IsBaseTexture)
                         v.TexCoord = v.AutodotsTexCoord.Xy;
 
@@ -457,6 +479,25 @@ namespace RH.MeshUtils.Helpers
         //    return Vector2.Zero;
         //}
 
+        public void FillPointInfo(ref TrinagleInfo triangle, ref TexturingInfo t, Vector2 point, ref Vector2 a, ref Vector2 b, ref Vector2 c, int triangleIndex)
+        {
+            if (TexturingInfo.PointInTriangle(ref a, ref b, ref c, point))
+            {
+                triangle.TrinagleIndex = triangleIndex;
+                var uv = Vector3.Cross(
+                    new Vector3(c.X - a.X, b.X - a.X, a.X - point.X),
+                    new Vector3(c.Y - a.Y, b.Y - a.Y, a.Y - point.Y));
+                if (uv.Z == 0.0f)
+                    triangle.U = triangle.V = triangle.W = 0.0f;
+                else
+                {
+                    triangle.U = 1.0f - (uv.X + uv.Y) / uv.Z;
+                    triangle.V = uv.Y / uv.Z;
+                    triangle.W = uv.X / uv.Z;
+                }
+            }
+        }
+                    
         public void FillPointsInfo(ref TexturingInfo t, bool isShape, bool isProfile)
         {
             for (var i = 0; i < t.Indices.Length; i += 3)
@@ -467,26 +508,24 @@ namespace RH.MeshUtils.Helpers
                 for (var index = 0; index < Points.Count; index++)
                 {
                     var point = Points[index];
-                    var triangle = isShape ? isProfile ? point.ProfileShapeTrinagleInfo : point.ShapeTrinagleInfo : point.TextureTrinagleInfo;
-                    if (triangle.TrinagleIndex > 0)
-                        continue;
+                    var triangle = isShape ?
+                        (isProfile ? point.ProfileShapeTrinagleInfo : point.ShapeTrinagleInfo)
+                        : point.TextureTrinagleInfo;
+
                     var p = Vertices[point.Indices[0]].OriginalPosition;
-                    if (TexturingInfo.PointInTriangle(ref a, ref b, ref c, isProfile ? p.Zy : p.Xy))
+                    if (triangle.TrinagleIndex < 0)
                     {
-                        triangle.TrinagleIndex = i / 3;
-                        var x = isProfile ? p.Z : p.X;
-                        var uv = Vector3.Cross(
-                            new Vector3(c.X - a.X, b.X - a.X, a.X - x),
-                            new Vector3(c.Y - a.Y, b.Y - a.Y, a.Y - p.Y));
-                        if (uv.Z == 0.0f)
-                            triangle.U = triangle.V = triangle.W = 0.0f;
-                        else
-                        {
-                            triangle.U = 1.0f - (uv.X + uv.Y) / uv.Z;
-                            triangle.V = uv.Y / uv.Z;
-                            triangle.W = uv.X / uv.Z;
-                        }
+                        FillPointInfo(ref triangle, ref t, isProfile ? p.Zy : p.Xy, ref a, ref b, ref c, i / 3);
                     }
+
+                   /* if (!isProfile)
+                    {
+                        var triangleMirror = isShape ? point.ShapeTrinagleInfoMirror : point.TextureTrinagleInfoMirror;
+                        if(triangleMirror.TrinagleIndex < 0)
+                        {
+                            FillPointInfo(ref triangleMirror, ref t, new Vector2(-p.X, p.Y), ref a, ref b, ref c, i / 3);
+                        }                        
+                    }*/
                     Points[index] = point;
                 }
             }
@@ -670,11 +709,11 @@ namespace RH.MeshUtils.Helpers
             var pointsMapping = new SortedList<int, uint>();
             var vertices = new List<Vertex3d>();
             var positions = new List<Vector3>();
-            var delta = leftToRight ? axis + 0.00001f : axis - 0.00001f;
+            var delta = leftToRight ? 0.00001f : - 0.00001f;
             for (var i = 0; i < Vertices.Length; i++)
             {
                 var vertex = Vertices[i];
-                if (vertex.Position.X < delta == leftToRight)
+                if (vertex.Position.X < axis + delta == leftToRight)
                 {
                     var index = vertices.Count;
                     pointsMapping.Add(i, (uint)index);
@@ -687,14 +726,14 @@ namespace RH.MeshUtils.Helpers
                     });
                     positions.Add(vertices.Last().Position);
 
-                    if (vertex.Position.X > -delta == leftToRight)
+                    if (vertex.Position.X > axis == leftToRight)
                         mirroredPoints.Add(index, index);
                     else
                     {
                         mirroredPoints.Add(index, vertices.Count);
                         vertices.Add(new Vertex3d
                         {
-                            Position = new Vector3(-vertex.Position.X, vertex.Position.Y, vertex.Position.Z),
+                            Position = new Vector3(axis - (vertex.Position.X - axis), vertex.Position.Y, vertex.Position.Z),
                             TexCoord = vertex.TexCoord,
                             OriginalPosition = new Vector3(-(i + 2), 0.0f, 0.0f),
                             Color = Vector4.One
@@ -765,7 +804,7 @@ namespace RH.MeshUtils.Helpers
                             mirroredPoints.Add(vertices.Count, vertices.Count);
                             vertices.Add(new Vertex3d
                             {
-                                Position = Line.GetPoint(v0.Position, v1.Position, 0.0f, ref k),
+                                Position = Line.GetPoint(v0.Position, v1.Position, axis, ref k),
                                 OriginalPosition = new Vector3(k, line.A, line.B),
                                 TexCoord = v0.TexCoord + (v1.TexCoord - v0.TexCoord) * k,
                                 Color = Vector4.One
@@ -821,7 +860,7 @@ namespace RH.MeshUtils.Helpers
             Vertices = vertices.ToArray();
 #if (WEB_APP)
 #else
-            UpdateBuffers();
+            UpdateBuffers(true);
 #endif
         }
 
@@ -865,9 +904,9 @@ namespace RH.MeshUtils.Helpers
         }
 #endif
         public void UpdateBuffers(bool firstTime = false)
-        {
-            UpdateIndexBuffer(firstTime);
+        {            
             UpdateVertexBuffer(firstTime);
+            UpdateIndexBuffer(firstTime);
         }
 
         public void Destroy()

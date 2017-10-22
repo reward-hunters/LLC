@@ -1342,17 +1342,24 @@ namespace RH.Core.Render.Controllers
 
         public static Vector2 GetFrontWorldPoint(Vector2 valueMirrored, ProgramCore.ProgramMode program)
         {
-            switch (program)
-            {
-                case ProgramCore.ProgramMode.HeadShop_Rotator:
-                    return GetFrontWorldPoint_ForHeadShop_Rotator(valueMirrored);
-                default:
-                    return GetFrontWorldPoint_Base(valueMirrored);
-            }
+            return GetFrontWorldPoint(new Vector3(valueMirrored), program);
+        }
+
+        public static Vector2 GetFrontWorldPoint(Vector3 valueMirrored, ProgramCore.ProgramMode program)
+        {
+             switch (program)
+             {
+                 case ProgramCore.ProgramMode.HeadShop_Rotator:
+                     return GetFrontWorldPoint_ForHeadShop_Rotator(valueMirrored);
+                 default:
+                     return GetFrontWorldPoint_Base(valueMirrored);
+             }
+
+            //return GetFrontWorldPoint_Base(valueMirrored);
         }
 
         /// <summary> Базовая функция  для остальных программ</summary>
-        private static Vector2 GetFrontWorldPoint_Base(Vector2 valueMirrored)
+        private static Vector2 GetFrontWorldPoint_Base(Vector3 valueMirrored)
         {
             Vector2 v;
             var result = new Vector2();
@@ -1371,7 +1378,7 @@ namespace RH.Core.Render.Controllers
             return result;
         }
         /// <summary> Функция только для версии HeadShop 11 Rotator (для работы с повернутыми головами на фото) </summary>
-        private static Vector2 GetFrontWorldPoint_ForHeadShop_Rotator(Vector2 valueMirrored)
+        private static Vector2 GetFrontWorldPoint_ForHeadShop_Rotator(Vector3 valueMirrored)
         {
             Vector2 v;
             var result = new Vector2();
@@ -1391,7 +1398,7 @@ namespace RH.Core.Render.Controllers
             var centerX = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.FaceCenterX;
             var angle = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle;
             var noseDepth = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.NoseDepth;
-            result.X = ((result.X - centerX) + (float)Math.Sin(angle) * 0.0f * noseDepth) / (float)Math.Cos(angle);
+            result.X = centerX + ((result.X - centerX) + (float)Math.Sin(angle) * valueMirrored.Z * noseDepth) / (float)Math.Cos(angle);
 
             /*
                 FaceCenterX - центр лица по X (вокруг него все будем вращать)
@@ -1418,7 +1425,7 @@ namespace RH.Core.Render.Controllers
             var result = new Vector2();
             if (ProgramCore.MainForm.HeadFront)
             {
-                result = GetFrontWorldPoint_ForHeadShop_Rotator(valueMirrored);
+                result = GetFrontWorldPoint_ForHeadShop_Rotator(new Vector3(valueMirrored));
             }
             else if (ProgramCore.MainForm.HeadProfile)
             {

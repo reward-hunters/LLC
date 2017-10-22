@@ -88,6 +88,7 @@ namespace RH.Core.Render
                 return ProgramCore.Project.RenderMainHelper.HeadShapeController;
             }
         }
+
         private HeadController headController
         {
             get
@@ -95,7 +96,8 @@ namespace RH.Core.Render
                 return ProgramCore.Project.RenderMainHelper.headController;
             }
         }
-        private HeadMeshesController headMeshesController
+
+        public HeadMeshesController headMeshesController
         {
             get
             {
@@ -547,6 +549,7 @@ namespace RH.Core.Render
             {
                 if (ProgramCore.Project.ManType != ManType.Custom)
                 {
+
                     var scaleX = UpdateMeshProportions(aabb);
                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);
 
@@ -568,9 +571,9 @@ namespace RH.Core.Render
                     SpecialLipsPointsUpdate(points, ProgramCore.Project.MouthCenter);
                     SpecialNosePointsUpdate(points);
 
-                    SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3]);
+                    SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3].Xy);
                     SpecialBottomPointsUpdate(points);
-                    SpecialTopHaedWidth(points);
+                    SpecialTopHaedWidth(points);                                     
                 }
                 else
                 {
@@ -602,7 +605,7 @@ namespace RH.Core.Render
             return (max + min) * 0.5f;
         }
 
-        private void DetectFaceRotation()
+        private float DetectFaceRotation()
         {
             var noseTip = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
 
@@ -617,8 +620,11 @@ namespace RH.Core.Render
             var angle = (float)Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
 
             headMeshesController.RenderMesh.HeadAngle = noseTip.X > noseTop.X ? angle : -angle;
+            /*headMeshesController.TexturingInfo.MirrorType =
+                autodotsShapeHelper.ShapeInfo.MirrorType = headMeshesController.RenderMesh.HeadAngle < 0.0 ? EMirrorType.Left : EMirrorType.Right;*/
             headMeshesController.RenderMesh.NoseDepth = noseLength;
-            headMeshesController.RenderMesh.FaceCenterX = noseTop.X;
+            headMeshesController.RenderMesh.FaceCenterX = noseBottom.X;
+            return headMeshesController.RenderMesh.HeadAngle;
         }
 
         private void SpecialTopHaedWidth(List<HeadPoint> points)
@@ -685,7 +691,7 @@ namespace RH.Core.Render
         {
             var mouthIndices = headController.GetMouthIndexes();
 
-            var borders = new Vector2[] { ProgramCore.Project.DetectedLipsPoints[0], ProgramCore.Project.DetectedLipsPoints[4] };
+            var borders = new Vector3[] { ProgramCore.Project.DetectedLipsPoints[0], ProgramCore.Project.DetectedLipsPoints[4] };
 
             float maxX, minX;
             var center = GetCenter(points, mouthIndices, out minX, out maxX);
@@ -3292,6 +3298,7 @@ namespace RH.Core.Render
         public void OrtoTop()
         {
             camera.ResetCamera(false, headMeshesController.RenderMesh.HeadAngle);
+            camera.ResetCamera(false, 0.0f);
         }
         public void OrtoBack()
         {
