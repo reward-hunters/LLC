@@ -3298,7 +3298,7 @@ namespace RH.Core.Render
         public void OrtoTop()
         {
             camera.ResetCamera(false, headMeshesController.RenderMesh.HeadAngle);
-            camera.ResetCamera(false, 0.0f);
+            //camera.ResetCamera(false, 0.0f);
         }
         public void OrtoBack()
         {
