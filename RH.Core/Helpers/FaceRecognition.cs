@@ -18,6 +18,93 @@ namespace RH.Core.Helpers
 
     public class LuxandFaceRecognition
     {
+        public static float[] GetPointDepths()
+        {
+            //Гулбины точек (1 = длина носа)
+            float[] PointDepths =  {
+                0.0f, // глаз
+                0.0f, // глаз
+                -1.0f, // кончик носа
+                0.0f, // левый край губы
+                0.0f, // правый край губы
+
+                0.0f, // 5 Подбородок
+                0.0f, // 6
+                0.0f, // 7
+                0.0f, // 8
+                0.0f, // 9
+                0.0f, // 10
+                0.0f, // 11 Подбородок
+
+                0.0f, // 12 Брови
+                0.0f, // 13
+                0.0f, // 14
+                0.0f, // 15
+                0.0f, // 16
+                0.0f, // 17
+                0.0f, // 18
+                0.0f, // 19
+                0.0f, // 20
+                0.0f, // 21 Брови
+
+                0.0f, // 22 Верх центра носа
+
+                0.0f, // 23 Глаза
+                0.0f, // 24
+                0.0f, // 25
+                0.0f, // 26
+                0.0f, // 27
+                0.0f, // 28
+                0.0f, // 29
+                0.0f, // 30
+                0.0f, // 31
+                0.0f, // 32
+                0.0f, // 33
+                0.0f, // 34
+                0.0f, // 35
+                0.0f, // 36
+                0.0f, // 37
+                0.0f, // 38
+                0.0f, // 39
+                0.0f, // 40
+                0.0f, // 41
+                0.0f, // 42 Глаза
+
+                0.0f, // 43 Нос
+                0.0f, // 44
+                0.0f, // 45
+                0.0f, // 46
+                -0.5f, // 47
+                -0.5f, // 48
+                0.0f, // 49 Нос
+
+                0.0f, // 50 Щеки
+                0.0f, // 51 
+                0.0f, // 52
+                0.0f, // 53 Щеки
+
+                0.0f, // 54 Губы
+                0.0f, // 55
+                0.0f, // 56
+                0.0f, // 57
+                0.0f, // 58
+                0.0f, // 59
+                0.0f, // 60
+                0.0f, // 61
+                0.0f, // 62
+                0.0f, // 63
+                0.0f, // 64
+                0.0f, // 65 Губы
+
+                0.0f, // 66 Уши
+                0.0f, // 67
+                0.0f, // 68
+                0.0f, // 69 Уши
+            };
+
+            return PointDepths;
+        }
+
         public RectangleF FaceRectRelative;
         public Vector4 FaceColor;
 
@@ -237,92 +324,13 @@ namespace RH.Core.Helpers
             RightMiddleFace1 = new Vector2(RightMiddleFace1.X / (image.Width * 1f), RightMiddleFace1.Y / (image.Height * 1f));
             RightMiddleFace2 = new Vector2(RightMiddleFace2.X / (image.Width * 1f), RightMiddleFace2.Y / (image.Height * 1f));
 
-            //Гулбины точек (1 = длина носа)
-            float[] PointDepths =  {
-                0.0f, // глаз
-                0.0f, // глаз
-                -1.0f, // кончик носа
-                0.0f, // левый край губы
-                0.0f, // правый край губы
-
-                0.0f, // 5 Подбородок
-                0.0f, // 6
-                0.0f, // 7
-                0.0f, // 8
-                0.0f, // 9
-                0.0f, // 10
-                0.0f, // 11 Подбородок
-
-                0.0f, // 12 Брови
-                0.0f, // 13
-                0.0f, // 14
-                0.0f, // 15
-                0.0f, // 16
-                0.0f, // 17
-                0.0f, // 18
-                0.0f, // 19
-                0.0f, // 20
-                0.0f, // 21 Брови
-
-                0.0f, // 22 Верх центра носа
-
-                0.0f, // 23 Глаза
-                0.0f, // 24
-                0.0f, // 25
-                0.0f, // 26
-                0.0f, // 27
-                0.0f, // 28
-                0.0f, // 29
-                0.0f, // 30
-                0.0f, // 31
-                0.0f, // 32
-                0.0f, // 33
-                0.0f, // 34
-                0.0f, // 35
-                0.0f, // 36
-                0.0f, // 37
-                0.0f, // 38
-                0.0f, // 39
-                0.0f, // 40
-                0.0f, // 41
-                0.0f, // 42 Глаза
-
-                0.0f, // 43 Нос
-                0.0f, // 44
-                0.0f, // 45
-                0.0f, // 46
-                -0.5f, // 47
-                -0.5f, // 48
-                0.0f, // 49 Нос
-
-                0.0f, // 50 Щеки
-                0.0f, // 51 
-                0.0f, // 52
-                0.0f, // 53 Щеки
-
-                0.0f, // 54 Губы
-                0.0f, // 55
-                0.0f, // 56
-                0.0f, // 57
-                0.0f, // 58
-                0.0f, // 59
-                0.0f, // 60
-                0.0f, // 61
-                0.0f, // 62
-                0.0f, // 63
-                0.0f, // 64
-                0.0f, // 65 Губы
-
-                0.0f, // 66 Уши
-                0.0f, // 67
-                0.0f, // 68
-                0.0f, // 69 Уши
-            };
+            
 
             FacialFeatures = new List<Vector3>();
             int index = 0;
+            var pointDepths = GetPointDepths();
             foreach (var point in pointFeature)
-                FacialFeatures.Add(new Vector3(point.x / (image.Width * 1f), point.y / (image.Height * 1f), PointDepths[index++]));
+                FacialFeatures.Add(new Vector3(point.x / (image.Width * 1f), point.y / (image.Height * 1f), pointDepths[index++]));
 
             #endregion
 

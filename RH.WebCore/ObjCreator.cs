@@ -95,10 +95,12 @@ namespace RH.WebCore
 
         private void Recognize(Bitmap sourceImage)
         {
+           var facialFeatures = new List<Vector3>();
+            var pointDepths = LuxandFaceRecognition.GetPointDepths();
+            int index = 0;
             var pointFeature = GetFeaturePoints(sourceImage);
-            var facialFeatures = new List<Vector2>();
             foreach (var point in pointFeature)
-                facialFeatures.Add(new Vector2(point.x / (sourceImage.Width * 1f), point.y / (sourceImage.Height * 1f)));
+                facialFeatures.Add(new Vector3(point.x / (sourceImage.Width * 1f), point.y / (sourceImage.Height * 1f), pointDepths[index++]));
 
             var LeftEyeCenter = new Vector2(pointFeature[0].x, pointFeature[0].y);
             LeftEyeCenter = new Vector2(LeftEyeCenter.X / (sourceImage.Width * 1f), LeftEyeCenter.Y / (sourceImage.Height * 1f));
@@ -181,8 +183,8 @@ namespace RH.WebCore
             ProgramCore.Project.DetectedBottomPoints.Add(facialFeatures[5]); //точки нижней части лица
             ProgramCore.Project.DetectedBottomPoints.Add(facialFeatures[7]);// * 0.75f + facialFeatures[9] * 0.25f);
             var p11 = facialFeatures[11];
-            ProgramCore.Project.DetectedBottomPoints.Add(new Vector2((p11.X + facialFeatures[9].X) * 0.5f, p11.Y));
-            ProgramCore.Project.DetectedBottomPoints.Add(new Vector2((p11.X + facialFeatures[10].X) * 0.5f, p11.Y));
+            ProgramCore.Project.DetectedBottomPoints.Add(new Vector3((p11.X + facialFeatures[9].X) * 0.5f, p11.Y, facialFeatures[9].Z));
+            ProgramCore.Project.DetectedBottomPoints.Add(new Vector3((p11.X + facialFeatures[10].X) * 0.5f, p11.Y, facialFeatures[10].Z));
             ProgramCore.Project.DetectedBottomPoints.Add(facialFeatures[8]);// * 0.75f + facialFeatures[10] * 0.25f);
             ProgramCore.Project.DetectedBottomPoints.Add(facialFeatures[6]);
 

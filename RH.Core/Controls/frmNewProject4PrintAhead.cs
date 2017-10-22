@@ -179,8 +179,8 @@ namespace RH.Core.Controls
             if (string.IsNullOrEmpty(templateImage))
                 return;
 
-            //          if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-            //             return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+                      if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                         return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
 
             foreach (var point in facialFeaturesTransformed)
                 e.Graphics.FillEllipse(DrawingTools.BlueSolidBrush, point.X - 2, point.Y - 2, 4, 4);
