@@ -710,6 +710,7 @@ namespace RH.MeshUtils.Helpers
             var vertices = new List<Vertex3d>();
             var positions = new List<Vector3>();
             var delta = leftToRight ? 0.00001f : - 0.00001f;
+
             for (var i = 0; i < Vertices.Length; i++)
             {
                 var vertex = Vertices[i];

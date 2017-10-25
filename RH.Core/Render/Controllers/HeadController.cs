@@ -1295,8 +1295,13 @@ namespace RH.Core.Render.Controllers
                     //v.Y = ProgramCore.Project.FaceRectRelative.Height * v.Y + ProgramCore.Project.FaceRectRelative.Y;
                     //ValueMirrored = v;
 
-                    var v = point - new Vector2(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.A.X,
+                    var centerX = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.FaceCenterX;
+                    var leftTop = new Vector2(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.A.X,
                         ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.B.Y);
+
+                    var v = point - leftTop;
+                    v.X += centerX;
+
                     v.X /= ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.X;
                     v.Y /= (-ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.AABB.Size.Y);
 
@@ -1398,7 +1403,7 @@ namespace RH.Core.Render.Controllers
             var centerX = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.FaceCenterX;
             var angle = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle;
             var noseDepth = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.NoseDepth;
-            result.X = centerX + ((result.X - centerX) + (float)Math.Sin(angle) * valueMirrored.Z * noseDepth) / (float)Math.Cos(angle);
+            result.X = ((result.X - centerX) + (float)Math.Sin(angle) * valueMirrored.Z * noseDepth) / (float)Math.Cos(angle);
 
             /*
                 FaceCenterX - центр лица по X (вокруг него все будем вращать)

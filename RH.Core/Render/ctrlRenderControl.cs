@@ -573,7 +573,7 @@ namespace RH.Core.Render
 
                     SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3].Xy);
                     SpecialBottomPointsUpdate(points);
-                    SpecialTopHaedWidth(points);                                     
+                    SpecialTopHaedWidth(points);
                 }
                 else
                 {
@@ -588,7 +588,7 @@ namespace RH.Core.Render
 
             RenderTimer.Start();
         }
-
+        
         private Vector2 GetCenterPoint(List<Vector2> points)
         {
             var min = new Vector2(float.MaxValue, float.MaxValue);
@@ -622,8 +622,11 @@ namespace RH.Core.Render
             headMeshesController.RenderMesh.HeadAngle = noseTip.X > noseTop.X ? angle : -angle;
             /*headMeshesController.TexturingInfo.MirrorType =
                 autodotsShapeHelper.ShapeInfo.MirrorType = headMeshesController.RenderMesh.HeadAngle < 0.0 ? EMirrorType.Left : EMirrorType.Right;*/
-            headMeshesController.RenderMesh.NoseDepth = noseLength;
+            headMeshesController.RenderMesh.NoseDepth = noseLength;            
+
+            noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
             headMeshesController.RenderMesh.FaceCenterX = noseBottom.X;
+
             return headMeshesController.RenderMesh.HeadAngle;
         }
 

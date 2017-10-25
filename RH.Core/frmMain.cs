@@ -476,9 +476,8 @@ namespace RH.Core
 
                         if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
                         {
-                            var headMeshesController = ProgramCore.MainForm.ctrlRenderControl.headMeshesController;
-                            var noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
-                            headMeshesController.Mirror(headMeshesController.RenderMesh.HeadAngle > 0.0f, noseBottom.X);
+                            var headMeshesController = ProgramCore.MainForm.ctrlRenderControl.headMeshesController;                            
+                            headMeshesController.Mirror(headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
                         }
                     }
                     break;

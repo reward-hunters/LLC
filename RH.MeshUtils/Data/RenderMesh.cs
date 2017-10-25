@@ -37,7 +37,7 @@ namespace RH.MeshUtils.Data
         {
             get;
             set;
-        }        
+        }
 
         public RectangleAABB AABB = new RectangleAABB();
         public Vector2 Scale = Vector2.One;
