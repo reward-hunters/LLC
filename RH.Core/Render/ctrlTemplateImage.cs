@@ -1655,6 +1655,11 @@ namespace RH.Core.Render
                                                 if (p.Selected)
                                                     ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
                                             }
+
+                                            if(ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                                            {
+                                                ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
+                                            }
                                         }
                                     }
                                 }

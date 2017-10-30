@@ -56,7 +56,7 @@ namespace RH.Core.Controls.Panels
 
         private void ReInitializeControl(bool isFrontTab)
         {
-            btnAutodots.Visible = isFrontTab && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator;
+            btnAutodots.Visible = isFrontTab;// && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator;
 
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnPolyLine.Visible = !isFrontTab;

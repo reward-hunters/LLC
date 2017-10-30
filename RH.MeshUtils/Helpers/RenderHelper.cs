@@ -387,6 +387,12 @@ namespace RH.MeshUtils.Helpers
 
         public void UpdateShape(ref TexturingInfo t)
         {
+           /* bool isMirrored = IsMirrored;
+            if(isMirrored)
+            {
+                UndoMirror(false);
+            }*/
+
             foreach (var p in Points)
             {
                 TrinagleInfo ShapeTrinagleInfo = GetTriangleInfo(ref t, p, false);
@@ -407,7 +413,14 @@ namespace RH.MeshUtils.Helpers
             }
 #if (WEB_APP)
 #else
-            UpdateVertexBuffer();
+            /*if(isMirrored)
+            {
+                Mirror(IsLeftToRight, 0.0f);
+            }
+            else
+            {*/
+                UpdateVertexBuffer();
+            //}
 #endif
         }
 
@@ -422,7 +435,13 @@ namespace RH.MeshUtils.Helpers
         }
 
         public void UpdateTexCoords(ref TexturingInfo t)
-        {            
+        {
+            bool isMirrored = IsMirrored;
+            if (isMirrored)
+            {
+                UndoMirror(false);
+            }
+
             foreach (var p in Points)
             {
                 TrinagleInfo TextureTrinagleInfo = GetTriangleInfo(ref t, p, true);
@@ -445,7 +464,15 @@ namespace RH.MeshUtils.Helpers
             }
 #if (WEB_APP)
 #else
-            UpdateVertexBuffer();
+            if (isMirrored)
+            {
+                //Mirror(IsLeftToRight, 0.0f);
+                UpdateBuffers(true);
+            }
+            else
+            {
+                UpdateVertexBuffer();
+            }
 #endif
         }
 
@@ -531,7 +558,7 @@ namespace RH.MeshUtils.Helpers
             }
         }
 
-        public void UndoMirror()
+        public void UndoMirror(bool needUpdateBuffer = true)
         {
             if (BaseVertices == null)
                 return;
@@ -544,7 +571,10 @@ namespace RH.MeshUtils.Helpers
             baseIndices.Clear();
 #if (WEB_APP)
 #else
-            UpdateBuffers();
+            if(needUpdateBuffer)
+            {
+                UpdateBuffers();
+            }            
 #endif
         }
 
@@ -732,10 +762,24 @@ namespace RH.MeshUtils.Helpers
                     else
                     {
                         mirroredPoints.Add(index, vertices.Count);
+
+                        var texCoords = vertex.TexCoord;
+
+                        /*if (Type == HeadMeshType.Eyes)
+                        {
+                            texCoords.X = texCoords.X > 0.5f ? texCoords.X - 0.5f : texCoords.X + 0.5f;
+                            var originalPosition = new Vector3(-vertex.OriginalPosition.X, vertex.OriginalPosition.Y, vertex.OriginalPosition.Z);
+                            var originalVertexs = Vertices.Where(v => VectorEqualityComparer.EqualsVector3(v.OriginalPosition, originalPosition)).ToArray();
+                            if(originalVertexs.Length > 0)
+                            {
+                                //texCoords = originalVertexs[0].TexCoord;
+                            }
+                        }*/
+
                         vertices.Add(new Vertex3d
                         {
                             Position = new Vector3(axis - (vertex.Position.X - axis), vertex.Position.Y, vertex.Position.Z),
-                            TexCoord = vertex.TexCoord,
+                            TexCoord = texCoords,
                             OriginalPosition = new Vector3(-(i + 2), 0.0f, 0.0f),
                             Color = Vector4.One
                         });
@@ -743,6 +787,33 @@ namespace RH.MeshUtils.Helpers
                     }
                 }
             }
+
+            /*float maxU = float.MinValue;
+            float minU = float.MaxValue;
+
+            foreach (var vertex in vertices)
+            {
+                if (vertex.Position.X <= axis - delta == leftToRight)
+                {
+                    maxU = Math.Max(maxU, vertex.TexCoord.X);
+                    minU = Math.Min(minU, vertex.TexCoord.X);
+                }
+            }
+
+            if (maxU > minU)
+            {
+                float distance = maxU - minU;
+
+                for(int i = 0; i < vertices.Count; ++i)
+                {
+                    var vertex = vertices[i];
+                    if (vertex.Position.X > axis - delta == leftToRight)
+                    {
+                        float u = minU + (1.0f - (vertex.TexCoord.X - minU) / distance) * distance;
+                        vertex.TexCoord.X = u;
+                        vertices[i] = vertex;
+                    }
+                }*/
 
             var indices = new List<uint>();
             var linesMapping = new Dictionary<Line, int>(new VectorEqualityComparer());
@@ -1005,7 +1076,7 @@ namespace RH.MeshUtils.Helpers
             TransparentTextureName = info.TransparentTextureName;
             
             Name = info.PartName;
-            if (Name.Contains("Pupil"))
+            if (Name.Contains("Pupil") || Name.Contains("Eye"))// || Name.Contains("Irises") || Name.Contains("Eye") || Name.Contains("Cornea") || Name.Contains("Sclera") || Name.Contains("Pulpis"))
                 Type = HeadMeshType.Eyes;
             else if (Name.Contains("SkinFace"))
                 Type = HeadMeshType.Face;

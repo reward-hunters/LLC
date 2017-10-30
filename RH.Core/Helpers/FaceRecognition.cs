@@ -28,13 +28,13 @@ namespace RH.Core.Helpers
                 0.0f, // левый край губы
                 0.0f, // правый край губы
 
-                1.9f, // 5 Подбородок
-                1.9f, // 6
-                1.8f, // 7
-                1.8f, // 8
-                1.7f, // 9
-                1.7f, // 10
-                1.6f, // 11 Подбородок
+                1.5f, // 5 Подбородок
+                1.5f, // 6
+                1.4f, // 7
+                1.4f, // 8
+                1.3f, // 9
+                1.3f, // 10
+                1.2f, // 11 Подбородок
 
                 0.0f, // 12 Брови
                 0.0f, // 13
@@ -49,26 +49,26 @@ namespace RH.Core.Helpers
 
                 0.0f, // 22 Верх центра носа
 
-                0.1f, // 23 Глаза
-                0.1f, // 24
-                0.1f, // 25
-                0.1f, // 26
-                0.1f, // 27
-                0.1f, // 28
-                0.1f, // 29
-                0.1f, // 30
-                0.1f, // 31
-                0.1f, // 32
-                0.1f, // 33
-                0.1f, // 34
-                0.1f, // 35
-                0.1f, // 36
-                0.1f, // 37
-                0.1f, // 38
-                0.1f, // 39
-                0.1f, // 40
-                0.1f, // 41
-                0.1f, // 42 Глаза
+                1.2f, // 23 Глаза
+                1.2f, // 24
+                1.2f, // 25
+                1.2f, // 26
+                1.2f, // 27
+                1.2f, // 28
+                1.2f, // 29
+                1.2f, // 30
+                1.2f, // 31
+                1.2f, // 32
+                1.2f, // 33
+                1.2f, // 34
+                1.2f, // 35
+                1.2f, // 36
+                1.2f, // 37
+                1.2f, // 38
+                1.2f, // 39
+                1.2f, // 40
+                1.2f, // 41
+                1.2f, // 42 Глаза
 
                 0.0f, // 43 Нос
                 0.0f, // 44
@@ -96,10 +96,10 @@ namespace RH.Core.Helpers
                 0.0f, // 64
                 0.0f, // 65 Губы
 
-                2.5f, // 66 Уши
-                2.5f, // 67
-                2.0f, // 68
-                2.0f, // 69 Уши
+                2.0f, // 66 Уши
+                2.0f, // 67
+                1.5f, // 68
+                1.5f, // 69 Уши
             };
 
             return PointDepths;
@@ -326,7 +326,7 @@ namespace RH.Core.Helpers
 
             FacialFeatures = new List<Vector3>();
             int index = 0;
-            var pointDepths = GetPointDepths();
+            var pointDepths = GetPointDepths();           
             foreach (var point in pointFeature)
                 FacialFeatures.Add(new Vector3(point.x / (image.Width * 1f), point.y / (image.Height * 1f), pointDepths[index++]));
 

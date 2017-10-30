@@ -1403,6 +1403,10 @@ namespace RH.Core.Render.Controllers
             var centerX = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.FaceCenterX;
             var angle = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle;
             var noseDepth = ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.NoseDepth;
+            float angleDegree = 180.0f * Math.Abs(angle) / (float)Math.PI;
+            var depthScale = Math.Max(Math.Min((angleDegree - 10.0f) / 15.0f, 1.0f), 0.0f);
+            depthScale = 1.0f + depthScale * 0.75f;
+            noseDepth = noseDepth * depthScale;
             result.X = ((result.X - centerX) + (float)Math.Sin(angle) * valueMirrored.Z * noseDepth) / (float)Math.Cos(angle);
 
             /*
