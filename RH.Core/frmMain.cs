@@ -327,13 +327,13 @@ namespace RH.Core
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
-                case ProgramCore.ProgramMode.HeadShop_Rotator:
-                    {
-                        frmStages = new frmStages();
-                        frmStages.VisibleChanged += frmStages_VisibleChanged;
-                    }
-                    break;
+                /* case ProgramCore.ProgramMode.HeadShop:            // 31.10 - frmStages  использовалось в старой версии программы и старикан отказался от этого вроде как.
+                 case ProgramCore.ProgramMode.HeadShop_Rotator:
+                     {
+                         frmStages = new frmStages();
+                         frmStages.VisibleChanged += frmStages_VisibleChanged;
+                     }
+                     break;*/
                 default:
                     frmPrint = new frmPrint();
                     frmPrint.VisibleChanged += frmStages_VisibleChanged;
@@ -471,12 +471,12 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     {
                         ProgramCore.MainForm.HeadFront = true;
-                        ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);                        
+                        ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
                         ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
 
-                        if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                        if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator && Math.Abs(ProgramCore.Project.RotatedAngle) > 5)
                         {
-                            var headMeshesController = ProgramCore.MainForm.ctrlRenderControl.headMeshesController;                            
+                            var headMeshesController = ProgramCore.MainForm.ctrlRenderControl.headMeshesController;
                             headMeshesController.Mirror(headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
                         }
                     }
@@ -551,7 +551,7 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.HeadShop:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
-                    if (UserConfig.ByName("Options")["Tutorials", "Export", "1"] == "1")
+                    if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;
             }
@@ -1815,7 +1815,7 @@ namespace RH.Core
 
             var importer = new AssimpImporter();
             importer.ConvertFromFileToFile(fiName, daeName, "collada");
-    
+
 
             if (ProgramCore.Project.FrontImage != null)
                 ProgramCore.Project.FrontImage.Save(Path.Combine(newDirectory, "tempHaarImage.jpg"));
@@ -1904,19 +1904,33 @@ namespace RH.Core
             ctrlRenderControl.pickingController.SelectedMeshes.Clear();
             var acDirPath = Path.GetDirectoryName(fiName);
 
-            var haPath = Path.GetFileNameWithoutExtension(fiName) + "hair.obj";
-            var hairPath = Path.Combine(ProgramCore.Project.ProjectPath, haPath);
-            var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
+            #region Выгрузка волос и аксессуаров
 
-            ObjSaver.SaveObjFile(hairPath, ctrlRenderControl.pickingController.HairMeshes, MeshType.Hair, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
-
-            if (ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes.Count > 0)            // save accessories to separate file
+            switch (ProgramCore.CurrentProgram)
             {
-                var acName = Path.GetFileNameWithoutExtension(fiName) + "_accessory.obj";
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    break;  // When pushing Export, only head needs to export (not the neck, hair, etc) as this will simply export back to DAZ Studio.  
+                default:
+                    {
+                        var haPath = Path.GetFileNameWithoutExtension(fiName) + "hair.obj";
+                        var hairPath = Path.Combine(ProgramCore.Project.ProjectPath, haPath);
+                        var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
 
-                var accessoryPath = Path.Combine(ProgramCore.Project.ProjectPath, acName);
-                ObjSaver.SaveObjFile(accessoryPath, ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
+                        ObjSaver.SaveObjFile(hairPath, ctrlRenderControl.pickingController.HairMeshes, MeshType.Hair, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
+
+                        if (ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes.Count > 0)            // save accessories to separate file
+                        {
+                            var acName = Path.GetFileNameWithoutExtension(fiName) + "_accessory.obj";
+
+                            var accessoryPath = Path.Combine(ProgramCore.Project.ProjectPath, acName);
+                            ObjSaver.SaveObjFile(accessoryPath, ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
+                        }
+                    }
+                    break;
             }
+
+            #endregion
+
 
             ctrlRenderControl.SaveHead(fiName, true);
 

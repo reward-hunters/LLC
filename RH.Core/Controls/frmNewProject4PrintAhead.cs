@@ -341,7 +341,7 @@ namespace RH.Core.Controls
 
                   */
 
-                if (Math.Abs(fcr.RotatedAngle) > 20)
+                if (Math.Abs(fcr.RotatedAngle) > 25)
                     MessageBox.Show("The head rotated more than 20 degrees. Please select an other photo...");
                 else
                     btnApply.Enabled = true;

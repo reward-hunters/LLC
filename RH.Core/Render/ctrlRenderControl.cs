@@ -588,7 +588,7 @@ namespace RH.Core.Render
 
             RenderTimer.Start();
         }
-        
+
         private Vector2 GetCenterPoint(List<Vector2> points)
         {
             var min = new Vector2(float.MaxValue, float.MaxValue);
@@ -622,7 +622,7 @@ namespace RH.Core.Render
             headMeshesController.RenderMesh.HeadAngle = noseTip.X > noseTop.X ? angle : -angle;
             /*headMeshesController.TexturingInfo.MirrorType =
                 autodotsShapeHelper.ShapeInfo.MirrorType = headMeshesController.RenderMesh.HeadAngle < 0.0 ? EMirrorType.Left : EMirrorType.Right;*/
-            headMeshesController.RenderMesh.NoseDepth = noseLength;            
+            headMeshesController.RenderMesh.NoseDepth = noseLength;
 
             noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
             headMeshesController.RenderMesh.FaceCenterX = noseBottom.X;
@@ -4083,7 +4083,33 @@ namespace RH.Core.Render
                 var oldTexturePath = GetTexturePath(smoothTex.Key);
                 var newImagePath = Path.Combine(newFolderPath, Path.GetFileNameWithoutExtension(oldTexturePath) + "_smoothed" + Path.GetExtension(oldTexturePath));
                 using (var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value))
-                    bitmap.Save(newImagePath, ImageFormat.Jpeg);
+                {
+                    var needSave = true;
+                    if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)     // Новый стандарт Daz Studio. Текстуры должны быть в разрешение 4096.
+                    {
+                        var actualTextureSize = 4096;
+                        var max = (float)Math.Max(bitmap.Width, bitmap.Height);
+                        if (max != actualTextureSize)
+                        {
+                            var k = actualTextureSize / max;
+                            try
+                            {
+                                var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
+
+                                newImg.Save(newImagePath, ImageFormat.Jpeg);        // было BPM! если косяки - вернуть
+                            }
+                            catch
+                            {
+
+                            }
+
+                            needSave = false;
+                        }
+                    }
+
+                    if (needSave)
+                        bitmap.Save(newImagePath, ImageFormat.Jpeg);
+                }
             }
         }
 

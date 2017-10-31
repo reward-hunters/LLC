@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace RH.Core.Render.Helpers
 {
@@ -93,7 +94,7 @@ namespace RH.Core.Render.Helpers
             var destWidth = (int)Math.Round(sourceWidth * nPercent);
             var destHeight = (int)Math.Round(sourceHeight * nPercent);
 
-            var b = new Bitmap(destWidth, destHeight);
+            var b = new Bitmap(destWidth, destHeight, PixelFormat.Format16bppRgb555);
             var g = Graphics.FromImage(b);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
