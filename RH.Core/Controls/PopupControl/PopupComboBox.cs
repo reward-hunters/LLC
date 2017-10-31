@@ -116,10 +116,7 @@ namespace RH.Core.Controls.PopupControl
             {
                 if ((DateTime.UtcNow - dropDownHideTime).TotalSeconds > 0.5)
                 {
-                    if (DropDown != null)
-                    {
-                        DropDown(this, EventArgs.Empty);
-                    }
+                    DropDown?.Invoke(this, EventArgs.Empty);
                     dropDown.Show(this);
                 }
                 else
@@ -143,10 +140,7 @@ namespace RH.Core.Controls.PopupControl
             if (dropDown != null)
             {
                 dropDown.Hide();
-                if (DropDownClosed != null)
-                {
-                    DropDownClosed(this, EventArgs.Empty);
-                }
+                DropDownClosed?.Invoke(this, EventArgs.Empty);
             }
         }
 

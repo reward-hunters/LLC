@@ -45,8 +45,7 @@ namespace RH.Core.Controls.Panels
             btnSave.BackColor = SystemColors.Control;
             btnSave.ForeColor = Color.Black;
 
-            if (OnSave != null)
-                OnSave(this, EventArgs.Empty);
+            OnSave?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnDelete_MouseDown(object sender, MouseEventArgs e)
@@ -59,8 +58,7 @@ namespace RH.Core.Controls.Panels
             btnDelete.BackColor = SystemColors.Control;
             btnDelete.ForeColor = Color.Black;
 
-            if (OnDelete != null)
-                OnDelete(this, EventArgs.Empty);
+            OnDelete?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnExport_MouseDown(object sender, MouseEventArgs e)
@@ -73,8 +71,7 @@ namespace RH.Core.Controls.Panels
             btnExport.BackColor = SystemColors.Control;
             btnExport.ForeColor = Color.Black;
 
-            if (OnExport != null)
-                OnExport(this, EventArgs.Empty);
+            OnExport?.Invoke(this, EventArgs.Empty);
         }
 
         public void HideControl()
@@ -97,16 +94,14 @@ namespace RH.Core.Controls.Panels
                 btnOpen.Tag = "1";
                 btnOpen.BackColor = SystemColors.ControlDarkDark;
                 btnOpen.ForeColor = Color.White;
-                if (OnOpenLibrary != null)
-                    OnOpenLibrary(this, EventArgs.Empty);
+                OnOpenLibrary?.Invoke(this, EventArgs.Empty);
             }
             else
             {
                 btnOpen.Tag = "2";
                 btnOpen.BackColor = SystemColors.Control;
                 btnOpen.ForeColor = Color.Black;
-                if (OnOpenLibrary != null)
-                    OnOpenLibrary(this, EventArgs.Empty);
+                OnOpenLibrary?.Invoke(this, EventArgs.Empty);
             }
         }
 

@@ -220,8 +220,7 @@ namespace RH.Core.Controls.Panels
             btnSave.BackColor = SystemColors.Control;
             btnSave.ForeColor = Color.Black;
 
-            if (OnSave != null)
-                OnSave(this, EventArgs.Empty);
+            OnSave?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnUndo_MouseDown(object sender, MouseEventArgs e)
@@ -234,8 +233,7 @@ namespace RH.Core.Controls.Panels
             btnUndo.BackColor = SystemColors.Control;
             btnUndo.ForeColor = Color.Black;
 
-            if (OnUndo != null)
-                OnUndo(this, EventArgs.Empty);
+            OnUndo?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

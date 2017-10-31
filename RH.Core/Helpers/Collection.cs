@@ -196,8 +196,7 @@ namespace RH.Core.Helpers
         }
         protected sealed override void OnClear()
         {
-            if (BeforeClear != null)
-                BeforeClear(null, EventArgs.Empty);
+            BeforeClear?.Invoke(null, EventArgs.Empty);
 
             itemsToClear = ToArray();
             base.OnClear();
@@ -272,8 +271,7 @@ namespace RH.Core.Helpers
                 }
                 else
                 {
-                    if (ItemsAdded != null)
-                        ItemsAdded(items);
+                    ItemsAdded?.Invoke(items);
                 }
             }
             RaiseCollectionChanged();
@@ -287,8 +285,7 @@ namespace RH.Core.Helpers
                     EnqueueEvent(ItemsRemoved, new object[] { items });
                 else
                 {
-                    if (ItemsRemoved != null)
-                        ItemsRemoved(items);
+                    ItemsRemoved?.Invoke(items);
                 }
             }
             RaiseCollectionChanged();

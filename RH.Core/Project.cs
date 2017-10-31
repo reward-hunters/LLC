@@ -57,6 +57,8 @@ namespace RH.Core
 
         /// <summary> Было ли назначение автоточек </summary>
         public bool AutodotsUsed;
+        /// <summary> Отражение головы включено </summary>
+        public bool MirrorUsed;
 
         public FlipType TextureFlip = FlipType.None;        // отражено ли или нет
         public FlipType ShapeFlip = FlipType.None;

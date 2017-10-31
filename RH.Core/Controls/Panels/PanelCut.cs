@@ -105,8 +105,7 @@ namespace RH.Core.Controls.Panels
             btnDuplicate.BackColor = SystemColors.Control;
             btnDuplicate.ForeColor = Color.Black;
 
-            if (OnDuplicate != null)
-                OnDuplicate(this, EventArgs.Empty);
+            OnDuplicate?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnSave_MouseDown(object sender, MouseEventArgs e)
@@ -119,8 +118,7 @@ namespace RH.Core.Controls.Panels
             btnSave.BackColor = SystemColors.Control;
             btnSave.ForeColor = Color.Black;
 
-            if (OnSave != null)
-                OnSave(this, EventArgs.Empty);
+            OnSave?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnDelete_MouseDown(object sender, MouseEventArgs e)
@@ -133,8 +131,7 @@ namespace RH.Core.Controls.Panels
             btnDelete.BackColor = SystemColors.Control;
             btnDelete.ForeColor = Color.Black;
 
-            if (OnDelete != null)
-                OnDelete(this, EventArgs.Empty);
+            OnDelete?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnUndo_MouseDown(object sender, MouseEventArgs e)
@@ -147,8 +144,7 @@ namespace RH.Core.Controls.Panels
             btnUndo.BackColor = SystemColors.Control;
             btnUndo.ForeColor = Color.Black;
 
-            if (OnUndo != null)
-                OnUndo(this, EventArgs.Empty);
+            OnUndo?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnLasso_Click(object sender, EventArgs e)

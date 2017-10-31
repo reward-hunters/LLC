@@ -396,8 +396,7 @@ namespace RH.Core
             {
                 var hs = callStackReleasedHandlers;
                 callStackReleasedHandlers = null;
-                if (hs != null)
-                    hs(null, EventArgs.Empty);
+                hs?.Invoke(null, EventArgs.Empty);
             }
         }
 

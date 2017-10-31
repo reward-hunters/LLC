@@ -58,9 +58,11 @@ namespace RH.Core.Controls.Panels
         {
             btnAutodots.Visible = isFrontTab;// && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator;
 
+
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnPolyLine.Visible = !isFrontTab;
-
+            else if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                btnMirror_Click(null, EventArgs.Empty);
         }
 
 
@@ -68,7 +70,7 @@ namespace RH.Core.Controls.Panels
 
         public void ResetModeTools(bool resetMirror = true)
         {
-            if (btnMirror.Tag.ToString() == "1" && resetMirror)
+            if (btnMirror.Tag.ToString() == "1" && resetMirror && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator)
                 btnMirror_Click(null, EventArgs.Empty);
 
             if (btnShapeTool.Tag.ToString() == "1")
@@ -89,7 +91,8 @@ namespace RH.Core.Controls.Panels
         {
             if (ProgramCore.Project.AutodotsUsed)
             {
-                btnMirror.Enabled = false;
+                if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator)
+                    btnMirror.Enabled = false;
                 btnAutodots.Enabled = true;
 
                 btnLasso.Enabled = false;
@@ -105,7 +108,8 @@ namespace RH.Core.Controls.Panels
             }
             else
             {
-                btnMirror.Enabled = false;
+                if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator)
+                    btnMirror.Enabled = false;
                 btnAutodots.Enabled = true;
 
                 btnLasso.Enabled = false;
@@ -128,7 +132,8 @@ namespace RH.Core.Controls.Panels
                 case Mode.HeadShapeFirstTime:
                 case Mode.HeadShape:
                     {
-                        btnMirror.Enabled = true;
+                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator)
+                            btnMirror.Enabled = true;
                         btnAutodots.Enabled = false;
 
                         btnLasso.Enabled = false;
@@ -144,7 +149,8 @@ namespace RH.Core.Controls.Panels
                 case Mode.HeadAutodots:
                 case Mode.HeadAutodotsFirstTime:
                     {
-                        btnMirror.Enabled = false;
+                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator)
+                            btnMirror.Enabled = false;
                         btnAutodots.Enabled = true;
 
                         btnLasso.Enabled = true;
@@ -174,7 +180,8 @@ namespace RH.Core.Controls.Panels
                             btnFlipRight.Enabled = true;
                             break;*/
                 case Mode.HeadLine:
-                    btnMirror.Enabled = false;
+                    if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator)
+                        btnMirror.Enabled = false;
                     btnAutodots.Enabled = false;
 
                     btnLasso.Enabled = false;
@@ -274,8 +281,20 @@ namespace RH.Core.Controls.Panels
                 btnMirror.BackColor = SystemColors.ControlDarkDark;
                 btnMirror.ForeColor = Color.White;
 
-                ProgramCore.MainForm.ctrlRenderControl.ToolMirrored = true;
-                ProgramCore.MainForm.ctrlRenderControl.Mode = Mode.HeadShape;
+                switch (ProgramCore.CurrentProgram)
+                {
+                    case ProgramCore.ProgramMode.HeadShop_Rotator:
+                        if (sender != null)
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
+                        break;
+                    default:
+                        {
+                            ProgramCore.MainForm.ctrlRenderControl.ToolMirrored = true;
+                            ProgramCore.MainForm.ctrlRenderControl.Mode = Mode.HeadShape;
+                        }
+                        break;
+                }
+                ProgramCore.Project.MirrorUsed = true;
             }
             else
             {
@@ -284,8 +303,20 @@ namespace RH.Core.Controls.Panels
                 btnMirror.BackColor = SystemColors.Control;
                 btnMirror.ForeColor = Color.Black;
 
-                ProgramCore.MainForm.ctrlRenderControl.ToolMirrored = false;
-                ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
+                switch (ProgramCore.CurrentProgram)
+                {
+                    case ProgramCore.ProgramMode.HeadShop_Rotator:
+                        if (sender != null)
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();
+                        break;
+                    default:
+                        {
+                            ProgramCore.MainForm.ctrlRenderControl.ToolMirrored = false;
+                            ProgramCore.Project.RenderMainHelper.headController.ClearPointsSelection();
+                        }
+                        break;
+                }
+                ProgramCore.Project.MirrorUsed = false;
             }
             SetPanelLogic();
         }
@@ -300,8 +331,7 @@ namespace RH.Core.Controls.Panels
             btnSave.BackColor = SystemColors.Control;
             btnSave.ForeColor = Color.Black;
 
-            if (OnSave != null)
-                OnSave(this, EventArgs.Empty);
+            OnSave?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnDelete_MouseDown(object sender, MouseEventArgs e)
@@ -314,8 +344,7 @@ namespace RH.Core.Controls.Panels
             btnDelete.BackColor = SystemColors.Control;
             btnDelete.ForeColor = Color.Black;
 
-            if (OnDelete != null)
-                OnDelete(this, EventArgs.Empty);
+            OnDelete?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnUndo_MouseDown(object sender, MouseEventArgs e)
@@ -328,8 +357,7 @@ namespace RH.Core.Controls.Panels
             btnUndo.BackColor = SystemColors.Control;
             btnUndo.ForeColor = Color.Black;
 
-            if (OnUndo != null)
-                OnUndo(this, EventArgs.Empty);
+            OnUndo?.Invoke(this, EventArgs.Empty);
         }
 
         public void btnLasso_Click(object sender, EventArgs e)

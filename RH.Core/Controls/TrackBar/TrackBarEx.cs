@@ -838,8 +838,7 @@ namespace RH.Core.Controls.TrackBar
         public virtual void OnValueChanged(int value)
         {
             // Any attached event handlers?
-            if (ValueChanged != null)
-                ValueChanged(this, value);
+            ValueChanged?.Invoke(this, value);
 
         }
 
@@ -849,8 +848,7 @@ namespace RH.Core.Controls.TrackBar
         public virtual void OnScroll()
         {
             // Any attached event handlers?
-            if (Scroll != null)
-                Scroll(this, new EventArgs());
+            Scroll?.Invoke(this, new EventArgs());
         }
 
 
