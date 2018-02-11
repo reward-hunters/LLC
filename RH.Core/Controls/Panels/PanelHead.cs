@@ -430,7 +430,8 @@ namespace RH.Core.Controls.Panels
 
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.PrintAhead:
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:

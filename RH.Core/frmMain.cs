@@ -159,10 +159,17 @@ namespace RH.Core
                     saveToolStripMenuItem5.Visible = saveToolStripMenuItem6.Visible = saveToolStripMenuItem8.Visible = toolStripMenuItem1.Visible = false;
                     materialHelpToolStripMenuItem.Visible = materialtabToolStripMenuItem.Visible = false;
                     break;
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
                     Text = @"HeadShop 10";
                     aboutHeadShopProToolStripMenuItem.Text = @"About HeadShop 10.2";
                     panelMenuStage.Image = Resources.btnMenuStageNormal;
+                    childHelpToolStripMenuItem.Visible = false;
+                    break;
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                    Text = @"HeadShop 11";
+                    aboutHeadShopProToolStripMenuItem.Text = @"About HeadShop 11";
+                    panelMenuStage.Image = Resources.btnMenuStageNormal;
+                    panelMenuFeatures.Visible = featuresTabToolStripMenuItem.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
@@ -247,7 +254,8 @@ namespace RH.Core
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -269,7 +277,7 @@ namespace RH.Core
             {
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
                         {
                             #region новый проект для HeadShop
 
@@ -294,6 +302,7 @@ namespace RH.Core
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     case ProgramCore.ProgramMode.PrintAhead_Online:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:          // вроде для этой версии не нужно открывать загруженные проекты. Поэтому лучше использовать этот диалог, он уже с новой распознавалкой.
                         {
                             #region проект для PrintAhead
@@ -488,7 +497,8 @@ namespace RH.Core
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -548,7 +558,8 @@ namespace RH.Core
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                     if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
@@ -852,7 +863,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -865,7 +877,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -878,7 +891,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -891,7 +905,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -904,7 +919,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -922,7 +938,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -935,7 +952,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -953,7 +971,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -966,7 +985,8 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -1130,7 +1150,8 @@ namespace RH.Core
 
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -1180,7 +1201,8 @@ namespace RH.Core
                 panelMenuMaterials.Image = Resources.btnMenuColorNormal;
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -1230,7 +1252,8 @@ namespace RH.Core
                 panelMenuMaterials.Image = Resources.btnMenuColorNormal;
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -1279,7 +1302,8 @@ namespace RH.Core
                 panelMenuAccessories.Image = Resources.btnMenuAccessoriesNormal;
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -1319,7 +1343,8 @@ namespace RH.Core
                 panelMenuStage.Tag = "1";
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStagePressed;
@@ -1407,7 +1432,8 @@ namespace RH.Core
                 panelMenuMaterials.Image = Resources.btnMenuColorNormal;
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -1462,7 +1488,8 @@ namespace RH.Core
                 panelMenuMaterials.Image = Resources.btnMenuColorNormal;
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -1524,7 +1551,8 @@ namespace RH.Core
                 panelMenuMaterials.Image = Resources.btnMenuColorNormal;
                 switch (ProgramCore.CurrentProgram)
                 {
-                    case ProgramCore.ProgramMode.HeadShop:
+                    case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -1624,7 +1652,8 @@ namespace RH.Core
                     UserConfig.ByName("Tutorials")["Links", "AdvancedManual"] = "https://youtu.be/gWOkSUDbv0I";
                     UserConfig.ByName("Tutorials")["Links", "QuickStart"] = "https://youtu.be/8cejdijABQY";
                     break;
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     UserConfig.ByName("Tutorials")["Links", "Start"] = "https://www.youtube.com/watch?v=0baUErHwngA";
@@ -2208,7 +2237,7 @@ namespace RH.Core
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
 
                     {
                         var frm = new frmNewProject4HeadShop(false);
@@ -2219,6 +2248,7 @@ namespace RH.Core
                         frm.CreateProject();
                     }
                     break;
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
                 case ProgramCore.ProgramMode.PrintAhead:

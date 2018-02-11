@@ -50,9 +50,10 @@ namespace RH.Core
             PrintAhead,                 // обычный PrintAhead
             PrintAhead_PayPal,          // PrintAhead с интеграцией PayPal. Нет возможности сохранения, экспорта. Только печать за деньги
             PrintAhead_Online,          // Онлайн версия (незначительные изменение с paypal версией: загружается ряд аксессуаров по дефолту, добавлены АПИ вызовы для сайта)
-            HeadShop,                   // HeadShop 10.2
+            HeadShop_v10_2,             // HeadShop 10.2
+            HeadShop_v11,               // HeadShop 11 (ТЗ PRD2.5.18)
             HeadShop_OneClick,          // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
-            HeadShop_Rotator            // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях.
+            HeadShop_Rotator            // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях. (Версия НЕ РАБОЧАЯ! Делали в качестве эксперимента, результат не понравился старику)
         }
         public static string ProgramCaption
         {
@@ -60,8 +61,10 @@ namespace RH.Core
             {
                 switch (CurrentProgram)
                 {
-                    case ProgramMode.HeadShop:
+                    case ProgramMode.HeadShop_v10_2:
                         return "HeadShop 10.2";
+                    case ProgramMode.HeadShop_v11:
+                        return "HeadShop 11";
                     case ProgramMode.HeadShop_Rotator:
                         return "HeadShop 11";
                     case ProgramMode.PrintAhead:
@@ -82,7 +85,8 @@ namespace RH.Core
             {
                 switch (CurrentProgram)
                 {
-                    case ProgramMode.HeadShop:
+                    case ProgramMode.HeadShop_v10_2:
+                    case ProgramMode.HeadShop_v11:
                     case ProgramMode.HeadShop_Rotator:
                     case ProgramMode.HeadShop_OneClick:
                         return "HeadShop";

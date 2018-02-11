@@ -116,6 +116,7 @@ namespace RH.Core.Controls
                     labelNotes.Visible = labelNotes1.Visible = !ProgramCore.IsFreeVersion;
                     label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;
                     break;
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     pictureExample.Visible = labelNotes.Visible = labelNotes1.Visible = false;
                     rbImportObj.Visible = label11.Visible = true;

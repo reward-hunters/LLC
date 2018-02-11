@@ -142,7 +142,7 @@ namespace RH.Core.Controls
             rbNew.Enabled = atStartup;
             ShowInTaskbar = atStartup;
 
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop)
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v10_2)
             {
                 GL.GetInteger(GetPName.MaxTextureSize, out videoCardSize);
                 rb512.Visible = rb1024.Visible = rb2048.Visible = true;
@@ -295,7 +295,7 @@ namespace RH.Core.Controls
             {
                 btnMale_Click(null, EventArgs.Empty);
 
-                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop)
+                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v10_2)
                 {
                     rb512.Enabled = rbNew.Checked && videoCardSize >= 512;
                     rb1024.Enabled = rbNew.Checked && videoCardSize >= 1024;

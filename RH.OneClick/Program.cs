@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using RH.Core;
 
-namespace RH.OneClick
+namespace RH.HeadShop
 {
     static class Program
     {
@@ -22,7 +22,7 @@ namespace RH.OneClick
                 var currentDomain = AppDomain.CurrentDomain;
                 currentDomain.AssemblyResolve += LoadSubLibs;
 
-                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.HeadShop_Rotator;
+                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.HeadShop_v11;
                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);
             }

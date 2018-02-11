@@ -10,6 +10,6 @@ RH.PrintAhead_Paypal/obj/
 RH.MeshUtils/obj/
 AbaloneLLC/
 .vs/
-*.zip
-*.rar
-*.manifest
+**.zip
+**.rar
+**.manifest

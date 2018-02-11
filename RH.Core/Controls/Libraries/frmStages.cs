@@ -26,7 +26,8 @@ namespace RH.Core.Controls.Libraries
 
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:              // HeadShop 10-11, отключить возможность 3д print.
+                case ProgramCore.ProgramMode.HeadShop_v10_2:              // HeadShop 10-11, отключить возможность 3д print.
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     btnColor3DPrint.Visible = false;
                     break;
@@ -347,7 +348,8 @@ namespace RH.Core.Controls.Libraries
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -363,7 +365,8 @@ namespace RH.Core.Controls.Libraries
         {
             switch (ProgramCore.CurrentProgram)
             {
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:

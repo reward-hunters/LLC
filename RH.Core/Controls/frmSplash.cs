@@ -26,7 +26,10 @@ namespace RH.Core.Controls
                     case ProgramCore.ProgramMode.PrintAhead_Online:
                     image = Resources.Logo_PrintAheadPayPal;
                     break;
-                case ProgramCore.ProgramMode.HeadShop:
+                case ProgramCore.ProgramMode.HeadShop_v10_2:
+                    image = Resources.logo_HeadShop;
+                    break;
+                case ProgramCore.ProgramMode.HeadShop_v11:      // TODO даст иконку - заюзать
                     image = Resources.logo_HeadShop;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
