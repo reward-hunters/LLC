@@ -58,11 +58,15 @@ namespace RH.Core.Controls.Panels
         {
             btnAutodots.Visible = isFrontTab;// && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_Rotator;
 
-
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
-                btnPolyLine.Visible = !isFrontTab;
-            else if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                btnMirror_Click(null, EventArgs.Empty);
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop_OneClick:
+                    btnPolyLine.Visible = !isFrontTab;
+                    break;
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    btnMirror_Click(null, EventArgs.Empty);
+                    break;
+            }
         }
 
 

@@ -477,6 +477,7 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     {
                         ProgramCore.MainForm.HeadFront = true;
@@ -1937,6 +1938,7 @@ namespace RH.Core
 
             switch (ProgramCore.CurrentProgram)
             {
+                case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     break;  // When pushing Export, only head needs to export (not the neck, hair, etc) as this will simply export back to DAZ Studio.  
                 default:
@@ -1996,6 +1998,7 @@ namespace RH.Core
                 var mapPath = ctrlRenderControl.GetTexturePath(iTexture);
                 switch (ProgramCore.CurrentProgram)
                 {
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:      // HeadShop 11 - выгрузка текстур с размерами 4096.
                     case ProgramCore.ProgramMode.HeadShop_OneClick:      // для этой программы должна быть выгрузка текстур с размерами 2048
                         {

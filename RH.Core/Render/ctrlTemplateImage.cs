@@ -1656,9 +1656,15 @@ namespace RH.Core.Render
                                                     ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
                                             }
 
-                                            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator && ProgramCore.Project.MirrorUsed)
+                                            switch (ProgramCore.CurrentProgram)
                                             {
-                                                ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
+                                                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                                                case ProgramCore.ProgramMode.HeadShop_v11:
+                                                    if (ProgramCore.Project.MirrorUsed)
+                                                    {
+                                                        ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
+                                                    }
+                                                    break;
                                             }
                                         }
                                     }

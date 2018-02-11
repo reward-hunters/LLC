@@ -544,6 +544,7 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                         textureSize = 2048;          // если поставит ьу нас в проге 4096 - то все крашится к хуям. Пусть уж только на экспорте будет.
                         break;

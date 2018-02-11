@@ -4085,26 +4085,31 @@ namespace RH.Core.Render
                 using (var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value))
                 {
                     var needSave = true;
-                    if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)     // Новый стандарт Daz Studio. Текстуры должны быть в разрешение 4096.
+                    switch (ProgramCore.CurrentProgram)
                     {
-                        var actualTextureSize = 4096;
-                        var max = (float)Math.Max(bitmap.Width, bitmap.Height);
-                        if (max != actualTextureSize)
-                        {
-                            var k = actualTextureSize / max;
-                            try
+                        case ProgramCore.ProgramMode.HeadShop_Rotator:
+                        case ProgramCore.ProgramMode.HeadShop_v11:          // Новый стандарт Daz Studio. Текстуры должны быть в разрешение 4096.
                             {
-                                var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
+                                var actualTextureSize = 4096;
+                                var max = (float)Math.Max(bitmap.Width, bitmap.Height);
+                                if (max != actualTextureSize)
+                                {
+                                    var k = actualTextureSize / max;
+                                    try
+                                    {
+                                        var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
 
-                                newImg.Save(newImagePath, ImageFormat.Jpeg);        // было BPM! если косяки - вернуть
+                                        newImg.Save(newImagePath, ImageFormat.Jpeg);        // было BPM! если косяки - вернуть
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                    needSave = false;
+                                }
                             }
-                            catch
-                            {
-
-                            }
-
-                            needSave = false;
-                        }
+                            break;
                     }
 
                     if (needSave)

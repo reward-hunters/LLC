@@ -5,10 +5,9 @@
 *.suo
 RH.Core/obj/
 RH.FaceShopExecutor/obj/
-RH.OneClick/obj/
+RH.HeadShop/obj/
 RH.PrintAhead_Paypal/obj/
 RH.MeshUtils/obj/
-AbaloneLLC/
 .vs/
 **.zip
 **.rar

@@ -81,13 +81,7 @@ namespace RH.Core.Controls
         {
             get
             {
-                switch (ProgramCore.CurrentProgram)
-                {
-                    case ProgramCore.ProgramMode.HeadShop_Rotator:
-                        return videoCardSize > 2048 ? 4096 : 2048;
-                    default:
-                        return rb512.Checked ? 512 : (rb1024.Checked ? 1024 : 2048);
-                }
+                return rb512.Checked ? 512 : (rb1024.Checked ? 1024 : 2048);
             }
         }
         private Pen edgePen;

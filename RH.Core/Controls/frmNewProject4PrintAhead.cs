@@ -56,6 +56,7 @@ namespace RH.Core.Controls
                 {
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         return 2048;
+                    case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                         int videoCardSize;
                         GL.GetInteger(GetPName.MaxTextureSize, out videoCardSize);
@@ -118,7 +119,7 @@ namespace RH.Core.Controls
                     break;
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
-                    pictureExample.Visible = labelNotes.Visible = labelNotes1.Visible = false;
+                    labelNotes.Visible = labelNotes1.Visible = false;
                     rbImportObj.Visible = label11.Visible = true;
                     break;
                 default:
@@ -191,8 +192,12 @@ namespace RH.Core.Controls
         }
         private void pictureTemplate_MouseDown(object sender, MouseEventArgs e)
         {
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            switch (ProgramCore.CurrentProgram)          // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    return;
+            }      
 
             if (e.Button == MouseButtons.Left)
             {
@@ -214,8 +219,12 @@ namespace RH.Core.Controls
         }
         private void pictureTemplate_MouseMove(object sender, MouseEventArgs e)
         {
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            switch (ProgramCore.CurrentProgram)          // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    return;
+            }
 
             if (startMousePoint == Point.Empty)
                 startMousePoint = new Point(e.X, e.Y);
@@ -249,8 +258,12 @@ namespace RH.Core.Controls
         }
         private void pictureTemplate_MouseUp(object sender, MouseEventArgs e)
         {
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            switch (ProgramCore.CurrentProgram)          // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    return;
+            }
 
             if (leftMousePressed && currentSelection != Selection.Empty)
                 RecalcRealTemplateImagePosition();

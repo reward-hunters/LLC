@@ -1,0 +1,16 @@
+D:\Projects\Фриланс\Laslo\LLC\AbaloneLLC\OneClick\Rh.HeadShop.exe.config
+D:\Projects\Фриланс\Laslo\LLC\AbaloneLLC\OneClick\Rh.HeadShop.exe
+D:\Projects\Фриланс\Laslo\LLC\AbaloneLLC\OneClick\Rh.HeadShop.pdb
+D:\Projects\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\RH.OneClick.csprojResolveAssemblyReference.cache
+D:\Projects\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\RH.OneClick.Properties.Resources.resources
+D:\Projects\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\RH.OneClick.csproj.GenerateResource.Cache
+D:\Projects\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\Rh.HeadShop.exe
+D:\Projects\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\Rh.HeadShop.pdb
+D:\Develop\Фриланс\Laslo\LLC\AbaloneLLC\OneClick\Rh.HeadShop.exe.config
+D:\Develop\Фриланс\Laslo\LLC\AbaloneLLC\OneClick\Rh.HeadShop.exe
+D:\Develop\Фриланс\Laslo\LLC\AbaloneLLC\OneClick\Rh.HeadShop.pdb
+D:\Develop\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\RH.OneClick.csprojResolveAssemblyReference.cache
+D:\Develop\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\RH.OneClick.Properties.Resources.resources
+D:\Develop\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\RH.OneClick.csproj.GenerateResource.Cache
+D:\Develop\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\Rh.HeadShop.exe
+D:\Develop\Фриланс\Laslo\LLC\RH.OneClick\obj\x86\Debug\Rh.HeadShop.pdb

@@ -642,82 +642,89 @@ namespace RH.Core.Render.Obj
                 {
                     FolderEx.CreateDirectory(new DirectoryInfo(newTexturePath));
 
-                    if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                    {       // для этой версии нужно преобразовывать все текстуры в текстуры с размером 4096, т.к. у DAZ studio новый формат.
-                        #region HeadShop rotator
-
-                        var actualTextureSize = 4096;
-                        var textureId = ProgramCore.MainForm.ctrlRenderControl.GetTexture(mapPath);
-                        if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(textureId))
-                        {
-                            var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[textureId];
-                            using (var bitmap = new Bitmap(mapPath))
-                            {
-                                var max = (float)Math.Max(bitmap.Width, bitmap.Height);
-                                if (max != actualTextureSize)
-                                {
-                                    var k = actualTextureSize / max;
-                                    var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
-
-                                    using (var grfx = Graphics.FromImage(newImg))
-                                        grfx.DrawImage(brushTexture.TextureData, 0, 0, newImg.Width, newImg.Height);
-
-                                    newImg.Save(newTextureFullPath, ImageFormat.Bmp);
-                                }
-                                else
-                                {
-                                    using (var grfx = Graphics.FromImage(bitmap))
-                                        grfx.DrawImage(brushTexture.TextureData, 0, 0);
-
-                                    bitmap.Save(newTextureFullPath, ImageFormat.Bmp);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            using (var bitmap = new Bitmap(mapPath))
-                            {
-                                var max = (float)Math.Max(bitmap.Width, bitmap.Height);
-                                if (max != actualTextureSize)
-                                {
-                                    var k = actualTextureSize / max;
-                                    var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
-                                    newImg.Save(newTextureFullPath, ImageFormat.Bmp);
-                                }
-                                else
-                                    File.Copy(mapPath, newTextureFullPath, false);
-                            }
-                        }
-
-
-                        #endregion
-                    }
-                    else
+                    switch (ProgramCore.CurrentProgram)
                     {
-                        #region Для прочих версий
-
-                        if (saveBrushesToTexture)
-                        {
-                            var textureId = ProgramCore.MainForm.ctrlRenderControl.GetTexture(mapPath);
-                            if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(textureId))
+                        case ProgramCore.ProgramMode.HeadShop_Rotator:
+                        case ProgramCore.ProgramMode.HeadShop_v11:
                             {
-                                var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[textureId];
-                                using (var bitmap = new Bitmap(mapPath))
-                                {
-                                    using (var grfx = Graphics.FromImage(bitmap))
-                                        grfx.DrawImage(brushTexture.TextureData, 0, 0);
-                                    bitmap.Save(newTextureFullPath, ImageFormat.Jpeg);
-                                }
-                            }
-                            else
-                                File.Copy(mapPath, newTextureFullPath, false);
-                        }
-                        else
-                        {
-                            File.Copy(mapPath, newTextureFullPath, false);
-                        }
+                                #region HeadShop rotator
 
-                        #endregion
+                                var actualTextureSize = 4096;
+                                var textureId = ProgramCore.MainForm.ctrlRenderControl.GetTexture(mapPath);
+                                if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(textureId))
+                                {
+                                    var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[textureId];
+                                    using (var bitmap = new Bitmap(mapPath))
+                                    {
+                                        var max = (float)Math.Max(bitmap.Width, bitmap.Height);
+                                        if (max != actualTextureSize)
+                                        {
+                                            var k = actualTextureSize / max;
+                                            var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
+
+                                            using (var grfx = Graphics.FromImage(newImg))
+                                                grfx.DrawImage(brushTexture.TextureData, 0, 0, newImg.Width, newImg.Height);
+
+                                            newImg.Save(newTextureFullPath, ImageFormat.Bmp);
+                                        }
+                                        else
+                                        {
+                                            using (var grfx = Graphics.FromImage(bitmap))
+                                                grfx.DrawImage(brushTexture.TextureData, 0, 0);
+
+                                            bitmap.Save(newTextureFullPath, ImageFormat.Bmp);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    using (var bitmap = new Bitmap(mapPath))
+                                    {
+                                        var max = (float)Math.Max(bitmap.Width, bitmap.Height);
+                                        if (max != actualTextureSize)
+                                        {
+                                            var k = actualTextureSize / max;
+                                            var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
+                                            newImg.Save(newTextureFullPath, ImageFormat.Bmp);
+                                        }
+                                        else
+                                            File.Copy(mapPath, newTextureFullPath, false);
+                                    }
+                                }
+
+
+                                #endregion
+                            }
+                            break;
+                        default:
+                            {
+                                #region Для прочих версий
+
+                                if (saveBrushesToTexture)
+                                {
+                                    var textureId = ProgramCore.MainForm.ctrlRenderControl.GetTexture(mapPath);
+                                    if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(textureId))
+                                    {
+                                        var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[textureId];
+                                        using (var bitmap = new Bitmap(mapPath))
+                                        {
+                                            using (var grfx = Graphics.FromImage(bitmap))
+                                                grfx.DrawImage(brushTexture.TextureData, 0, 0);
+                                            bitmap.Save(newTextureFullPath, ImageFormat.Jpeg);
+                                        }
+                                    }
+                                    else
+                                        File.Copy(mapPath, newTextureFullPath, false);
+                                }
+                                else
+                                {
+                                    File.Copy(mapPath, newTextureFullPath, false);
+                                }
+
+                                #endregion
+                            }
+                            break;
+
                     }
                 }
 #endif
