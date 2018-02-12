@@ -30,16 +30,15 @@ u~u~p5I(XxNH
 
 Удобнее работать через filezilla
 ====
-https://279528467592.signin.aws.amazon.com/console
 
-Abalone LLC
+AWS 670144056936
 laslovespremi@gmail.com
-Molotov12
+Feature12
 
 Access Key ID:
-AKIAIDWMKOBSHBGZ563A
+AKIAJ6KQFZV5XRPXE43Q
 Secret Access Key:
-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
+Xlcg2JE00JyLtZTvGt7oBEH2iJWBmw6VcMSQMNjX
 
 
 ======
