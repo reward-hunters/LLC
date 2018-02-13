@@ -335,7 +335,8 @@ namespace RH.Core.Render.Controllers
                         var dv = Vector3.Zero;
                         foreach (var meshPartInfo in meshPartInfos)
                         {
-                            dv = AlignByTop(ref meshPartInfo.VertexPositions, a, b, topPoint);
+                            // dv = AlignByTop(ref meshPartInfo.VertexPositions, a, b, topPoint);
+                            dv = MoveToPosition(ref meshPartInfo.VertexPositions, a, b, Vector3.Zero);
                             ProgramCore.Project.RenderMainHelper.headMeshesController.CreateMeshPart(meshPartInfo);
                         }
 
