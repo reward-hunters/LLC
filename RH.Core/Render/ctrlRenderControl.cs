@@ -558,22 +558,26 @@ namespace RH.Core.Render
 
                     switch (ProgramCore.CurrentProgram)
                     {
-                        case ProgramCore.ProgramMode.HeadShop_Rotator:
-                            DetectFaceRotation();
+                        case ProgramCore.ProgramMode.HeadShop_v10_2:
+                            break;
+                        default:
+                            {
+                                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+                                    DetectFaceRotation();
+
+                                var points = autodotsShapeHelper.GetBaseDots();
+                                SpecialEyePointsUpdate(points, true);
+                                SpecialEyePointsUpdate(points, false);
+
+                                SpecialLipsPointsUpdate(points, ProgramCore.Project.MouthCenter);
+                                SpecialNosePointsUpdate(points);
+
+                                SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3].Xy);
+                                SpecialBottomPointsUpdate(points);
+                                SpecialTopHaedWidth(points);
+                            }
                             break;
                     }
-
-                    var points = autodotsShapeHelper.GetBaseDots();
-
-                    SpecialEyePointsUpdate(points, true);
-                    SpecialEyePointsUpdate(points, false);
-
-                    SpecialLipsPointsUpdate(points, ProgramCore.Project.MouthCenter);
-                    SpecialNosePointsUpdate(points);
-
-                    SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3].Xy);
-                    SpecialBottomPointsUpdate(points);
-                    SpecialTopHaedWidth(points);
                 }
                 else
                 {

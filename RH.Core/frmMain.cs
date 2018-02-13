@@ -226,6 +226,7 @@ namespace RH.Core
                     ProgramCore.EchoToLog(ex);
                 }
 
+            ProgramCore.PluginMode = true;  //
             if (!string.IsNullOrEmpty(fn))
             {
                 if (fn.StartsWith("fs"))
@@ -481,13 +482,16 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     {
                         ProgramCore.MainForm.HeadFront = true;
-                        ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
-                        ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
-
-                        if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator && Math.Abs(ProgramCore.Project.RotatedAngle) > 5)
+                        if (!ProgramCore.PluginMode)
                         {
-                            var headMeshesController = ProgramCore.MainForm.ctrlRenderControl.headMeshesController;
-                            headMeshesController.Mirror(headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
+                            ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
+                            ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
+
+                            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator && Math.Abs(ProgramCore.Project.RotatedAngle) > 5)
+                            {
+                                var headMeshesController = ProgramCore.MainForm.ctrlRenderControl.headMeshesController;
+                                headMeshesController.Mirror(headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);
+                            }
                         }
                     }
                     break;

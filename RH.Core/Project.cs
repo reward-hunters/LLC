@@ -195,7 +195,7 @@ namespace RH.Core
                 case ManType.Female:        // если это обычные модели - копируем их из папки с прогой - в папку с проектом
                 case ManType.Child:
                     if (!ProgramCore.PluginMode)        //тогда хед модел пас оставляем какой был! пиздец важно!
-                    {
+                    {                                   // я хз почему это важно, но сейчас получается что при загрузке из Даз всегда берется одна модель, независимо от того, что выбрал пользователь (13.02.2018)
 #if WEB_APP
                         headModelPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" +  manType.GetObjPath();
                         headModelPath = headModelPath.Replace(@"\", "/");
