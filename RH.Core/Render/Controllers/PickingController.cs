@@ -251,7 +251,7 @@ namespace RH.Core.Render.Controllers
                             //  objModel.TextureCoords.Count != objModelNull.TextureCoords.Count))
                             objModelNull = null;
 
-                        result = LoadHairMeshes(objModel, objModelNull, fromDragAndDrop, manType, MeshType.Hair,  ref lastTriangle);
+                        result = LoadHairMeshes(objModel, objModelNull, fromDragAndDrop, manType, MeshType.Hair, ref lastTriangle);
                         foreach (var renderMesh in result)
                             HairMeshes.Add(renderMesh);
                         break;
@@ -292,6 +292,7 @@ namespace RH.Core.Render.Controllers
                                     break;
                             }
                         }
+                        var tempPluginTextureIndex = ProgramCore.MainForm.ctrlRenderControl.GetTexture(tempPluginTexture);
 
                         float scale = 1.0f;
                         switch (ProgramCore.Project.ManType)
@@ -303,7 +304,7 @@ namespace RH.Core.Render.Controllers
                                 topPoint = 11.61f;
                                 break;
                             case ManType.Child:
-                                         scale = 0.85f;
+                                scale = 0.85f;
                                 topPoint = 9.759598f;
                                 break;
                         }
@@ -324,10 +325,11 @@ namespace RH.Core.Render.Controllers
                         {
                             if (ProgramCore.PluginMode && ProgramCore.MainForm.PluginUvGroups.Contains(meshPartInfo.MaterialName))
                             {
-                                if (string.IsNullOrEmpty(meshPartInfo.TextureName))
+                                if (string.IsNullOrEmpty(meshPartInfo.TextureName) || !File.Exists(meshPartInfo.TextureName))
+                                {
                                     meshPartInfo.TextureName = tempPluginTexture;
-                                else if (!File.Exists(meshPartInfo.TextureName))
-                                    meshPartInfo.TextureName = tempPluginTexture;
+                                    meshPartInfo.Texture = tempPluginTextureIndex;
+                                }
                             }
                             GetAABB(ref a, ref b, meshPartInfo.VertexPositions);
 
@@ -833,7 +835,7 @@ namespace RH.Core.Render.Controllers
             return result;
         }
 
-#endregion
+        #endregion
 
     }
 }
