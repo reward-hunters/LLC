@@ -1,392 +1,172 @@
-newmtl Teeth
+newmtl Legs
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Gums
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Sclera
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Pupils
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Irises
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
+map_Kd /Maps/m5philliplimbs01.jpg
 
 newmtl EyeReflection
 d 0
-Ns 1
-Ni 0
+Ns 0.75
+Ni 1.3
 Ka 0 0 0
 Kd 0.80000001 0.80000001 0.80000001
 Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Cornea
-d 0
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Torso
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Neck
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Head
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Tongue
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Tear
-d 0.1182
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 0.80000001 0.80000001 0.80000001
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
+Km 0.02
 
 newmtl Nostrils
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Lips
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
+map_Kd /Maps/m5phillipface01.jpg
 
 newmtl Lacrimals
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
+map_Kd /Maps/d84.png
+
+newmtl Pupils
+d 1
+Kd 1 1 1
+map_Kd /Maps/d84.png
+
+newmtl Lips
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5phillipface01.jpg
+
+newmtl Tear
+d 0.118182
+Ns 0.80000001
+Ni 1.3
+Ka 0 0 0
+Kd 0.80000001 0.80000001 0.80000001
 Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
+Km 0.02
+
+newmtl Gums
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5phillipmouth.jpg
+map_D /Maps/m5phillipmoutho.jpg
+
+newmtl Irises
+d 1
+Kd 1 1 1
+map_Kd /Maps/d84.png
+
+newmtl Teeth
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5phillipmouth.jpg
+
+newmtl Cornea
+d 0
+Kd 1 1 1
 
 newmtl Face
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
+map_Kd /Maps/m5phillipface01.jpg
+
+newmtl Toenails
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5philliplimbs01.jpg
+
+newmtl Sclera
+d 1
+Kd 1 1 1
+map_Kd /Maps/d84.png
+map_D /Maps/m5phillipeyeso.jpg
+
+newmtl Fingernails
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5philliplimbs01.jpg
+
+newmtl Head
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5philliptorso01.jpg
 
 newmtl Ears
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
+map_Kd /Maps/m5philliptorso01.jpg
 
-newmtl Teeth_Male1
+newmtl Hands
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
+map_Kd /Maps/m5philliplimbs01.jpg
 
-newmtl Gums_Male1
+newmtl Shoulders
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
+map_Kd /Maps/m5philliplimbs01.jpg
 
-newmtl Sclera_Male1
+newmtl Neck
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
+map_Kd /Maps/m5philliptorso01.jpg
 
-newmtl Pupils_Male1
+newmtl Hips
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
+map_Kd /Maps/m5philliptorso01.jpg
 
-newmtl Irises_Male1
+newmtl Torso
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
+map_Kd /Maps/m5philliptorso01.jpg
 
-newmtl EyeReflection_Male1
+newmtl Nipples
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5philliptorso01.jpg
+
+newmtl Forearms
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5philliplimbs01.jpg
+
+newmtl Feet
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5philliplimbs01.jpg
+
+newmtl Eyelashes
+d 0.69999999
+Kd 0.21176471 0.17647059 0.16470589
+map_Kd /Maps/m5philliplashes.jpg
+map_D /Maps/m5philliplasheso.jpg
+
+newmtl Tongue
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5phillipmouth.jpg
+
+newmtl InnerMouth
+d 1
+Kd 1 1 1
+map_Kd /Maps/m5phillipmouth.jpg
+
+newmtl Cornea_Male2
 d 0
 Ns 1
 Ni 0
 Ka 0 0 0
-Kd 0.80000001 0.80000001 0.80000001
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Cornea_Male1
-d 0
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/d2.png
 
-newmtl Torso_Male1
+newmtl Ears_Male2
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Neck_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Head_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Tongue_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Tear_Male1
-d 0.1182
 Ns 1
 Ni 0
 Ka 0 0 0
-Kd 0.80000001 0.80000001 0.80000001
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Nostrils_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Lips_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
-
-newmtl Lacrimals_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Face_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
-
-newmtl Ears_Male1
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Teeth_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Gums_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Sclera_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Pupils_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Irises_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
 
 newmtl EyeReflection_Male2
 d 0
@@ -397,58 +177,96 @@ Kd 0.80000001 0.80000001 0.80000001
 Ks 1 1 1
 Km 0
 map_Kd /Maps/d2.png
-map_Ks /Maps/d2.png
 
-newmtl Cornea_Male2
-d 0
-Ns 0
+newmtl Face_Male2
+d 1
+Ns 1
 Ni 0
 Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
-map_Kd /Maps/d2.png
-map_Ks /Maps/d2.png
+map_Kd /Maps/M5PhillipFace01.jpg
 
-newmtl Torso_Male2
+newmtl Gums_Male2
 d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Neck_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Head_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Tongue_Male2
-d 1
-Ns 0
+Ns 1
 Ni 0
 Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/M5PhillipMouth.jpg
+
+newmtl Head_Male2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/M5PhillipTorso01.jpg
+
+newmtl Irises_Male2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/d2.png
+
+newmtl Lacrimals_Male2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/d2.png
+
+newmtl Lips_Male2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/M5PhillipFace01.jpg
+
+newmtl Nostrils_Male2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/d2.png
+
+newmtl Pupils_Male2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/d2.png
+
+newmtl Sclera_Male2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/d2.png
 
 newmtl Tear_Male2
 d 0.1182
@@ -460,54 +278,23 @@ Ks 1 1 1
 Km 0
 map_Kd /Maps/d2.png
 
-newmtl Nostrils_Male2
+newmtl Teeth_Male2
 d 1
-Ns 0
+Ns 1
 Ni 0
 Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
-map_Kd /Maps/d2.png
+map_Kd /Maps/M5PhillipMouth.jpg
 
-newmtl Lips_Male2
+newmtl Tongue_Male2
 d 1
-Ns 0
+Ns 1
 Ni 0
 Ka 0 0 0
 Kd 1 1 1
 Ks 1 1 1
 Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
-
-newmtl Lacrimals_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Face_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
-
-newmtl Ears_Male2
-d 1
-Ns 0
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-map_Ks /Maps/M5PhillipTorso01.jpg
+map_Kd /Maps/M5PhillipMouth.jpg
 
