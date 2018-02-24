@@ -1,0 +1,25 @@
+Краткое описание на русском:
+	https://geektimes.ru/post/293503/
+
+То что нужно, но на питоне и луа:
+	https://github.com/1adrianb/2D-and-3D-face-alignment
+	https://github.com/1adrianb/binary-face-alignment
+	https://github.com/1adrianb/face-alignment
+
+Идея с тем, чтобы заставить пользователя поворачивать сетку и подгонять под голову (версия 3_0):
+	https://www.codeproject.com/Articles/1182854/D-Face-Viewer-and-Matcher 
+
+Сложная распознавалка на плюсах (скорей всего не то):
+	https://github.com/anhttran/extreme_3d_faces
+
+Полезная распознавалка на плюсах (может пригодится!)
+	https://github.com/anhttran/3dmm_cnn
+
+Автоматический наклон головы (на плюсах):
+	http://www.morethantechnical.com/2012/10/17/head-pose-estimation-with-opencv-opengl-revisited-w-code/
+	https://github.com/royshil/HeadPosePnP
+
+Тут нужно почитать, может можно что-то дюзнуть:
+	http://clementcreusot.com/phd/
+	https://github.com/MasteringOpenCV/code
+	http://www.4dface.org/
