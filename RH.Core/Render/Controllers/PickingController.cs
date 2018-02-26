@@ -273,6 +273,7 @@ namespace RH.Core.Render.Controllers
                     {
                         var tempPluginTexture = string.Empty;
                         var topPoint = 11.98351f;
+                        int tempPluginTextureIndex = 0;
                         if (ProgramCore.PluginMode)
                         {
                             var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjDirPath());
@@ -291,8 +292,9 @@ namespace RH.Core.Render.Controllers
                                     tempPluginTexture = Path.Combine(Application.StartupPath, "Plugin", "fsRndColor.png");
                                     break;
                             }
+                            tempPluginTextureIndex = ProgramCore.MainForm.ctrlRenderControl.GetTexture(tempPluginTexture);
                         }
-                        var tempPluginTextureIndex = ProgramCore.MainForm.ctrlRenderControl.GetTexture(tempPluginTexture);
+
 
                         float scale = 1.0f;
                         switch (ProgramCore.Project.ManType)
@@ -336,9 +338,12 @@ namespace RH.Core.Render.Controllers
                         }
                         var dv = Vector3.Zero;
                         foreach (var meshPartInfo in meshPartInfos)
-                        {
-                            // dv = AlignByTop(ref meshPartInfo.VertexPositions, a, b, topPoint);
+                        {           // ПОТЕНЦИАЛЬНО ОПАСНОЕ МЕСТО! В случае улетания башки - AlignByTOp сделать для всех, кроме плагина. Для него оставить MoveToPosition
+#if (WEB_APP)
+                            dv = AlignByTop(ref meshPartInfo.VertexPositions, a, b, topPoint);
+#else
                             dv = MoveToPosition(ref meshPartInfo.VertexPositions, a, b, Vector3.Zero);
+#endif
                             ProgramCore.Project.RenderMainHelper.headMeshesController.CreateMeshPart(meshPartInfo);
                         }
 
