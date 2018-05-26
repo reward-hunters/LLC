@@ -26,6 +26,8 @@ namespace RH.Core
         public string HeadModelPath;
         public bool IsOpenSmile = false;
 
+        public List<Vector3> FacialFeatures;
+
         /// <summary> Относительный путь до левой картинке (шаблона)</summary>
         private string frontImagePath = string.Empty;
         public string FrontImagePath

@@ -161,6 +161,7 @@ namespace RH.Core.Render
 
         #region Supported void's
 
+        public List<PointF> facialFeaturesTransformed = new List<PointF>();
         /// <summary> Пересчитать положение прямоугольника в зависимост от размера картинки на picturetemplate </summary>
         public void RecalcRealTemplateImagePosition()
         {
@@ -193,6 +194,14 @@ namespace RH.Core.Render
 
             ImageTemplateOffsetX = (pb.Width - ImageTemplateWidth) / 2;
             ImageTemplateOffsetY = (pb.Height - ImageTemplateHeight) / 2;
+
+            facialFeaturesTransformed.Clear();
+            foreach (var point in ProgramCore.Project.FacialFeatures)
+            {
+                var pointTransformed = new PointF(point.X * ImageTemplateWidth + ImageTemplateOffsetX,
+                                          point.Y * ImageTemplateHeight + ImageTemplateOffsetY);
+                facialFeaturesTransformed.Add(pointTransformed);
+            }
 
             imageScale = 1.0f;
 

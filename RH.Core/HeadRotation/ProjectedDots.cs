@@ -28,9 +28,9 @@ namespace RH.Core.HeadRotation
             GL.PointSize(1.0f);
         }
 
-        public void Initialize(LuxandFaceRecognition recognizer, HeadPoints headPoints)
+        public void Initialize( HeadPoints headPoints)
         {
-            if (recognizer.FacialFeatures.Count < headPoints.Points.Count)
+            if (ProgramCore.Project.FacialFeatures.Count < headPoints.Points.Count)
                 return;
 
             if (headPoints.Points.Count <= RootIndex)
@@ -44,15 +44,15 @@ namespace RH.Core.HeadRotation
             var rootPointWorld = headPoints.GetWorldPoint(RootIndex);
             var helperPointWorld = headPoints.GetWorldPoint(HelperIndex);
 
-            var rootPointPhoto = recognizer.FacialFeatures[RootIndex];
-            var helperPointPhoto = recognizer.FacialFeatures[HelperIndex];
+            var rootPointPhoto = ProgramCore.Project.FacialFeatures[RootIndex];
+            var helperPointPhoto = ProgramCore.Project.FacialFeatures[HelperIndex];
 
             float distWorld = rootPointWorld.X - helperPointWorld.X;
             float distPhoto = rootPointPhoto.X - helperPointPhoto.X;
 
             float scale = distWorld / distPhoto;
 
-            foreach (var point in recognizer.FacialFeatures)
+            foreach (var point in ProgramCore.Project.FacialFeatures)
             {
                 var p = point - rootPointPhoto;
                 p.X *= scale;

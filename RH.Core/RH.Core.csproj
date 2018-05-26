@@ -410,6 +410,7 @@
     <Compile Include="HeadRotation\HeadPoints.cs" />
     <Compile Include="HeadRotation\MorphHelper.cs" />
     <Compile Include="HeadRotation\ProjectedDots.cs" />
+    <Compile Include="HeadRotation\TextRender.cs" />
     <Compile Include="HeadRotation\Triangulation.cs" />
     <Compile Include="Helpers\Collection.cs" />
     <Compile Include="Helpers\ControlBox.cs" />

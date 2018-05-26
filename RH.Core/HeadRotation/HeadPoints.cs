@@ -8,6 +8,7 @@ using RH.MeshUtils.Helpers;
 using RH.MeshUtils.Data;
 using System.Drawing;
 using RH.Core.Render.Helpers;
+using System.Drawing.Text;
 
 namespace RH.Core.HeadRotation
 {
@@ -31,8 +32,8 @@ namespace RH.Core.HeadRotation
         #endregion
 
         #region Render
-       // public List<TextRender> TextRenderList = null;
-        //public Font TextFont = new Font(new FontFamily(GenericFontFamilies.SansSerif), 20, GraphicsUnit.Pixel);
+        public List<TextRender> TextRenderList = null;
+       public Font TextFont = new Font(new FontFamily(GenericFontFamilies.SansSerif), 20, GraphicsUnit.Pixel);
 
         public int IndexBuffer, VertexBuffer = 0;
         public List<uint> Indices = new List<uint>();
@@ -188,9 +189,9 @@ namespace RH.Core.HeadRotation
         public void DrawDots()
         {
 
-          /*  const float scale = 0.7f;
+            const float scale = 0.7f;
             float textScale = scale * RenderCamera.Scale;
-            InitializeTextRender();*/
+            InitializeTextRender();
 
             GL.PointSize(5.0f);
             GL.Begin(PrimitiveType.Points);
@@ -207,14 +208,14 @@ namespace RH.Core.HeadRotation
 
                 var point = GetWorldPoint(Points[i]);
                 GL.Vertex3(point);
-               // TextRenderList[i].Position = point;
-               // TextRenderList[i].Scale = textScale;
+                TextRenderList[i].Position = point;
+                TextRenderList[i].Scale = textScale;
             }
 
             GL.End();
             GL.PointSize(1.0f);
 
-         /*   for (var i = 0; i < TextRenderList.Count; i++)
+            for (var i = 0; i < TextRenderList.Count; i++)
             {
                 var text = TextRenderList[i];
                 if (!IsVisible[i])
@@ -232,13 +233,13 @@ namespace RH.Core.HeadRotation
                 GL.Rotate(cameraAngle, 0.0f, -1.0f, 0.0f);
                 GL.Translate(-text.Position);
 
-            }*/
+            }
 
             GL.Disable(EnableCap.Texture2D);
 
         }
 
-        /*private void InitializeTextRender()
+        private void InitializeTextRender()
         {
             if (TextRenderList == null || TextRenderList.Count != Points.Count)
             {
@@ -251,7 +252,7 @@ namespace RH.Core.HeadRotation
                         Position = Points[i]
                     });
             }
-        }*/
+        }
 
         public void StartMoving(int x, int y)
         {

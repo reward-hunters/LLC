@@ -91,7 +91,12 @@ namespace RH.Core.Render.Helpers
             PutCamera();
         }
 
-        public float Scale = 0.06772818f;
+        private float scale = 0.06772818f;
+        public float Scale
+        {
+            get { return scale; }
+            set { scale = value; }
+        }
         public void UpdateViewport(int width, int hegiht)
         {
             WindowWidth = width;

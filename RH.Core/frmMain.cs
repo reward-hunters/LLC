@@ -1520,7 +1520,7 @@ namespace RH.Core
                 ctrlTemplateImage.btnCopyProfileImg.Visible = false;
                 ctrlRenderControl.OrtoTop();            // поворачиваем морду как надо
                 EnableRotating();
-                ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
+                ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage, false);       // возвращаем как было, после изменения профиля лица
 
                 //         if (UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")            // хз зачем тут. есть же кнопка автодотс. устаревшее похоже
                 //             frmTutAutodots.ShowDialog(this);
@@ -2378,7 +2378,8 @@ namespace RH.Core
                 OpenProject(item.Text);
         }
 
-        public void UpdateProjectControls(LuxandFaceRecognition fcr, bool newProject, RectangleAABB aabb = null)
+
+        public void UpdateProjectControls(bool newProject, RectangleAABB aabb = null)
         {
             if (ProgramCore.Project == null)
             {
@@ -2386,7 +2387,7 @@ namespace RH.Core
             }
             else
             {
-                ctrlRenderControl.LoadProject(fcr, newProject, aabb);
+                ctrlRenderControl.LoadProject(newProject, aabb);
                 ctrlRenderControl.camera.UpdateDy();
 
                 if (panelCut != null && panelStyles != null)
@@ -2404,8 +2405,35 @@ namespace RH.Core
                 else
                 {
                     using (var bmp = new Bitmap(ProgramCore.Project.FrontImage))
-                        ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage((Bitmap)bmp.Clone());
+                        ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage((Bitmap)bmp.Clone(), false);
                 }
+
+                if (ProgramCore.Project.ManType != ManType.Custom)
+                {
+                    /* var scaleX = UpdateMeshProportions(aabb);
+                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);*/
+
+                    ctrlRenderControl.autodotsShapeHelper.TransformRects();
+                    ctrlRenderControl.autodotsShapeHelper.InitializeShaping();
+
+                    switch (ProgramCore.CurrentProgram)
+                    {
+                        case ProgramCore.ProgramMode.HeadShop_v10_2:
+                            break;
+                        default:
+                            {
+                              ProgramCore.MainForm.ctrlRenderControl.PhotoLoaded("");
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                   ProgramCore.MainForm.ctrlRenderControl.camera.ResetCamera(true);
+                }
+
+
+
                 if (newProject && ProgramCore.Project.ManType == ManType.Custom)
                     ctrlRenderControl.camera.ResetCamera(true);
             }
@@ -2421,7 +2449,7 @@ namespace RH.Core
         private void OpenProject(string fileName)
         {
             ProgramCore.Project = Project.FromStream(fileName);
-            UpdateProjectControls(null, false);
+            UpdateProjectControls(false);
 
             ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper();         // инициализация точек головы.
             ProgramCore.MainForm.ctrlTemplateImage.RecalcProfilePoints();            // пидоры сломали все. инициализируем профиль.

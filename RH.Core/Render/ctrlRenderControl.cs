@@ -215,6 +215,8 @@ namespace RH.Core.Render
         public Dictionary<Guid, PartMorphInfo> FatMorphing = null;
         public Dictionary<Guid, PartMorphInfo> PoseMorphing = null;
 
+        private bool drawPoints = true;
+
         #region Var custom points
 
         private Vector2 customLastPoint;
@@ -261,12 +263,17 @@ namespace RH.Core.Render
 
         #region Graphic's
 
+        public const int HeadPointsCount = 70;
         /// <summary> Initialize control and setup GL settings </summary>
         public void Initialize()
         {
             loaded = true;
             PlayAnimation = false;
             pickingController = new PickingController(camera);
+
+            HeadPoints.Initialize(HeadPointsCount);
+            HeadPoints.RenderCamera = camera;
+            HeadPoints.GenerateSphere(0.3f, 5, 5);
 
             idleShader = new ShaderController("idle.vs", "idle.fs");
             idleShader.SetUniformLocation("u_UseTexture");
@@ -302,9 +309,9 @@ namespace RH.Core.Render
             InitializeCustomBaseSprites();
         }
 
-        public void ImportPoints(LuxandFaceRecognition recognizer)
+        public void ImportPoints()
         {
-            var isSmile = recognizer == null ? ProgramCore.DefaultIsSmile : recognizer.IsOpenSmile;
+            var isSmile = ProgramCore.Project.IsOpenSmile;
             HeadPoints.Points.Clear();
             HeadPoints.Points.AddRange(VectorEx.ImportVector(isSmile));
             HeadPoints.IsVisible.AddRange(Enumerable.Repeat(true, HeadPoints.Points.Count));
@@ -312,27 +319,29 @@ namespace RH.Core.Render
             //headMorphing.Initialize(HeadPoints);
         }
 
-        public void PhotoLoaded(LuxandFaceRecognition recognizer, string photoPath)
+        public void PhotoLoaded(string photoPath)
         {
             //this.recognizer = recognizer;
             // headTextureId = TextureHelper.GetTexture(photoPath);
 
+            camera.ResetCamera(true);
             /*  ReloadModel();
               HeadMesh.DetectFaceRotationEmgu();
               ImportPoints();*/
             var HeadMesh = headMeshesController.RenderMesh;
             HeadPoints.HeadMesh = HeadMesh;
 
-            ImportPoints(recognizer);
+            ImportPoints();
 
-            ProjectedPoints.Initialize(recognizer, HeadPoints);
-            headMorphing.Initialize(recognizer, HeadPoints);
+            ProjectedPoints.Initialize(HeadPoints);
+            headMorphing.Initialize( HeadPoints);
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
             //ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
 
-            // ResetCamera();
+
+            ResetCamera();
 
             /* additionalMorphing.Type = HeadMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
              additionalMorphing.Initialize(HeadMesh, ProjectedPoints, headMorphing);
@@ -452,7 +461,7 @@ namespace RH.Core.Render
 
         #region Project
 
-        public void LoadProject(LuxandFaceRecognition fcr, bool newProject, RectangleAABB aabb)
+        public void LoadProject( bool newProject, RectangleAABB aabb)
         {
             headMeshesController.RenderMesh.OnBeforePartDraw -= RenderMesh_OnBeforePartDraw;
             headMeshesController.RenderMesh.OnBeforePartDraw += RenderMesh_OnBeforePartDraw;
@@ -472,7 +481,7 @@ namespace RH.Core.Render
             if (newProject)
             {
                 var modelPath = ProgramCore.Project.HeadModelPath;
-                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode, fcr.IsOpenSmile);
+                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode, ProgramCore.Project.IsOpenSmile);
 
                 float scale = 0;
                 if (ProgramCore.Project.ManType == ManType.Custom)
@@ -482,18 +491,18 @@ namespace RH.Core.Render
                 }
                 else if (ProgramCore.PluginMode)
                 {
-                   /* switch (ProgramCore.Project.ManType)
-                    {
-                        case ManType.Male:
-                            scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
-                            break;
-                        case ManType.Female:
-                            scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
-                            break;
-                        case ManType.Child:
-                            scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
-                            break;
-                    }*/
+                    /* switch (ProgramCore.Project.ManType)
+                     {
+                         case ManType.Male:
+                             scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
+                             break;
+                         case ManType.Female:
+                             scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
+                             break;
+                         case ManType.Child:
+                             scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
+                             break;
+                     }*/
                 }
                 if (pickingController.ObjExport != null)
                     pickingController.ObjExport.Scale = scale;
@@ -576,47 +585,7 @@ namespace RH.Core.Render
 
             #endregion
 
-            if (newProject)
-            {
-                if (ProgramCore.Project.ManType != ManType.Custom)
-                {
-                   /* var scaleX = UpdateMeshProportions(aabb);
-                    UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);*/
-
-                    autodotsShapeHelper.TransformRects();
-                    autodotsShapeHelper.InitializeShaping();
-
-                    switch (ProgramCore.CurrentProgram)
-                    {
-                        case ProgramCore.ProgramMode.HeadShop_v10_2:
-                            break;
-                        default:
-                            {
-                                /*if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                                    DetectFaceRotation();
-
-                                var points = autodotsShapeHelper.GetBaseDots();
-                                SpecialEyePointsUpdate(points, true);
-                                SpecialEyePointsUpdate(points, false);
-
-                                SpecialLipsPointsUpdate(points, ProgramCore.Project.MouthCenter);
-                                SpecialNosePointsUpdate(points);
-
-                                SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), ProgramCore.Project.DetectedNosePoints[3].Xy);
-                                SpecialBottomPointsUpdate(points);
-                                SpecialTopHaedWidth(points);*/
-
-                                PhotoLoaded(fcr, "");
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    camera.ResetCamera(true);
-                }
-            }
-            else
+            if (!newProject)
             {
                 autodotsShapeHelper.TransformRects();
                 headMeshesController.UpdateBuffers();
@@ -855,7 +824,7 @@ namespace RH.Core.Render
             if (needClean)
                 CleanProjectMeshes();
 
-            pickingController.AddMehes(path, type, false, manType, false,isOpenSmile);
+            pickingController.AddMehes(path, type, false, manType, false, isOpenSmile);
         }
 
         private void UpdatePointsProportion(float scaleX, float centerX)
@@ -1123,6 +1092,9 @@ namespace RH.Core.Render
                         else
                             DeleteSelectedAccessory();
                     }
+                    break;
+                case Keys.D:
+                    drawPoints = !drawPoints;
                     break;
             }
         }
@@ -2379,6 +2351,10 @@ namespace RH.Core.Render
             }
             if (sliceController != null && sliceController.Lines.Count > 00)
                 DrawSlice();
+
+            if (drawPoints)
+                HeadPoints.DrawDots();
+
             glControl.SwapBuffers();
         }
 
@@ -3998,8 +3974,8 @@ namespace RH.Core.Render
         public void ResetCamera()
         {
             if (true) //recognizer != null
-            {
-                /*const int indexA = 22;
+            { 
+                const int indexA = 22;
                 const int indexB = 11;
 
                 var pA = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexA];
@@ -4015,7 +3991,7 @@ namespace RH.Core.Render
                 var worldPointB = camera.GetWorldPoint((int)pointB1.X, (int)pB.Y, 0.0f);
                 var worldPointB1 = HeadPoints.Points[indexB];
                 camera.dy = (worldPointB1.Y - worldPointB.Y);
-                camera.PutCamera();*/
+                camera.PutCamera();
             }
             else
             {

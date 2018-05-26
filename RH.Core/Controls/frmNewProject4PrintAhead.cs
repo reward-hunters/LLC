@@ -467,6 +467,8 @@ namespace RH.Core.Controls
             FolderEx.CreateDirectory(path, true);
 
             ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
+            ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;
+
             ProgramCore.Project.LoadMeshes();
          
             var minX = fcr.GetMinX();
@@ -532,11 +534,13 @@ namespace RH.Core.Controls
 
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[66]);
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[67]);
+            
+
 
             ProgramCore.Project.RotatedAngle = fcr.RotatedAngle;
 
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
-            ProgramCore.MainForm.UpdateProjectControls(fcr, true, aabb);
+            ProgramCore.MainForm.UpdateProjectControls(true, aabb);
 
             ProgramCore.Project.ToStream();
             // ProgramCore.MainForm.ctrlRenderControl.UpdateMeshProportions();
