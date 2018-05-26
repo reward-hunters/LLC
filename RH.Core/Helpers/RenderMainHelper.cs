@@ -124,14 +124,6 @@ namespace RH.Core.Helpers
 
         public int HeadTextureId;
 
-        public void LoadModel(string path, bool needClean, ManType manType, MeshType type)
-        {
-            if (needClean)
-                CleanProjectMeshes();
-
-            pickingController.AddMehes(path, type, false, manType, false);
-        }
-
         public void CleanProjectMeshes()
         {
             //  textures.Clear();             // сейчас это не надо :)
@@ -203,7 +195,7 @@ namespace RH.Core.Helpers
             return string.Empty;
         }
 
-        public void LoadProject(bool newProject, RectangleAABB aabb, string headTexturePath)
+        public void LoadProject(bool newProject, RectangleAABB aabb, string headTexturePath, bool isOpenSmile)
         {
             //var headTexturePath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
             HeadTextureId = 0;
@@ -230,7 +222,7 @@ namespace RH.Core.Helpers
             if (newProject)
             {
                 var modelPath = ProgramCore.Project.HeadModelPath;
-                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode);
+                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode, isOpenSmile);
 
                 //float scale = 0;
                 //if (ProgramCore.Project.ManType == ManType.Custom)

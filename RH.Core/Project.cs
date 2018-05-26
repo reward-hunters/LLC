@@ -24,7 +24,7 @@ namespace RH.Core
         public string ProjectPath;
 
         public string HeadModelPath;
-
+        public bool IsOpenSmile = false;
 
         /// <summary> Относительный путь до левой картинке (шаблона)</summary>
         private string frontImagePath = string.Empty;
@@ -182,13 +182,14 @@ namespace RH.Core
         /// <param name="manType"></param>
         /// <param name="headModelPath">Указываем путь до модели головы (в случае если выбрали import OBJ). Иначе - пустая строка</param>
         /// <param name="needCopy"></param>
-        public Project(string projectName, string projectPath, string templateImageName, ManType manType, string headModelPath, bool needCopy, int selectedSize)
+        public Project(string projectName, string projectPath, string templateImageName, ManType manType, string headModelPath, bool needCopy, int selectedSize, bool isOpenSmile)
         {
             ProjectName = projectName;
             ProjectPath = projectPath;
             TextureSize = selectedSize;
 
             ManType = manType;
+            IsOpenSmile = isOpenSmile;
             switch (manType)
             {
                 case ManType.Male:
@@ -200,7 +201,7 @@ namespace RH.Core
                         headModelPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" +  manType.GetObjPath();
                         headModelPath = headModelPath.Replace(@"\", "/");
 #else
-                        headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPath());
+                        headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPath(isOpenSmile));
 #endif
                     }
 
@@ -305,13 +306,13 @@ namespace RH.Core
 
 #else
             var modelPath = Path.Combine(ProjectPath, "OBJ", "hair.obj");
-            ProgramCore.MainForm.ctrlRenderControl.LoadModel(modelPath, true, ManType, MeshType.Hair);
+            ProgramCore.MainForm.ctrlRenderControl.LoadModel(modelPath, true, ManType, MeshType.Hair, false);
 
             var acDirPath = Path.GetDirectoryName(modelPath);
             var acName = Path.GetFileNameWithoutExtension(modelPath) + "_accessory.obj";
             var accessoryPath = Path.Combine(acDirPath, acName);
             if (File.Exists(accessoryPath))
-                ProgramCore.MainForm.ctrlRenderControl.LoadModel(accessoryPath, false, ManType, MeshType.Accessory);
+                ProgramCore.MainForm.ctrlRenderControl.LoadModel(accessoryPath, false, ManType, MeshType.Accessory, false);
 #endif
         }
 
@@ -337,6 +338,8 @@ namespace RH.Core
                     bw.Write((int)ManType);
                     bw.Write((int)TextureFlip);
                     bw.Write((int)ShapeFlip);
+
+                    bw.Write(IsOpenSmile);
 
                     var fiName = Path.Combine(ProjectPath, "OBJ", "hair.obj");
                     FolderEx.CreateDirectory(Path.GetDirectoryName(fiName));
@@ -540,6 +543,8 @@ namespace RH.Core
                 var textureFlip = (FlipType)br.ReadInt32();
                 var shapeFlip = (FlipType)br.ReadInt32();
 
+                var isOpenSmile = br.ReadBoolean();
+
                 var textureSize = 1024;
                 switch (ProgramCore.CurrentProgram)
                 {
@@ -553,7 +558,7 @@ namespace RH.Core
                            break;*/
                 }
 
-                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, textureSize);
+                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, textureSize, isOpenSmile);
                 result.LoadMeshes();
                 result.TextureFlip = textureFlip;
                 result.ShapeFlip = shapeFlip;
@@ -767,30 +772,30 @@ namespace RH.Core
             }
         }
 
-        public static string GetObjDirPath(this ManType manType)
+        public static string GetObjDirPath(this ManType manType, bool isOpenSmile)
         {
             switch (manType)
             {
                 case ManType.Male:
-                    return "Male";
+                    return isOpenSmile ? "MaleWithSmile" : "Male";
                 case ManType.Female:
-                    return "Fem";
+                    return isOpenSmile ? "FemWithSmile" : "Fem";
                 case ManType.Child:
-                    return "Child";
+                    return isOpenSmile ? "ChildWithSmile" : "Child";
                 default:
                     return string.Empty;
             }
         }
-        public static string GetObjPath(this ManType manType)
+        public static string GetObjPath(this ManType manType, bool isOpenSmile)
         {
             switch (manType)
             {
                 case ManType.Male:
-                    return "Male\\Male.obj";
+                    return Path.Combine(manType.GetObjDirPath(isOpenSmile), "Male.obj");
                 case ManType.Female:
-                    return "Fem\\Fem.obj";
+                    return Path.Combine(manType.GetObjDirPath(isOpenSmile), "Fem.obj");
                 case ManType.Child:
-                    return "Child\\Child.obj";
+                    return Path.Combine(manType.GetObjDirPath(isOpenSmile), "Child.obj");
                 default:
                     return string.Empty;
             }

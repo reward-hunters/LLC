@@ -413,7 +413,7 @@ namespace RH.Core.Controls
 
             #endregion
 
-            ProgramCore.Project = new Project(ProjectName, ProjectFolder, templateImage, ManType, CustomModelPath, true, SelectedSize);
+            ProgramCore.Project = new Project(ProjectName, ProjectFolder, templateImage, ManType, CustomModelPath, true, SelectedSize, false);
             ProgramCore.Project.LoadMeshes();
 
             ProgramCore.Project.FaceRectRelative = new RectangleF(LeftCheek.GetMinX(), nextHeadRect.Y, RightCheek.GetMaxX() - LeftCheek.GetMinX(), nextHeadRect.Bottom - nextHeadRect.Y);

@@ -226,7 +226,7 @@ namespace RH.Core
                     ProgramCore.EchoToLog(ex);
                 }
 
-            ProgramCore.PluginMode = true;
+          //  ProgramCore.PluginMode = true;
             if (!string.IsNullOrEmpty(fn))
             {
                 if (fn.StartsWith("fs"))

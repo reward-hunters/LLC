@@ -466,28 +466,13 @@ namespace RH.Core.Render
                     HeadTexture = (Bitmap)Image.FromStream(ms);
 
                 HeadTextureId = GetTexture(headTexturePath);
-
-                if (ProgramCore.Project.FaceRectRelative == RectangleF.Empty)
-                {
-                    var fileName = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
-
-                    var faceRecognition = new OpenCvFaceRecognition();
-                    faceRecognition.Recognize(ref fileName, false);
-
-                    ProgramCore.Project.FaceRectRelative = faceRecognition.FaceRectRelative;
-                    ProgramCore.Project.MouthCenter = faceRecognition.MouthCenter;
-                    ProgramCore.Project.LeftEyeCenter = faceRecognition.LeftEyeCenter;
-                    ProgramCore.Project.RightEyeCenter = faceRecognition.RightEyeCenter;
-                    ProgramCore.Project.FaceColor = faceRecognition.FaceColor;
-                }
-
             }
             baseProfilePoints.Clear();
 
             if (newProject)
             {
                 var modelPath = ProgramCore.Project.HeadModelPath;
-                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode);
+                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode, fcr.IsOpenSmile);
 
                 float scale = 0;
                 if (ProgramCore.Project.ManType == ManType.Custom)
@@ -865,12 +850,12 @@ namespace RH.Core.Render
             return new Vector2((maxX + minX) * 0.5f, (maxY + minY) * 0.5f);
         }
 
-        public void LoadModel(string path, bool needClean, ManType manType, MeshType type)
+        public void LoadModel(string path, bool needClean, ManType manType, MeshType type, bool isOpenSmile)
         {
             if (needClean)
                 CleanProjectMeshes();
 
-            pickingController.AddMehes(path, type, false, manType, false);
+            pickingController.AddMehes(path, type, false, manType, false,isOpenSmile);
         }
 
         private void UpdatePointsProportion(float scaleX, float centerX)
@@ -1049,7 +1034,7 @@ namespace RH.Core.Render
             var directoryName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory");
             var objPath = Path.Combine(directoryName, baseName + ".obj");
 
-            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
+            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false, false);
 
 
             for (var i = 0; i < meshes.Count; i++)
@@ -2092,7 +2077,7 @@ namespace RH.Core.Render
                 return;
 
 
-            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false);
+            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false, false);
 
             if (float.IsNaN(meshSize) && meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
             {
