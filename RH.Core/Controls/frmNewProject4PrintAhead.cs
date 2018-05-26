@@ -536,7 +536,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.RotatedAngle = fcr.RotatedAngle;
 
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
-            ProgramCore.MainForm.UpdateProjectControls(true, aabb);
+            ProgramCore.MainForm.UpdateProjectControls(fcr, true, aabb);
 
             ProgramCore.Project.ToStream();
             // ProgramCore.MainForm.ctrlRenderControl.UpdateMeshProportions();

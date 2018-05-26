@@ -2378,7 +2378,7 @@ namespace RH.Core
                 OpenProject(item.Text);
         }
 
-        public void UpdateProjectControls(bool newProject, RectangleAABB aabb = null)
+        public void UpdateProjectControls(LuxandFaceRecognition fcr, bool newProject, RectangleAABB aabb = null)
         {
             if (ProgramCore.Project == null)
             {
@@ -2386,7 +2386,7 @@ namespace RH.Core
             }
             else
             {
-                ctrlRenderControl.LoadProject(newProject, aabb);
+                ctrlRenderControl.LoadProject(fcr, newProject, aabb);
                 ctrlRenderControl.camera.UpdateDy();
 
                 if (panelCut != null && panelStyles != null)
@@ -2421,7 +2421,7 @@ namespace RH.Core
         private void OpenProject(string fileName)
         {
             ProgramCore.Project = Project.FromStream(fileName);
-            UpdateProjectControls(false);
+            UpdateProjectControls(null, false);
 
             ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper();         // инициализация точек головы.
             ProgramCore.MainForm.ctrlTemplateImage.RecalcProfilePoints();            // пидоры сломали все. инициализируем профиль.

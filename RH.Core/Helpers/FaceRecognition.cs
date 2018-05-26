@@ -105,6 +105,9 @@ namespace RH.Core.Helpers
             return PointDepths;
         }
 
+        /// <summary> Есть ли улыбка с открытым ртом на фото. </summary>
+        public bool IsOpenSmile { get; private set; }
+
         public RectangleF FaceRectRelative;
         public Vector4 FaceColor;
 
@@ -304,6 +307,15 @@ namespace RH.Core.Helpers
             }
 
             #endregion
+
+            var upperUpperLip = pointFeature[54];       // вехняя точка верхней губы
+            var lowerUpperLip = pointFeature[61];            // нижняя точка верхней губы
+            var lowerLip = pointFeature[64];            // верхняя точка нижней губы
+
+            var diff2 = Math.Abs(lowerUpperLip.y - upperUpperLip.y);
+            var diffX = Math.Abs(lowerLip.y - lowerUpperLip.y);
+
+            IsOpenSmile = diffX > diff2;
 
             #region Переводим в относительные координаты
 
@@ -793,7 +805,7 @@ namespace RH.Core.Helpers
                 }
 
                 #endregion
-
+                
                 #endregion
             }
 

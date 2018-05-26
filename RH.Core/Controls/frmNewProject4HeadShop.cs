@@ -424,7 +424,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.FaceColor = fcr.FaceColor;
 
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
-            ProgramCore.MainForm.UpdateProjectControls(true, aabb);
+            ProgramCore.MainForm.UpdateProjectControls(null, true, aabb);
 
             ProgramCore.Project.ToStream();
             // ProgramCore.MainForm.ctrlRenderControl.UpdateMeshProportions();

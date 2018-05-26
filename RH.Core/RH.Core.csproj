@@ -471,6 +471,7 @@
     <Compile Include="Render\Helpers\Sprite2d.cs" />
     <Compile Include="Render\Helpers\TextRenderHelper.cs" />
     <Compile Include="Render\Helpers\Texture.cs" />
+    <Compile Include="Render\Helpers\VectorEx.cs" />
     <Compile Include="Render\Meshes\BaseRenderMesh.cs" />
     <Compile Include="Render\Meshes\DynamicRenderMesh.cs" />
     <Compile Include="Render\Obj\ObjExporter.cs" />
