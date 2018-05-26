@@ -5,6 +5,9 @@ using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using RH.MeshUtils.Helpers;
+using Emgu.CV.Structure;
+using Emgu.CV;
+using System.Drawing;
 
 namespace RH.MeshUtils.Data
 {
@@ -13,6 +16,35 @@ namespace RH.MeshUtils.Data
         public delegate void BeforePartDrawHandler(RenderMeshPart part);
         public event BeforePartDrawHandler OnBeforePartDraw;
         public List<BlendingInfo> BlendingInfos = new List<BlendingInfo>();
+
+        public Matrix4 RotationMatrix
+        {
+            get { return rotationMatrix; }
+            set
+            {
+                rotationMatrix = value;
+                Matrix4.Invert(ref rotationMatrix, out invRotationMatrix);
+            }
+        }
+
+        private Matrix4 rotationMatrix = Matrix4.Identity;
+        private Matrix4 invRotationMatrix = Matrix4.Identity;
+
+        //Reversed rotation
+        public Matrix4 ReverseRotationMatrix
+        {
+            get { return reverseRotationMatrix; }
+            set
+            {
+                reverseRotationMatrix = value;
+                Matrix4.Invert(ref reverseRotationMatrix, out invReverseRotationMatrix);
+            }
+        }
+
+        private Matrix4 reverseRotationMatrix = Matrix4.Identity;
+        private Matrix4 invReverseRotationMatrix = Matrix4.Identity;
+
+        public Quaternion MeshQuaternion = Quaternion.Identity;
 
         public RenderMeshParts Parts
         {
@@ -312,6 +344,143 @@ namespace RH.MeshUtils.Data
                     if (!point.IsFixed.HasValue)
                         point.IsFixed = true;
             }
+        }
+
+        public Vector3 GetWorldPoint(Vector3 point)
+        {
+            var point4 = new Vector4(point);
+            return Vector4.Transform(point4, RotationMatrix).Xyz;
+        }
+
+        public Vector3 GetPositionFromWorld(Vector3 point)
+        {
+            var point4 = new Vector4(point);
+            return Vector4.Transform(point4, invRotationMatrix).Xyz;
+        }
+
+        public Vector3 GetReverseWorldPoint(Vector3 point)
+        {
+            var point4 = new Vector4(point);
+            return Vector4.Transform(point4, ReverseRotationMatrix).Xyz;
+        }
+
+        public Vector3 GetReversePositionFromWorld(Vector3 point)
+        {
+            var point4 = new Vector4(point);
+            return Vector4.Transform(point4, invReverseRotationMatrix).Xyz;
+        }
+
+        public void DetectFaceRotationEmgu(int ImageWidth, int ImageHeight, List<Vector2> RealPoints, List<Vector3> HeadPoints)
+        {
+            var imagePoints = new List<PointF>();
+            imagePoints.Add(new PointF(RealPoints[66].X, RealPoints[66].Y));        // уши
+            imagePoints.Add(new PointF(RealPoints[67].X, RealPoints[67].Y));
+            imagePoints.Add(new PointF(RealPoints[0].X, RealPoints[0].Y));       // глаза центры
+            imagePoints.Add(new PointF(RealPoints[1].X, RealPoints[1].Y));
+            imagePoints.Add(new PointF(RealPoints[3].X, RealPoints[3].Y));       // левый-правый угол рта
+            imagePoints.Add(new PointF(RealPoints[4].X, RealPoints[4].Y));
+            imagePoints.Add(new PointF(RealPoints[2].X, RealPoints[2].Y));       // центр носа
+
+            var modelPoints = new List<MCvPoint3D32f>();
+            modelPoints.Add(new MCvPoint3D32f(HeadPoints[66].X, HeadPoints[66].Y, HeadPoints[66].Z));
+            modelPoints.Add(new MCvPoint3D32f(HeadPoints[67].X, HeadPoints[67].Y, HeadPoints[67].Z));
+            modelPoints.Add(new MCvPoint3D32f(HeadPoints[0].X, HeadPoints[0].Y, HeadPoints[0].Z));
+            modelPoints.Add(new MCvPoint3D32f(HeadPoints[1].X, HeadPoints[1].Y, HeadPoints[1].Z));
+            modelPoints.Add(new MCvPoint3D32f(HeadPoints[3].X, HeadPoints[3].Y, HeadPoints[3].Z));
+            modelPoints.Add(new MCvPoint3D32f(HeadPoints[4].X, HeadPoints[4].Y, HeadPoints[4].Z));
+            modelPoints.Add(new MCvPoint3D32f(HeadPoints[2].X, HeadPoints[2].Y, HeadPoints[2].Z));
+
+            #region CamMatrix
+
+            //var img = CvInvoke.Imread(ProgramCore.MainForm.PhotoControl.TemplateImage);
+            //float imageWidth = img.Cols;
+            // float imageHeight = img.Rows;
+            float imageWidth = ImageWidth;
+            float imageHeight = ImageHeight;
+            var max_d = Math.Max(imageWidth, imageHeight);
+            var camMatrix = new Emgu.CV.Matrix<double>(3, 3);
+            camMatrix[0, 0] = max_d;
+            camMatrix[0, 1] = 0;
+            camMatrix[0, 2] = imageWidth / 2.0;
+            camMatrix[1, 0] = 0;
+            camMatrix[1, 1] = max_d;
+            camMatrix[1, 2] = imageHeight / 2.0;
+            camMatrix[2, 0] = 0;
+            camMatrix[2, 1] = 0;
+            camMatrix[2, 2] = 1.0;
+
+            /*
+            float max_d = Mathf.Max (imageHeight, imageWidth);
+            camMatrix = new Mat (3, 3, CvType.CV_64FC1);
+            camMatrix.put (0, 0, max_d);
+            camMatrix.put (0, 1, 0);
+            camMatrix.put (0, 2, imageWidth / 2.0f);
+            camMatrix.put (1, 0, 0);
+            camMatrix.put (1, 1, max_d);
+            camMatrix.put (1, 2, imageHeight / 2.0f);
+            camMatrix.put (2, 0, 0);
+            camMatrix.put (2, 1, 0);
+            camMatrix.put (2, 2, 1.0f);
+             */
+
+            #endregion
+
+            var distArray = new double[] { 0, 0, 0, 0 };
+            var distMatrix = new Matrix<double>(distArray);      // не используемый коэф.
+
+            var rv = new double[] { 0, 0, 0 };
+            var rvec = new Matrix<double>(rv);
+
+            var tv = new double[] { 0, 0, 1 };
+            var tvec = new Matrix<double>(tv);
+
+            Emgu.CV.CvInvoke.SolvePnP(modelPoints.ToArray(), imagePoints.ToArray(), camMatrix, distMatrix, rvec, tvec, false, Emgu.CV.CvEnum.SolvePnpMethod.EPnP);      // решаем проблему PNP
+
+            double tvec_z = tvec[2, 0];
+            var rotM = new Matrix<double>(3, 3);
+
+            if (!double.IsNaN(tvec_z))
+            {
+                CvInvoke.Rodrigues(rvec, rotM);
+                Matrix4 transformationM = new Matrix4();
+                transformationM.Row0 = new Vector4((float)rotM[0, 0], (float)rotM[0, 1], (float)rotM[0, 2], (float)tvec[0, 0]);
+                transformationM.Row1 = new Vector4((float)rotM[1, 0], (float)rotM[1, 1], (float)rotM[1, 2], (float)tvec[1, 0]);
+                transformationM.Row2 = new Vector4((float)rotM[2, 0], (float)rotM[2, 1], (float)rotM[2, 2], (float)tvec[2, 0]);
+                transformationM.Row3 = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+
+                var quaternion = MathHelpers.ExtractRotationFromMatrix(ref transformationM);
+
+                //quaternion.Y = -quaternion.Y;
+
+                // RotationMatrix = CreateRotationMatrix(quaternion);
+                // RotationMatrix = Matrix4.CreateFromQuaternion(quaternion);
+                // RotationMatrix = invertYM * RotationMatrix * invertZM;
+
+                quaternion.X = -quaternion.X;
+                quaternion.Y = -quaternion.Y;
+                quaternion.Z = -quaternion.Z;
+
+                MeshQuaternion = quaternion;
+
+                var angles = MathHelpers.ToEulerRad(MeshQuaternion);
+                if (angles.X > -5.0f && angles.X < 5.0f)
+                    angles.X = 0.0f;
+
+                HeadAngle = angles.Y;
+
+                MeshQuaternion = quaternion = MathHelpers.ToQ(angles);
+
+                RotationMatrix = MathHelpers.CreateRotationMatrix(quaternion);
+
+                quaternion.Z = -MeshQuaternion.Z;
+                ReverseRotationMatrix = MathHelpers.CreateRotationMatrix(quaternion);
+            }
+            else
+            {
+                MeshQuaternion = Quaternion.Identity;
+                HeadAngle = 0.0f;
+            }
+
         }
 
         public void Draw(bool debug)

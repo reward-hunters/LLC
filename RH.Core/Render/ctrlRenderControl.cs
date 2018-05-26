@@ -294,6 +294,30 @@ namespace RH.Core.Render
             InitializeProfileSprites();
             InitializeCustomBaseSprites();
         }
+
+        public void PhotoLoaded(LuxandFaceRecognition recognizer, string photoPath)
+        {
+            //this.recognizer = recognizer;
+           // headTextureId = TextureHelper.GetTexture(photoPath);
+
+          /*  ReloadModel();
+            HeadMesh.DetectFaceRotationEmgu();
+            ImportPoints();*/
+
+           /* ProjectedPoints.Initialize(recognizer, HeadPoints);
+            headMorphing.Initialize(recognizer, HeadPoints);
+            morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
+            headMorphing.Morph();*/
+
+            //ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
+
+           // ResetCamera();
+
+           /* additionalMorphing.Type = HeadMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
+            additionalMorphing.Initialize(HeadMesh, ProjectedPoints, headMorphing);
+            additionalMorphing.ProcessPoints(ProjectedPoints);*/
+        }
+
         private void SetupViewport(GLControl c)
         {
             if (c.ClientSize.Height == 0)
@@ -392,6 +416,7 @@ namespace RH.Core.Render
                 customBasePointsSprites.Add(sprite);
             }
         }
+
         public void InitializeCustomControlSpritesPosition()
         {
             InitializeCustomBaseSprites();

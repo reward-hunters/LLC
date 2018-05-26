@@ -188,6 +188,39 @@ namespace RH.Core.Render.Helpers
             return p - dir * (length - depth);
         }
 
+        public Vector3 GetWorldPoint(int screenX, int screenY, float depth)
+        {
+            var x = (screenX * 2.0f / WindowWidth) - 1.0f;
+            var y = 1.0f - (screenY * 2.0f / WindowHeight);
+            var p = new Vector3(x, y, -1.0f);
+
+            var viewProj = ViewMatrix * ProjectMatrix;
+            var invViewProj = viewProj.Inverted();
+
+            p = Vector4.Transform(new Vector4(p), invViewProj).Xyz;
+
+            var dir = new Vector3(Position.X, 0.0f, Position.Z);
+            dir.Normalize();
+            var length = Vector3.Dot(dir, p);
+            return p - dir * (length - depth);
+        }
+
+        public float GetPointDepth(Vector3 worldPoint)
+        {
+            var dir = new Vector3(Position.X, 0.0f, Position.Z);
+            dir.Normalize();
+            return Vector3.Dot(dir, worldPoint);
+        }
+
+        public Vector2 GetScreenPoint(Vector3 worldPoint)
+        {
+            var viewProj = ViewMatrix * ProjectMatrix;
+            var p = Vector3.TransformPosition(worldPoint, viewProj);
+
+            return new Vector2((p.X + 1.0f) * WindowWidth * 0.5f,
+                    (1f - p.Y) * WindowHeight * 0.5f);
+        }
+
         public Vector2 GetScreenPoint(Vector3 worldPoint, int screenWidth, int screenHeight)
         {
             /*

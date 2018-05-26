@@ -9,6 +9,15 @@ using RH.MeshUtils.Data;
 
 namespace RH.MeshUtils.Helpers
 {
+    public class RenderHelper
+    {
+        static public void DrawLine(Vector3 a, Vector3 b)
+        {
+            GL.Vertex3(a);
+            GL.Vertex3(b);
+        }
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     public struct Vertex3d
     {
@@ -16,11 +25,22 @@ namespace RH.MeshUtils.Helpers
         public Vector3 Normal;
         public Vector2 TexCoord;
         public Vector4 Color;
-        public Vector3 AutodotsTexCoord;
+        public Vector4 AutodotsTexCoord;
         public Vector3 OriginalPosition;
+        public float BlendWeight;
         public Vector3 OldPosition;
         public int PointIndex;
         public static readonly int Stride = Marshal.SizeOf(default(Vertex3d));
+
+        /* public Vector3 Position;
+         public Vector3 Normal;
+         public Vector2 TexCoord;
+         public Vector4 Color;
+         public Vector3 AutodotsTexCoord;
+         public Vector3 OriginalPosition;
+         public Vector3 OldPosition;
+         public int PointIndex;
+         public static readonly int Stride = Marshal.SizeOf(default(Vertex3d));*/
 
         public void ToStream(BinaryWriter bw)
         {
@@ -47,7 +67,7 @@ namespace RH.MeshUtils.Helpers
             result.TexCoord = new Vector2(br.ReadSingle(), br.ReadSingle());
             result.Color = new Vector4(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
 
-            result.AutodotsTexCoord = Vector3Ex.FromStream(br);
+            result.AutodotsTexCoord = Vector4Ex.FromStream(br);
             result.OriginalPosition = Vector3Ex.FromStream(br);
 
             return result;
@@ -95,9 +115,6 @@ namespace RH.MeshUtils.Helpers
         public TrinagleInfo TextureTrinagleInfo = new TrinagleInfo();
         public TrinagleInfo ShapeTrinagleInfo = new TrinagleInfo();
 
-        //public TrinagleInfo TextureTrinagleInfoMirror = new TrinagleInfo(-1.0f);
-        //public TrinagleInfo ShapeTrinagleInfoMirror = new TrinagleInfo(-1.0f);
-
         public TrinagleInfo ProfileShapeTrinagleInfo = new TrinagleInfo();
 
         public bool isFixedLocalBroken = false;
@@ -127,6 +144,7 @@ namespace RH.MeshUtils.Helpers
             ShapeTrinagleInfo.ToStream(bw);
             ProfileShapeTrinagleInfo.ToStream(bw);
         }
+
         public static Point3d FromStream(BinaryReader br, ref bool oldVersion)
         {
             var result = new Point3d();
@@ -225,6 +243,7 @@ namespace RH.MeshUtils.Helpers
         public List<uint> Indices = new List<uint>();
         public Vertex3d[] Vertices = null;
         public List<Point3d> Points = new List<Point3d>();
+        public List<MorphingPoint> MorphPoints = new List<MorphingPoint>();
         public int Texture = 0;
         public int TransparentTexture = 0;
 
@@ -1138,7 +1157,7 @@ namespace RH.MeshUtils.Helpers
                 Vertices[i].OriginalPosition = positions[i];
                 Vertices[i].Normal = normals[i];
                 Vertices[i].TexCoord = texCoords[i];
-                Vertices[i].AutodotsTexCoord = new Vector3(texCoords[i].X, texCoords[i].Y, 1.0f);
+                Vertices[i].AutodotsTexCoord = new Vector4(texCoords[i].X, texCoords[i].Y, 1.0f, 1.0f);
                 Vertices[i].Color = Vector4.One;
             }
 

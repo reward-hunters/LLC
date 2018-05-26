@@ -49,12 +49,26 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emgu.CV.UI, Version=3.3.0.2824, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AbaloneLLC\Libraries\Emgu.CV.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.World, Version=3.3.0.2824, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AbaloneLLC\Libraries\Emgu.CV.World.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438" />
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AbaloneLLC\Libraries\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\HeadRotation\HeadRotation\Compiled\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,7 +85,9 @@
     <Compile Include="Helpers\AutodotsShapeHelper.cs" />
     <Compile Include="Helpers\BrushTool.cs" />
     <Compile Include="Helpers\HeadShapeController.cs" />
+    <Compile Include="Helpers\MathHelpers.cs" />
     <Compile Include="Helpers\MeshUtils.cs" />
+    <Compile Include="Helpers\MorphingPoint.cs" />
     <Compile Include="Helpers\ProfileSmoothing.cs" />
     <Compile Include="Helpers\RenderHelper.cs" />
     <Compile Include="Helpers\SmoothFilter.cs" />

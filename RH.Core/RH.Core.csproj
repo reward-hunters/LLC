@@ -405,6 +405,12 @@
     <Compile Include="frmMain.designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="HeadRotation\AdditionalMorphing.cs" />
+    <Compile Include="HeadRotation\HeadMorphing.cs" />
+    <Compile Include="HeadRotation\HeadPoints.cs" />
+    <Compile Include="HeadRotation\MorphHelper.cs" />
+    <Compile Include="HeadRotation\ProjectedDots.cs" />
+    <Compile Include="HeadRotation\Triangulation.cs" />
     <Compile Include="Helpers\Collection.cs" />
     <Compile Include="Helpers\ControlBox.cs" />
     <Compile Include="Helpers\FaceRecognition.cs" />

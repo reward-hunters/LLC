@@ -33,12 +33,14 @@ namespace RH.Core.Controls.Libraries
 
             currentPose = animPath;
             var temp = 0;
-            ProgramCore.MainForm.ctrlRenderControl.PoseMorphing = ProgramCore.MainForm.ctrlRenderControl.pickingController.LoadPartsMorphInfo(currentPose, ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh, ref temp);
+            ProgramCore.MainForm.ctrlRenderControl.PoseMorphing = 
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.LoadPartsMorphInfo(currentPose, ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh, ref temp);
 
             trackBarPose.Enabled = true;
             trackBarPose.Value = 100;
             SetPosePosition();
         }
+
         private void SetPosePosition()
         {
             //if(ProgramCore.MainForm.ctrlRenderControl.PoseMorphing == null)
