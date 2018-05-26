@@ -1135,11 +1135,18 @@ namespace RH.MeshUtils.Helpers
                             Indices = new List<uint> { index },
                             Position = vertexInfo.Position
                         });
+
+                        MorphPoints.Add(new MorphingPoint
+                        {
+                            Indices = new List<int> { (int) index },
+                            Position = vertexInfo.Position
+                        });
                     }
                     else
                     {
                         var id = pointnsDict[vertexInfo.Position];
                         Points[id].Indices.Add(index);
+                        MorphPoints[id].Indices.Add((int)index);
                         pointsIndicesDict.Add((int)index, id);
                     }
                 }
