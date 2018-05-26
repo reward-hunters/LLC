@@ -221,12 +221,12 @@ namespace RH.Core.Render.Controllers
                 SelectedMeshes.Clear();
         }
 
-        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, bool needExporter, float smilePercent = 0.0f)
+        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, bool needExporter, bool isOpenSmile)
         {
-            return AddMehes(path, type, fromDragAndDrop, manType, string.Empty, needExporter, smilePercent);
+            return AddMehes(path, type, fromDragAndDrop, manType, string.Empty, needExporter, isOpenSmile);
         }
 
-        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, string animationPath, bool needExporter, float smilePercent)
+        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, string animationPath, bool needExporter, bool isOpenSmile)
         {
             var result = new List<DynamicRenderMesh>();
 
@@ -244,7 +244,7 @@ namespace RH.Core.Render.Controllers
                 case MeshType.Hair:
                     {
                         var fi = new FileInfo(path);
-                        var objModelNull = ObjLoader.LoadObjFile(Path.Combine(fi.DirectoryName, fi.Name.Replace(fi.Extension, string.Format("_null{0}", fi.Extension))));
+                        var objModelNull = ObjLoader.LoadObjFile(Path.Combine(fi.DirectoryName, fi.Name.Replace(fi.Extension, string.Format("_null{0}", fi.Extension))), isOpenSmile);
                         if (objModelNull != null &&
                             (objModelNull.Groups.Count != objModel.Groups.Count ||
                             objModel.Vertices.Count != objModelNull.Vertices.Count))
@@ -276,7 +276,7 @@ namespace RH.Core.Render.Controllers
                         int tempPluginTextureIndex = 0;
                         if (ProgramCore.PluginMode)
                         {
-                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjDirPath());
+                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjDirPath(isOpenSmile));
                             switch (ProgramCore.Project.ManType)
                             {
                                 case ManType.Male:
@@ -311,7 +311,7 @@ namespace RH.Core.Render.Controllers
                                 break;
                         }
 
-                        var objModelFull = animationPath == string.Empty ? null : ObjLoader.LoadObjFile(animationPath);
+                        var objModelFull = animationPath == string.Empty ? null : ObjLoader.LoadObjFile(animationPath, isOpenSmile);
                         if (objModelFull != null &&
                             (objModelFull.Groups.Count != objModel.Groups.Count ||
                             objModel.Vertices.Count != objModelFull.Vertices.Count ||
@@ -456,6 +456,9 @@ namespace RH.Core.Render.Controllers
 
             foreach (var modelGroup in objModel.Groups) // one group - one mesh
             {
+                if (modelGroup.Key.Name == "Tear" || modelGroup.Key.Name == "Cornea" || modelGroup.Key.Name == "EyeReflection")     // очень плохие материалы. ИЗ-за них ломаются глазки.
+                    continue;
+
                 vertexPositions.Clear();
                 vertexNormals.Clear();
                 vertexTextureCoordinates.Clear();
@@ -646,7 +649,7 @@ namespace RH.Core.Render.Controllers
             List<uint> uitmp = null;
             var vertices = new List<Vector3>();
 
-            var objModel = ObjLoader.LoadObjFile(path);
+            var objModel = ObjLoader.LoadObjFile(path, ProgramCore.Project.IsOpenSmile);
             if (objModel == null)
             {
                 ProgramCore.EchoToLog(string.Format("Can't load obj model '{0}'", path), EchoMessageType.Error);

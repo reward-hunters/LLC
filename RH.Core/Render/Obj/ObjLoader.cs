@@ -16,12 +16,12 @@ namespace RH.Core.Render.Obj
 {
     public static class ObjLoader
     {
-        public static ObjItem LoadObjFile(string filePath)
+        public static ObjItem LoadObjFile(string filePath, bool isOpenSmile)
         {
-            return LoadObjFile(filePath, false);
+            return LoadObjFile(filePath, false, isOpenSmile);
         }
         
-        public static ObjItem LoadObjFile(string filePath, bool needExporter)
+        public static ObjItem LoadObjFile(string filePath, bool needExporter, bool isOpenSmile)
         {
             var result = new ObjItem(needExporter);           
 
@@ -62,7 +62,7 @@ namespace RH.Core.Render.Obj
 
                         if (ProgramCore.PluginMode)
                         {
-                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjDirPath());
+                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjDirPath(isOpenSmile));
                             switch (ProgramCore.Project.ManType)
                             {
                                 case ManType.Male:

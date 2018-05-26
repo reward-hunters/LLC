@@ -298,7 +298,7 @@ namespace RH.WebCore
             var templateImage = new Bitmap(ms);
 
 
-            ProgramCore.Project = new Project(sessionID, null, null, manType, null, false, 1024);
+            ProgramCore.Project = new Project(sessionID, null, null, manType, null, false, 1024, false);
             ProgramCore.Project.FrontImage = templateImage;
             //ProgramCore.Project.LoadMeshes();
             #endregion
@@ -318,7 +318,7 @@ namespace RH.WebCore
 
             Recognize(templateImage);
             var aabb = ProgramCore.Project.RenderMainHelper.InitializeShapedotsHelper(true);
-            ProgramCore.Project.RenderMainHelper.LoadProject(true, aabb, imagePath);
+            ProgramCore.Project.RenderMainHelper.LoadProject(true, aabb, imagePath, false);
 
             headMeshesController.InitializeTexturing(autodotsShapeHelper.GetBaseDots(), HeadController.GetIndices());
             autodotsShapeHelper.Transform(headMeshesController.TexturingInfo.Points.ToArray());
@@ -345,7 +345,7 @@ namespace RH.WebCore
             {
                 var intTemp = 0;
 
-                var oldMorphingPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" + manType.GetObjDirPath() + "/Old.obj";       // загружаем трансформации для старения
+                var oldMorphingPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" + manType.GetObjDirPath(false) + "/Old.obj";       // загружаем трансформации для старения
                 oldMorphingPath = oldMorphingPath.Replace(@"\", "/");
                 if (FTPHelper.IsFileExists(oldMorphingPath))
                     OldMorphing = ProgramCore.Project.RenderMainHelper.pickingController.LoadPartsMorphInfo(oldMorphingPath, headMeshesController.RenderMesh, ref intTemp);
@@ -366,7 +366,7 @@ namespace RH.WebCore
             if (fatMorphingValue != 0)
             {
                 var intTemp = 0;
-                var fatMorphingPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" + manType.GetObjDirPath() + "/Fat.obj";  // загружаем трансформации для толстения
+                var fatMorphingPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" + manType.GetObjDirPath(false) + "/Fat.obj";  // загружаем трансформации для толстения
                 fatMorphingPath = fatMorphingPath.Replace(@"\", "/");
                 if (FTPHelper.IsFileExists(fatMorphingPath))
                     FatMorphing = ProgramCore.Project.RenderMainHelper.pickingController.LoadPartsMorphInfo(fatMorphingPath, headMeshesController.RenderMesh, ref intTemp);

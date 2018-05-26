@@ -466,9 +466,9 @@ namespace RH.Core.Controls
             path = Path.Combine(path, "TempProject");
             FolderEx.CreateDirectory(path, true);
 
-            ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, ManType, CustomModelPath, true, SelectedSize);
+            ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
             ProgramCore.Project.LoadMeshes();
-
+         
             var minX = fcr.GetMinX();
             var topPoint = (TopEdgeTransformed.Y - ImageTemplateOffsetY) / ImageTemplateHeight;
             ProgramCore.Project.FaceRectRelative = new RectangleF(minX, topPoint, fcr.GetMaxX() - minX, fcr.BottomFace.Y - topPoint);
