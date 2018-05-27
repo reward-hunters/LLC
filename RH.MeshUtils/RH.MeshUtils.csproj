@@ -57,7 +57,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AbaloneLLC\Libraries\Emgu.CV.World.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.Util, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438" />
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AbaloneLLC\Libraries\OpenTK.dll</HintPath>

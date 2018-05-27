@@ -38,7 +38,7 @@ namespace RH.Core.HeadRotation
 
             headPoints = hPoints;
 
-            var headMesh = headPoints.HeadMesh;
+            var headMesh = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh;
             var a = headMesh.AABB.A;
             var b = headMesh.AABB.B;
             var b1 = new Vector3(a.X, b.Y, b.Z);
@@ -339,7 +339,7 @@ namespace RH.Core.HeadRotation
 
         private void InitializeMorphin()
         {
-            var headMesh = headPoints.HeadMesh;
+            var headMesh = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh;
 
             foreach (var part in headMesh.Parts)
             {
@@ -384,7 +384,7 @@ namespace RH.Core.HeadRotation
 
         public void Morph()
         {
-            var headMesh = headPoints.HeadMesh;
+            var headMesh = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh;
             foreach (var part in headMesh.Parts)
             {
                 foreach (var point in part.MorphPoints)

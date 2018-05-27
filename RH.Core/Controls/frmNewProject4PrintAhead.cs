@@ -181,8 +181,8 @@ namespace RH.Core.Controls
             if (string.IsNullOrEmpty(templateImage))
                 return;
 
-                 //     if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
-                  //       return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
+            //     if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator)
+            //       return;             // для HeadShop 11 по ТЗ не нужна отрисовка точек и возможность настройки.
 
             foreach (var point in facialFeaturesTransformed)
                 e.Graphics.FillEllipse(DrawingTools.BlueSolidBrush, point.X - 2, point.Y - 2, 4, 4);
@@ -197,7 +197,7 @@ namespace RH.Core.Controls
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     return;
-            }      
+            }
 
             if (e.Button == MouseButtons.Left)
             {
@@ -467,10 +467,12 @@ namespace RH.Core.Controls
             FolderEx.CreateDirectory(path, true);
 
             ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
+
             ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;
+            ProgramCore.Project.ImageRealPoints = fcr.RealPoints;
 
             ProgramCore.Project.LoadMeshes();
-         
+
             var minX = fcr.GetMinX();
             var topPoint = (TopEdgeTransformed.Y - ImageTemplateOffsetY) / ImageTemplateHeight;
             ProgramCore.Project.FaceRectRelative = new RectangleF(minX, topPoint, fcr.GetMaxX() - minX, fcr.BottomFace.Y - topPoint);
@@ -534,7 +536,7 @@ namespace RH.Core.Controls
 
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[66]);
             ProgramCore.Project.DetectedTopPoints.Add(fcr.FacialFeatures[67]);
-            
+
 
 
             ProgramCore.Project.RotatedAngle = fcr.RotatedAngle;

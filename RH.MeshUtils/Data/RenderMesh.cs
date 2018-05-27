@@ -58,6 +58,13 @@ namespace RH.MeshUtils.Data
             get;
             set;
         }
+        public void SetMorphPercent(float percent)
+        {
+            foreach (var part in Parts)
+            {
+                part.SetMorphPercent(percent);
+            }
+        }
 
         public float FaceCenterX
         {
@@ -275,6 +282,12 @@ namespace RH.MeshUtils.Data
         {
             foreach (var vertex in part.Vertices)
             {
+                a.X = Math.Min(vertex.Position.X, a.X);
+                b.X = Math.Max(vertex.Position.X, b.X);
+
+                a.Y = Math.Min(vertex.Position.Y, a.Y);
+                b.Y = Math.Max(vertex.Position.Y, b.Y);
+
                 a.Z = Math.Min(vertex.Position.Z, a.Z);
                 b.Z = Math.Max(vertex.Position.Z, b.Z);
             }
@@ -370,33 +383,32 @@ namespace RH.MeshUtils.Data
             return Vector4.Transform(point4, invReverseRotationMatrix).Xyz;
         }
 
-        public void DetectFaceRotationEmgu(int ImageWidth, int ImageHeight, List<Vector2> RealPoints, List<Vector3> HeadPoints)
+        public void DetectFaceRotationEmgu(string filePath, Image templateImage, List<Vector2> imagePointsInVector, List<Vector3> realPoints)
         {
             var imagePoints = new List<PointF>();
-            imagePoints.Add(new PointF(RealPoints[66].X, RealPoints[66].Y));        // уши
-            imagePoints.Add(new PointF(RealPoints[67].X, RealPoints[67].Y));
-            imagePoints.Add(new PointF(RealPoints[0].X, RealPoints[0].Y));       // глаза центры
-            imagePoints.Add(new PointF(RealPoints[1].X, RealPoints[1].Y));
-            imagePoints.Add(new PointF(RealPoints[3].X, RealPoints[3].Y));       // левый-правый угол рта
-            imagePoints.Add(new PointF(RealPoints[4].X, RealPoints[4].Y));
-            imagePoints.Add(new PointF(RealPoints[2].X, RealPoints[2].Y));       // центр носа
+            imagePoints.Add(new PointF(imagePointsInVector[66].X, imagePointsInVector[66].Y));        // уши
+            imagePoints.Add(new PointF(imagePointsInVector[67].X, imagePointsInVector[67].Y));
+            imagePoints.Add(new PointF(imagePointsInVector[0].X, imagePointsInVector[0].Y));       // глаза центры
+            imagePoints.Add(new PointF(imagePointsInVector[1].X, imagePointsInVector[1].Y));
+            imagePoints.Add(new PointF(imagePointsInVector[3].X, imagePointsInVector[3].Y));       // левый-правый угол рта
+            imagePoints.Add(new PointF(imagePointsInVector[4].X, imagePointsInVector[4].Y));
+            imagePoints.Add(new PointF(imagePointsInVector[2].X, imagePointsInVector[2].Y));       // центр носа
 
             var modelPoints = new List<MCvPoint3D32f>();
-            modelPoints.Add(new MCvPoint3D32f(HeadPoints[66].X, HeadPoints[66].Y, HeadPoints[66].Z));
-            modelPoints.Add(new MCvPoint3D32f(HeadPoints[67].X, HeadPoints[67].Y, HeadPoints[67].Z));
-            modelPoints.Add(new MCvPoint3D32f(HeadPoints[0].X, HeadPoints[0].Y, HeadPoints[0].Z));
-            modelPoints.Add(new MCvPoint3D32f(HeadPoints[1].X, HeadPoints[1].Y, HeadPoints[1].Z));
-            modelPoints.Add(new MCvPoint3D32f(HeadPoints[3].X, HeadPoints[3].Y, HeadPoints[3].Z));
-            modelPoints.Add(new MCvPoint3D32f(HeadPoints[4].X, HeadPoints[4].Y, HeadPoints[4].Z));
-            modelPoints.Add(new MCvPoint3D32f(HeadPoints[2].X, HeadPoints[2].Y, HeadPoints[2].Z));
+            modelPoints.Add(new MCvPoint3D32f(realPoints[66].X, realPoints[66].Y, realPoints[66].Z));
+            modelPoints.Add(new MCvPoint3D32f(realPoints[67].X, realPoints[67].Y, realPoints[67].Z));
+            modelPoints.Add(new MCvPoint3D32f(realPoints[0].X, realPoints[0].Y, realPoints[0].Z));
+            modelPoints.Add(new MCvPoint3D32f(realPoints[1].X, realPoints[1].Y, realPoints[1].Z));
+            modelPoints.Add(new MCvPoint3D32f(realPoints[3].X, realPoints[3].Y, realPoints[3].Z));
+            modelPoints.Add(new MCvPoint3D32f(realPoints[4].X, realPoints[4].Y, realPoints[4].Z));
+            modelPoints.Add(new MCvPoint3D32f(realPoints[2].X, realPoints[2].Y, realPoints[2].Z));
 
             #region CamMatrix
 
-            //var img = CvInvoke.Imread(ProgramCore.MainForm.PhotoControl.TemplateImage);
-            //float imageWidth = img.Cols;
-            // float imageHeight = img.Rows;
-            float imageWidth = ImageWidth;
-            float imageHeight = ImageHeight;
+
+            var img = CvInvoke.Imread(filePath);
+            float imageWidth = templateImage.Width;
+            float imageHeight = templateImage.Height;
             var max_d = Math.Max(imageWidth, imageHeight);
             var camMatrix = new Emgu.CV.Matrix<double>(3, 3);
             camMatrix[0, 0] = max_d;
@@ -408,20 +420,6 @@ namespace RH.MeshUtils.Data
             camMatrix[2, 0] = 0;
             camMatrix[2, 1] = 0;
             camMatrix[2, 2] = 1.0;
-
-            /*
-            float max_d = Mathf.Max (imageHeight, imageWidth);
-            camMatrix = new Mat (3, 3, CvType.CV_64FC1);
-            camMatrix.put (0, 0, max_d);
-            camMatrix.put (0, 1, 0);
-            camMatrix.put (0, 2, imageWidth / 2.0f);
-            camMatrix.put (1, 0, 0);
-            camMatrix.put (1, 1, max_d);
-            camMatrix.put (1, 2, imageHeight / 2.0f);
-            camMatrix.put (2, 0, 0);
-            camMatrix.put (2, 1, 0);
-            camMatrix.put (2, 2, 1.0f);
-             */
 
             #endregion
 
@@ -448,13 +446,7 @@ namespace RH.MeshUtils.Data
                 transformationM.Row2 = new Vector4((float)rotM[2, 0], (float)rotM[2, 1], (float)rotM[2, 2], (float)tvec[2, 0]);
                 transformationM.Row3 = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 
-                var quaternion = MathHelpers.ExtractRotationFromMatrix(ref transformationM);
-
-                //quaternion.Y = -quaternion.Y;
-
-                // RotationMatrix = CreateRotationMatrix(quaternion);
-                // RotationMatrix = Matrix4.CreateFromQuaternion(quaternion);
-                // RotationMatrix = invertYM * RotationMatrix * invertZM;
+                var quaternion = ExtractRotationFromMatrix(ref transformationM);
 
                 quaternion.X = -quaternion.X;
                 quaternion.Y = -quaternion.Y;
@@ -462,18 +454,18 @@ namespace RH.MeshUtils.Data
 
                 MeshQuaternion = quaternion;
 
-                var angles = MathHelpers.ToEulerRad(MeshQuaternion);
-                if (angles.X > -5.0f && angles.X < 5.0f)
+                var angles = ToEulerRad(MeshQuaternion);
+                if (angles.X > -6f && angles.X < 3.0f)
                     angles.X = 0.0f;
 
                 HeadAngle = angles.Y;
 
-                MeshQuaternion = quaternion = MathHelpers.ToQ(angles);
+                MeshQuaternion = quaternion = ToQ(angles);
 
-                RotationMatrix = MathHelpers.CreateRotationMatrix(quaternion);
+                RotationMatrix = CreateRotationMatrix(quaternion);
 
                 quaternion.Z = -MeshQuaternion.Z;
-                ReverseRotationMatrix = MathHelpers.CreateRotationMatrix(quaternion);
+                ReverseRotationMatrix = CreateRotationMatrix(quaternion);
             }
             else
             {
@@ -482,6 +474,189 @@ namespace RH.MeshUtils.Data
             }
 
         }
+
+        #region Функции определения угла верх-низ
+
+        private static float Rad2Deg = 180.0f / (float)Math.PI;
+        private static Vector3 NormalizeAngles(Vector3 angles)
+        {
+            angles.X = NormalizeAngle(angles.X);
+            angles.Y = NormalizeAngle(angles.Y);
+            angles.Z = NormalizeAngle(angles.Z);
+            return angles;
+        }
+        private static float NormalizeAngle(float angle)
+        {
+            while (angle > 180.0f)
+                angle -= 360.0f;
+            while (angle < -180.0f)
+                angle += 360.0f;
+            return angle;
+        }
+
+        private static Matrix4 CreateRotationMatrix(Quaternion quaternion)
+        {
+            var invertYM = Matrix4.CreateScale(1.0f, -1.0f, 1.0f);
+            var invertZM = Matrix4.CreateScale(1.0f, 1.0f, -1.0f);
+
+            var result = Matrix4.CreateFromQuaternion(quaternion);
+            result = invertYM * result * invertZM;
+
+            return result;
+        }
+
+        public static Quaternion ToQ(Vector3 v)
+        {
+            return ToQ(v.Y, v.X, v.Z);
+        }
+        public static Quaternion ToQ(float yaw, float pitch, float roll)
+        {
+            const float Deg2Rad = (float)Math.PI / 180.0f;
+
+            yaw *= Deg2Rad;
+            pitch *= Deg2Rad;
+            roll *= Deg2Rad;
+            float rollOver2 = roll * 0.5f;
+            float sinRollOver2 = (float)Math.Sin((double)rollOver2);
+            float cosRollOver2 = (float)Math.Cos((double)rollOver2);
+            float pitchOver2 = pitch * 0.5f;
+            float sinPitchOver2 = (float)Math.Sin((double)pitchOver2);
+            float cosPitchOver2 = (float)Math.Cos((double)pitchOver2);
+            float yawOver2 = yaw * 0.5f;
+            float sinYawOver2 = (float)Math.Sin((double)yawOver2);
+            float cosYawOver2 = (float)Math.Cos((double)yawOver2);
+            Quaternion result = new Quaternion();
+            result.W = cosYawOver2 * cosPitchOver2 * cosRollOver2 + sinYawOver2 * sinPitchOver2 * sinRollOver2;
+            result.X = cosYawOver2 * sinPitchOver2 * cosRollOver2 + sinYawOver2 * cosPitchOver2 * sinRollOver2;
+            result.Y = sinYawOver2 * cosPitchOver2 * cosRollOver2 - cosYawOver2 * sinPitchOver2 * sinRollOver2;
+            result.Z = cosYawOver2 * cosPitchOver2 * sinRollOver2 - sinYawOver2 * sinPitchOver2 * cosRollOver2;
+
+            return result;
+        }
+        private static Vector3 ToEulerRad(Quaternion rotation)
+        {
+            float sqw = rotation.W * rotation.W;
+            float sqx = rotation.X * rotation.X;
+            float sqy = rotation.Y * rotation.Y;
+            float sqz = rotation.Z * rotation.Z;
+            float unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+            float test = rotation.X * rotation.W - rotation.Y * rotation.Z;
+            Vector3 v;
+
+            if (test > 0.4995f * unit)
+            { // singularity at north pole
+                v.Y = 2f * (float)Math.Atan2(rotation.Y, rotation.X);
+                v.X = (float)Math.PI / 2.0f;
+                v.Z = 0;
+                return NormalizeAngles(v * Rad2Deg);
+            }
+            if (test < -0.4995f * unit)
+            { // singularity at south pole
+                v.Y = -2f * (float)Math.Atan2(rotation.Y, rotation.X);
+                v.X = -(float)Math.PI / 2.0f;
+                v.Z = 0;
+                return NormalizeAngles(v * Rad2Deg);
+            }
+            Quaternion q = new Quaternion(rotation.W, rotation.Z, rotation.X, rotation.Y);
+            v.Y = (float)System.Math.Atan2(2f * q.X * q.W + 2f * q.Y * q.Z, 1 - 2f * (q.Z * q.Z + q.W * q.W));     // Yaw
+            v.X = (float)System.Math.Asin(2f * (q.X * q.Z - q.W * q.Y));                             // Pitch
+            v.Z = (float)System.Math.Atan2(2f * q.X * q.Y + 2f * q.Z * q.W, 1 - 2f * (q.Y * q.Y + q.Z * q.Z));      // Roll
+            return NormalizeAngles(v * Rad2Deg);
+        }
+        private Quaternion ExtractRotationFromMatrix(ref Matrix4 matrix)
+        {
+            Vector3 forward;
+            forward.X = matrix[0, 2];
+            forward.Y = matrix[1, 2];
+            forward.Z = matrix[2, 2];
+
+            Vector3 upwards;
+            upwards.X = matrix[0, 1];
+            upwards.Y = matrix[1, 1];
+            upwards.Z = matrix[2, 1];
+
+            return LookRotation(forward, upwards);
+        }
+        public static Quaternion LookRotation(Vector3 forward, Vector3 up)
+        {
+            forward.Normalize();
+
+            Vector3 vector = Vector3.Normalize(forward);
+            Vector3 vector2 = Vector3.Normalize(Vector3.Cross(up, vector));
+            Vector3 vector3 = Vector3.Cross(vector, vector2);
+            var m00 = vector2.X;
+            var m01 = vector2.Y;
+            var m02 = vector2.Z;
+            var m10 = vector3.X;
+            var m11 = vector3.Y;
+            var m12 = vector3.Z;
+            var m20 = vector.X;
+            var m21 = vector.Y;
+            var m22 = vector.Z;
+
+
+            float num8 = (m00 + m11) + m22;
+            var quaternion = new Quaternion();
+            if (num8 > 0f)
+            {
+                var num = (float)Math.Sqrt(num8 + 1f);
+                quaternion.W = num * 0.5f;
+                num = 0.5f / num;
+                quaternion.X = (m12 - m21) * num;
+                quaternion.Y = (m20 - m02) * num;
+                quaternion.Z = (m01 - m10) * num;
+                return quaternion;
+            }
+            if ((m00 >= m11) && (m00 >= m22))
+            {
+                var num7 = (float)Math.Sqrt(((1f + m00) - m11) - m22);
+                var num4 = 0.5f / num7;
+                quaternion.X = 0.5f * num7;
+                quaternion.Y = (m01 + m10) * num4;
+                quaternion.Z = (m02 + m20) * num4;
+                quaternion.W = (m12 - m21) * num4;
+                return quaternion;
+            }
+            if (m11 > m22)
+            {
+                var num6 = (float)Math.Sqrt(((1f + m11) - m00) - m22);
+                var num3 = 0.5f / num6;
+                quaternion.X = (m10 + m01) * num3;
+                quaternion.Y = 0.5f * num6;
+                quaternion.Z = (m21 + m12) * num3;
+                quaternion.W = (m20 - m02) * num3;
+                return quaternion;
+            }
+            var num5 = (float)Math.Sqrt(((1f + m22) - m00) - m11);
+            var num2 = 0.5f / num5;
+            quaternion.X = (m20 + m02) * num2;
+            quaternion.Y = (m21 + m12) * num2;
+            quaternion.Z = 0.5f * num5;
+            quaternion.W = (m01 - m10) * num2;
+            return quaternion;
+        }
+
+        private static Vector3 MatrixToEuler(Matrix<double> m)
+        {
+            float x, y, z;
+            double cy = Math.Sqrt(m[2, 2] * m[2, 2] + m[2, 0] * m[2, 0]);
+            if (cy > 16 * float.Epsilon)
+            {
+                z = (float)Math.Atan2(m[0, 1], m[1, 1]);
+                x = (float)Math.Atan2(-m[2, 1], (float)cy);
+                y = (float)Math.Atan2(m[2, 0], m[2, 2]);
+            }
+            else
+            {
+                z = (float)Math.Atan2(-m[1, 0], m[0, 0]);
+                x = (float)Math.Atan2(-m[2, 1], (float)cy);
+                y = 0;
+            }
+
+            return new Vector3(x, y, z);
+        }
+
+        #endregion
 
         public void Draw(bool debug)
         {

@@ -9,7 +9,6 @@ namespace RH.Core.HeadRotation
 {
     public class AdditionalMorphing
     {
-        public RenderMesh HeadMesh;
         public MorphTriangleType Type = MorphTriangleType.Left;
         public List<Vector2> Convex = new List<Vector2>();
         public List<uint> Indices = new List<uint>();
@@ -18,10 +17,8 @@ namespace RH.Core.HeadRotation
         public int LastIndex = 0;
         public int FirstIndex = 0;
 
-        public void Initialize(RenderMesh headMesh, ProjectedDots dots, HeadMorphing headMorphing)
+        public void Initialize(ProjectedDots dots, HeadMorphing headMorphing)
         {
-            HeadMesh = headMesh;
-
             MorphTriangleType realType = Type;
             if (IsReversed)
             {
@@ -29,7 +26,7 @@ namespace RH.Core.HeadRotation
             }
 
             List<Vector2> points = new List<Vector2>();
-            foreach (var part in HeadMesh.Parts)
+            foreach (var part in ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts)
             {
                 foreach (var point in part.MorphPoints)
                 {
@@ -112,7 +109,7 @@ namespace RH.Core.HeadRotation
                 new int[] { 66, 68, 5, 7, 9, 11 };
 
             var right = new Vector3(1.0f, 0.0f, 0.0f);
-            right = HeadMesh.GetWorldPoint(right);
+            right = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.GetWorldPoint(right);
 
             var a = dots.Points[dotIndices.First()];
             var b = Convex[FirstIndex];
@@ -125,7 +122,7 @@ namespace RH.Core.HeadRotation
 
             var ds = Math.Abs(sa / sb);
 
-            foreach (var part in HeadMesh.Parts)
+            foreach (var part in ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts)
             {
                 foreach (var point in part.MorphPoints)
                 {
@@ -149,7 +146,7 @@ namespace RH.Core.HeadRotation
             var centerY = (start.Y + end.Y) * 0.5f;
             var height = Math.Abs((start.Y - end.Y)) * 0.5f;
 
-            foreach (var part in HeadMesh.Parts)
+            foreach (var part in ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.Parts)
             {
                 foreach (var point in part.MorphPoints)
                 {
@@ -170,7 +167,7 @@ namespace RH.Core.HeadRotation
                         var kz = point.Position.Z / 2.0f;
                         kz = kz * kz;
                         var k = Math.Min(Math.Min(ky, kz), 1.0f);
-                        var originalPoint = IsReversed ? HeadMesh.GetReversePositionFromWorld(worldPosition) : HeadMesh.GetPositionFromWorld(worldPosition);
+                        var originalPoint = IsReversed ? ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.GetReversePositionFromWorld(worldPosition) : ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.GetPositionFromWorld(worldPosition);
 
                         point.Position = k * originalPoint + point.Position * (1.0f - k); // = point.Position;//
                     }

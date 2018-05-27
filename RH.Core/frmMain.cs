@@ -279,26 +279,6 @@ namespace RH.Core
                 switch (ProgramCore.CurrentProgram)
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
-                        {
-                            #region новый проект для HeadShop
-
-                            var newProjectDlg = new frmNewProject4HeadShop(true);
-                            newProjectDlg.ShowDialog(this);
-
-                            if (newProjectDlg.dialogResult != DialogResult.OK)
-                            {
-                                Application.Exit();
-                                return;
-                            }
-
-                            if (newProjectDlg.LoadProject && !string.IsNullOrEmpty(newProjectDlg.LoadingProject))
-                                OpenProject(newProjectDlg.LoadingProject);
-                            else
-                                newProjectDlg.CreateProject();
-
-                            #endregion
-                        }
-                        break;
                     case ProgramCore.ProgramMode.PrintAhead:
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     case ProgramCore.ProgramMode.PrintAhead_Online:
@@ -2245,16 +2225,6 @@ namespace RH.Core
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
-
-                    {
-                        var frm = new frmNewProject4HeadShop(false);
-                        frm.ShowDialog();
-                        if (frm.dialogResult != DialogResult.OK)
-                            return;
-
-                        frm.CreateProject();
-                    }
-                    break;
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -2422,7 +2392,7 @@ namespace RH.Core
                             break;
                         default:
                             {
-                              ProgramCore.MainForm.ctrlRenderControl.PhotoLoaded("");
+                              ProgramCore.MainForm.ctrlRenderControl.PhotoLoaded();
                             }
                             break;
                     }

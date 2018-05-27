@@ -26,7 +26,10 @@ namespace RH.Core
         public string HeadModelPath;
         public bool IsOpenSmile = false;
 
+        /// <summary> Распознанные ключевые точки с изображения (глаза-нос и т.п., нормированные) </summary>
         public List<Vector3> FacialFeatures;
+        /// <summary> Тоже самое, но не нормированные, требуются для определения угла поворота. </summary>
+        public List<Vector2> ImageRealPoints;
 
         /// <summary> Относительный путь до левой картинке (шаблона)</summary>
         private string frontImagePath = string.Empty;

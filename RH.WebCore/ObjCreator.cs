@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Windows.Forms;
 using ICSharpCode.SharpZipLib.Zip;

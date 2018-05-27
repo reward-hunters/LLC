@@ -319,33 +319,33 @@ namespace RH.Core.Render
             //headMorphing.Initialize(HeadPoints);
         }
 
-        public void PhotoLoaded(string photoPath)
+        public void PhotoLoaded()
         {
-            //this.recognizer = recognizer;
-            // headTextureId = TextureHelper.GetTexture(photoPath);
+            //   headTextureId = TextureHelper.GetTexture(photoPath);
 
             camera.ResetCamera(true);
-            /*  ReloadModel();
-              HeadMesh.DetectFaceRotationEmgu();
-              ImportPoints();*/
-            var HeadMesh = headMeshesController.RenderMesh;
-            HeadPoints.HeadMesh = HeadMesh;
+            //    ReloadModel();
+
+            var imgPath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
+            headMeshesController.RenderMesh.DetectFaceRotationEmgu(imgPath, ProgramCore.Project.FrontImage, ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
 
             ImportPoints();
 
             ProjectedPoints.Initialize(HeadPoints);
-            headMorphing.Initialize( HeadPoints);
+            headMorphing.Initialize(HeadPoints);
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
-            //ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
+       //     ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
 
 
             ResetCamera();
 
-            /* additionalMorphing.Type = HeadMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
-             additionalMorphing.Initialize(HeadMesh, ProjectedPoints, headMorphing);
-             additionalMorphing.ProcessPoints(ProjectedPoints);*/
+       /*     additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
+            additionalMorphing.Initialize(ProjectedPoints, headMorphing);
+            additionalMorphing.ProcessPoints(ProjectedPoints);*/
+
+
         }
 
         private void SetupViewport(GLControl c)
@@ -461,7 +461,7 @@ namespace RH.Core.Render
 
         #region Project
 
-        public void LoadProject( bool newProject, RectangleAABB aabb)
+        public void LoadProject(bool newProject, RectangleAABB aabb)
         {
             headMeshesController.RenderMesh.OnBeforePartDraw -= RenderMesh_OnBeforePartDraw;
             headMeshesController.RenderMesh.OnBeforePartDraw += RenderMesh_OnBeforePartDraw;
@@ -3974,7 +3974,7 @@ namespace RH.Core.Render
         public void ResetCamera()
         {
             if (true) //recognizer != null
-            { 
+            {
                 const int indexA = 22;
                 const int indexB = 11;
 

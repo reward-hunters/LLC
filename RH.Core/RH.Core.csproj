@@ -60,13 +60,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.CV, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <HintPath>..\AbaloneLLC\Libraries\Emgu.CV.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Emgu.CV.UI, Version=3.3.0.2824, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AbaloneLLC\Libraries\Emgu.CV.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.Util, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <HintPath>..\AbaloneLLC\Libraries\Emgu.Util.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Emgu.CV.World, Version=3.3.0.2824, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AbaloneLLC\Libraries\Emgu.CV.World.dll</HintPath>
     </Reference>
     <Reference Include="FaceSDK.NET, Version=6.2.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\AbaloneLLC\Libraries\FaceSDK.NET.dll</HintPath>
@@ -147,12 +147,6 @@
     </Compile>
     <Compile Include="Controls\frmNewProfilePict2.designer.cs">
       <DependentUpon>frmNewProfilePict2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\frmNewProject4HeadShop.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\frmNewProject4HeadShop.designer.cs">
-      <DependentUpon>frmNewProject4HeadShop.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ctrlPrintAheadExport.cs">
       <SubType>UserControl</SubType>
@@ -501,9 +495,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\frmNewProfilePict2.resx">
       <DependentUpon>frmNewProfilePict2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\frmNewProject4HeadShop.resx">
-      <DependentUpon>frmNewProject4HeadShop.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ctrlPrintAheadExport.resx">
       <DependentUpon>ctrlPrintAheadExport.cs</DependentUpon>

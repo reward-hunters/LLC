@@ -266,9 +266,9 @@ namespace RH.MeshUtils.Helpers
                 return Type == HeadMeshType.Face || Type == HeadMeshType.Lip || Type == HeadMeshType.Head;
             }
         }
-#endregion
+        #endregion
 
-#region Public
+        #region Public
 
         public bool IsMirrored
         {
@@ -406,11 +406,11 @@ namespace RH.MeshUtils.Helpers
 
         public void UpdateShape(ref TexturingInfo t)
         {
-           /* bool isMirrored = IsMirrored;
-            if(isMirrored)
-            {
-                UndoMirror(false);
-            }*/
+            /* bool isMirrored = IsMirrored;
+             if(isMirrored)
+             {
+                 UndoMirror(false);
+             }*/
 
             foreach (var p in Points)
             {
@@ -438,18 +438,18 @@ namespace RH.MeshUtils.Helpers
             }
             else
             {*/
-                UpdateVertexBuffer();
+            UpdateVertexBuffer();
             //}
 #endif
         }
 
         private TrinagleInfo GetTriangleInfo(ref TexturingInfo t, Point3d point, bool isTexture)
         {
-           /* var p = point.Position;// Vertices[point.Indices[0]].OriginalPosition;
-            if((t.MirrorType == EMirrorType.Left && p.X < 0.0f) ||(t.MirrorType == EMirrorType.Right && p.X > 0.0f))
-            {
-                return isTexture ? point.TextureTrinagleInfoMirror : point.ShapeTrinagleInfoMirror;
-            }*/
+            /* var p = point.Position;// Vertices[point.Indices[0]].OriginalPosition;
+             if((t.MirrorType == EMirrorType.Left && p.X < 0.0f) ||(t.MirrorType == EMirrorType.Right && p.X > 0.0f))
+             {
+                 return isTexture ? point.TextureTrinagleInfoMirror : point.ShapeTrinagleInfoMirror;
+             }*/
             return isTexture ? point.TextureTrinagleInfo : point.ShapeTrinagleInfo;
         }
 
@@ -543,7 +543,7 @@ namespace RH.MeshUtils.Helpers
                 }
             }
         }
-                    
+
         public void FillPointsInfo(ref TexturingInfo t, bool isShape, bool isProfile)
         {
             for (var i = 0; i < t.Indices.Length; i += 3)
@@ -564,14 +564,14 @@ namespace RH.MeshUtils.Helpers
                         FillPointInfo(ref triangle, ref t, isProfile ? p.Zy : p.Xy, ref a, ref b, ref c, i / 3);
                     }
 
-                   /* if (!isProfile)
-                    {
-                        var triangleMirror = isShape ? point.ShapeTrinagleInfoMirror : point.TextureTrinagleInfoMirror;
-                        if(triangleMirror.TrinagleIndex < 0)
-                        {
-                            FillPointInfo(ref triangleMirror, ref t, new Vector2(-p.X, p.Y), ref a, ref b, ref c, i / 3);
-                        }                        
-                    }*/
+                    /* if (!isProfile)
+                     {
+                         var triangleMirror = isShape ? point.ShapeTrinagleInfoMirror : point.TextureTrinagleInfoMirror;
+                         if(triangleMirror.TrinagleIndex < 0)
+                         {
+                             FillPointInfo(ref triangleMirror, ref t, new Vector2(-p.X, p.Y), ref a, ref b, ref c, i / 3);
+                         }                        
+                     }*/
                     Points[index] = point;
                 }
             }
@@ -590,10 +590,10 @@ namespace RH.MeshUtils.Helpers
             baseIndices.Clear();
 #if (WEB_APP)
 #else
-            if(needUpdateBuffer)
+            if (needUpdateBuffer)
             {
                 UpdateBuffers();
-            }            
+            }
 #endif
         }
 
@@ -631,7 +631,7 @@ namespace RH.MeshUtils.Helpers
 
             var edges = edgesDictionary.Where(e => e.Value == 1).Select(e => e.Key).ToList();
             var edges0 = new List<Line>();
-            if(edges.Count > 0)
+            if (edges.Count > 0)
             {
                 var currentEdge = edges[0];
                 while (currentEdge != null)
@@ -641,13 +641,13 @@ namespace RH.MeshUtils.Helpers
                         edges.Remove(currentEdge);
                         edges0.Add(currentEdge);
                     }
-                    currentEdge = edges.FirstOrDefault(e => e.A == currentEdge.A || e.B == currentEdge.A || e.A == currentEdge.B || e.B == currentEdge.B);                    
+                    currentEdge = edges.FirstOrDefault(e => e.A == currentEdge.A || e.B == currentEdge.A || e.A == currentEdge.B || e.B == currentEdge.B);
                 }
-                if(edges.Count > 0 && edges0.Count > 0)
+                if (edges.Count > 0 && edges0.Count > 0)
                 {
                     Vector2 A = new Vector2(float.MaxValue, float.MaxValue), B = new Vector2(float.MinValue, float.MinValue);
                     Vector2 A0 = A, B0 = B;
-                    foreach(var edge in edges)
+                    foreach (var edge in edges)
                     {
                         var a = points[edge.A];
                         var b = points[edge.B];
@@ -758,7 +758,7 @@ namespace RH.MeshUtils.Helpers
             var pointsMapping = new SortedList<int, uint>();
             var vertices = new List<Vertex3d>();
             var positions = new List<Vector3>();
-            var delta = leftToRight ? 0.00001f : - 0.00001f;
+            var delta = leftToRight ? 0.00001f : -0.00001f;
 
             for (var i = 0; i < Vertices.Length; i++)
             {
@@ -986,8 +986,8 @@ namespace RH.MeshUtils.Helpers
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(TempVertices.Length * Vertex3d.Stride), TempVertices, BufferUsageHint.StreamDraw);
             OpenGlHelper.CheckErrors();
-        }       
-        
+        }
+
 
         private void TempUpdateIndexBuffer()
         {
@@ -995,7 +995,7 @@ namespace RH.MeshUtils.Helpers
         }
 #endif
         public void UpdateBuffers(bool firstTime = false)
-        {            
+        {
             UpdateVertexBuffer(firstTime);
             UpdateIndexBuffer(firstTime);
         }
@@ -1093,7 +1093,7 @@ namespace RH.MeshUtils.Helpers
             TransparentTexture = info.TransparentTexture;
             DefaultTextureName = TextureName = info.TextureName;
             TransparentTextureName = info.TransparentTextureName;
-            
+
             Name = info.PartName;
             if (Name.Contains("Pupil") || Name.Contains("Eye"))// || Name.Contains("Irises") || Name.Contains("Eye") || Name.Contains("Cornea") || Name.Contains("Sclera") || Name.Contains("Pulpis"))
                 Type = HeadMeshType.Eyes;
@@ -1138,7 +1138,7 @@ namespace RH.MeshUtils.Helpers
 
                         MorphPoints.Add(new MorphingPoint
                         {
-                            Indices = new List<int> { (int) index },
+                            Indices = new List<int> { (int)index },
                             Position = vertexInfo.Position
                         });
                     }
@@ -1193,7 +1193,7 @@ namespace RH.MeshUtils.Helpers
 #endif
             return true;
         }
-        
+
 
         public void ToStream(BinaryWriter bw)
         {
@@ -1281,9 +1281,9 @@ namespace RH.MeshUtils.Helpers
             return result;
         }
 
-#endregion
+        #endregion
 
-#region Private
+        #region Private
 
         private void FillPoints(Dictionary<int, int> dictionary)
         {
@@ -1313,9 +1313,23 @@ namespace RH.MeshUtils.Helpers
                     }
                 }
             }
-        } 
+        }
 
-#endregion
+        #endregion
+
+        public void SetMorphPercent(float percent)
+        {
+            foreach (var point in MorphPoints)
+            {
+                foreach (var index in point.Indices)
+                {
+                    var vertex = Vertices[index];
+                    vertex.Position = point.Position * percent + vertex.OriginalPosition * (1.0f - percent);
+                    Vertices[index] = vertex;
+                }
+            }
+            UpdateVertexBuffer();
+        }
     }
 
     public class RenderMeshParts : List<RenderMeshPart>

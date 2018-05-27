@@ -80,7 +80,7 @@ namespace RH.Core.HeadRotation
             for (int i = 0; i < dots.Points.Count; ++i)
                 headIndices.Add(i);
 
-            var rotationMatrix = headPoints.HeadMesh.RotationMatrix;
+            var rotationMatrix = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.RotationMatrix;
             Matrix4.Invert(ref rotationMatrix, out RotationMatrix);
 
             ProcessHeadPoints();
@@ -165,10 +165,10 @@ namespace RH.Core.HeadRotation
             for (int i = 0; i < dots.Points.Count; ++i)
                 headIndices.Add(i);
 
-            var rotaionMatrix = headPoints.HeadMesh.RotationMatrix;
+            var rotaionMatrix = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.RotationMatrix;
             Matrix4.Invert(ref rotaionMatrix, out RotationMatrix);
             
-            rightPower = 1.0f - Math.Abs(headPoints.HeadMesh.HeadAngle) * 2.0f / (float)Math.PI;
+            rightPower = 1.0f - Math.Abs(ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.HeadAngle) * 2.0f / (float)Math.PI;
             //rightPower = Math.Min(1.0f, Math.Max(rightPower, 0.0f));
             // (float)Math.Cos(headPoints.HeadMesh.HeadAngle);
 
@@ -183,7 +183,7 @@ namespace RH.Core.HeadRotation
 
         public void MirrorPoints()
         {
-            MirrorPoints(headPoints.HeadMesh.HeadAngle > 0.0f);
+            MirrorPoints(ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.HeadAngle > 0.0f);
         }
 
         private void ProcessHeadPoints_old()

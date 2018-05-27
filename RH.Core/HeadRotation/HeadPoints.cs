@@ -20,7 +20,6 @@ namespace RH.Core.HeadRotation
         public List<Vector3> Points = new List<Vector3>();
         public List<bool> IsVisible = new List<bool>();
         public Camera RenderCamera;
-        public RenderMesh HeadMesh;
 
         #region Selection
 
@@ -183,7 +182,7 @@ namespace RH.Core.HeadRotation
 
         public Vector3 GetWorldPoint(Vector3 point)
         {
-            return HeadMesh.GetWorldPoint(point);
+            return ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.GetWorldPoint(point);
         }
 
         public void DrawDots()
