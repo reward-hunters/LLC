@@ -10,7 +10,13 @@ namespace RH.MeshUtils
     public class HeadMeshesController
     {
         #region Var
-        public RenderMesh RenderMesh = new RenderMesh();
+
+        private RenderMesh rMesh = new RenderMesh();
+        public RenderMesh RenderMesh
+        {
+            get { return rMesh; }
+            set { rMesh = value; }
+        }
         public TexturingInfo TexturingInfo = new TexturingInfo();
         #endregion
 
@@ -103,13 +109,13 @@ namespace RH.MeshUtils
         public void Smooth()
         {
             foreach (var p in RenderMesh.Parts)
-            p.Smooth();
+                p.Smooth();
         }
 
         public bool CreateMeshPart(MeshPartInfo info)
         {
             var part = new RenderMeshPart();
-            
+
             if (part.Create(info))
             {
                 RenderMesh.AddPart(part);
@@ -127,9 +133,9 @@ namespace RH.MeshUtils
         {
             foreach (var p in RenderMesh.Parts)
             {
-                p.Mirror(leftToRight, axis);                
+                p.Mirror(leftToRight, axis);
             }
-                             
+
         }
 
         public void UndoMirror()

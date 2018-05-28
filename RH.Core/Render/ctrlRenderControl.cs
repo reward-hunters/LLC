@@ -336,14 +336,14 @@ namespace RH.Core.Render
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
-       //     ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
+            ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
 
 
             ResetCamera();
 
-       /*     additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
+            additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
             additionalMorphing.Initialize(ProjectedPoints, headMorphing);
-            additionalMorphing.ProcessPoints(ProjectedPoints);*/
+            additionalMorphing.ProcessPoints(ProjectedPoints);
 
 
         }

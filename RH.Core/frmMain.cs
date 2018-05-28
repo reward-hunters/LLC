@@ -464,8 +464,8 @@ namespace RH.Core
                         ProgramCore.MainForm.HeadFront = true;
                         if (!ProgramCore.PluginMode)
                         {
-                            ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
-                            ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
+                       //     ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);            //TODO 28.05.2018. это было раскомменчено.
+                        //    ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
 
                             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator && Math.Abs(ProgramCore.Project.RotatedAngle) > 5)
                             {
@@ -2380,8 +2380,6 @@ namespace RH.Core
 
                 if (ProgramCore.Project.ManType != ManType.Custom)
                 {
-                    /* var scaleX = UpdateMeshProportions(aabb);
-                     UpdatePointsProportion(scaleX, (aabb.A.X + aabb.B.X) * 0.5f);*/
 
                     ctrlRenderControl.autodotsShapeHelper.TransformRects();
                     ctrlRenderControl.autodotsShapeHelper.InitializeShaping();
@@ -2392,7 +2390,7 @@ namespace RH.Core
                             break;
                         default:
                             {
-                              ProgramCore.MainForm.ctrlRenderControl.PhotoLoaded();
+                             ProgramCore.MainForm.ctrlRenderControl.PhotoLoaded();
                             }
                             break;
                     }

@@ -436,10 +436,10 @@ namespace RH.Core
                             m.Value.Delta = 0;
                         foreach (var m in ProgramCore.MainForm.ctrlRenderControl.FatMorphing)
                             m.Value.Delta = 0;
-                        ProgramCore.MainForm.ctrlRenderControl.DoMorth();
+                   //     ProgramCore.MainForm.ctrlRenderControl.DoMorth();
                     }
 
-                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Save(rmPath);
+                   ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Save(rmPath);
 
                     if (ManType != ManType.Custom)
                     {
@@ -447,7 +447,7 @@ namespace RH.Core
                             m.Value.Delta = AgeCoefficient;
                         foreach (var m in ProgramCore.MainForm.ctrlRenderControl.FatMorphing)
                             m.Value.Delta = FatCoefficient;
-                        ProgramCore.MainForm.ctrlRenderControl.DoMorth();
+                     //   ProgramCore.MainForm.ctrlRenderControl.DoMorth();
                     }
 
                     #endregion
