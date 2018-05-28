@@ -453,20 +453,18 @@ namespace RH.Core.HeadRotation
             var points = useProfilePoints ? TrianglesRight : TrianglesFront;
             foreach (var triangle in points)
             {
-                var a = headPoints.GetWorldPoint(triangle.A);
+                /*var a = headPoints.GetWorldPoint(triangle.A);
                 var b = headPoints.GetWorldPoint(triangle.B);
-                var c = headPoints.GetWorldPoint(triangle.C);
+                var c = headPoints.GetWorldPoint(triangle.C);*/
+                 var a = headPoints.Points[triangle.A];
+                 var b = headPoints.Points[triangle.B];
+                 var c = headPoints.Points[triangle.C];
                 RenderHelper.DrawLine(a, b);
                 RenderHelper.DrawLine(b, c);
                 RenderHelper.DrawLine(c, a);
             }
 
             GL.End();
-        }
-
-        public void UpdateMorphing()
-        {
-
         }
     }
 }
