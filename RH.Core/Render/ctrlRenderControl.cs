@@ -325,20 +325,19 @@ namespace RH.Core.Render
 
             ImportPoints();
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
-          
+
 
             ProjectedPoints.Initialize(HeadPoints);
             headMorphing.Initialize(HeadPoints);
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
-              ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
-
+            ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
 
             ResetCamera();
-            /*  additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
-              additionalMorphing.Initialize(ProjectedPoints, headMorphing);
-              additionalMorphing.ProcessPoints(ProjectedPoints);*/
+            additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
+            additionalMorphing.Initialize(ProjectedPoints, headMorphing);
+            additionalMorphing.ProcessPoints(ProjectedPoints);
 
 
         }
@@ -2776,8 +2775,8 @@ namespace RH.Core.Render
         private void DrawHead()
         {
             idleShader.UpdateUniform("u_LightDirection", Vector3.Normalize(camera.Position));
-            var worldMatrix = //Если мы в режиме просмотра морфинга, то делаем это
-                InStageMode ? Matrix4.CreateScale(headMeshesController.RenderMesh.RealScale) : Matrix4.Identity;
+            //var worldMatrix =  InStageMode ? Matrix4.CreateScale(headMeshesController.RenderMesh.RealScale) : Matrix4.Identity;
+            var worldMatrix = headMeshesController.RenderMesh.RotationMatrix;
             //Иначе берем Matrix4.Identity
             idleShader.UpdateUniform("u_World", worldMatrix);
             idleShader.UpdateUniform("u_WorldView", worldMatrix * camera.ViewMatrix);
@@ -3870,7 +3869,7 @@ namespace RH.Core.Render
         }
         public void StagesDeactivate(int pos)
         {
-           // headMeshesController.RenderMesh.EndMorph();
+            // headMeshesController.RenderMesh.EndMorph();
             InStageMode = false;
             if (pos != -1)
             {
