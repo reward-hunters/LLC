@@ -421,7 +421,7 @@ namespace RH.Core.HeadRotation
                         part.Vertices[index].Position = point.Position;
                     }
                 }
-                part.UpdateBuffers();
+                part.UpdateBuffers(true);
             }
         }
 

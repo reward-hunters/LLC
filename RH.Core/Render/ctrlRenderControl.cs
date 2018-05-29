@@ -286,10 +286,15 @@ namespace RH.Core.Render
             idleShader.SetUniformLocation("u_ViewProjection");
             idleShader.SetUniformLocation("u_LightDirection");
 
-            blendShader = new ShaderController(ProgramCore.PluginMode ? "blendingPl.vs" : "blending.vs", "blending.fs");
+            /* blendShader = new ShaderController(ProgramCore.PluginMode ? "blendingPl.vs" : "blending.vs", "blending.fs");
+             blendShader.SetUniformLocation("u_Texture");
+             blendShader.SetUniformLocation("u_BlendStartDepth");
+             blendShader.SetUniformLocation("u_BlendDepth");*/
+
+            blendShader = new ShaderController("blending.vs", "blending.fs");
             blendShader.SetUniformLocation("u_Texture");
-            blendShader.SetUniformLocation("u_BlendStartDepth");
-            blendShader.SetUniformLocation("u_BlendDepth");
+            blendShader.SetUniformLocation("u_BaseTexture");
+            blendShader.SetUniformLocation("u_BlendDirectionX");
 
             brushShader = new ShaderController("brush.vs", "brush.fs");
             brushShader.SetUniformLocation("u_Texture");
@@ -3425,7 +3430,7 @@ namespace RH.Core.Render
             shader.UpdateUniform("u_SphereCenter", brushTool.SphereCenter);
             shader.UpdateUniform("u_SphereRadius", brushTool.Radius);
 
-            headMeshesController.RenderMesh.DrawToTexture(headMeshesController.RenderMesh.Parts.Where(p => p.Texture == textureId));
+            headMeshesController.RenderMesh.DrawToTexture(textureId);
 
             shader.End();
 
@@ -3457,11 +3462,17 @@ namespace RH.Core.Render
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, HeadTextureId);
             shader.UpdateUniform("u_Texture", 0);
-            shader.UpdateUniform("u_BlendStartDepth", -0.5f);
-            shader.UpdateUniform("u_BlendDepth", 4f);
+            /*shader.UpdateUniform("u_BlendStartDepth", -0.5f);
+            shader.UpdateUniform("u_BlendDepth", 4f);*/
+
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, textureId);
+            shader.UpdateUniform("u_BaseTexture", 1);
+
+            shader.UpdateUniform("u_BlendDirectionX", headMeshesController.RenderMesh.HeadAngle >= 0 ? 1.0f : -1.0f);
 
 
-            headMeshesController.RenderMesh.DrawToTexture(headMeshesController.RenderMesh.Parts.Where(p => p.Texture == textureId));
+            headMeshesController.RenderMesh.DrawToTexture(textureId);
 
             shader.End();
             GL.Disable(EnableCap.Blend);
