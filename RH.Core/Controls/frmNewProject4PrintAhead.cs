@@ -443,6 +443,7 @@ namespace RH.Core.Controls
         {
             #region Корректируем размер фотки
 
+            var realTemplateImage = templateImage;
             using (var ms = new MemoryStream(File.ReadAllBytes(templateImage))) // Don't use using!!
             {
                 var img = (Bitmap)Image.FromStream(ms);
@@ -467,6 +468,7 @@ namespace RH.Core.Controls
             FolderEx.CreateDirectory(path, true);
 
             ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
+            ProgramCore.Project.RealTemplateImage = realTemplateImage;
 
             ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;
             ProgramCore.Project.ImageRealPoints = fcr.RealPoints;
@@ -544,7 +546,7 @@ namespace RH.Core.Controls
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
             ProgramCore.MainForm.UpdateProjectControls(true, aabb);
 
-            ProgramCore.Project.ToStream();
+          //  ProgramCore.Project.ToStream();
             // ProgramCore.MainForm.ctrlRenderControl.UpdateMeshProportions();
 
             if (ProgramCore.Project.ManType == ManType.Custom)

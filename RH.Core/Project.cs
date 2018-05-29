@@ -58,6 +58,9 @@ namespace RH.Core
         }
         public Bitmap FrontImage;
 
+        /// <summary> Путь до картинки исходника. Так как в frontImagePath мы храним ссылку на скопированную и с  измененным размером имагу. </summary>
+        public string RealTemplateImage;
+
         public Bitmap ProfileImage;
 
         /// <summary> Было ли назначение автоточек </summary>

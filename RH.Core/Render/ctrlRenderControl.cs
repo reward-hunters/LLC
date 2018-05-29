@@ -315,8 +315,6 @@ namespace RH.Core.Render
             HeadPoints.Points.Clear();
             HeadPoints.Points.AddRange(VectorEx.ImportVector(isSmile));
             HeadPoints.IsVisible.AddRange(Enumerable.Repeat(true, HeadPoints.Points.Count));
-
-            //headMorphing.Initialize(HeadPoints);
         }
 
         public void PhotoLoaded()
@@ -324,26 +322,23 @@ namespace RH.Core.Render
             //   headTextureId = TextureHelper.GetTexture(photoPath);
 
             camera.ResetCamera(true);
-            //    ReloadModel();
-
-            var imgPath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
-            headMeshesController.RenderMesh.DetectFaceRotationEmgu(imgPath, ProgramCore.Project.FrontImage, ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
 
             ImportPoints();
+            headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
+          
 
             ProjectedPoints.Initialize(HeadPoints);
             headMorphing.Initialize(HeadPoints);
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
-            ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
+              ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
 
 
             ResetCamera();
-
-            additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
-            additionalMorphing.Initialize(ProjectedPoints, headMorphing);
-            additionalMorphing.ProcessPoints(ProjectedPoints);
+            /*  additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
+              additionalMorphing.Initialize(ProjectedPoints, headMorphing);
+              additionalMorphing.ProcessPoints(ProjectedPoints);*/
 
 
         }
@@ -608,31 +603,6 @@ namespace RH.Core.Render
                 max.Y = Math.Max(max.Y, p.Y);
             }
             return (max + min) * 0.5f;
-        }
-
-        private float DetectFaceRotation()
-        {
-            var noseTip = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
-
-            //var eyeLeftTop = MirroredHeadPoint.GetFrontWorldPoint_ForHeadShop_Rotator(ProgramCore.Project.DetectedLeftEyePoints[1]);
-            //var eyeRightTop = MirroredHeadPoint.GetFrontWorldPoint_ForHeadShop_Rotator(ProgramCore.Project.DetectedRightEyePoints[1]);
-            //var eyeLeftCenter = GetCenterPoint(ProgramCore.Project.DetectedLeftEyePoints);
-            //var eyeRightCenter = GetCenterPoint(ProgramCore.Project.DetectedRightEyePoints);
-
-            var noseTop = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[3], ProgramCore.CurrentProgram);
-            var noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[4], ProgramCore.CurrentProgram);
-            var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
-            var angle = (float)Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
-
-            headMeshesController.RenderMesh.HeadAngle = noseTip.X > noseTop.X ? angle : -angle;
-            /*headMeshesController.TexturingInfo.MirrorType =
-                autodotsShapeHelper.ShapeInfo.MirrorType = headMeshesController.RenderMesh.HeadAngle < 0.0 ? EMirrorType.Left : EMirrorType.Right;*/
-            headMeshesController.RenderMesh.NoseDepth = noseLength;
-
-            noseBottom = MirroredHeadPoint.GetFrontWorldPoint(ProgramCore.Project.DetectedNosePoints[2], ProgramCore.CurrentProgram);
-            headMeshesController.RenderMesh.FaceCenterX = noseBottom.X;
-
-            return headMeshesController.RenderMesh.HeadAngle;
         }
 
         private void SpecialTopHaedWidth(List<HeadPoint> points)
@@ -3312,8 +3282,7 @@ namespace RH.Core.Render
 
         public void OrtoTop()
         {
-            camera.ResetCamera(false, headMeshesController.RenderMesh.HeadAngle);
-            //camera.ResetCamera(false, 0.0f);
+            camera.ResetCamera(true);
         }
         public void OrtoBack()
         {
@@ -3491,6 +3460,7 @@ namespace RH.Core.Render
             shader.UpdateUniform("u_Texture", 0);
             shader.UpdateUniform("u_BlendStartDepth", -0.5f);
             shader.UpdateUniform("u_BlendDepth", 4f);
+
 
             headMeshesController.RenderMesh.DrawToTexture(headMeshesController.RenderMesh.Parts.Where(p => p.Texture == textureId));
 
@@ -3900,7 +3870,7 @@ namespace RH.Core.Render
         }
         public void StagesDeactivate(int pos)
         {
-            headMeshesController.RenderMesh.EndMorph();
+           // headMeshesController.RenderMesh.EndMorph();
             InStageMode = false;
             if (pos != -1)
             {
@@ -3973,30 +3943,23 @@ namespace RH.Core.Render
 
         public void ResetCamera()
         {
-            if (true) //recognizer != null
-            {
-                const int indexA = 22;
-                const int indexB = 11;
+            const int indexA = 22;
+            const int indexB = 11;
 
-                var pA = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexA];
-                var pB = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexB];
-                var pointA = new Vector2(pA.X, pA.Y);
-                var pointB = new Vector2(pB.X, pB.Y);
+            var pA = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexA];
+            var pB = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexB];
+            var pointA = new Vector2(pA.X, pA.Y);
+            var pointB = new Vector2(pB.X, pB.Y);
 
-                var pointA1 = camera.GetScreenPoint(HeadPoints.Points[indexA]);
-                var pointB1 = camera.GetScreenPoint(HeadPoints.Points[indexB]);
+            var pointA1 = camera.GetScreenPoint(HeadPoints.Points[indexA]);
+            var pointB1 = camera.GetScreenPoint(HeadPoints.Points[indexB]);
 
-                camera.SetupCamera(pointA - pointB, pointA1 - pointB1);
+            camera.SetupCamera(pointA - pointB, pointA1 - pointB1);
 
-                var worldPointB = camera.GetWorldPoint((int)pointB1.X, (int)pB.Y, 0.0f);
-                var worldPointB1 = HeadPoints.Points[indexB];
-                camera.dy = (worldPointB1.Y - worldPointB.Y);
-                camera.PutCamera();
-            }
-            else
-            {
-                camera.ResetCamera(true);
-            }
+            var worldPointB = camera.GetWorldPoint((int)pointB1.X, (int)pB.Y, 0.0f);
+            var worldPointB1 = HeadPoints.Points[indexB];
+            camera.dy = (worldPointB1.Y - worldPointB.Y);
+            camera.PutCamera();
         }
 
         internal void ResetModeTools()
