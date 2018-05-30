@@ -996,21 +996,21 @@ namespace RH.Core.Helpers
 
         private Vector2 UpdateUserCenterPositions(IEnumerable<int> indexes)
         {
-            List<MirroredHeadPoint> sourcePoints = ProgramCore.Project.RenderMainHelper.headController.AutoDots;
+            List<HeadPoint> sourcePoints = ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2;
             if (sourcePoints.Count == 0)
                 return Vector2.Zero;
 
-            var dots = new List<MirroredHeadPoint>();
+            var dots = new List<HeadPoint>();
             foreach (var index in indexes)
             {
                 var dot = sourcePoints[index];
                 dots.Add(dot);
             }
 
-            var minX = dots.Min(point => point.ValueMirrored.X);
-            var maxX = dots.Max(point => point.ValueMirrored.X);
-            var minY = dots.Min(point => point.ValueMirrored.Y);
-            var maxY = dots.Max(point => point.ValueMirrored.Y);
+            var minX = dots.Min(point => point.OriginalValue.X);
+            var maxX = dots.Max(point => point.OriginalValue.X);
+            var minY = dots.Min(point => point.OriginalValue.Y);
+            var maxY = dots.Max(point => point.OriginalValue.Y);
 
             return new Vector2((maxX + minX) * 0.5f, (maxY + minY) * 0.5f);
         }

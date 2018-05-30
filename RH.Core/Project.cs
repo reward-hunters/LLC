@@ -482,9 +482,9 @@ namespace RH.Core
                     bw.Write(ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Count);
                     foreach (var dot in ProgramCore.Project.RenderMainHelper.headController.ShapeDots)
                         dot.ToStreamM(bw);
-                    bw.Write(ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count);
-                    foreach (var dot in ProgramCore.Project.RenderMainHelper.headController.AutoDots)
-                        dot.ToStreamM(bw);
+                    bw.Write(ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Count);
+                    foreach (var dot in ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2)
+                        dot.ToStream(bw);
 
                     bw.Write(CustomHeadNeedProfileSetup);
 
@@ -648,14 +648,14 @@ namespace RH.Core
 
                 ProgramCore.Project.RenderMainHelper.headMeshesController.TexturingInfo = TexturingInfo.FromStream(br);
 
-                ProgramCore.Project.RenderMainHelper.headController.AutoDots.Clear();
+                ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Clear();
                 ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Clear();
                 var cnt = br.ReadInt32();
                 for (var i = 0; i < cnt; i++)
                     ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Add(MirroredHeadPoint.FromStreamW(br));
                 cnt = br.ReadInt32();
                 for (var i = 0; i < cnt; i++)
-                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.Add(MirroredHeadPoint.FromStreamW(br));
+                    ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Add(HeadPoint.FromStream(br));
 
                 result.CustomHeadNeedProfileSetup = br.ReadBoolean();
 

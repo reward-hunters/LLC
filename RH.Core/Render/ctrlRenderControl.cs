@@ -327,8 +327,8 @@ namespace RH.Core.Render
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
 
 
-            ProjectedPoints.Initialize(HeadPoints);
-            headMorphing.Initialize(HeadPoints);
+            ProjectedPoints.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures);
+            headMorphing.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures);
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
@@ -4221,8 +4221,8 @@ namespace RH.Core.Render
             var indicies = headController.GetFaceIndexes();
             var faceDots = headController.GetSpecialAutodots(indicies);
 
-            var minX = faceDots.Min(point => point.ValueMirrored.X) * originalImg.Width;
-            var maxX = faceDots.Max(point => point.ValueMirrored.X) * originalImg.Width;
+            var minX = faceDots.Min(point => point.OriginalValue.X) * originalImg.Width;
+            var maxX = faceDots.Max(point => point.OriginalValue.X) * originalImg.Width;
 
             var faceCenter = minX + (maxX - minX) * 0.5f;
 

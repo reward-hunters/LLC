@@ -10,6 +10,8 @@ using RH.Core.Controls;
 using RH.Core.Helpers;
 using RH.Core.Render.Helpers;
 using RH.MeshUtils.Data;
+using RH.Core.HeadRotation;
+using RH.MeshUtils.Helpers;
 
 namespace RH.Core.Render.Controllers
 {
@@ -59,7 +61,9 @@ namespace RH.Core.Render.Controllers
             }
         }
 
-        public HeadPoints<MirroredHeadPoint> AutoDots = new HeadPoints<MirroredHeadPoint>();
+        public HeadPoints<HeadPoint> AutoDotsv2 = new HeadPoints<HeadPoint>();
+
+     //   public HeadPoints<MirroredHeadPoint> AutoDots = new HeadPoints<MirroredHeadPoint>();
         public HeadPoints<MirroredHeadPoint> ShapeDots = new HeadPoints<MirroredHeadPoint>();
 
         private const float PointRectSize = 6;
@@ -78,20 +82,20 @@ namespace RH.Core.Render.Controllers
         /// <summary> Уточнить положение глаз и рта справа, относительно центра, указанного пользователем </summary>
         private void ClarifyEyeAndMouth(IEnumerable<int> indexes, Vector2 originalCenter)
         {
-            var dots = new List<MirroredHeadPoint>();
+            var dots = new List<HeadPoint>();
             foreach (var index in indexes)
-                dots.Add(AutoDots[index]);
+                dots.Add(AutoDotsv2[index]);
 
-            var minX = dots.Min(point => point.ValueMirrored.X);
-            var maxX = dots.Max(point => point.ValueMirrored.X);
-            var minY = dots.Min(point => point.ValueMirrored.Y);
-            var maxY = dots.Max(point => point.ValueMirrored.Y);
+            var minX = dots.Min(point => point.OriginalValue.X);
+            var maxX = dots.Max(point => point.OriginalValue.X);
+            var minY = dots.Min(point => point.OriginalValue.Y);
+            var maxY = dots.Max(point => point.OriginalValue.Y);
 
             var center = new Vector2((maxX + minX) * 0.5f, (maxY + minY) * 0.5f);
             var delta = originalCenter - center;
 
             foreach (var dot in dots)
-                dot.ValueMirrored += delta;
+                dot.OriginalValue += delta;
         }
 
         public Bitmap InitProfileImage(Bitmap sourceImage, Vector2 mouthRelative, Vector2 eyeRelative, out float angle, out Rectangle faceRectangle)
@@ -310,7 +314,7 @@ namespace RH.Core.Render.Controllers
             GL.PointSize(5.0f);
             GL.Begin(PrimitiveType.Points);
 
-            foreach (var point in AutoDots)
+            foreach (var point in AutoDotsv2)
             {
                 if (!point.Visible)
                     continue;
@@ -396,12 +400,12 @@ namespace RH.Core.Render.Controllers
         }
         private void DrawAutodots(Graphics g)
         {
-            foreach (var point in AutoDots)
+            foreach (var point in AutoDotsv2)
             {
                 if (!point.Visible)
                     continue;
 
-                var v = point.ValueMirrored;
+                var v = point.OriginalValue;
                 var pointRect = new RectangleF((v.X * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateWidth + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetX) - HalfPointRectSize,
                     (v.Y * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateHeight + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetY) - HalfPointRectSize,
                     PointRectSize, PointRectSize);
@@ -446,7 +450,7 @@ namespace RH.Core.Render.Controllers
         /// <summary> Удалить выделенные точки </summary>
         public void RemoveSelectedPoints()
         {
-            var history = new HistoryHeadAutoDots(ProgramCore.Project.RenderMainHelper.headController.AutoDots);
+            var history = new HistoryHeadAutoDots(ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2);
             ProgramCore.MainForm.ctrlRenderControl.historyController.Add(history);
 
             for (var i = Lines.Count - 1; i >= 0; i--)
@@ -1015,73 +1019,73 @@ namespace RH.Core.Render.Controllers
 
         public void SelectAutodotsFaceEllipse()
         {
-            if (AutoDots.Count == 0)
+            if (AutoDotsv2.Count == 0)// TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
                 return;
-            AutoDots.ClearSelection();
+            AutoDotsv2.ClearSelection();
 
             foreach (var index in GetFaceIndexes())
-                AutoDots[index].Selected = true;
+                AutoDotsv2[index].Selected = true;
         }
         public void SelectAutdotsMouth()
         {
-            if (AutoDots.Count == 0)
+            if (AutoDotsv2.Count == 0)
                 return;
-            AutoDots.ClearSelection();
+            AutoDotsv2.ClearSelection();
 
             foreach (var index in GetMouthIndexes())
-                AutoDots[index].Selected = true;
+                AutoDotsv2[index].Selected = true;
         }
         public void SelectAutodotsLeftEye()
         {
-            if (AutoDots.Count == 0)
+            if (AutoDotsv2.Count == 0)
                 return;
-            AutoDots.ClearSelection();
+            AutoDotsv2.ClearSelection();
 
             foreach (var index in GetLeftEyeIndexes())
-                AutoDots[index].Selected = true;
+                AutoDotsv2[index].Selected = true;
         }
         public void SelectAutodotsRightEye()
         {
-            if (AutoDots.Count == 0)
+            if (AutoDotsv2.Count == 0)
                 return;
-            AutoDots.ClearSelection();
+            AutoDotsv2.ClearSelection();
 
             foreach (var index in GetRightEyeIndexes())
-                AutoDots[index].Selected = true;
+                AutoDotsv2[index].Selected = true;
         }
         public void SelectAutodotsNose()
         {
-            if (AutoDots.Count == 0)
+            if (AutoDotsv2.Count == 0)
                 return;
-            AutoDots.ClearSelection();
+            AutoDotsv2.ClearSelection();
 
             foreach (var index in GetNoseIndexes())
-                AutoDots[index].Selected = true;
+                AutoDotsv2[index].Selected = true;
         }
 
-        public List<MirroredHeadPoint> GetSpecialAutodots(List<int> indexes)
+        public List<HeadPoint> GetSpecialAutodots(List<int> indexes)
         {
-            var result = new List<MirroredHeadPoint>();
-            if (AutoDots.Count == 0)
+            var result = new List<HeadPoint>();
+            if (AutoDotsv2.Count == 0)
                 return result;
 
             foreach (var index in indexes)
-                result.Add(AutoDots[index]);
+                result.Add(AutoDotsv2[index]);
 
             return result;
         }
         public bool UpdateAutodotsPointSelection(float x, float y, bool needUpdate)
         {
             var index = 0;
-            foreach (var elem in AutoDots)
+            foreach (var elem in AutoDotsv2)  // TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
             {
                 if (!elem.Visible)
                     continue;
 
                 Vector2 absolutePoint;
 
-                absolutePoint.X = (elem.ValueMirrored.X * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateWidth + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetX) + HalfPointRectSize;
-                absolutePoint.Y = (elem.ValueMirrored.Y * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateHeight + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetY) + HalfPointRectSize;
+                absolutePoint.X = (elem.OriginalValue.X * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateWidth + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetX) + HalfPointRectSize;
+                absolutePoint.Y = (elem.OriginalValue.Y * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateHeight + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetY) + HalfPointRectSize;
 
                 if (absolutePoint.X >= x - PointRectSize && absolutePoint.X <= x + PointRectSize && absolutePoint.Y >= y - PointRectSize && absolutePoint.Y <= y + PointRectSize)
                 {
@@ -1090,7 +1094,7 @@ namespace RH.Core.Render.Controllers
                         elem.Selected = !elem.Selected;
                         foreach (var linkedPointIndex in elem.LinkedPoints)
                         {
-                            var linkedPoint = AutoDots[linkedPointIndex];
+                            var linkedPoint = AutoDotsv2[linkedPointIndex];
                             linkedPoint.Selected = !linkedPoint.Selected;
                         }
                     }
@@ -1105,25 +1109,20 @@ namespace RH.Core.Render.Controllers
         /// <summary> Процедура автоточек </summary>
         public void StartAutodots()
         {
-            if (AutoDots.Count != 0)
+            if (AutoDotsv2.Count != 0)
                 return;
 
-            ShapeDots.Clear();
-            foreach (var dot in ProgramCore.Project.RenderMainHelper.headMeshesController.TexturingInfo.Points)
+            ShapeDots.Clear();          // TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
+            foreach (var dot in ProgramCore.Project.FacialFeatures)
             {
-                var newPoint = new MirroredHeadPoint(dot.Value, dot.Value);
-                newPoint.Visible = dot.Visible;
-                newPoint.LinkedPoints.AddRange(dot.LinkedPoints);
-                AutoDots.Add(newPoint);
+                var newPoint = new HeadPoint(new Vector2(dot.X, dot.Y));
+               // newPoint.LinkedPoints.AddRange(dot.LinkedPoints);
+                AutoDotsv2.Add(newPoint);
 
-                ShapeDots.Add(newPoint.Clone() as MirroredHeadPoint);        // по дефолту шейп-точки берутся из автодотсов и потом уже сами по себе
+              //  ShapeDots.Add(newPoint.Clone() as MirroredHeadPoint);        // по дефолту шейп-точки берутся из автодотсов и потом уже сами по себе
             }
 
-            // Уточняем положение глаз и рта, относительно центра указанного пользователем
-            //ClarifyEyeAndMouth(new List<int> { 21, 22, 23, 24 }, ProgramCore.Project.LeftEyeCenter);  // Left eye
-            //ClarifyEyeAndMouth(new List<int> { 43, 44, 45, 46 }, ProgramCore.Project.RightEyeCenter);  // Right eye
-
-            //ClarifyEyeAndMouth(new List<int> { 1, 15, 16, 17, 37, 38, 39, 51 }, ProgramCore.Project.MouthCenter);  // Mouth
+          
 #if WEB_APP
 #else
             ProgramCore.MainForm.ctrlTemplateImage.UpdateUserCenterPositions(false, true);
@@ -1132,12 +1131,34 @@ namespace RH.Core.Render.Controllers
         public void EndAutodots(bool needClear = true)
         {
             var results = new List<Vector2>();
-            foreach (var point in AutoDots)
-                results.Add(point.ValueMirrored);
+            foreach (var point in AutoDotsv2)
+                results.Add(point.OriginalValue);           // TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
 
-            ProgramCore.Project.RenderMainHelper.headMeshesController.UpdateTexCoors(results);
+            var p = new List<Vector3>();
+            for (var i =0; i < AutoDotsv2.Count; i++)
+            {
+                var v = new Vector3(AutoDotsv2[i].OriginalValue.X ,
+                    AutoDotsv2[i].OriginalValue.Y 
+                    , ProgramCore.MainForm.ctrlRenderControl.HeadPoints.Points[i].Z);
+                p.Add(v);
+
+            }
+            ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints.Initialize(ProgramCore.MainForm.ctrlRenderControl.HeadPoints, p);
+            ProgramCore.MainForm.ctrlRenderControl.headMorphing.Initialize(ProgramCore.MainForm.ctrlRenderControl.HeadPoints, p);
+            ProgramCore.MainForm.ctrlRenderControl.morphHelper.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints, ProgramCore.MainForm.ctrlRenderControl.HeadPoints);
+            ProgramCore.MainForm.ctrlRenderControl.headMorphing.Morph();
+
+            ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
+
+            ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.Type = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
+            ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.Initialize(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints, ProgramCore.MainForm.ctrlRenderControl.headMorphing);
+            ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints);
+
+
+
+            //  ProgramCore.Project.RenderMainHelper.headMeshesController.UpdateTexCoors(results);
             if (needClear)
-                AutoDots.ClearSelection();
+                AutoDotsv2.ClearSelection();
         }
 
         #endregion
@@ -1147,9 +1168,9 @@ namespace RH.Core.Render.Controllers
         public void UpdateAllShapedotsFromAutodots()
         {
             ShapeDots.Clear();
-            foreach (var dot in AutoDots)
+            foreach (var dot in AutoDotsv2)
             {
-                ShapeDots.Add(dot.Clone() as MirroredHeadPoint);
+                //  ShapeDots.Add(dot.Clone() as MirroredHeadPoint);      // TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
             }
         }
         public void SelectShapedotsFaceEllipse()

@@ -263,19 +263,19 @@ namespace RH.Core.Render.Controllers
     /// <summary> Откат изменения головы (инструмент шейп) </summary>
     public class HistoryHeadAutoDots : IHistoryItem
     {
-        private readonly List<MirroredHeadPoint> autoDotsInfo = new List<MirroredHeadPoint>();
+        private readonly List<HeadPoint> autoDotsInfo = new List<HeadPoint>();
 
-        public HistoryHeadAutoDots(IEnumerable<MirroredHeadPoint> autoDots)
+        public HistoryHeadAutoDots(IEnumerable<HeadPoint> autoDots)
         {
             foreach (var dot in autoDots)
-                autoDotsInfo.Add(dot.Clone() as MirroredHeadPoint);
+                autoDotsInfo.Add(dot.Clone());
         }
 
         public override void Undo()
         {
-            ProgramCore.Project.RenderMainHelper.headController.AutoDots.Clear();         // все точки нужны
+            ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Clear();         // все точки нужны
             foreach (var dot in autoDotsInfo)
-                ProgramCore.Project.RenderMainHelper.headController.AutoDots.Add(dot.Clone() as MirroredHeadPoint);
+                ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Add(dot.Clone());
 
             if (ProgramCore.Project.AutodotsUsed)
             {

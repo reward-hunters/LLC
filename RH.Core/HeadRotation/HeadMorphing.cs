@@ -25,7 +25,7 @@ namespace RH.Core.HeadRotation
         public List<Vector2> AutodotsTexCords = new List<Vector2>();
         public Dictionary<int, int> MirroredPoints = new Dictionary<int, int>();
 
-        public void Initialize(HeadPoints hPoints)
+        public void Initialize(HeadPoints hPoints, List<Vector3> facialFeatures)
         {
             MirroredPoints.Clear();
             AutodotsTexCords.Clear();
@@ -51,7 +51,7 @@ namespace RH.Core.HeadRotation
             var a1 = new Vector3(centerX, a.Y, centerZ);
             var a2 = new Vector3(centerX, b.Y, centerZ);
 
-            foreach(var point in ProgramCore.Project.FacialFeatures)
+            foreach(var point in facialFeatures)
             {
                 AutodotsTexCords.Add(point.Xy);
             }

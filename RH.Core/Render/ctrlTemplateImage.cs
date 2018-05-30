@@ -11,6 +11,7 @@ using RH.Core.Properties;
 using RH.Core.Render.Controllers;
 using RH.Core.Render.Helpers;
 using RH.MeshUtils.Helpers;
+using RH.MeshUtils.Data;
 
 namespace RH.Core.Render
 {
@@ -71,7 +72,7 @@ namespace RH.Core.Render
         private Vector2 headLastPoint = Vector2.Zero;
         private Vector2 tempOffsetPoint;
 
-        private readonly List<MirroredHeadPoint> headTempPoints = new List<MirroredHeadPoint>();
+        private readonly List<HeadPoint> headTempPoints = new List<HeadPoint>();
 
         /// <summary> прямоугольник глаза-рот, Подогнанный под контрол </summary>
         public RectangleF EyesMouthRectTransformed;
@@ -375,8 +376,8 @@ namespace RH.Core.Render
 
         public void SelectAutodotsByLasso()
         {
-            ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
-            foreach (var point in ProgramCore.Project.RenderMainHelper.headController.AutoDots)
+            ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
+            foreach (var point in ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2)
                 point.CheckLassoSelection(headAutodotsLassoPoints);
 
             headAutodotsLassoPoints.Clear();
@@ -395,10 +396,10 @@ namespace RH.Core.Render
             if (ProgramCore.MainForm.ctrlRenderControl.Mode == Mode.HeadAutodots)
             {
                 if (e.KeyData == (Keys.A))
-                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.SelectAll();
+                    ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.SelectAll();
                 else if (e.KeyData == (Keys.D))
                 {
-                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                    ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
                 }
             }
         }
@@ -406,7 +407,7 @@ namespace RH.Core.Render
         private void UpdateFaceRect()
         {
             var indicies = ProgramCore.Project.RenderMainHelper.headController.GetFaceIndexes();
-            List<MirroredHeadPoint> faceDots;
+            List<MirroredHeadPoint> faceDots = new List<MirroredHeadPoint>();
             switch (ProgramCore.MainForm.ctrlRenderControl.Mode)
             {
                 // case Mode.HeadShapedots:
@@ -416,7 +417,7 @@ namespace RH.Core.Render
                     faceDots = ProgramCore.Project.RenderMainHelper.headController.GetSpecialShapedots(indicies);
                     break;
                 default:
-                    faceDots = ProgramCore.Project.RenderMainHelper.headController.GetSpecialAutodots(indicies);
+                   // faceDots = ProgramCore.Project.RenderMainHelper.headController.GetSpecialAutodots(indicies);
                     break;
             }
 
@@ -469,7 +470,7 @@ namespace RH.Core.Render
         }
         private Vector2 UpdateUserCenterPositions(IEnumerable<int> indexes, bool onlySelected)
         {
-            List<MirroredHeadPoint> sourcePoints;
+            List<MirroredHeadPoint> sourcePoints = new List<MirroredHeadPoint>();
             switch (ProgramCore.MainForm.ctrlRenderControl.Mode)
             {
                 //       case Mode.HeadShapedots:
@@ -479,7 +480,7 @@ namespace RH.Core.Render
                     sourcePoints = ProgramCore.Project.RenderMainHelper.headController.ShapeDots;
                     break;
                 default:
-                    sourcePoints = ProgramCore.Project.RenderMainHelper.headController.AutoDots;
+                   sourcePoints = ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Select(x=>new MirroredHeadPoint(x.OriginalValue, x.OriginalValue)).ToList();   
                     break;
             }
             if (sourcePoints.Count == 0)
@@ -781,7 +782,7 @@ namespace RH.Core.Render
                 //      case Mode.HeadShapedots:
                 case Mode.HeadAutodots:
                 case Mode.HeadAutodotsFirstTime:
-                    DrawAutodotsGroupPoints(e.Graphics);
+                 //   DrawAutodotsGroupPoints(e.Graphics);
                     if (RectTransformMode)
                     {
                         e.Graphics.DrawRectangle(DrawingTools.RedPen, FaceRectTransformed);
@@ -991,7 +992,7 @@ namespace RH.Core.Render
                                     if (dblClick)
                                     {
                                         RectTransformMode = false;
-                                        ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                                        ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
                                     }
 
                                     #region Rectangle transforM ?
@@ -1013,8 +1014,8 @@ namespace RH.Core.Render
 
                                     if (moveRectIndex == -1) // если таскаем не прямоугольник, а точки
                                     {
-                                        foreach (var item in ProgramCore.Project.RenderMainHelper.headController.AutoDots.SelectedPoints)
-                                            headTempPoints.Add(item.Clone() as MirroredHeadPoint);
+                                        foreach (var item in ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.SelectedPoints)
+                                            headTempPoints.Add(item.Clone());
                                     }
                                     else
                                     {
@@ -1278,12 +1279,12 @@ namespace RH.Core.Render
                                     return;
 
                                 if (firstMove &&
-                                    ProgramCore.Project.RenderMainHelper.headController.AutoDots.SelectedPoints.Count >
+                                    ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.SelectedPoints.Count >
                                     0)
                                 {
                                     var history =
                                         new HistoryHeadAutoDots(
-                                            ProgramCore.Project.RenderMainHelper.headController.AutoDots);
+                                            ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2);
                                     ProgramCore.MainForm.ctrlRenderControl.historyController.Add(history);
 
                                     Dictionary<Guid, MeshUndoInfo> undoInfo;
@@ -1339,16 +1340,13 @@ namespace RH.Core.Render
                                         var newHeight = (FaceRectTransformed.Height) / (ImageTemplateHeight * 1f);
                                         var kx = newWidth / tempMoveRectWidth;
                                         var ky = newHeight / tempMoveRectHeight;
-                                        foreach (
-                                            var point in
-                                                ProgramCore.Project.RenderMainHelper.headController.AutoDots
-                                                    .SelectedPoints)
+                                        foreach ( var point in ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.SelectedPoints)
                                         {
-                                            var p = point.ValueMirrored - tempMoveRectCenter;
+                                          var p = point.OriginalValue - tempMoveRectCenter;  
                                             p.X *= kx;
                                             p.Y *= ky;
-                                            point.ValueMirrored = p + center;
-                                            point.UpdateWorldPoint();
+                                            point.OriginalValue = p + center;
+                                       //     point.UpdateWorldPoint();
                                         }
                                         tempMoveRectCenter = center;
                                         tempMoveRectWidth = newWidth;
@@ -1358,14 +1356,13 @@ namespace RH.Core.Render
                                     else // таскаем точки
                                     {
                                         var selectedPoints =
-                                            ProgramCore.Project.RenderMainHelper.headController.AutoDots
+                                            ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2
                                                 .SelectedPoints;
                                         for (var i = 0; i < selectedPoints.Count; i++)
                                         {
-                                            var headPoint = selectedPoints[i];
-                                            headPoint.ValueMirrored = headTempPoints[i].ValueMirrored + delta2;
+                                              var headPoint = selectedPoints[i];          
+                                              headPoint.OriginalValue = headTempPoints[i].OriginalValue + delta2;
 
-                                            headPoint.UpdateWorldPoint();
                                         }
                                         UpdateUserCenterPositions(true, true);
                                     }
@@ -1398,10 +1395,9 @@ namespace RH.Core.Render
                                         i < ProgramCore.Project.RenderMainHelper.headController.SelectedPoints.Count;
                                         i++)
                                     {
-                                        var headPoint =
-                                            ProgramCore.Project.RenderMainHelper.headController.SelectedPoints[i];
-                                        headPoint.ValueMirrored = headTempPoints[i].ValueMirrored + delta2;
-                                        headPoint.UpdateWorldPoint();
+                                          var headPoint = ProgramCore.Project.RenderMainHelper.headController.SelectedPoints[i];
+                                          headPoint.OriginalValue = headTempPoints[i].OriginalValue + delta2;
+
                                     }
                                 }
                                 break;
@@ -1508,11 +1504,11 @@ namespace RH.Core.Render
                                                 delta2 = newPoint - headLastPointRelative;
                                                 for (var i = 0; i < profileControlPoints.Count; i++)
                                                 {
-                                                    var headPoint = profileControlPoints[i];
-                                                    if (!headPoint.Selected)
-                                                        continue;
+                                                      var headPoint = profileControlPoints[i];             
+                                                      if (!headPoint.Selected)
+                                                          continue;
 
-                                                    headPoint.ValueMirrored = headTempPoints[i].ValueMirrored + delta2;
+                                                      headPoint.OriginalValue = headTempPoints[i].OriginalValue + delta2;
                                                 }
                                             }
                                             break;
@@ -1619,7 +1615,7 @@ namespace RH.Core.Render
                                     if (!startMove && !dblClick)
                                     {
                                         if (!shiftKeyPressed)
-                                            ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                                            ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
 
                                         if (e.X >= MouthTransformed.X - HalfPointRectSize && e.X <= MouthTransformed.X + HalfPointRectSize && e.Y >= MouthTransformed.Y - HalfPointRectSize && e.Y <= MouthTransformed.Y + HalfPointRectSize)       // рот
                                             ProgramCore.Project.RenderMainHelper.headController.SelectAutdotsMouth();
@@ -1634,7 +1630,7 @@ namespace RH.Core.Render
                                             if (RectTransformMode)
                                             {
                                                 RectTransformMode = false;
-                                                ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                                                ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
                                             }
                                             else
                                             {
@@ -1657,12 +1653,12 @@ namespace RH.Core.Render
                                             ProgramCore.Project.RenderMainHelper.headController.EndAutodots(false);
                                             ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
 
-                                            for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count; i++)      // после слияние с ShapeDots. Проверить!
+                                            for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Count; i++)      // после слияние с ShapeDots. Проверить!
                                             {
-                                                var p = ProgramCore.Project.RenderMainHelper.headController.AutoDots[i];
+                                          /*      var p = ProgramCore.Project.RenderMainHelper.headController.AutoDots[i];      //TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
 
                                                 if (p.Selected)
-                                                    ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
+                                                    ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах*/
                                             }
 
                                             switch (ProgramCore.CurrentProgram)

@@ -534,11 +534,11 @@ namespace RH.Core.Controls.Panels
                     ProgramCore.Project.RenderMainHelper.headController.EndAutodots();
                     ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
 
-                    for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count; i++)      // после слияние с ShapeDots. Проверить!
+                  /*  for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count; i++)      // TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
                     {
                         var p = ProgramCore.Project.RenderMainHelper.headController.AutoDots[i];
                         ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
-                    }
+                    }*/
                 }
 
                 //        btnFlipLeft.Visible = false;
@@ -708,7 +708,7 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);
                         ProgramCore.Project.ShapeFlip = FlipType.LeftToRight;
 
-                        ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                        ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
@@ -719,7 +719,7 @@ namespace RH.Core.Controls.Panels
 
                         ProgramCore.Project.TextureFlip = FlipType.LeftToRight;
 
-                        ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();            // добавлено после слияниея с shapedots!
+                        ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();            // добавлено после слияниея с shapedots!
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
@@ -768,7 +768,7 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);
                         ProgramCore.Project.ShapeFlip = FlipType.RightToLeft;
 
-                        ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();
+                        ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
@@ -779,7 +779,7 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.MainForm.ctrlRenderControl.FlipRight(true);
                         ProgramCore.Project.TextureFlip = FlipType.RightToLeft;
 
-                        ProgramCore.Project.RenderMainHelper.headController.AutoDots.ClearSelection();        // после слияние с ShapeDots. Проверить!
+                        ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();        // после слияние с ShapeDots. Проверить!
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
