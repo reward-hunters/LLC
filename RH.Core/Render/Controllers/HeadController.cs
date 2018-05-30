@@ -1137,22 +1137,20 @@ namespace RH.Core.Render.Controllers
             var p = new List<Vector3>();
             for (var i =0; i < AutoDotsv2.Count; i++)
             {
-                var v = new Vector3(AutoDotsv2[i].OriginalValue.X ,
-                    AutoDotsv2[i].OriginalValue.Y 
-                    , ProgramCore.MainForm.ctrlRenderControl.HeadPoints.Points[i].Z);
+                var v = new Vector3(AutoDotsv2[i].OriginalValue.X, AutoDotsv2[i].OriginalValue.Y, 0.0f);
                 p.Add(v);
 
             }
-            ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints.Initialize(ProgramCore.MainForm.ctrlRenderControl.HeadPoints, p);
-            ProgramCore.MainForm.ctrlRenderControl.headMorphing.Initialize(ProgramCore.MainForm.ctrlRenderControl.HeadPoints, p);
+            ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints.Initialize(p);
+            //ProgramCore.MainForm.ctrlRenderControl.headMorphing.Initialize(ProgramCore.MainForm.ctrlRenderControl.HeadPoints, p);
             ProgramCore.MainForm.ctrlRenderControl.morphHelper.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints, ProgramCore.MainForm.ctrlRenderControl.HeadPoints);
             ProgramCore.MainForm.ctrlRenderControl.headMorphing.Morph();
 
             ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
 
-            ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.Type = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
+           /* ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.Type = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
             ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.Initialize(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints, ProgramCore.MainForm.ctrlRenderControl.headMorphing);
-            ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints);
+            ProgramCore.MainForm.ctrlRenderControl.additionalMorphing.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints);*/
 
 
 

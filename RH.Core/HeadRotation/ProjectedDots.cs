@@ -28,6 +28,24 @@ namespace RH.Core.HeadRotation
             GL.PointSize(1.0f);
         }
 
+        private Vector3 rootPointWorld;
+        private float scale;
+        private Vector3 rootPointPhoto;
+
+        public void Initialize(List<Vector3> facialFeatures)
+        {
+            Points.Clear();
+
+            foreach (var point in facialFeatures)
+            {
+                var p = point - rootPointPhoto;
+                p.X *= scale;
+                p.Y *= -scale;
+                p += rootPointWorld;
+                Points.Add(p.Xy);
+            }
+        }
+
         public void Initialize( HeadPoints headPoints, List<Vector3> facialFeatures)
         {
             if (facialFeatures.Count < headPoints.Points.Count)
@@ -39,27 +57,18 @@ namespace RH.Core.HeadRotation
             if (headPoints.Points.Count <= HelperIndex)
                 return;
 
-            Points.Clear();
-
-            var rootPointWorld = headPoints.GetWorldPoint(RootIndex);
+            rootPointWorld = headPoints.GetWorldPoint(RootIndex);
             var helperPointWorld = headPoints.GetWorldPoint(HelperIndex);
 
-            var rootPointPhoto = facialFeatures[RootIndex];
+            rootPointPhoto = facialFeatures[RootIndex];
             var helperPointPhoto = facialFeatures[HelperIndex];
 
             float distWorld = rootPointWorld.X - helperPointWorld.X;
             float distPhoto = rootPointPhoto.X - helperPointPhoto.X;
 
-            float scale = distWorld / distPhoto;
+            scale = distWorld / distPhoto;
 
-            foreach (var point in facialFeatures)
-            {
-                var p = point - rootPointPhoto;
-                p.X *= scale;
-                p.Y *= -scale;
-                p += rootPointWorld;
-                Points.Add(p.Xy);
-            }
+            Initialize(facialFeatures);
         }
     }
 }
