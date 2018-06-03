@@ -181,6 +181,14 @@ namespace RH.MeshUtils.Data
                     pos.Z *= scale;
                     p.Position = pos;
                 }
+                foreach(var p in part.MorphPoints)
+                {
+                    var pos = p.Position;
+                    pos.X *= scale;
+                    pos.Y *= scale;
+                    pos.Z *= scale;
+                    p.Position = pos;
+                }
             }
             return 1.0f / scale;
         }
