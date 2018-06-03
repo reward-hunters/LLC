@@ -2390,7 +2390,7 @@ namespace RH.Core
                             break;
                         default:
                             {
-                             ProgramCore.MainForm.ctrlRenderControl.PhotoLoaded();
+                                ProgramCore.MainForm.ctrlRenderControl.PhotoLoaded();
                             }
                             break;
                     }

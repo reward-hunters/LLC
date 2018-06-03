@@ -490,7 +490,7 @@ namespace RH.Core.Render
                 }
                 else if (ProgramCore.PluginMode)
                 {
-                    /* switch (ProgramCore.Project.ManType)
+                     switch (ProgramCore.Project.ManType)
                      {
                          case ManType.Male:
                              scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
@@ -501,7 +501,7 @@ namespace RH.Core.Render
                          case ManType.Child:
                              scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
                              break;
-                     }*/
+                     }
                 }
                 if (pickingController.ObjExport != null)
                     pickingController.ObjExport.Scale = scale;
