@@ -147,6 +147,36 @@ namespace RH.MeshUtils.Data
             }
         }
 
+        public void Resize(float scale)
+        {
+            AABB = new RectangleAABB();
+            var a = AABB.A;
+            var b = AABB.B;
+            foreach (var part in Parts)
+            {
+                for (var i = 0; i < part.Vertices.Length; i++)
+                {
+                    var vertex = part.Vertices[i];
+                    vertex.OriginalPosition = vertex.Position;
+                    vertex.Position.X *= scale;
+                    vertex.Position.Y *= scale;
+                    vertex.Position.Z *= scale;
+                    part.Vertices[i] = vertex;
+                }
+                foreach (var p in part.Points)
+                {
+                    p.Position = p.Position * scale;
+                }
+                foreach (var p in part.MorphPoints)
+                {
+                    p.Position = p.Position * scale;
+                }
+                UpdateAABB(part, ref a, ref b);
+            }
+            AABB.A = a;
+            AABB.B = b;
+        }
+
         public float SetSize(float diagonal)
         {
             Vector2 a = new Vector2(99999.0f, 99999.0f), b = new Vector2(-99999.0f, -99999.0f);
@@ -463,6 +493,7 @@ namespace RH.MeshUtils.Data
                 MeshQuaternion = quaternion = ToQ(angles);
 
                 RotationMatrix = CreateRotationMatrix(quaternion);
+                //RotationMatrix = Matrix4.Identity;
 
                 quaternion.Z = -MeshQuaternion.Z;
                 ReverseRotationMatrix = CreateRotationMatrix(quaternion);

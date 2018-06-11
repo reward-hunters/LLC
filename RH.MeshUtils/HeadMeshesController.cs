@@ -86,6 +86,12 @@ namespace RH.MeshUtils
             UpdateBuffers();
         }
 
+        public void Resize(float scale)
+        {
+            RenderMesh.Resize(scale);
+            UpdateBuffers();
+        }
+
         public float SetSize(float diagonal)
         {
             var scale = RenderMesh.SetSize(diagonal);

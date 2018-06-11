@@ -337,7 +337,7 @@ namespace RH.Core.Render
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
-            ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
+            /*ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.*/
 
             ResetCamera();
             /*additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
@@ -482,6 +482,7 @@ namespace RH.Core.Render
                 var modelPath = ProgramCore.Project.HeadModelPath;
                 pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode, ProgramCore.Project.IsOpenSmile);
 
+                //265.54415390315148338545523758907
                 float scale = 0;
                 if (ProgramCore.Project.ManType == ManType.Custom)
                 {
@@ -496,12 +497,15 @@ namespace RH.Core.Render
                              scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
                              break;
                          case ManType.Female:
-                             scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
-                             break;
+                            scale = 265.544153903151483385f;
+                            headMeshesController.Resize(scale);
+                            scale = 1.0f / scale;
+                            // scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
+                            break;
                          case ManType.Child:
                              scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
                              break;
-                     }
+                     }                    
                 }
                 if (pickingController.ObjExport != null)
                     pickingController.ObjExport.Scale = scale;

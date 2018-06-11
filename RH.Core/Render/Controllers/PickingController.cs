@@ -283,7 +283,7 @@ namespace RH.Core.Render.Controllers
                                     tempPluginTexture = Path.Combine(folderPath, "Maps", "RyNevio_faceB.jpg");
                                     break;
                                 case ManType.Female:
-                                    tempPluginTexture = Path.Combine(folderPath, "Maps", "RyBelle_face.jpg");
+                                    tempPluginTexture = Path.Combine(folderPath, "Maps", "V5BreeHeadM.jpg");
                                     break;
                                 case ManType.Child:
                                     tempPluginTexture = Path.Combine(folderPath, "Maps", "AC_KidsRRHBy.jpg");
