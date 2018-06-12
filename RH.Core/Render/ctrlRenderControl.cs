@@ -337,7 +337,7 @@ namespace RH.Core.Render
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
-            ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.*/
+            ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
 
             ResetCamera();
             additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
@@ -497,10 +497,11 @@ namespace RH.Core.Render
                              scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
                              break;
                          case ManType.Female:
-                            scale = 265.544153903151483385f;
+                            /*scale = 265.544153903151483385f;
                             headMeshesController.Resize(scale);
-                            scale = 1.0f / scale;
-                            // scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
+                            scale = 1.0f / scale;*/
+                            //scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
+                            scale = headMeshesController.SetSize(31.862587f); // подгонка размера 
                             break;
                          case ManType.Child:
                              scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 

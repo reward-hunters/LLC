@@ -180,6 +180,8 @@ namespace RH.MeshUtils.Data
         public float SetSize(float diagonal)
         {
             Vector2 a = new Vector2(99999.0f, 99999.0f), b = new Vector2(-99999.0f, -99999.0f);
+           
+
             foreach (var part in Parts)
                 foreach (var vertex in part.Vertices)
                 {
@@ -188,10 +190,17 @@ namespace RH.MeshUtils.Data
                     b.X = Math.Max(vertex.Position.X, b.X);
                     b.Y = Math.Max(vertex.Position.Y, b.Y);
                 }
+
+           
             var d = (b - a).Length;
             if (d == 0.0f)
                 return 0.0f;
             var scale = diagonal / d;
+
+            AABB = new RectangleAABB();
+            var a1 = AABB.A;
+            var b1 = AABB.B;
+
             foreach (var part in Parts)
             {
                 for (var i = 0; i < part.Vertices.Length; i++)
@@ -211,7 +220,11 @@ namespace RH.MeshUtils.Data
                 {
                     p.Position = p.Position * scale;
                 }
+
+                UpdateAABB(part, ref a1, ref b1);
             }
+            AABB.A = a1;
+            AABB.B = b1;
             return 1.0f / scale;
         }
 
