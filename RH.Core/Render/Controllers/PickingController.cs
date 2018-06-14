@@ -456,8 +456,8 @@ namespace RH.Core.Render.Controllers
 
             foreach (var modelGroup in objModel.Groups) // one group - one mesh
             {
-                if (modelGroup.Key.Name == "Tear" || modelGroup.Key.Name == "Cornea" || modelGroup.Key.Name == "EyeReflection")     // очень плохие материалы. ИЗ-за них ломаются глазки.
-                    continue;
+                if (!ProgramCore.PluginMode && ( modelGroup.Key.Name == "Tear" || modelGroup.Key.Name == "Cornea" || modelGroup.Key.Name == "EyeReflection"))     // очень плохие материалы. ИЗ-за них ломаются глазки.
+                    continue;           // если это плагин - то пропуск материалов ВСЕ ломает для экспортера в строчке GetObjFace. Возможно потребуется химичить с индексами
 
                 vertexPositions.Clear();
                 vertexNormals.Clear();
