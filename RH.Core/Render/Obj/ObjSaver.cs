@@ -112,7 +112,7 @@ namespace RH.Core.Render.Obj
 
             foreach (var face in objExport.Faces)
             {
-                var index = face.TriangleIndex0 * 3;
+                var index = face.TriangleIndex0 * 3;        
 
                 for (var l = 0; l < 3; l++)
                 {

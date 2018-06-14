@@ -215,7 +215,7 @@ namespace RH.Core.Render
         public Dictionary<Guid, PartMorphInfo> FatMorphing = null;
         public Dictionary<Guid, PartMorphInfo> PoseMorphing = null;
 
-        private bool drawPoints = true;
+        private bool drawPoints = false;
 
         #region Var custom points
 
@@ -327,7 +327,7 @@ namespace RH.Core.Render
             //   headTextureId = TextureHelper.GetTexture(photoPath);
 
             camera.ResetCamera(true);
-
+/*
             ImportPoints();
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
 
@@ -342,7 +342,7 @@ namespace RH.Core.Render
             ResetCamera();
             additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
             additionalMorphing.Initialize(ProjectedPoints, headMorphing);
-            additionalMorphing.ProcessPoints(ProjectedPoints);
+            additionalMorphing.ProcessPoints(ProjectedPoints);*/
 
 
         }

@@ -230,7 +230,7 @@ namespace RH.Core.Render.Controllers
         {
             var result = new List<DynamicRenderMesh>();
 
-            var objModel = ObjLoader.LoadObjFile(path, needExporter);
+            var objModel = ObjLoader.LoadObjFile(path, needExporter , isOpenSmile);
             if (objModel == null)
             {
                 ProgramCore.EchoToLog($"Can't load obj model '{path}'", EchoMessageType.Error);
