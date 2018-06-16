@@ -18,6 +18,7 @@ namespace RH.Core.HeadRotation
 
         public const float SelectionRadius = 10.0f;
         public List<Vector3> Points = new List<Vector3>();
+        public List<Vector3> OriginalPoints = new List<Vector3>();
         public List<bool> IsVisible = new List<bool>();
         public Camera RenderCamera;
 

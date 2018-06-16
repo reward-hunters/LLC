@@ -99,7 +99,7 @@ namespace RH.Core.HeadRotation
             foreach (int index in headIndices)
             {
                 Vector2 targetPoint = projectedDots.Points[index];
-                Vector3 current = headPoints.GetWorldPoint(index);
+                Vector3 current = headPoints.GetWorldPoint(headPoints.OriginalPoints[index]);
 
                 var point0 = new Vector3(targetPoint.X, targetPoint.Y, -1000.0f);
                 var point1 = new Vector3(targetPoint.X, targetPoint.Y, 1000.0f);

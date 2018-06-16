@@ -83,6 +83,9 @@ namespace RH.Core.HeadRotation
             headPoints.Points.Add(a1); //78
             headPoints.Points.Add(a2); //79
 
+            foreach (var point in headPoints.Points)
+                headPoints.OriginalPoints.Add(point);
+
             MirroredPoints.Add(72, 70);
             MirroredPoints.Add(73, 77);
             MirroredPoints.Add(74, 76);
