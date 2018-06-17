@@ -1141,7 +1141,7 @@ namespace RH.Core.Render.Controllers
                 p.Add(v);
 
             }
-            ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints.Initialize(p);
+            ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints.Initialize(p, ProgramCore.Project.TopPoint);
             //ProgramCore.MainForm.ctrlRenderControl.headMorphing.Initialize(ProgramCore.MainForm.ctrlRenderControl.HeadPoints, p);
             ProgramCore.MainForm.ctrlRenderControl.morphHelper.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints, ProgramCore.MainForm.ctrlRenderControl.HeadPoints);
             ProgramCore.MainForm.ctrlRenderControl.headMorphing.Morph();

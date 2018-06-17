@@ -332,7 +332,7 @@ namespace RH.Core.Render
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
 
 
-            ProjectedPoints.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures);
+            ProjectedPoints.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures, ProgramCore.Project.TopPoint);
             headMorphing.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures);
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();

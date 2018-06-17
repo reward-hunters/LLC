@@ -14,7 +14,7 @@ namespace RH.Core.HeadRotation
         private Vector3 rightVector;
         private Vector3 upVector;
 
-        
+        static List<int> topIndices = new List<int> { 70, 71, 72, 79 };
         static List<int> headIndices = new List<int>();
         #region Mirrored indices
         public static List<int> mirroredPoints = new List<int>
@@ -96,10 +96,20 @@ namespace RH.Core.HeadRotation
 
         private void ProcessHeadPoints()
         {
+            var topPoint = ProcessHeadPoint(79, projectedDots.TopPoint);
+            foreach (int index in topIndices)
+            {
+                var point = headPoints.Points[index];
+                point.Y = topPoint.Y;
+                headPoints.Points[index] = point;
+            }
+
             foreach (int index in headIndices)
             {
                 Vector2 targetPoint = projectedDots.Points[index];
-                Vector3 current = headPoints.GetWorldPoint(headPoints.OriginalPoints[index]);
+
+                headPoints.Points[index] = ProcessHeadPoint(index, targetPoint);
+               /* Vector3 current = headPoints.GetWorldPoint(headPoints.OriginalPoints[index]);
 
                 var point0 = new Vector3(targetPoint.X, targetPoint.Y, -1000.0f);
                 var point1 = new Vector3(targetPoint.X, targetPoint.Y, 1000.0f);
@@ -114,17 +124,36 @@ namespace RH.Core.HeadRotation
 
                 var point3 = point0 + p * dot;
 
-                /*if (index == headIndices[44])
-                {
-                    Point0 = headPoints.GetWorldPoint(point0);
-                    Point1 = headPoints.GetWorldPoint(point1);
-
-                    Point2 = current;
-                    Point3 = headPoints.GetWorldPoint(point3);
-                }*/
-
-                headPoints.Points[index] = point3;
+                headPoints.Points[index] = point3;*/
             }
+        }
+
+        private Vector3 ProcessHeadPoint(int index, Vector2 targetPoint)
+        {
+            Vector3 current = headPoints.GetWorldPoint(headPoints.OriginalPoints[index]);
+
+            var point0 = new Vector3(targetPoint.X, targetPoint.Y, -1000.0f);
+            var point1 = new Vector3(targetPoint.X, targetPoint.Y, 1000.0f);
+
+            point0 = Vector4.Transform(new Vector4(point0), RotationMatrix).Xyz;
+            point1 = Vector4.Transform(new Vector4(point1), RotationMatrix).Xyz;
+
+            var p = point1 - point0;
+            var t = current - point0;
+            p.Normalize();
+            var dot = Vector3.Dot(t, p);
+
+            var point3 = point0 + p * dot;
+            return point3;
+
+            /*if (index == headIndices[44])
+            {
+                Point0 = headPoints.GetWorldPoint(point0);
+                Point1 = headPoints.GetWorldPoint(point1);
+
+                Point2 = current;
+                Point3 = headPoints.GetWorldPoint(point3);
+            }*/
         }
 
         private void FixLipsPoints()

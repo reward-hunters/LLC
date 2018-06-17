@@ -11,6 +11,7 @@ namespace RH.Core.HeadRotation
         public int HelperIndex = 67;
 
         public List<Vector2> Points = new List<Vector2>();
+        public Vector2 TopPoint = Vector2.Zero;
 
         public void Draw()
         {
@@ -23,7 +24,11 @@ namespace RH.Core.HeadRotation
             {
                 GL.Vertex2(point);
             }
-        
+
+            GL.Color3(1.0f, 0.0f, 1.0f);
+
+            GL.Vertex2(TopPoint);
+
             GL.End();
             GL.PointSize(1.0f);
         }
@@ -32,21 +37,32 @@ namespace RH.Core.HeadRotation
         private float scale;
         private Vector3 rootPointPhoto;
 
-        public void Initialize(List<Vector3> facialFeatures)
+        public void Initialize(List<Vector3> facialFeatures, Vector2 topPoint)
         {
             Points.Clear();
 
             foreach (var point in facialFeatures)
             {
-                var p = point - rootPointPhoto;
+                /*var p = point - rootPointPhoto;
                 p.X *= scale;
                 p.Y *= -scale;
-                p += rootPointWorld;
-                Points.Add(p.Xy);
+                p += rootPointWorld;*/
+                Points.Add(InitializePoint(point));
             }
+
+            TopPoint = InitializePoint(new Vector3(topPoint.X, topPoint.Y, 0.0f));
         }
 
-        public void Initialize( HeadPoints headPoints, List<Vector3> facialFeatures)
+        private Vector2 InitializePoint(Vector3 point)
+        {
+            var p = point - rootPointPhoto;
+            p.X *= scale;
+            p.Y *= -scale;
+            p += rootPointWorld;
+            return p.Xy;
+        }
+
+        public void Initialize( HeadPoints headPoints, List<Vector3> facialFeatures, Vector2 topPoint)
         {
             if (facialFeatures.Count < headPoints.Points.Count)
                 return;
@@ -68,7 +84,7 @@ namespace RH.Core.HeadRotation
 
             scale = distWorld / distPhoto;
 
-            Initialize(facialFeatures);
+            Initialize(facialFeatures, topPoint);
         }
     }
 }

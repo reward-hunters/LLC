@@ -455,7 +455,11 @@ namespace RH.Core.Controls
 
             var minX = fcr.GetMinX();
             var topPoint = (TopEdgeTransformed.Y - ImageTemplateOffsetY) / ImageTemplateHeight;
-            ProgramCore.Project.FaceRectRelative = new RectangleF(minX, topPoint, fcr.GetMaxX() - minX, fcr.BottomFace.Y - topPoint);
+
+            ProgramCore.Project.TopPoint.X = 0.0f;
+            ProgramCore.Project.TopPoint.Y = topPoint;
+
+            ProgramCore.Project.FaceRectRelative = new RectangleF(minX, topPoint, fcr.GetMaxX() - minX, fcr.BottomFace.Y - topPoint);            
             ProgramCore.Project.MouthCenter = new Vector2(fcr.LeftMouth.X + (fcr.RightMouth.X - fcr.LeftMouth.X) * 0.5f, fcr.LeftMouth.Y + (fcr.RightMouth.Y - fcr.LeftMouth.Y) * 0.5f);
 
             ProgramCore.Project.LeftEyeCenter = fcr.LeftEyeCenter;

@@ -98,6 +98,7 @@ namespace RH.Core
         /// <summary> Прямоугольник лица, рассчитанный по точкам глаз и рта, определенных распознаванием. Относительные координаты.</summary>
         public RectangleF FaceRectRelative;
         public RectangleF nextHeadRectF = new RectangleF();
+        public Vector2 TopPoint = Vector2.Zero;
 
         /// <summary> Центр рта, опредееленный распознаванием лица. Относительные координаты </summary>
         private Vector2 mouthCenter;
