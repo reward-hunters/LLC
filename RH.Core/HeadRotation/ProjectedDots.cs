@@ -51,6 +51,7 @@ namespace RH.Core.HeadRotation
             }
 
             TopPoint = InitializePoint(new Vector3(topPoint.X, topPoint.Y, 0.0f));
+            TopPoint.X = 0.0f;
         }
 
         private Vector2 InitializePoint(Vector3 point)
