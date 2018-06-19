@@ -169,7 +169,7 @@ namespace RH.Core
                     Text = @"HeadShop 11";
                     aboutHeadShopProToolStripMenuItem.Text = @"About HeadShop 11";
                     panelMenuStage.Image = Resources.btnMenuStageNormal;
-                    panelMenuFeatures.Visible = featuresTabToolStripMenuItem.Visible = false;
+                    panelMenuFeatures.Visible = featuresTabToolStripMenuItem.Visible = true;
                     childHelpToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
