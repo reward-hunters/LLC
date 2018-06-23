@@ -24,7 +24,7 @@ namespace RH.MeshUtils.Data
                     result.PointsMorph.Add(v);
                 }
             }
-            if (result.PointsMorph.Count != part.Points.Count)
+            if (result.PointsMorph.Count != part.MorphPoints.Count)
             {
                 info = null;
                 return false;
@@ -32,7 +32,7 @@ namespace RH.MeshUtils.Data
 
             for (var i = 0; i < result.PointsMorph.Count; i++)
             {
-                var index = part.Points[i].Indices[0];
+                var index = part.MorphPoints[i].Indices[0];
                 var p = (part.BaseVertices ?? part.Vertices)[index].OriginalPosition;
                 result.PointsMorph[i] = result.PointsMorph[i] - p / scale;
             }
@@ -52,14 +52,14 @@ namespace RH.MeshUtils.Data
             if (part.IsMirrored)
             {
                 var verticesDictionary = new Dictionary<uint, Vector3>();
-                for (var i = 0; i < part.Points.Count; i++)
+                for (var i = 0; i < part.MorphPoints.Count; i++)
                 {
-                    var point = part.Points[i];
+                    var point = part.MorphPoints[i];
                     var delta = morphInfos.Aggregate(Vector3.Zero, (current, mi) => current + mi.PointsMorph[i] * mi.Delta) * count;
                     foreach (var index in point.Indices)
                     {
-                        if (!verticesDictionary.ContainsKey(index))
-                            verticesDictionary.Add(index, delta);
+                        if (!verticesDictionary.ContainsKey((uint)index))
+                            verticesDictionary.Add((uint)index, delta);
                     }
                 }
                 for (var i = 0; i < part.Vertices.Length; i++)
@@ -88,9 +88,9 @@ namespace RH.MeshUtils.Data
             }
             else
             {
-                for (var i = 0; i < part.Points.Count; i++)
+                for (var i = 0; i < part.MorphPoints.Count; i++)
                 {
-                    var point = part.Points[i];
+                    var point = part.MorphPoints[i]; //Points[i];
                     var delta = morphInfos.Aggregate(Vector3.Zero, (current, mi) => current + mi.PointsMorph[i] * mi.Delta) * count;
                     foreach (var index in point.Indices)
                         part.Vertices[index].Position = point.Position + delta;
