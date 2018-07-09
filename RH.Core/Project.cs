@@ -795,6 +795,22 @@ namespace RH.Core
                     return string.Empty;
             }
         }
+
+        public static string GetObjDirPathSmilePlugin(this ManType manType)
+        {
+            switch (manType)
+            {
+                case ManType.Male:
+                    return "MaleWithSmilePlugin";
+                case ManType.Female:
+                    return "FemWithSmilePlugin";
+                case ManType.Child:
+                    return "ChildWithSmilePlugin";
+                default:
+                    return string.Empty;
+            }
+        }
+
         public static string GetObjPath(this ManType manType, bool isOpenSmile)
         {
             switch (manType)
@@ -805,6 +821,22 @@ namespace RH.Core
                     return Path.Combine(manType.GetObjDirPath(isOpenSmile), "Fem.obj");
                 case ManType.Child:
                     return Path.Combine(manType.GetObjDirPath(isOpenSmile), "Child.obj");
+                default:
+                    return string.Empty;
+            }
+        }
+
+
+        public static string GetObjPathSmilePlugin(this ManType manType)
+        {
+            switch (manType)
+            {
+                case ManType.Male:
+                    return Path.Combine(manType.GetObjDirPathSmilePlugin(), "Male.obj");
+                case ManType.Female:
+                    return Path.Combine(manType.GetObjDirPathSmilePlugin(), "Fem.obj");
+                case ManType.Child:
+                    return Path.Combine(manType.GetObjDirPathSmilePlugin(), "Child.obj");
                 default:
                     return string.Empty;
             }

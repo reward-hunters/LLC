@@ -551,6 +551,12 @@ namespace RH.Core.HeadRotation
 
             current = first;
 
+            List<Vector2> result = new List<Vector2>();
+            if(points.Count == 0)
+            {
+                return result;
+            }
+
             Vector2 vec = isRightSide ? new Vector2(1.0f, 0.0f) : new Vector2(-1.0f, 0.0f);
             Vector2 curr, prev = points[first], next;
             while (true)
@@ -589,8 +595,7 @@ namespace RH.Core.HeadRotation
                     return null;
                 }
             }
-
-            List<Vector2> result = new List<Vector2>();
+            
             for (int i = 0; i < count; ++i)
                 result.Add(points[indices[i]]);
 

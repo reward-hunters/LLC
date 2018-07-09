@@ -319,6 +319,12 @@ namespace RH.Core.Render.Controllers
                             objModelFull = null;
 
                         var meshPartInfos = LoadHeadMeshes(objModel, fromDragAndDrop, manType, scale, ref lastTriangle);
+
+                        if (ProgramCore.PluginMode && isOpenSmile)
+                        {
+                            PluginMorphToSmile(meshPartInfos, manType, scale);
+                        }
+
                         //result = LoadHairMeshes(objModel, objModelFull, fromDragAndDrop, manType, MeshType.Head);
                         //var meshPartInfos = new List<MeshPartInfo>();
                         var a = new Vector3(99999.0f, 99999.0f, 99999.0f);
@@ -363,6 +369,49 @@ namespace RH.Core.Render.Controllers
                 item.Path = path;
 
             return result;
+        }
+
+        private void PluginMorphToSmile(List<MeshPartInfo> meshesInfo, ManType manType, float scale)
+        {
+            var lastTriangle = 0;
+            var path = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPathSmilePlugin());
+            var objModel = ObjLoader.LoadObjFile(path, true, true);
+            var smileMeshes = LoadHeadMeshes(objModel, false, manType, scale, ref lastTriangle);
+
+            var a0 = new Vector3(99999.0f, 99999.0f, 99999.0f);
+            var b0 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+
+            foreach (var meshPartInfo in meshesInfo)
+            {
+                GetAABB(ref a0, ref b0, meshPartInfo.VertexPositions);
+            }
+
+            var a1 = new Vector3(99999.0f, 99999.0f, 99999.0f);
+            var b1 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+            foreach (var meshPartInfo in smileMeshes)
+            {
+                GetAABB(ref a1, ref b1, meshPartInfo.VertexPositions);
+            }
+
+            var dist0 = (b0 - a0).Length;
+            var dist1 = (b1 - a1).Length;
+
+            var center0 = (b0 + a0) * 0.5f;
+            var center1 = (b1 + a1) * 0.5f;
+
+            float k = dist1 / dist0;
+
+            foreach (var meshInfo in meshesInfo)
+            {
+                var mesh = smileMeshes.FirstOrDefault(m => m.PartName == meshInfo.PartName);
+                if(mesh.VertexPositions.Count == meshInfo.VertexPositions.Count)
+                {
+                    for(int i = 0; i < mesh.VertexPositions.Count; ++i)
+                    {
+                        meshInfo.VertexPositions[i] = center0 + (mesh.VertexPositions[i] - center1) * k;
+                    }
+                }
+            }
         }
 
         private List<Vector3> GetScaledVertices(List<Vector3> vlist, float scale)
