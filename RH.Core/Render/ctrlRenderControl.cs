@@ -325,7 +325,7 @@ namespace RH.Core.Render
         public void PhotoLoaded()
         {
             //   headTextureId = TextureHelper.GetTexture(photoPath);
-
+           
             camera.ResetCamera(true);
 
             ImportPoints();
@@ -500,8 +500,8 @@ namespace RH.Core.Render
                             /*scale = 265.544153903151483385f;
                             headMeshesController.Resize(scale);
                             scale = 1.0f / scale;*/
-                            //scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
-                            scale = headMeshesController.SetSize(31.862587f); // подгонка размера 
+                            scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
+                            //scale = headMeshesController.SetSize(31.862587f); // подгонка размера 
                             break;
                          case ManType.Child:
                              scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
