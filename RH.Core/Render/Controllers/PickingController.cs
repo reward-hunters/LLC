@@ -227,7 +227,7 @@ namespace RH.Core.Render.Controllers
         }
 
         public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, string animationPath, bool needExporter, bool isOpenSmile)
-        {
+        {            
             var result = new List<DynamicRenderMesh>();
 
             var objModel = ObjLoader.LoadObjFile(path, needExporter , isOpenSmile);
@@ -378,38 +378,62 @@ namespace RH.Core.Render.Controllers
             var objModel = ObjLoader.LoadObjFile(path, true, true);
             var smileMeshes = LoadHeadMeshes(objModel, false, manType, scale, ref lastTriangle);
 
-            var a0 = new Vector3(99999.0f, 99999.0f, 99999.0f);
-            var b0 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+             /*var a0 = new Vector3(99999.0f, 99999.0f, 99999.0f);
+             var b0 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
 
-            foreach (var meshPartInfo in meshesInfo)
+             foreach (var meshPartInfo in meshesInfo)
+             {
+                 GetAABB(ref a0, ref b0, meshPartInfo.VertexPositions);
+             }
+
+             var a1 = new Vector3(99999.0f, 99999.0f, 99999.0f);
+             var b1 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+             foreach (var meshPartInfo in smileMeshes)
+             {
+                 GetAABB(ref a1, ref b1, meshPartInfo.VertexPositions);
+             }
+
+             var dist0 = (b0 - a0).Length;
+             var dist1 = (b1 - a1).Length;
+
+             var center0 = (b0 + a0) * 0.5f;
+             var center1 = (b1 + a1) * 0.5f;*/
+
+            float k = 265.4678407f; //! Вот это нужно подобрать
+            //dist1 / dist0;
+
+            float MaxY0 = -99999.0f;
+            float MaxY1 = -99999.0f;
+
+            foreach (var meshInfo in meshesInfo)
             {
-                GetAABB(ref a0, ref b0, meshPartInfo.VertexPositions);
+                for (int i = 0; i < meshInfo.VertexPositions.Count; ++i)
+                {
+                    MaxY0 = Math.Max(MaxY0, meshInfo.VertexPositions[i].Y);
+                }
             }
-
-            var a1 = new Vector3(99999.0f, 99999.0f, 99999.0f);
-            var b1 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
-            foreach (var meshPartInfo in smileMeshes)
-            {
-                GetAABB(ref a1, ref b1, meshPartInfo.VertexPositions);
-            }
-
-            var dist0 = (b0 - a0).Length;
-            var dist1 = (b1 - a1).Length;
-
-            var center0 = (b0 + a0) * 0.5f;
-            var center1 = (b1 + a1) * 0.5f;
-
-            float k = dist1 / dist0;
 
             foreach (var meshInfo in meshesInfo)
             {
                 var mesh = smileMeshes.FirstOrDefault(m => m.PartName == meshInfo.PartName);
-                if(mesh.VertexPositions.Count == meshInfo.VertexPositions.Count)
+                if (mesh.VertexPositions.Count == meshInfo.VertexPositions.Count)
                 {
-                    for(int i = 0; i < mesh.VertexPositions.Count; ++i)
+                    for (int i = 0; i < mesh.VertexPositions.Count; ++i)
                     {
-                        meshInfo.VertexPositions[i] = center0 + (mesh.VertexPositions[i] - center1) * k;
+                        //meshInfo.VertexPositions[i] = center0 + (mesh.VertexPositions[i] - center1) * k;
+                        meshInfo.VertexPositions[i] = mesh.VertexPositions[i] / k;
+                        MaxY1 = Math.Max(MaxY1, meshInfo.VertexPositions[i].Y);
                     }
+                }
+            }
+
+            foreach (var meshInfo in meshesInfo)
+            {
+                for (int i = 0; i < meshInfo.VertexPositions.Count; ++i)
+                {
+                    Vector3 v = meshInfo.VertexPositions[i];
+                    v.Y += (MaxY0 - MaxY1);
+                    meshInfo.VertexPositions[i] = v;
                 }
             }
         }
