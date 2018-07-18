@@ -500,7 +500,12 @@ namespace RH.Core.Render
                             /*scale = 265.544153903151483385f;
                             headMeshesController.Resize(scale);
                             scale = 1.0f / scale;*/
-                            scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
+                            if(ProgramCore.Project.IsOpenSmile)
+                                scale = headMeshesController.SetSize(29.3064537f);
+                            else
+                                scale = headMeshesController.SetSize(31.862587f);
+
+                            // подгонка размера 
                             //scale = headMeshesController.SetSize(31.862587f); // подгонка размера 
                             break;
                          case ManType.Child:
