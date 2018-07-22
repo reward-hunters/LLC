@@ -35,10 +35,12 @@ namespace RH.Core.Controls.Panels
             this.btnUndo = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.trackAge = new TrackBarEx();
-            this.trackFat = new TrackBarEx();
+            this.trackAge = new RH.Core.Controls.TrackBar.TrackBarEx();
+            this.trackFat = new RH.Core.Controls.TrackBar.TrackBarEx();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.labelSmooth = new System.Windows.Forms.Label();
+            this.trackBarSmooth = new RH.Core.Controls.TrackBar.TrackBarEx();
             this.SuspendLayout();
             // 
             // btnUndo
@@ -87,7 +89,7 @@ namespace RH.Core.Controls.Panels
             this.trackAge.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackAge.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.trackAge.IndentHeight = 6;
-            this.trackAge.Location = new System.Drawing.Point(371, 1);
+            this.trackAge.Location = new System.Drawing.Point(309, 0);
             this.trackAge.Maximum = 80;
             this.trackAge.Minimum = 20;
             this.trackAge.Name = "trackAge";
@@ -112,7 +114,7 @@ namespace RH.Core.Controls.Panels
             this.trackFat.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackFat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.trackFat.IndentHeight = 6;
-            this.trackFat.Location = new System.Drawing.Point(663, 3);
+            this.trackFat.Location = new System.Drawing.Point(601, 2);
             this.trackFat.Maximum = 30;
             this.trackFat.Minimum = -30;
             this.trackFat.Name = "trackFat";
@@ -136,7 +138,7 @@ namespace RH.Core.Controls.Panels
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.label1.Location = new System.Drawing.Point(330, 22);
+            this.label1.Location = new System.Drawing.Point(268, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 15);
             this.label1.TabIndex = 8;
@@ -148,17 +150,57 @@ namespace RH.Core.Controls.Panels
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.label2.Location = new System.Drawing.Point(602, 22);
+            this.label2.Location = new System.Drawing.Point(540, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(55, 15);
             this.label2.TabIndex = 9;
             this.label2.Text = "Weight:";
             // 
+            // labelSmooth
+            // 
+            this.labelSmooth.AutoSize = true;
+            this.labelSmooth.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmooth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelSmooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.labelSmooth.Location = new System.Drawing.Point(836, 21);
+            this.labelSmooth.Name = "labelSmooth";
+            this.labelSmooth.Size = new System.Drawing.Size(60, 15);
+            this.labelSmooth.TabIndex = 11;
+            this.labelSmooth.Text = "Smooth;";
+            // 
+            // trackBarSmooth
+            // 
+            this.trackBarSmooth.BackColor = System.Drawing.Color.Transparent;
+            this.trackBarSmooth.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+            this.trackBarSmooth.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackBarSmooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.trackBarSmooth.IndentHeight = 6;
+            this.trackBarSmooth.Location = new System.Drawing.Point(902, -1);
+            this.trackBarSmooth.Maximum = 100;
+            this.trackBarSmooth.Minimum = 0;
+            this.trackBarSmooth.Name = "trackBarSmooth";
+            this.trackBarSmooth.Size = new System.Drawing.Size(212, 47);
+            this.trackBarSmooth.TabIndex = 10;
+            this.trackBarSmooth.TextTickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBarSmooth.TickColor = System.Drawing.Color.Gray;
+            this.trackBarSmooth.TickFrequency = 20;
+            this.trackBarSmooth.TickHeight = 4;
+            this.trackBarSmooth.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBarSmooth.TrackerColor = System.Drawing.Color.Silver;
+            this.trackBarSmooth.TrackerSize = new System.Drawing.Size(16, 16);
+            this.trackBarSmooth.TrackLineColor = System.Drawing.Color.DimGray;
+            this.trackBarSmooth.TrackLineHeight = 3;
+            this.trackBarSmooth.Value = 100;
+            this.trackBarSmooth.ValueChanged += new RH.Core.Controls.TrackBar.ValueChangedHandler(this.trackBarSmooth_ValueChanged);
+            this.trackBarSmooth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarSmooth_MouseUp);
+            // 
             // PanelFeatures
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage =  global::RH.Core.Properties.Resources.menuBackground;
+            this.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
+            this.Controls.Add(this.labelSmooth);
+            this.Controls.Add(this.trackBarSmooth);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.trackFat);
@@ -167,7 +209,7 @@ namespace RH.Core.Controls.Panels
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnSave);
             this.Name = "PanelFeatures";
-            this.Size = new System.Drawing.Size(994, 49);
+            this.Size = new System.Drawing.Size(1267, 49);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,5 +224,7 @@ namespace RH.Core.Controls.Panels
         private Label label2;
         private TrackBarEx trackAge;
         private TrackBarEx trackFat;
+        private TrackBarEx trackBarSmooth;
+        public Label labelSmooth;
     }
 }

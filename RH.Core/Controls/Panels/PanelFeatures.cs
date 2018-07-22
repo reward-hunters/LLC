@@ -73,12 +73,12 @@ namespace RH.Core.Controls.Panels
 
         private void trackAge_MouseUp(object sender, MouseEventArgs e)
         {
-            var delta = trackAge.Value == trackAge.Minimum ? 0 : trackAge.Value / (trackAge.Maximum * 1f);
-            foreach (var m in ProgramCore.MainForm.ctrlRenderControl.OldMorphing)
-                m.Value.Delta = delta;
+              var delta = trackAge.Value == trackAge.Minimum ? 0 : trackAge.Value / (trackAge.Maximum * 1f);
+              foreach (var m in ProgramCore.MainForm.ctrlRenderControl.OldMorphing)
+                  m.Value.Delta = delta;
 
-            ProgramCore.Project.AgeCoefficient = delta;
-            ProgramCore.MainForm.ctrlRenderControl.DoMorth();
+              ProgramCore.Project.AgeCoefficient = delta;
+              ProgramCore.MainForm.ctrlRenderControl.DoMorth();   
         }
         private void trackWeight_MouseUp(object sender, MouseEventArgs e)
         {
@@ -99,6 +99,17 @@ namespace RH.Core.Controls.Panels
         public void Setfat(float delta)
         {
             trackFat.Value = (int)(trackFat.Maximum * delta);
+        }
+
+        private void trackBarSmooth_ValueChanged(object sender, decimal value)
+        {
+
+        }
+
+        private void trackBarSmooth_MouseUp(object sender, MouseEventArgs e)
+        {
+            var value = trackBarSmooth.Value / 100f;
+            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(value);
         }
     }
 }
