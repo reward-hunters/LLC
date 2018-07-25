@@ -25,6 +25,7 @@ using RH.Core.Render.Meshes;
 using RH.Core.Render.Obj;
 using RH.MeshUtils.Data;
 using RH.Core.Render.Controllers;
+using static RH.Core.ProgramCore;
 
 namespace RH.Core
 {
@@ -170,6 +171,7 @@ namespace RH.Core
                     aboutHeadShopProToolStripMenuItem.Text = @"About HeadShop 11";
                     panelMenuStage.Image = Resources.btnMenuStageNormal;
                     panelMenuFeatures.Visible = featuresTabToolStripMenuItem.Visible = true;
+                    panelMenuStage.Visible = stageHelpToolStripMenuItem.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
@@ -405,6 +407,8 @@ namespace RH.Core
             panelFeatures.OnDelete += OnDeleteHeadSelectedPoints_Click;
             panelFeatures.OnSave += OnSaveHead_Click;
             panelFeatures.OnUndo += OnUndo_Click;
+            if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11)
+            panelFeatures.labelSmooth.Text = ProgramCore.Project.IsOpenSmile ? "Smile:" : "Smooth:";
 
             if (activePanel != -1)      // это загружено из проекта. открываем ту вкладку, на которой закрыли
             {
@@ -2400,7 +2404,7 @@ namespace RH.Core
                    ProgramCore.MainForm.ctrlRenderControl.camera.ResetCamera(true);
                 }
 
-
+          
 
                 if (newProject && ProgramCore.Project.ManType == ManType.Custom)
                     ctrlRenderControl.camera.ResetCamera(true);
