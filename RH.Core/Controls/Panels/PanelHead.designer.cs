@@ -169,7 +169,6 @@ namespace RH.Core.Controls.Panels
             this.btnFlipLeft.TabIndex = 10;
             this.btnFlipLeft.Tag = "2";
             this.btnFlipLeft.UseVisualStyleBackColor = true;
-            this.btnFlipLeft.Visible = false;
             this.btnFlipLeft.Click += new System.EventHandler(this.btnFlipLeft_Click);
             // 
             // btnFlipRight
@@ -181,7 +180,6 @@ namespace RH.Core.Controls.Panels
             this.btnFlipRight.TabIndex = 11;
             this.btnFlipRight.Tag = "2";
             this.btnFlipRight.UseVisualStyleBackColor = true;
-            this.btnFlipRight.Visible = false;
             this.btnFlipRight.Click += new System.EventHandler(this.btnFlipRight_Click);
             // 
             // btnProfile

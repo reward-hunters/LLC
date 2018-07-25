@@ -186,7 +186,7 @@ namespace RH.Core.HeadRotation
             return ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.GetWorldPoint(point);
         }
 
-        public void DrawDots()
+        public void DrawDots(bool DrawText = true, int MaxPointCount = 100)
         {
 
             const float scale = 0.7f;
@@ -198,6 +198,9 @@ namespace RH.Core.HeadRotation
 
             for (int i = 0; i < Points.Count; ++i)
             {
+                if(i >= MaxPointCount)                
+                    break;
+                
                 if (!IsVisible[i])
                     continue;
 
@@ -214,6 +217,9 @@ namespace RH.Core.HeadRotation
 
             GL.End();
             GL.PointSize(1.0f);
+
+            if (!DrawText)
+                return;
 
             for (var i = 0; i < TextRenderList.Count; i++)
             {

@@ -712,7 +712,7 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
-                    case Mode.HeadAutodotsFirstTime:
+                   /* case Mode.HeadAutodotsFirstTime:
                     case Mode.HeadAutodots:
                         ProgramCore.MainForm.ctrlRenderControl.FlipLeft(true);
                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);                // добавлено после слияниея с shapedots!
@@ -722,6 +722,10 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();            // добавлено после слияниея с shapedots!
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
+                        break;*/
+                    case Mode.None:
+                        ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = true;
+                        ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
                         break;
                 }
 
@@ -742,11 +746,15 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();
                         ProgramCore.Project.ShapeFlip = FlipType.None;
                         break;
-                    case Mode.HeadAutodotsFirstTime:
-                    case Mode.HeadAutodots:
-                        ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();     // после слияние с ShapeDots. Проверить!
-                        ProgramCore.MainForm.ctrlRenderControl.FlipLeft(false);
-                        ProgramCore.Project.TextureFlip = FlipType.None;
+                    /* case Mode.HeadAutodotsFirstTime:
+                     case Mode.HeadAutodots:
+                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();     // после слияние с ShapeDots. Проверить!
+                         ProgramCore.MainForm.ctrlRenderControl.FlipLeft(false);
+                         ProgramCore.Project.TextureFlip = FlipType.None;
+                         break;*/
+                    case Mode.None:
+                        ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = null;
+                        ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
                         break;
                 }
             }
@@ -772,7 +780,7 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
-                    case Mode.HeadAutodotsFirstTime:
+                   /* case Mode.HeadAutodotsFirstTime:
                     case Mode.HeadAutodots:
                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);       // после слияние с ShapeDots. Проверить!
 
@@ -782,6 +790,10 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();        // после слияние с ShapeDots. Проверить!
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
+                        break;*/
+                    case Mode.None:
+                        ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = false;
+                        ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
                         break;
                 }
 
@@ -800,11 +812,15 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();
                         ProgramCore.Project.ShapeFlip = FlipType.None;
                         break;
-                    case Mode.HeadAutodotsFirstTime:
-                    case Mode.HeadAutodots:
-                        ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();           // после слияние с ShapeDots. Проверить!
-                        ProgramCore.MainForm.ctrlRenderControl.FlipRight(false);
-                        ProgramCore.Project.TextureFlip = FlipType.None;
+                    /* case Mode.HeadAutodotsFirstTime:
+                     case Mode.HeadAutodots:
+                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();           // после слияние с ShapeDots. Проверить!
+                         ProgramCore.MainForm.ctrlRenderControl.FlipRight(false);
+                         ProgramCore.Project.TextureFlip = FlipType.None;
+                         break;*/
+                    case Mode.None:
+                        ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = null;
+                        ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
                         break;
                 }
 

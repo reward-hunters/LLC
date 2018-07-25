@@ -258,7 +258,8 @@ namespace RH.Core.Render.Controllers
                 case Mode.HeadAutodotsLassoStart:
                 case Mode.HeadAutodotsLassoActive:
                     //    if (ProgramCore.Debug)
-                    DrawAutodots();
+                    ProgramCore.MainForm.ctrlRenderControl.HeadPoints.DrawDots(false, 70);
+                    //DrawAutodots();
                     break;
                 /*  case Mode.HeadShapedots:
                   case Mode.HeadShapedotsLassoStart:
