@@ -3481,12 +3481,13 @@ namespace RH.Core.Render
             GL.BindTexture(TextureTarget.Texture2D, textureId);
             shader.UpdateUniform("u_BaseTexture", 1);
 
-            bool LeftToRight = headMeshesController.RenderMesh.HeadAngle >= 0;
+            float LeftToRight = 0.0f;
+            //bool LeftToRight = headMeshesController.RenderMesh.HeadAngle >= 0;
             if (LeftToRightReflection != null)
-                LeftToRight = LeftToRightReflection.Value;
+                LeftToRight = LeftToRightReflection.Value ? 1.0f : -1.0f;
 
 
-            shader.UpdateUniform("u_BlendDirectionX", LeftToRight ? 1.0f : -1.0f);
+            shader.UpdateUniform("u_BlendDirectionX", LeftToRight);
 
 
             headMeshesController.RenderMesh.DrawToTexture(textureId);

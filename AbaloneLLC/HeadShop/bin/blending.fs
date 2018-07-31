@@ -12,11 +12,12 @@ void main(void)
 
 	//b = b * gl_TexCoord[0].z;
 
-	vec2 t;
-	if(u_BlendDirectionX * v_OrigitnalPosition.x < 0.0) {
-		t = gl_Color.xy;
-	}
-	else {
+	vec2 t = gl_Color.xy;
+
+	if(u_BlendDirectionX * v_OrigitnalPosition.x > 0.0) {
+		//t = gl_Color.xy;
+	//}
+	//else {
 		t = gl_Color.zw;
 	}
 
