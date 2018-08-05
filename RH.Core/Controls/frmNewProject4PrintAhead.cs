@@ -19,6 +19,8 @@ namespace RH.Core.Controls
     {
         #region Var
 
+        public string OpenProjectPath { get; private set; }
+
         public ManType ManType
         {
             get
@@ -104,7 +106,7 @@ namespace RH.Core.Controls
             arrowPen.EndCap = LineCap.ArrowAnchor;
 
             eWidth = pictureTemplate.Width - 100;
-            TopEdgeTransformed = new RectangleF(pictureTemplate.Width / 2f - eWidth / 2f, 50, eWidth, eWidth+20);
+            TopEdgeTransformed = new RectangleF(pictureTemplate.Width / 2f - eWidth / 2f, 50, eWidth, eWidth + 20);
 
             ShowInTaskbar = atStartup;
 
@@ -119,8 +121,13 @@ namespace RH.Core.Controls
                     break;
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    pictureExample.Visible = label1.Visible = label5.Visible = textTemplateImage.Visible = false;
+                   groupBox1.Visible= rbNewProject.Visible = rbOpenProject.Visible = groupBoxOpen.Visible = lblNewProject.Visible = textNewProjectFolder.Visible = btnNewProjectFolder.Visible =
+                        textNewProjectName.Visible = labelNewProjectName.Visible = false;
+
                     labelNotes.Visible = labelNotes1.Visible = false;
-                    rbImportObj.Visible = label11.Visible = true;
+                 //   rbImportObj.Visible = label11.Visible = true;
+                    labelHelp.Text = "Browse or drag jpg file here";
                     break;
                 default:
                     label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;
@@ -151,13 +158,13 @@ namespace RH.Core.Controls
         }
         private void rbImportObj_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbImportObj.Checked)
+         /*   if (rbImportObj.Checked)
             {
                 btnFemale.Tag = btnChild.Tag = btnMale.Tag = "2";
                 btnChild.Image = Resources.btnChildGray;
                 btnMale.Image = Resources.btnMaleGray;
-                btnFemale.Image = Resources.btnFemaleGray;
-
+                btnFemale.Image = Resources.btnFemaleGray;*/
+/*
                 if (!ProgramCore.PluginMode)
                 {
                     using (var ofd = new OpenFileDialogEx("Select obj file", "OBJ Files|*.obj"))
@@ -172,8 +179,8 @@ namespace RH.Core.Controls
                         //btnNext.Enabled = true;
                         CustomModelPath = ofd.FileName;
                     }
-                }
-            }
+                }*/
+       //     }
         }
 
         private void pictureTemplate_Paint(object sender, PaintEventArgs e)
@@ -302,6 +309,7 @@ namespace RH.Core.Controls
                     distance = facialFeaturesTransformed[2].Y - facialFeaturesTransformed[11].Y;
 
                 TopEdgeTransformed.Y = facialFeaturesTransformed[16].Y + distance;          // определение высоты по алгоритму старикана
+                TopEdgeTransformed.Y = TopEdgeTransformed.Y < 0 ? 10 : TopEdgeTransformed.Y;
 
                 RenderTimer.Start();
 
@@ -311,7 +319,7 @@ namespace RH.Core.Controls
                     var dazPath = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\", "fs3d.obj");
                     if (File.Exists(dazPath))
                     {
-                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick)
+                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_v11)
                             rbImportObj.Checked = true;
 
                         CustomModelPath = dazPath;
@@ -441,11 +449,21 @@ namespace RH.Core.Controls
 
             #endregion
 
-            var path = UserConfig.AppDataDir;
-            path = Path.Combine(path, "TempProject");
-            FolderEx.CreateDirectory(path, true);
+            var path = string.Empty;
+            if (string.IsNullOrEmpty(textNewProjectFolder.Text))
+            {
+                path = UserConfig.AppDataDir;
+                path = Path.Combine(path, "TempProject");
+                FolderEx.CreateDirectory(path, true);
+            }
+            else
+            {
+                path = textNewProjectFolder.Text;
+            }
 
-            ProgramCore.Project = new Project("PrintAheadProject", path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
+            var projectName = string.IsNullOrEmpty(textNewProjectName.Text) ? "HeadShop project" : textNewProjectName.Text;
+
+            ProgramCore.Project = new Project(projectName, path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
             ProgramCore.Project.RealTemplateImage = realTemplateImage;
 
             ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;
@@ -459,7 +477,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.TopPoint.X = 0.0f;
             ProgramCore.Project.TopPoint.Y = topPoint;
 
-            ProgramCore.Project.FaceRectRelative = new RectangleF(minX, topPoint, fcr.GetMaxX() - minX, fcr.BottomFace.Y - topPoint);            
+            ProgramCore.Project.FaceRectRelative = new RectangleF(minX, topPoint, fcr.GetMaxX() - minX, fcr.BottomFace.Y - topPoint);
             ProgramCore.Project.MouthCenter = new Vector2(fcr.LeftMouth.X + (fcr.RightMouth.X - fcr.LeftMouth.X) * 0.5f, fcr.LeftMouth.Y + (fcr.RightMouth.Y - fcr.LeftMouth.Y) * 0.5f);
 
             ProgramCore.Project.LeftEyeCenter = fcr.LeftEyeCenter;
@@ -528,7 +546,7 @@ namespace RH.Core.Controls
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
             ProgramCore.MainForm.UpdateProjectControls(true, aabb);
 
-          //  ProgramCore.Project.ToStream();
+            //  ProgramCore.Project.ToStream();
             // ProgramCore.MainForm.ctrlRenderControl.UpdateMeshProportions();
 
             if (ProgramCore.Project.ManType == ManType.Custom)
@@ -597,5 +615,36 @@ namespace RH.Core.Controls
         }
         private Selection currentSelection = Selection.Empty;
 
+        private void btnOpenProject_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "HeadShop files|*.hds";
+                if (ofd.ShowDialog() != DialogResult.OK)
+                    return;
+
+                textOpenProject.Text = ofd.FileName;
+                OpenProjectPath = ofd.FileName;
+                btnApply.Enabled = true;
+            }
+        }
+
+        private void btnNewProjectFolder_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new FolderDialogEx())
+            {
+                if (ofd.ShowDialog() != DialogResult.OK)
+                    return;
+
+                textNewProjectFolder.Text = ofd.SelectedFolder[0];
+            }
+        }
+
+        private void rbOpenProject_CheckedChanged(object sender, EventArgs e)
+        {
+            rbNewProject.Checked = !rbOpenProject.Checked;
+            groupBoxOpen.Enabled = rbOpenProject.Checked;
+            groupBox1.Enabled = pictureTemplate.Enabled =  !rbOpenProject.Checked;
+        }
     }
 }

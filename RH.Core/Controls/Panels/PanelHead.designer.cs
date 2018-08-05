@@ -46,6 +46,8 @@ namespace RH.Core.Controls.Panels
             this.btnProfile = new System.Windows.Forms.Button();
             this.lblProfileSmoothing = new System.Windows.Forms.Label();
             this.trackProfileSmoothing = new RH.Core.Controls.TrackBar.TrackBarEx();
+            this.labelSmooth = new System.Windows.Forms.Label();
+            this.trackBarSmooth = new RH.Core.Controls.TrackBar.TrackBarEx();
             this.SuspendLayout();
             // 
             // btnMirror
@@ -232,11 +234,50 @@ namespace RH.Core.Controls.Panels
             this.trackProfileSmoothing.Visible = false;
             this.trackProfileSmoothing.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackProfileSmoothing_MouseUp);
             // 
+            // labelSmooth
+            // 
+            this.labelSmooth.AutoSize = true;
+            this.labelSmooth.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmooth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelSmooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.labelSmooth.Location = new System.Drawing.Point(879, 22);
+            this.labelSmooth.Name = "labelSmooth";
+            this.labelSmooth.Size = new System.Drawing.Size(60, 15);
+            this.labelSmooth.TabIndex = 18;
+            this.labelSmooth.Text = "Smooth;";
+            // 
+            // trackBarSmooth
+            // 
+            this.trackBarSmooth.BackColor = System.Drawing.Color.Transparent;
+            this.trackBarSmooth.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+            this.trackBarSmooth.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackBarSmooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.trackBarSmooth.IndentHeight = 6;
+            this.trackBarSmooth.Location = new System.Drawing.Point(945, 0);
+            this.trackBarSmooth.Maximum = 100;
+            this.trackBarSmooth.Minimum = 0;
+            this.trackBarSmooth.Name = "trackBarSmooth";
+            this.trackBarSmooth.Size = new System.Drawing.Size(212, 47);
+            this.trackBarSmooth.TabIndex = 17;
+            this.trackBarSmooth.TextTickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBarSmooth.TickColor = System.Drawing.Color.Gray;
+            this.trackBarSmooth.TickFrequency = 20;
+            this.trackBarSmooth.TickHeight = 4;
+            this.trackBarSmooth.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBarSmooth.TrackerColor = System.Drawing.Color.Silver;
+            this.trackBarSmooth.TrackerSize = new System.Drawing.Size(16, 16);
+            this.trackBarSmooth.TrackLineColor = System.Drawing.Color.DimGray;
+            this.trackBarSmooth.TrackLineHeight = 3;
+            this.trackBarSmooth.Value = 80;
+            this.trackBarSmooth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarSmooth_MouseUp);
+            // 
             // PanelHead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
+            this.Controls.Add(this.labelSmooth);
+            this.Controls.Add(this.trackBarSmooth);
             this.Controls.Add(this.lblProfileSmoothing);
             this.Controls.Add(this.trackProfileSmoothing);
             this.Controls.Add(this.btnProfile);
@@ -252,7 +293,7 @@ namespace RH.Core.Controls.Panels
             this.Controls.Add(this.btnMirror);
             this.Controls.Add(this.btnAutodots);
             this.Name = "PanelHead";
-            this.Size = new System.Drawing.Size(1130, 49);
+            this.Size = new System.Drawing.Size(1448, 49);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,5 +315,7 @@ namespace RH.Core.Controls.Panels
         public Button btnProfile;
         private Label lblProfileSmoothing;
         public TrackBarEx trackProfileSmoothing;
+        public Label labelSmooth;
+        private TrackBarEx trackBarSmooth;
     }
 }

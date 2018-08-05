@@ -108,6 +108,12 @@ namespace RH.Core.Controls.Panels
                 /*         btnFlipLeft.Enabled = false;
                          btnFlipRight.Enabled = false;*/
 
+                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11)
+                {
+                    btnProfile.Visible = false;
+                    btnPolyLine.Visible = false;
+                }
+
                 btnProfile.Enabled = true;
             }
             else
@@ -267,6 +273,7 @@ namespace RH.Core.Controls.Panels
         public void UpdateProfileSmoothing(bool isSmoothing)
         {
             lblProfileSmoothing.Visible = trackProfileSmoothing.Visible = isSmoothing;
+            labelSmooth.Visible = trackBarSmooth.Visible = !isSmoothing;
 
             if (isSmoothing)                    // "After finished calculations, the default position of smoothen should be at 50% "
                 ProgramCore.MainForm.ctrlTemplateImage.ProfileSmoothing.Smooth(trackProfileSmoothing.Value / (float)(trackProfileSmoothing.Maximum));
@@ -534,11 +541,11 @@ namespace RH.Core.Controls.Panels
                     ProgramCore.Project.RenderMainHelper.headController.EndAutodots();
                     ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
 
-                  /*  for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count; i++)      // TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
-                    {
-                        var p = ProgramCore.Project.RenderMainHelper.headController.AutoDots[i];
-                        ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
-                    }*/
+                    /*  for (var i = 0; i < ProgramCore.Project.RenderMainHelper.headController.AutoDots.Count; i++)      // TODO АЛГОРИТМЫ АВТОДОТСОВ 29.05.2018
+                      {
+                          var p = ProgramCore.Project.RenderMainHelper.headController.AutoDots[i];
+                          ctrlRenderControl.autodotsShapeHelper.Transform(p.Value, i); // точка в мировых координатах
+                      }*/
                 }
 
                 //        btnFlipLeft.Visible = false;
@@ -712,17 +719,17 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
-                   /* case Mode.HeadAutodotsFirstTime:
-                    case Mode.HeadAutodots:
-                        ProgramCore.MainForm.ctrlRenderControl.FlipLeft(true);
-                        ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);                // добавлено после слияниея с shapedots!
+                    /* case Mode.HeadAutodotsFirstTime:
+                     case Mode.HeadAutodots:
+                         ProgramCore.MainForm.ctrlRenderControl.FlipLeft(true);
+                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);                // добавлено после слияниея с shapedots!
 
-                        ProgramCore.Project.TextureFlip = FlipType.LeftToRight;
+                         ProgramCore.Project.TextureFlip = FlipType.LeftToRight;
 
-                        ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();            // добавлено после слияниея с shapedots!
-                        ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
-                        ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
-                        break;*/
+                         ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();            // добавлено после слияниея с shapedots!
+                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
+                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
+                         break;*/
                     case Mode.None:
                         ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = true;
                         ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
@@ -780,17 +787,17 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
-                   /* case Mode.HeadAutodotsFirstTime:
-                    case Mode.HeadAutodots:
-                        ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);       // после слияние с ShapeDots. Проверить!
+                    /* case Mode.HeadAutodotsFirstTime:
+                     case Mode.HeadAutodots:
+                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);       // после слияние с ShapeDots. Проверить!
 
-                        ProgramCore.MainForm.ctrlRenderControl.FlipRight(true);
-                        ProgramCore.Project.TextureFlip = FlipType.RightToLeft;
+                         ProgramCore.MainForm.ctrlRenderControl.FlipRight(true);
+                         ProgramCore.Project.TextureFlip = FlipType.RightToLeft;
 
-                        ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();        // после слияние с ShapeDots. Проверить!
-                        ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
-                        ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
-                        break;*/
+                         ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();        // после слияние с ShapeDots. Проверить!
+                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
+                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
+                         break;*/
                     case Mode.None:
                         ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = false;
                         ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
@@ -919,6 +926,12 @@ namespace RH.Core.Controls.Panels
         private void trackProfileSmoothing_MouseUp(object sender, MouseEventArgs e)
         {
             ProgramCore.MainForm.ctrlTemplateImage.ProfileSmoothing.Smooth(trackProfileSmoothing.Value / (float)(trackProfileSmoothing.Maximum));
+        }
+
+        private void trackBarSmooth_MouseUp(object sender, MouseEventArgs e)
+        {
+            var value = trackBarSmooth.Value / 100f;
+            ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(value);
         }
     }
 }

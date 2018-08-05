@@ -39,8 +39,8 @@ namespace RH.Core.Controls.Panels
             this.trackFat = new RH.Core.Controls.TrackBar.TrackBarEx();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.labelSmooth = new System.Windows.Forms.Label();
-            this.trackBarSmooth = new RH.Core.Controls.TrackBar.TrackBarEx();
+            this.labelSmile = new System.Windows.Forms.Label();
+            this.trackBarSmile = new RH.Core.Controls.TrackBar.TrackBarEx();
             this.SuspendLayout();
             // 
             // btnUndo
@@ -156,51 +156,50 @@ namespace RH.Core.Controls.Panels
             this.label2.TabIndex = 9;
             this.label2.Text = "Weight:";
             // 
-            // labelSmooth
+            // labelSmile
             // 
-            this.labelSmooth.AutoSize = true;
-            this.labelSmooth.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmooth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelSmooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.labelSmooth.Location = new System.Drawing.Point(836, 21);
-            this.labelSmooth.Name = "labelSmooth";
-            this.labelSmooth.Size = new System.Drawing.Size(60, 15);
-            this.labelSmooth.TabIndex = 11;
-            this.labelSmooth.Text = "Smooth;";
+            this.labelSmile.AutoSize = true;
+            this.labelSmile.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelSmile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.labelSmile.Location = new System.Drawing.Point(835, 21);
+            this.labelSmile.Name = "labelSmile";
+            this.labelSmile.Size = new System.Drawing.Size(48, 15);
+            this.labelSmile.TabIndex = 20;
+            this.labelSmile.Text = "Smile:";
             // 
-            // trackBarSmooth
+            // trackBarSmile
             // 
-            this.trackBarSmooth.BackColor = System.Drawing.Color.Transparent;
-            this.trackBarSmooth.BorderColor = System.Drawing.SystemColors.ActiveBorder;
-            this.trackBarSmooth.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.trackBarSmooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.trackBarSmooth.IndentHeight = 6;
-            this.trackBarSmooth.Location = new System.Drawing.Point(902, -1);
-            this.trackBarSmooth.Maximum = 100;
-            this.trackBarSmooth.Minimum = 0;
-            this.trackBarSmooth.Name = "trackBarSmooth";
-            this.trackBarSmooth.Size = new System.Drawing.Size(212, 47);
-            this.trackBarSmooth.TabIndex = 10;
-            this.trackBarSmooth.TextTickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.trackBarSmooth.TickColor = System.Drawing.Color.Gray;
-            this.trackBarSmooth.TickFrequency = 20;
-            this.trackBarSmooth.TickHeight = 4;
-            this.trackBarSmooth.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.trackBarSmooth.TrackerColor = System.Drawing.Color.Silver;
-            this.trackBarSmooth.TrackerSize = new System.Drawing.Size(16, 16);
-            this.trackBarSmooth.TrackLineColor = System.Drawing.Color.DimGray;
-            this.trackBarSmooth.TrackLineHeight = 3;
-            this.trackBarSmooth.Value = 100;
-            this.trackBarSmooth.ValueChanged += new RH.Core.Controls.TrackBar.ValueChangedHandler(this.trackBarSmooth_ValueChanged);
-            this.trackBarSmooth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarSmooth_MouseUp);
+            this.trackBarSmile.BackColor = System.Drawing.Color.Transparent;
+            this.trackBarSmile.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+            this.trackBarSmile.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackBarSmile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.trackBarSmile.IndentHeight = 6;
+            this.trackBarSmile.Location = new System.Drawing.Point(889, 0);
+            this.trackBarSmile.Maximum = 100;
+            this.trackBarSmile.Minimum = 0;
+            this.trackBarSmile.Name = "trackBarSmile";
+            this.trackBarSmile.Size = new System.Drawing.Size(212, 47);
+            this.trackBarSmile.TabIndex = 19;
+            this.trackBarSmile.TextTickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBarSmile.TickColor = System.Drawing.Color.Gray;
+            this.trackBarSmile.TickFrequency = 20;
+            this.trackBarSmile.TickHeight = 4;
+            this.trackBarSmile.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBarSmile.TrackerColor = System.Drawing.Color.Silver;
+            this.trackBarSmile.TrackerSize = new System.Drawing.Size(16, 16);
+            this.trackBarSmile.TrackLineColor = System.Drawing.Color.DimGray;
+            this.trackBarSmile.TrackLineHeight = 3;
+            this.trackBarSmile.Value = 100;
+            this.trackBarSmile.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarSmile_MouseUp);
             // 
             // PanelFeatures
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::RH.Core.Properties.Resources.menuBackground;
-            this.Controls.Add(this.labelSmooth);
-            this.Controls.Add(this.trackBarSmooth);
+            this.Controls.Add(this.labelSmile);
+            this.Controls.Add(this.trackBarSmile);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.trackFat);
@@ -224,7 +223,7 @@ namespace RH.Core.Controls.Panels
         private Label label2;
         private TrackBarEx trackAge;
         private TrackBarEx trackFat;
-        private TrackBarEx trackBarSmooth;
-        public Label labelSmooth;
+        public Label labelSmile;
+        public TrackBarEx trackBarSmile;
     }
 }

@@ -627,8 +627,8 @@ namespace RH.Core
                 #region Информация о модели головы
 
                 var rmPath = Path.Combine(projectFi.DirectoryName, "Model", "MeshParts.rm");
-                ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Load(rmPath);
-                foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
+                result.RenderMainHelper.headMeshesController.RenderMesh.Load(rmPath);
+                foreach (var part in result.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 {
                     if (!string.IsNullOrEmpty(part.TextureName))
                         part.Texture = ProgramCore.MainForm.ctrlRenderControl.GetTexture(part.TextureName);
@@ -647,16 +647,16 @@ namespace RH.Core
                 result.RenderMainHelper.autodotsShapeHelper.ShapeInfo = TexturingInfo.FromStream(br);
                 result.RenderMainHelper.autodotsShapeHelper.ShapeProfileInfo = TexturingInfo.FromStream(br);
 
-                ProgramCore.Project.RenderMainHelper.headMeshesController.TexturingInfo = TexturingInfo.FromStream(br);
+                result.RenderMainHelper.headMeshesController.TexturingInfo = TexturingInfo.FromStream(br);
 
-                ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Clear();
-                ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Clear();
+                result.RenderMainHelper.headController.AutoDotsv2.Clear();
+                result.RenderMainHelper.headController.ShapeDots.Clear();
                 var cnt = br.ReadInt32();
                 for (var i = 0; i < cnt; i++)
-                    ProgramCore.Project.RenderMainHelper.headController.ShapeDots.Add(MirroredHeadPoint.FromStreamW(br));
+                    result.RenderMainHelper.headController.ShapeDots.Add(MirroredHeadPoint.FromStreamW(br));
                 cnt = br.ReadInt32();
                 for (var i = 0; i < cnt; i++)
-                    ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Add(HeadPoint.FromStream(br));
+                    result.RenderMainHelper.headController.AutoDotsv2.Add(HeadPoint.FromStream(br));
 
                 result.CustomHeadNeedProfileSetup = br.ReadBoolean();
 

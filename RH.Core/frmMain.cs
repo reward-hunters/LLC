@@ -228,7 +228,7 @@ namespace RH.Core
                     ProgramCore.EchoToLog(ex);
                 }
 
-          //  ProgramCore.PluginMode = true;
+            //  ProgramCore.PluginMode = true;
             if (!string.IsNullOrEmpty(fn))
             {
                 if (fn.StartsWith("fs"))
@@ -299,7 +299,10 @@ namespace RH.Core
                                 return;
                             }
 
-                            newProjectDlg.CreateProject();
+                            if (string.IsNullOrEmpty(newProjectDlg.OpenProjectPath))
+                                newProjectDlg.CreateProject();
+                            else
+                                OpenProject(newProjectDlg.OpenProjectPath);
 
                             #endregion
                         }
@@ -407,8 +410,6 @@ namespace RH.Core
             panelFeatures.OnDelete += OnDeleteHeadSelectedPoints_Click;
             panelFeatures.OnSave += OnSaveHead_Click;
             panelFeatures.OnUndo += OnUndo_Click;
-            if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11)
-            panelFeatures.labelSmooth.Text = ProgramCore.Project.IsOpenSmile ? "Smile:" : "Smooth:";
 
             if (activePanel != -1)      // это загружено из проекта. открываем ту вкладку, на которой закрыли
             {
@@ -468,8 +469,8 @@ namespace RH.Core
                         ProgramCore.MainForm.HeadFront = true;
                         if (!ProgramCore.PluginMode)
                         {
-                       //     ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);            //TODO 28.05.2018. это было раскомменчено.
-                        //    ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
+                            //     ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);            //TODO 28.05.2018. это было раскомменчено.
+                            //    ProgramCore.MainForm.panelFront.btnAutodots_Click(null, null);
 
                             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_Rotator && Math.Abs(ProgramCore.Project.RotatedAngle) > 5)
                             {
@@ -495,6 +496,14 @@ namespace RH.Core
                     if (ProgramCore.Project.ManType == ManType.Custom && UserConfig.ByName("Options")["Tutorials", "CustomHeads", "1"] == "1")
                         frmTutCustomHeads.ShowDialog(this);
                     break;
+            }
+
+            panelFront.btnAutodots_Click(null, new EventArgs());
+            panelFront.btnAutodots_Click(null, new EventArgs());
+
+            if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11)
+            {
+                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.8f);
             }
         }
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -1526,6 +1535,7 @@ namespace RH.Core
                 activePanel = 7;
                 panelFeatures.SetAge(ProgramCore.Project.AgeCoefficient);
                 panelFeatures.Setfat(ProgramCore.Project.FatCoefficient);
+                panelFeatures.SetSmile(ProgramCore.Project.IsOpenSmile);
 
                 panelMenuFeatures.Tag = "1";
                 panelMenuFeatures.Image = Resources.btnMenuFeaturesPressed;
@@ -1986,7 +1996,7 @@ namespace RH.Core
                 var mapPath = ctrlRenderControl.GetTexturePath(iTexture);
                 switch (ProgramCore.CurrentProgram)
                 {
-                   // case ProgramCore.ProgramMode.HeadShop_v11:
+                    // case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:      // HeadShop 11 - выгрузка текстур с размерами 4096.
                     case ProgramCore.ProgramMode.HeadShop_OneClick:      // для этой программы должна быть выгрузка текстур с размерами 2048
                         {
@@ -2401,13 +2411,14 @@ namespace RH.Core
                 }
                 else
                 {
-                   ProgramCore.MainForm.ctrlRenderControl.camera.ResetCamera(true);
+                    ProgramCore.MainForm.ctrlRenderControl.camera.ResetCamera(true);
                 }
 
-          
+
 
                 if (newProject && ProgramCore.Project.ManType == ManType.Custom)
                     ctrlRenderControl.camera.ResetCamera(true);
+
             }
 
             if (frmPrint != null || frmStages != null)

@@ -378,10 +378,49 @@ namespace RH.Core.Render
         {
             ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();
             foreach (var point in ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2)
-                point.CheckLassoSelection(headAutodotsLassoPoints);
+                CheckLassoSelection(headAutodotsLassoPoints, point);
 
             headAutodotsLassoPoints.Clear();
         }
+
+        public void CheckLassoSelection(List<Vector2> lassoPoints, HeadPoint point)
+        {
+            point.Selected = false;
+
+            Vector2 absolutePoint;
+            absolutePoint.X = (point.OriginalValue.X * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateWidth + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetX);
+            absolutePoint.Y = (point.OriginalValue.Y * ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateHeight + ProgramCore.MainForm.ctrlTemplateImage.ImageTemplateOffsetY);
+
+            var count = 0;
+            for (var i = 0; i < lassoPoints.Count; i++)
+            {
+                var j = (i + 1) % lassoPoints.Count;
+                var p0 = lassoPoints[i];
+                var p1 = lassoPoints[j];
+
+                if (p0.Y == lassoPoints[j].Y)
+                    continue;
+                if (p0.Y > absolutePoint.Y && p1.Y > absolutePoint.Y)
+                    continue;
+                if (p0.Y < absolutePoint.Y && p1.Y < absolutePoint.Y)
+                    continue;
+                if (Math.Max(p0.Y, p1.Y) == absolutePoint.Y)
+                    count++;
+                else
+                {
+                    if (Math.Min(p0.Y, p1.Y) == absolutePoint.Y)
+                        continue;
+
+                    var t = (absolutePoint.Y - p0.Y) / (p1.Y - p0.Y);
+                    if (p0.X + t * (p1.X - p0.X) >= absolutePoint.X)
+                        count++;
+                }
+            }
+            if (count % 2 == 1)
+                point.Selected = true;
+        }
+
+
         public void SelectShapedotsByLasso()
         {
             ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
