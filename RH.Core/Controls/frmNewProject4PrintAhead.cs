@@ -123,8 +123,9 @@ namespace RH.Core.Controls
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     pictureExample.Visible = label1.Visible = label5.Visible = textTemplateImage.Visible = false;
                    groupBox1.Visible= rbNewProject.Visible = rbOpenProject.Visible = groupBoxOpen.Visible = lblNewProject.Visible = textNewProjectFolder.Visible = btnNewProjectFolder.Visible =
-                        textNewProjectName.Visible = labelNewProjectName.Visible = false;
+                        textNewProjectName.Visible = false;
 
+                    labelPrintAhead11.Visible = true;
                     labelNotes.Visible = labelNotes1.Visible = false;
                  //   rbImportObj.Visible = label11.Visible = true;
                     labelHelp.Text = "Browse or drag jpg file here";

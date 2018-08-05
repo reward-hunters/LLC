@@ -39,9 +39,14 @@ namespace RH.Core.Controls
             this.label5 = new System.Windows.Forms.Label();
             this.pictureTemplate = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.labelNotes1 = new System.Windows.Forms.Label();
+            this.textNewProjectName = new System.Windows.Forms.TextBox();
+            this.btnNewProjectFolder = new System.Windows.Forms.Button();
+            this.textNewProjectFolder = new System.Windows.Forms.TextBox();
+            this.lblNewProject = new System.Windows.Forms.Label();
             this.labelNotes = new System.Windows.Forms.Label();
             this.pictureExample = new System.Windows.Forms.PictureBox();
+            this.labelNotes1 = new System.Windows.Forms.Label();
+            this.labelPrintAhead11 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.rbImportObj = new System.Windows.Forms.RadioButton();
@@ -61,14 +66,9 @@ namespace RH.Core.Controls
             this.rbOpenProject = new System.Windows.Forms.RadioButton();
             this.rbNewProject = new System.Windows.Forms.RadioButton();
             this.groupBoxOpen = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textOpenProject = new System.Windows.Forms.TextBox();
             this.btnOpenProject = new System.Windows.Forms.Button();
-            this.btnNewProjectFolder = new System.Windows.Forms.Button();
-            this.textNewProjectFolder = new System.Windows.Forms.TextBox();
-            this.lblNewProject = new System.Windows.Forms.Label();
-            this.textNewProjectName = new System.Windows.Forms.TextBox();
-            this.labelNewProjectName = new System.Windows.Forms.Label();
+            this.textOpenProject = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureTemplate)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureExample)).BeginInit();
@@ -145,7 +145,6 @@ namespace RH.Core.Controls
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.textNewProjectName);
-            this.groupBox1.Controls.Add(this.labelNewProjectName);
             this.groupBox1.Controls.Add(this.btnNewProjectFolder);
             this.groupBox1.Controls.Add(this.textNewProjectFolder);
             this.groupBox1.Controls.Add(this.lblNewProject);
@@ -153,8 +152,8 @@ namespace RH.Core.Controls
             this.groupBox1.Controls.Add(this.pictureExample);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textTemplateImage);
-            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.labelNotes1);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(350, 12);
             this.groupBox1.Name = "groupBox1";
@@ -163,15 +162,43 @@ namespace RH.Core.Controls
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Create new project";
             // 
-            // labelNotes1
+            // textNewProjectName
             // 
-            this.labelNotes1.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNotes1.Location = new System.Drawing.Point(6, 283);
-            this.labelNotes1.Name = "labelNotes1";
-            this.labelNotes1.Size = new System.Drawing.Size(433, 43);
-            this.labelNotes1.TabIndex = 15;
-            this.labelNotes1.Text = "For B/W files (STL) there will be a $5 charge per save, for full color prints $8." +
-    "";
+            this.textNewProjectName.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.textNewProjectName.Location = new System.Drawing.Point(117, 269);
+            this.textNewProjectName.Name = "textNewProjectName";
+            this.textNewProjectName.Size = new System.Drawing.Size(286, 24);
+            this.textNewProjectName.TabIndex = 18;
+            // 
+            // btnNewProjectFolder
+            // 
+            this.btnNewProjectFolder.Location = new System.Drawing.Point(409, 299);
+            this.btnNewProjectFolder.Name = "btnNewProjectFolder";
+            this.btnNewProjectFolder.Size = new System.Drawing.Size(30, 23);
+            this.btnNewProjectFolder.TabIndex = 16;
+            this.btnNewProjectFolder.Text = "...";
+            this.btnNewProjectFolder.UseVisualStyleBackColor = true;
+            this.btnNewProjectFolder.Click += new System.EventHandler(this.btnNewProjectFolder_Click);
+            // 
+            // textNewProjectFolder
+            // 
+            this.textNewProjectFolder.Enabled = false;
+            this.textNewProjectFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.textNewProjectFolder.Location = new System.Drawing.Point(117, 299);
+            this.textNewProjectFolder.Name = "textNewProjectFolder";
+            this.textNewProjectFolder.ReadOnly = true;
+            this.textNewProjectFolder.Size = new System.Drawing.Size(286, 24);
+            this.textNewProjectFolder.TabIndex = 15;
+            // 
+            // lblNewProject
+            // 
+            this.lblNewProject.AutoSize = true;
+            this.lblNewProject.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblNewProject.Location = new System.Drawing.Point(9, 303);
+            this.lblNewProject.Name = "lblNewProject";
+            this.lblNewProject.Size = new System.Drawing.Size(102, 17);
+            this.lblNewProject.TabIndex = 14;
+            this.lblNewProject.Text = "Project folder:";
             // 
             // labelNotes
             // 
@@ -193,6 +220,27 @@ namespace RH.Core.Controls
             this.pictureExample.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureExample.TabIndex = 13;
             this.pictureExample.TabStop = false;
+            // 
+            // labelNotes1
+            // 
+            this.labelNotes1.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNotes1.Location = new System.Drawing.Point(6, 283);
+            this.labelNotes1.Name = "labelNotes1";
+            this.labelNotes1.Size = new System.Drawing.Size(433, 43);
+            this.labelNotes1.TabIndex = 15;
+            this.labelNotes1.Text = "For B/W files (STL) there will be a $5 charge per save, for full color prints $8." +
+    "";
+            // 
+            // labelPrintAhead11
+            // 
+            this.labelPrintAhead11.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelPrintAhead11.Location = new System.Drawing.Point(344, 54);
+            this.labelPrintAhead11.Name = "labelPrintAhead11";
+            this.labelPrintAhead11.Size = new System.Drawing.Size(433, 63);
+            this.labelPrintAhead11.TabIndex = 19;
+            this.labelPrintAhead11.Text = "Models and Textures will be saved at Users/Public/My DAZ Library/Runtime/Faceshop" +
+    "/fs";
+            this.labelPrintAhead11.Visible = false;
             // 
             // panel1
             // 
@@ -421,15 +469,15 @@ namespace RH.Core.Controls
             this.groupBoxOpen.Text = "Load project";
             this.groupBoxOpen.Visible = false;
             // 
-            // label2
+            // btnOpenProject
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(9, 32);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 17);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Project file:";
+            this.btnOpenProject.Location = new System.Drawing.Point(409, 28);
+            this.btnOpenProject.Name = "btnOpenProject";
+            this.btnOpenProject.Size = new System.Drawing.Size(30, 23);
+            this.btnOpenProject.TabIndex = 13;
+            this.btnOpenProject.Text = "...";
+            this.btnOpenProject.UseVisualStyleBackColor = true;
+            this.btnOpenProject.Click += new System.EventHandler(this.btnOpenProject_Click);
             // 
             // textOpenProject
             // 
@@ -441,63 +489,15 @@ namespace RH.Core.Controls
             this.textOpenProject.Size = new System.Drawing.Size(286, 24);
             this.textOpenProject.TabIndex = 12;
             // 
-            // btnOpenProject
+            // label2
             // 
-            this.btnOpenProject.Location = new System.Drawing.Point(409, 28);
-            this.btnOpenProject.Name = "btnOpenProject";
-            this.btnOpenProject.Size = new System.Drawing.Size(30, 23);
-            this.btnOpenProject.TabIndex = 13;
-            this.btnOpenProject.Text = "...";
-            this.btnOpenProject.UseVisualStyleBackColor = true;
-            this.btnOpenProject.Click += new System.EventHandler(this.btnOpenProject_Click);
-            // 
-            // btnNewProjectFolder
-            // 
-            this.btnNewProjectFolder.Location = new System.Drawing.Point(409, 299);
-            this.btnNewProjectFolder.Name = "btnNewProjectFolder";
-            this.btnNewProjectFolder.Size = new System.Drawing.Size(30, 23);
-            this.btnNewProjectFolder.TabIndex = 16;
-            this.btnNewProjectFolder.Text = "...";
-            this.btnNewProjectFolder.UseVisualStyleBackColor = true;
-            this.btnNewProjectFolder.Click += new System.EventHandler(this.btnNewProjectFolder_Click);
-            // 
-            // textNewProjectFolder
-            // 
-            this.textNewProjectFolder.Enabled = false;
-            this.textNewProjectFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.textNewProjectFolder.Location = new System.Drawing.Point(117, 299);
-            this.textNewProjectFolder.Name = "textNewProjectFolder";
-            this.textNewProjectFolder.ReadOnly = true;
-            this.textNewProjectFolder.Size = new System.Drawing.Size(286, 24);
-            this.textNewProjectFolder.TabIndex = 15;
-            // 
-            // lblNewProject
-            // 
-            this.lblNewProject.AutoSize = true;
-            this.lblNewProject.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblNewProject.Location = new System.Drawing.Point(9, 303);
-            this.lblNewProject.Name = "lblNewProject";
-            this.lblNewProject.Size = new System.Drawing.Size(102, 17);
-            this.lblNewProject.TabIndex = 14;
-            this.lblNewProject.Text = "Project folder:";
-            // 
-            // textNewProjectName
-            // 
-            this.textNewProjectName.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.textNewProjectName.Location = new System.Drawing.Point(117, 269);
-            this.textNewProjectName.Name = "textNewProjectName";
-            this.textNewProjectName.Size = new System.Drawing.Size(286, 24);
-            this.textNewProjectName.TabIndex = 18;
-            // 
-            // labelNewProjectName
-            // 
-            this.labelNewProjectName.AutoSize = true;
-            this.labelNewProjectName.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNewProjectName.Location = new System.Drawing.Point(9, 273);
-            this.labelNewProjectName.Name = "labelNewProjectName";
-            this.labelNewProjectName.Size = new System.Drawing.Size(99, 17);
-            this.labelNewProjectName.TabIndex = 17;
-            this.labelNewProjectName.Text = "Project name:";
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(9, 32);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 17);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Project file:";
             // 
             // frmNewProject4PrintAhead
             // 
@@ -511,6 +511,7 @@ namespace RH.Core.Controls
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureTemplate);
+            this.Controls.Add(this.labelPrintAhead11);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -581,6 +582,6 @@ namespace RH.Core.Controls
         private TextBox textNewProjectFolder;
         private Label lblNewProject;
         private TextBox textNewProjectName;
-        private Label labelNewProjectName;
+        private Label labelPrintAhead11;
     }
 }

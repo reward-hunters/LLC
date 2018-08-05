@@ -204,7 +204,7 @@ namespace RH.Core.HeadRotation
                 if (!IsVisible[i])
                     continue;
 
-                if (i == SelectedPoint)
+                if (i < ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.Count && ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2[i].Selected)
                     GL.Color3(1.0f, 0.0f, 0.0f);
                 else
                     GL.Color3(0.0f, 1.0f, 0.0f);
