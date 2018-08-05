@@ -213,6 +213,7 @@ namespace RH.Core.Render
 
         public Dictionary<Guid, PartMorphInfo> OldMorphing = null;
         public Dictionary<Guid, PartMorphInfo> FatMorphing = null;
+        public Dictionary<Guid, PartMorphInfo> SmileMorphing = null;
         public Dictionary<Guid, PartMorphInfo> PoseMorphing = null;
 
         private bool drawPoints = false;
@@ -528,6 +529,14 @@ namespace RH.Core.Render
                 temp = 0;
                 var fatMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
                 FatMorphing = pickingController.LoadPartsMorphInfo(fatMorphingPath, headMeshesController.RenderMesh, ref temp);
+
+                temp = 0;
+                var invIsOpenSmile = !ProgramCore.Project.IsOpenSmile;
+                var smileMorphingPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjPath(invIsOpenSmile));
+               // var smileMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
+                SmileMorphing = pickingController.LoadPartsMorphInfo(smileMorphingPath, headMeshesController.RenderMesh, ref temp);
+
+                //
             }
 
             var baseDots = HeadController.GetBaseDots(ProgramCore.Project.ManType);
@@ -4158,8 +4167,8 @@ namespace RH.Core.Render
                 morphs.Add(OldMorphing);
             if (FatMorphing != null)
                 morphs.Add(FatMorphing);
-            //if (PoseMorphing != null)
-            //    morphs.Add(PoseMorphing);
+            if (SmileMorphing != null)
+                morphs.Add(SmileMorphing);
             if (k != null)
                 headMeshesController.RenderMesh.EndMorph();
 

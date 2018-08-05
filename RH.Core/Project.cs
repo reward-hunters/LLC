@@ -73,6 +73,7 @@ namespace RH.Core
 
         public float AgeCoefficient = 0;            // коэффициенты features для сохранения возраста и толщины.
         public float FatCoefficient = 0;
+        public float SmileCoefficient = 0;
 
         public float MorphingScale = float.NaN;
 

@@ -92,7 +92,15 @@ namespace RH.Core.Controls.Panels
 
         private void trackBarSmile_MouseUp(object sender, MouseEventArgs e)
         {
-            //TODO тут будет учет УЛЫБКИ
+            var delta = trackBarSmile.Value == 0 ? 0 : trackBarSmile.Value / (trackBarSmile.Maximum * 1f);
+            if (ProgramCore.MainForm.ctrlRenderControl.SmileMorphing == null)
+                return;
+
+            foreach (var m in ProgramCore.MainForm.ctrlRenderControl.SmileMorphing)
+                m.Value.Delta = delta;
+
+            ProgramCore.Project.SmileCoefficient = delta;
+            ProgramCore.MainForm.ctrlRenderControl.DoMorth();
         }
 
         #endregion
