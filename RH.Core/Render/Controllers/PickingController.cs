@@ -755,10 +755,10 @@ namespace RH.Core.Render.Controllers
 
 
                 PartMorphInfo morphInfo = null;
-                var scale = ProgramCore.PluginMode &&
-                              ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport != null
-                    ? ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport.Scale
-                    : 1.0f;
+                var scale = 1.0f; //= ProgramCore.PluginMode &&
+                           //   ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport != null
+                   // ? ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport.Scale
+                    //: 1.0f;
                 var part =
                     renderMesh.Parts.FirstOrDefault(
                         p =>

@@ -206,7 +206,7 @@ namespace RH.MeshUtils.Data
                 for (var i = 0; i < part.Vertices.Length; i++)
                 {
                     var vertex = part.Vertices[i];
-                    vertex.OriginalPosition = vertex.Position;
+                    vertex.OriginalPosition = vertex.Position * scale;
                     vertex.Position.X *= scale;
                     vertex.Position.Y *= scale;
                     vertex.Position.Z *= scale;
