@@ -104,7 +104,7 @@ namespace RH.Core.Controls
             arrowPen.EndCap = LineCap.ArrowAnchor;
 
             eWidth = pictureTemplate.Width - 100;
-            TopEdgeTransformed = new RectangleF(pictureTemplate.Width / 2f - eWidth / 2f, 30, eWidth, eWidth);
+            TopEdgeTransformed = new RectangleF(pictureTemplate.Width / 2f - eWidth / 2f, 50, eWidth, eWidth+20);
 
             ShowInTaskbar = atStartup;
 
@@ -185,7 +185,7 @@ namespace RH.Core.Controls
                 e.Graphics.FillEllipse(DrawingTools.BlueSolidBrush, point.X - 2, point.Y - 2, 4, 4);
 
             e.Graphics.DrawArc(edgePen, TopEdgeTransformed, 220, 100);
-            e.Graphics.DrawLine(arrowPen, centerX(TopEdgeTransformed), TopEdgeTransformed.Top, centerX(TopEdgeTransformed), TopEdgeTransformed.Top + 20);
+            e.Graphics.DrawLine(arrowPen, centerX(TopEdgeTransformed), TopEdgeTransformed.Top, centerX(TopEdgeTransformed), TopEdgeTransformed.Top + 40);
         }
         private void pictureTemplate_MouseDown(object sender, MouseEventArgs e)
         {
@@ -197,7 +197,7 @@ namespace RH.Core.Controls
                 headHandPoint.X = (ImageTemplateOffsetX + e.X) / (ImageTemplateWidth * 1f);
                 headHandPoint.Y = (ImageTemplateOffsetY + e.Y) / (ImageTemplateHeight * 1f);
 
-                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 20)
+                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 40)
                 {
                     currentSelection = Selection.TopEdge;
                     startEdgeRect = TopEdgeTransformed;
@@ -234,7 +234,7 @@ namespace RH.Core.Controls
             }
             else
             {
-                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 20)
+                if (e.X >= TopEdgeTransformed.Left && e.X <= TopEdgeTransformed.Right && e.Y >= TopEdgeTransformed.Y && e.Y <= TopEdgeTransformed.Y + 40)
                     Cursor = ProgramCore.MainForm.GrabCursor;
                 else
                     Cursor = Cursors.Arrow;

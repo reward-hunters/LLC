@@ -325,7 +325,7 @@ namespace RH.Core.Render
         public void PhotoLoaded()
         {
             //   headTextureId = TextureHelper.GetTexture(photoPath);
-           
+
             camera.ResetCamera(true);
 
             ImportPoints();
@@ -337,7 +337,7 @@ namespace RH.Core.Render
             morphHelper.ProcessPoints(ProjectedPoints, HeadPoints);
             headMorphing.Morph();
 
-            ApplySmoothedTextures(); 
+            ApplySmoothedTextures();
 
             ResetCamera();
             additionalMorphing.Type = headMeshesController.RenderMesh.HeadAngle < 0.0f ? MorphTriangleType.Left : MorphTriangleType.Right;
@@ -491,16 +491,16 @@ namespace RH.Core.Render
                 }
                 else if (ProgramCore.PluginMode)
                 {
-                     switch (ProgramCore.Project.ManType)
-                     {
-                         case ManType.Male:
-                             scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
-                             break;
-                         case ManType.Female:
+                    switch (ProgramCore.Project.ManType)
+                    {
+                        case ManType.Male:
+                            scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
+                            break;
+                        case ManType.Female:
                             /*scale = 265.544153903151483385f;
                             headMeshesController.Resize(scale);
                             scale = 1.0f / scale;*/
-                            if(ProgramCore.Project.IsOpenSmile)
+                            if (ProgramCore.Project.IsOpenSmile)
                                 scale = headMeshesController.SetSize(29.3064537f);
                             else
                                 scale = headMeshesController.SetSize(31.862587f);
@@ -508,10 +508,10 @@ namespace RH.Core.Render
                             // подгонка размера 
                             //scale = headMeshesController.SetSize(31.862587f); // подгонка размера 
                             break;
-                         case ManType.Child:
-                             scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
-                             break;
-                     }                    
+                        case ManType.Child:
+                            scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
+                            break;
+                    }
                 }
                 if (pickingController.ObjExport != null)
                     pickingController.ObjExport.Scale = scale;
@@ -2824,6 +2824,7 @@ namespace RH.Core.Render
             shader.UpdateUniform("u_TransparentMap", 1);
             //shader.UpdateUniform("u_UseTransparent", transparent);            
             useTextures.Y = transparent;
+
             if (!ProgramCore.PluginMode)
             {
                 GL.ActiveTexture(TextureUnit.Texture0);
@@ -2831,6 +2832,7 @@ namespace RH.Core.Render
                 shader.UpdateUniform("u_Texture", 0);
                 useTextures.X = UseTexture ? part.Texture : 0.0f;
                 //shader.UpdateUniform("u_UseTexture", UseTexture ? part.Texture : 0.0f);
+
                 shader.UpdateUniform("u_Color", part.Color);
             }
             else

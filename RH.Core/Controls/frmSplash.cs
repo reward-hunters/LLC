@@ -29,8 +29,8 @@ namespace RH.Core.Controls
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                     image = Resources.logo_HeadShop;
                     break;
-                case ProgramCore.ProgramMode.HeadShop_v11:      // TODO даст иконку - заюзать
-                    image = Resources.logo_HeadShop;
+                case ProgramCore.ProgramMode.HeadShop_v11:      
+                    image = Resources.logo_HeadShop11;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
                     image = Resources.logo_HeadShop_OneClick;

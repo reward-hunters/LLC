@@ -714,6 +714,9 @@ namespace RH.MeshUtils.Data
 
             foreach (var part in Parts)
             {
+                if (part.Color.W == 0)  // прозрачный материал, не нужно рисовать. сделано для этих материалов: "Tear""Cornea"  "EyeReflection"))
+                    continue;
+
                 if (OnBeforePartDraw != null)
                     OnBeforePartDraw(part);
 

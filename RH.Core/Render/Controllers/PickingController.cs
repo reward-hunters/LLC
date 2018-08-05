@@ -227,10 +227,10 @@ namespace RH.Core.Render.Controllers
         }
 
         public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, string animationPath, bool needExporter, bool isOpenSmile)
-        {            
+        {
             var result = new List<DynamicRenderMesh>();
 
-            var objModel = ObjLoader.LoadObjFile(path, needExporter , isOpenSmile);
+            var objModel = ObjLoader.LoadObjFile(path, needExporter, isOpenSmile);
             if (objModel == null)
             {
                 ProgramCore.EchoToLog($"Can't load obj model '{path}'", EchoMessageType.Error);
@@ -378,26 +378,26 @@ namespace RH.Core.Render.Controllers
             var objModel = ObjLoader.LoadObjFile(path, true, true);
             var smileMeshes = LoadHeadMeshes(objModel, false, manType, scale, ref lastTriangle);
 
-             /*var a0 = new Vector3(99999.0f, 99999.0f, 99999.0f);
-             var b0 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+            /*var a0 = new Vector3(99999.0f, 99999.0f, 99999.0f);
+            var b0 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
 
-             foreach (var meshPartInfo in meshesInfo)
-             {
-                 GetAABB(ref a0, ref b0, meshPartInfo.VertexPositions);
-             }
+            foreach (var meshPartInfo in meshesInfo)
+            {
+                GetAABB(ref a0, ref b0, meshPartInfo.VertexPositions);
+            }
 
-             var a1 = new Vector3(99999.0f, 99999.0f, 99999.0f);
-             var b1 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
-             foreach (var meshPartInfo in smileMeshes)
-             {
-                 GetAABB(ref a1, ref b1, meshPartInfo.VertexPositions);
-             }
+            var a1 = new Vector3(99999.0f, 99999.0f, 99999.0f);
+            var b1 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+            foreach (var meshPartInfo in smileMeshes)
+            {
+                GetAABB(ref a1, ref b1, meshPartInfo.VertexPositions);
+            }
 
-             var dist0 = (b0 - a0).Length;
-             var dist1 = (b1 - a1).Length;
+            var dist0 = (b0 - a0).Length;
+            var dist1 = (b1 - a1).Length;
 
-             var center0 = (b0 + a0) * 0.5f;
-             var center1 = (b1 + a1) * 0.5f;*/
+            var center0 = (b0 + a0) * 0.5f;
+            var center1 = (b1 + a1) * 0.5f;*/
 
             float k = 265.4678407f; //! Вот это нужно подобрать
             //dist1 / dist0;
@@ -529,8 +529,8 @@ namespace RH.Core.Render.Controllers
 
             foreach (var modelGroup in objModel.Groups) // one group - one mesh
             {
-                if (!ProgramCore.PluginMode && ( modelGroup.Key.Name == "Tear" || modelGroup.Key.Name == "Cornea" || modelGroup.Key.Name == "EyeReflection"))     // очень плохие материалы. ИЗ-за них ломаются глазки.
-                    continue;           // если это плагин - то пропуск материалов ВСЕ ломает для экспортера в строчке GetObjFace. Возможно потребуется химичить с индексами
+                //    if (/*!ProgramCore.PluginMode &&*/ ( modelGroup.Key.Name == "Tear" || modelGroup.Key.Name == "Cornea" || modelGroup.Key.Name == "EyeReflection"))     // очень плохие материалы. ИЗ-за них ломаются глазки.
+                //       continue;           // если это плагин - то пропуск материалов ВСЕ ломает для экспортера в строчке GetObjFace. Возможно потребуется химичить с индексами
 
                 vertexPositions.Clear();
                 vertexNormals.Clear();
@@ -555,17 +555,27 @@ namespace RH.Core.Render.Controllers
                 var meshPartInfo = new MeshPartInfo
                 {
                     VertexPositions = GetScaledVertices(positions, scale),
-                    MaterialName = modelGroup.Key.Name,
                     TextureCoords = texCoords,
                     PartName = modelGroup.Key.Name == "default" ? string.Empty : modelGroup.Key.Name,
-                    Color =
-                                           new Vector4(modelGroup.Key.DiffuseColor.X, modelGroup.Key.DiffuseColor.Y,
-                                               modelGroup.Key.DiffuseColor.Z, modelGroup.Key.Transparency),
-                    Texture = modelGroup.Key.Texture,
-                    TransparentTexture = modelGroup.Key.TransparentTexture,
-                    TextureName = modelGroup.Key.DiffuseTextureMap,
-                    TransparentTextureName = modelGroup.Key.TransparentTextureMap
+               
+                 
                 };
+
+                if (modelGroup.Key.Name != "Tear" && modelGroup.Key.Name != "Cornea" && modelGroup.Key.Name != "EyeReflection")
+                {
+                    meshPartInfo.Texture = modelGroup.Key.Texture;
+                    meshPartInfo.TransparentTexture = modelGroup.Key.TransparentTexture;
+                    meshPartInfo.TextureName = modelGroup.Key.DiffuseTextureMap;
+                    meshPartInfo.TransparentTextureName = modelGroup.Key.TransparentTextureMap;
+                    meshPartInfo.Color =
+                                      new Vector4(modelGroup.Key.DiffuseColor.X, modelGroup.Key.DiffuseColor.Y,
+                                          modelGroup.Key.DiffuseColor.Z, modelGroup.Key.Transparency);
+                    meshPartInfo.MaterialName = modelGroup.Key.Name;
+                }
+                else
+                {
+                    meshPartInfo.Color = new Vector4(1,1,1,0);
+                }
 
                 result.Add(meshPartInfo);
             }
