@@ -270,6 +270,8 @@ namespace RH.MeshUtils.Helpers
 
         #region Public
 
+        public bool IsVisible = true;
+
         public bool IsMirrored
         {
             get
@@ -1103,6 +1105,12 @@ namespace RH.MeshUtils.Helpers
                 Type = HeadMeshType.Lip;
             else if (Name.Contains("Torso"))
                 Type = HeadMeshType.Torso;
+
+            if(Name.Contains("Tongue"))
+            {
+                IsVisible = false;
+            }
+
             Indices.Clear();
             var positions = new List<Vector3>();
             var texCoords = new List<Vector2>();

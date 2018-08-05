@@ -714,6 +714,9 @@ namespace RH.MeshUtils.Data
 
             foreach (var part in Parts)
             {
+                if (!part.IsVisible)
+                    continue;
+
                 if (OnBeforePartDraw != null)
                     OnBeforePartDraw(part);
 
@@ -757,6 +760,8 @@ namespace RH.MeshUtils.Data
             foreach (var part in Parts)
             {
                 if (part.Texture != textureId)
+                    continue;
+                if (!part.IsVisible)
                     continue;
                 GL.BindBuffer(BufferTarget.ArrayBuffer, part.VertexBuffer);
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, part.IndexBuffer);

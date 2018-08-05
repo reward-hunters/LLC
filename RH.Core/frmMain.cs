@@ -496,6 +496,9 @@ namespace RH.Core
                         frmTutCustomHeads.ShowDialog(this);
                     break;
             }
+
+            panelFront.btnAutodots_Click(null, new EventArgs());
+            panelFront.btnAutodots_Click(null, new EventArgs());
         }
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -2408,6 +2411,7 @@ namespace RH.Core
 
                 if (newProject && ProgramCore.Project.ManType == ManType.Custom)
                     ctrlRenderControl.camera.ResetCamera(true);
+                
             }
 
             if (frmPrint != null || frmStages != null)
