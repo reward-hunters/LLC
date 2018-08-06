@@ -498,7 +498,7 @@ namespace RH.MeshUtils.Data
                 MeshQuaternion = quaternion;
 
                 var angles = ToEulerRad(MeshQuaternion);
-                if (angles.X > -6f && angles.X < 3.0f)
+              //  if (angles.X > -6f && angles.X < 3.0f)
                     angles.X = 0.0f;
 
                 HeadAngle = angles.Y;
@@ -714,7 +714,7 @@ namespace RH.MeshUtils.Data
 
             foreach (var part in Parts)
             {
-                if (part.Color.W == 0)  // прозрачный материал, не нужно рисовать. сделано для этих материалов: "Tear""Cornea"  "EyeReflection"))
+                if (!part.IsVisible)  // прозрачный материал, не нужно рисовать. сделано для этих материалов: "Tear""Cornea"  "EyeReflection"))
                     continue;
 
                 if (OnBeforePartDraw != null)
