@@ -93,6 +93,7 @@ namespace RH.Core.Controls.Panels
         private void trackBarSmile_MouseUp(object sender, MouseEventArgs e)
         {
             var delta = trackBarSmile.Value == 0 ? 0 : trackBarSmile.Value / (trackBarSmile.Maximum * 1f);
+            delta = ProgramCore.Project.IsOpenSmile ? 1 - delta : delta;
             if (ProgramCore.MainForm.ctrlRenderControl.SmileMorphing == null)
                 return;
 

@@ -787,11 +787,11 @@ namespace RH.Core
             switch (manType)
             {
                 case ManType.Male:
-                    return isOpenSmile ? "MaleWithSmile" : "Male";
+                    return isOpenSmile ? "MaleWithSmilePlugin" : "Male";
                 case ManType.Female:
-                    return isOpenSmile ? "FemWithSmile" : "Fem";
+                    return isOpenSmile ? "FemWithSmilePlugin" : "Fem";
                 case ManType.Child:
-                    return isOpenSmile ? "ChildWithSmile" : "Child";
+                    return isOpenSmile ? "ChildWithSmilePlugin" : "Child";
                 default:
                     return string.Empty;
             }
