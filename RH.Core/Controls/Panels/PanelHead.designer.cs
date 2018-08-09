@@ -268,7 +268,7 @@ namespace RH.Core.Controls.Panels
             this.trackBarSmooth.TrackerSize = new System.Drawing.Size(16, 16);
             this.trackBarSmooth.TrackLineColor = System.Drawing.Color.DimGray;
             this.trackBarSmooth.TrackLineHeight = 3;
-            this.trackBarSmooth.Value = 80;
+            this.trackBarSmooth.Value = 50;
             this.trackBarSmooth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarSmooth_MouseUp);
             // 
             // PanelHead

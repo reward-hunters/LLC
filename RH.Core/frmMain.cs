@@ -503,7 +503,7 @@ namespace RH.Core
 
             if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11)
             {
-                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.8f);
+                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
             }
         }
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -2057,8 +2057,8 @@ namespace RH.Core
                             }
                             else
                             {
-                                using (var ms = new Bitmap(mapPath)) // Don't use using!!
-                                    ms.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
+                                using (var bmp = new Bitmap(mapPath))
+                                    bmp.Save(Path.Combine(diName, "fs3d.bmp"), ImageFormat.Bmp);
                             }
                         }
                         break;

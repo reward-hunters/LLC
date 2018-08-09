@@ -127,7 +127,7 @@ namespace RH.Core.Controls
 
                     labelPrintAhead11.Visible = true;
                     labelNotes.Visible = labelNotes1.Visible = false;
-                 //   rbImportObj.Visible = label11.Visible = true;
+                    rbImportObj.Visible = label11.Visible = true;
                     labelHelp.Text = "Browse or drag jpg file here";
                     break;
                 default:

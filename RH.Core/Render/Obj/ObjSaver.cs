@@ -649,7 +649,7 @@ namespace RH.Core.Render.Obj
                             {
                                 #region HeadShop rotator
 
-                                var actualTextureSize = 4096;
+                                var actualTextureSize = 2048;
                                 var textureId = ProgramCore.MainForm.ctrlRenderControl.GetTexture(mapPath);
                                 if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(textureId))
                                 {
