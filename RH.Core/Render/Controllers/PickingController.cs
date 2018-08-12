@@ -557,25 +557,18 @@ namespace RH.Core.Render.Controllers
                     VertexPositions = GetScaledVertices(positions, scale),
                     TextureCoords = texCoords,
                     PartName = modelGroup.Key.Name == "default" ? string.Empty : modelGroup.Key.Name,
-               
-                 
+
+
                 };
 
-                if (modelGroup.Key.Name != "Tear" && modelGroup.Key.Name != "Cornea" && modelGroup.Key.Name != "EyeReflection")
-                {
-                    meshPartInfo.Texture = modelGroup.Key.Texture;
-                    meshPartInfo.TransparentTexture = modelGroup.Key.TransparentTexture;
-                    meshPartInfo.TextureName = modelGroup.Key.DiffuseTextureMap;
-                    meshPartInfo.TransparentTextureName = modelGroup.Key.TransparentTextureMap;
-                    meshPartInfo.Color =
-                                      new Vector4(modelGroup.Key.DiffuseColor.X, modelGroup.Key.DiffuseColor.Y,
-                                          modelGroup.Key.DiffuseColor.Z, modelGroup.Key.Transparency);
-                    meshPartInfo.MaterialName = modelGroup.Key.Name;
-                }
-                else
-                {
-                    meshPartInfo.Color = new Vector4(1,1,1,0);
-                }
+                meshPartInfo.Texture = modelGroup.Key.Texture;
+                meshPartInfo.TransparentTexture = modelGroup.Key.TransparentTexture;
+                meshPartInfo.TextureName = modelGroup.Key.DiffuseTextureMap;
+                meshPartInfo.TransparentTextureName = modelGroup.Key.TransparentTextureMap;
+                meshPartInfo.Color =
+                                  new Vector4(modelGroup.Key.DiffuseColor.X, modelGroup.Key.DiffuseColor.Y,
+                                      modelGroup.Key.DiffuseColor.Z, modelGroup.Key.Transparency);
+                meshPartInfo.MaterialName = modelGroup.Key.Name;
 
                 result.Add(meshPartInfo);
             }
@@ -756,9 +749,9 @@ namespace RH.Core.Render.Controllers
 
                 PartMorphInfo morphInfo = null;
                 var scale = 1.0f; //= ProgramCore.PluginMode &&
-                           //   ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport != null
-                   // ? ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport.Scale
-                    //: 1.0f;
+                                  //   ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport != null
+                                  // ? ProgramCore.MainForm.ctrlRenderControl.pickingController.ObjExport.Scale
+                                  //: 1.0f;
                 var part =
                     renderMesh.Parts.FirstOrDefault(
                         p =>

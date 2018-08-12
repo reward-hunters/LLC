@@ -199,11 +199,11 @@ namespace RH.Core
             if (!UserConfig.ByName("Tutorials").HasAny())
                 InitializeTutorialLinks();
 
-            PluginUvGroups.AddRange(new[] { "1_lip", "1_skinface", "lips", "face" });
+            PluginUvGroups.AddRange(new[] { "1_lip", "1_skinface", "lips", "face"});
 
             //ProgramCore.PluginMode = true;
 
-            #region активация охуенной распознавалки
+                #region активация охуенной распознавалки
 
             if (FSDK.FSDKE_OK != FSDK.ActivateLibrary("DWysHuomlBcczVM2MQfiz/3WraXb7r+fM0th71X5A9z+gsHn2kpGOgWrVh9D/9sQWlPXO00CFmGMvetl9A+VEr9Y5GVBIccyV32uaZutZjKYH5KB2k87NJAAw6NPkzK0DSQ5b5W7EO0yg2+x4HxpWzPogGyIIYcAHIYY11/YGsU="))
             {
@@ -233,6 +233,7 @@ namespace RH.Core
             {
                 if (fn.StartsWith("fs"))
                 {
+                    
                     ProgramCore.PluginMode = true;
                     var strs = fn.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.ToLower().Trim());
                     foreach (var str in strs)
