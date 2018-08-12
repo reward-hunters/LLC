@@ -3495,8 +3495,9 @@ namespace RH.Core.Render
             float LeftToRight = 0.0f;
             //bool LeftToRight = headMeshesController.RenderMesh.HeadAngle >= 0;
             if (LeftToRightReflection != null)
+            {
                 LeftToRight = LeftToRightReflection.Value ? 1.0f : -1.0f;
-
+            }
 
             shader.UpdateUniform("u_BlendDirectionX", LeftToRight);
 

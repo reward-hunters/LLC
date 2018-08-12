@@ -512,7 +512,7 @@ namespace RH.MeshUtils.Helpers
                 }
 
                 foreach (var i in p.Indices)
-                    Vertices[i].AutodotsTexCoord.Z = k;
+                    Vertices[i].BlendWeight =k;
             }
         }
 
