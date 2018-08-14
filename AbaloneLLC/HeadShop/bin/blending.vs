@@ -1,6 +1,7 @@
 #version 110
 
 varying vec3 v_OrigitnalPosition;
+varying float v_Blending;
 
 void main(void) 
 {
@@ -10,4 +11,5 @@ void main(void)
 
 	gl_FrontColor = gl_Color;
 	gl_TexCoord[0] = gl_Vertex;//vec4(gl_Vertex.xy, gl_MultiTexCoord0.x, 0.0);
+	v_Blending = gl_MultiTexCoord0.x;
 }
