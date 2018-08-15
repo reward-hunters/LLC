@@ -4060,13 +4060,20 @@ namespace RH.Core.Render
 
         public void ApplySmoothedTextures()
         {
-            foreach (var smoothTex in SmoothedTextures)
+            try
             {
-                if (smoothTex.Key == 0)
-                    continue;
+                foreach (var smoothTex in SmoothedTextures)
+                {
+                    if (smoothTex.Key == 0)
+                        continue;
 
-                var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value);
-                SetTexture(smoothTex.Value, bitmap);
+                    var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value);
+                    SetTexture(smoothTex.Value, bitmap);
+                }
+            }
+            catch
+            {
+                ApplySmoothedTextures();
             }
         }
 

@@ -112,6 +112,8 @@ namespace RH.Core.Controls.Panels
                 {
                     btnProfile.Visible = false;
                     btnPolyLine.Visible = false;
+                    btnMirror.Visible = false;
+                    btnShapeTool.Visible  = false;
                 }
 
                 btnProfile.Enabled = true;

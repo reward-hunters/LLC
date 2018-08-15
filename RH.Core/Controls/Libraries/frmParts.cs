@@ -81,7 +81,7 @@ namespace RH.Core.Controls.Libraries
 
         private void frmParts_Activated(object sender, EventArgs e)
         {
-            ProgramCore.MainForm.ctrlRenderControl.StagesDeactivate(0);      // disable animation
+            ProgramCore.MainForm.ctrlRenderControl.StagesDeactivate(-1);      // disable animation
         }
         private void frmParts_FormClosing(object sender, FormClosingEventArgs e)
         {

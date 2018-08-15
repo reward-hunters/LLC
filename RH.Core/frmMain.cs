@@ -26,6 +26,7 @@ using RH.Core.Render.Obj;
 using RH.MeshUtils.Data;
 using RH.Core.Render.Controllers;
 using static RH.Core.ProgramCore;
+using System.Threading;
 
 namespace RH.Core
 {
@@ -499,13 +500,13 @@ namespace RH.Core
                     break;
             }
 
-            panelFront.btnAutodots_Click(null, new EventArgs());
-            panelFront.btnAutodots_Click(null, new EventArgs());
-
             if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11)
             {
                 ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
             }
+
+            panelFront.btnAutodots_Click(null, new EventArgs());
+            panelFront.btnAutodots_Click(null, new EventArgs());
         }
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
