@@ -5,11 +5,10 @@ uniform sampler2D   u_BaseTexture;
 uniform float		u_BlendDirectionX;
 
 varying vec3 v_OrigitnalPosition;
-varying float v_Blending;
 
 void main(void) 
 {
-	float b = clamp(sign(v_OrigitnalPosition.z), 0.0, 1.0) * v_Blending;
+	float b = clamp(sign(v_OrigitnalPosition.z), 0.0, 1.0);
 	vec2 t = gl_Color.xy;
 
 	if(u_BlendDirectionX * v_OrigitnalPosition.x > 0.0) {
