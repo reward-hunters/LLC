@@ -778,6 +778,7 @@ namespace RH.MeshUtils.Data
             GL.DisableClientState(ArrayCap.NormalArray);
             GL.DisableClientState(ArrayCap.TextureCoordArray);
             GL.DisableClientState(ArrayCap.ColorArray);
+
             /* GL.Color3(1.0f, 1.0f, 1.0f);
              GL.EnableClientState(ArrayCap.VertexArray);
              GL.EnableClientState(ArrayCap.NormalArray);
