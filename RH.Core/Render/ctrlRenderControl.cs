@@ -249,6 +249,13 @@ namespace RH.Core.Render
         {
             InitializeComponent();
             glControl.PreviewKeyDown += glControl_PreviewKeyDown;
+
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                    panelStop.BackgroundImage = Properties.Resources.panelZero;
+                    break;
+            }
         }
         ~ctrlRenderControl()
         {
@@ -3340,7 +3347,15 @@ namespace RH.Core.Render
         }
         private void panelStop_Click(object sender, EventArgs e)
         {
-            workTimer.Stop();
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                    OrtoTop();
+                    break;
+                default:
+                    workTimer.Stop();
+                    break;
+            }
         }
 
         #endregion

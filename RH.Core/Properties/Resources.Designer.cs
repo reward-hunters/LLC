@@ -1203,6 +1203,16 @@ namespace RH.Core.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap panelZero {
+            get {
+                object obj = ResourceManager.GetObject("panelZero", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap radioCheck {
             get {
                 object obj = ResourceManager.GetObject("radioCheck", resourceCulture);

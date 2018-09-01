@@ -9,6 +9,7 @@ using RH.Core.IO;
 using RH.Core.Render.Meshes;
 using RH.Core.Render.Obj;
 using RH.ImageListView;
+using OpenTK;
 
 namespace RH.Core.Controls.Libraries
 {
@@ -32,7 +33,14 @@ namespace RH.Core.Controls.Libraries
             {
                 if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.Count == 0 || ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.All(x => x.meshType != MeshType.Hair))
                 {
+                    trackBarSize.Value = 1;
                     imageListView.ClearSelection();
+                }
+                else
+                {
+                    trackBarSize.Value = (int)(ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].MeshSize * 50);
+
+                    tempTransform = ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform;
                 }
             }
             finally
@@ -146,46 +154,38 @@ namespace RH.Core.Controls.Libraries
                 var path = Path.Combine(sel.FilePath, sel.FileName);
                 UserConfig.ByName("Options")["Styles", path] = "0";     // not delete, just hide it.
 
-                /*     var mtlPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + ".mtl");
-                     var objPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + ".obj");
-                     var objNullPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + "_null.obj");
-
-                     var fi = new FileInfo(path);
-                     if (fi.Exists)
-                     {
-                         fi.Attributes = FileAttributes.Normal;
-                         fi.Delete();
-                     }
-
-                     var mtlFi = new FileInfo(mtlPath);
-                     if (mtlFi.Exists)
-                     {
-                         mtlFi.Attributes = FileAttributes.Normal;
-                         mtlFi.Delete();
-                     }
-
-                     var objFi = new FileInfo(objPath);
-                     if (objFi.Exists)
-                     {
-                         objFi.Attributes = FileAttributes.Normal;
-                         objFi.Delete();
-                     }
-
-                     var objNullFi = new FileInfo(objNullPath);
-                     if (objNullFi.Exists)
-                     {
-                         objNullFi.Attributes = FileAttributes.Normal;
-                         objNullFi.Delete();
-                     }*/
             }
             InitializeListView();
         }
 
+        private float meshScale;
         private void trackBarSize_Scroll(object sender, EventArgs e)
         {
-            var k = (trackBarSize.Value - trackBarSize.Minimum) * 1f / (trackBarSize.Maximum - trackBarSize.Minimum);
-            foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes)
-                mesh.InterpolateMesh((trackBarSize.Value - trackBarSize.Minimum) * 1f / (trackBarSize.Maximum - trackBarSize.Minimum));
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11)
+            {
+                if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.Count != 1 || ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].meshType != MeshType.Hair)
+                    return;
+
+                var size = trackBarSize.Value / 50f;
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].MeshSize = size;
+
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform = tempTransform;
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform[3, 0] -= ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Position.X;
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform[3, 1] -= ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Position.Y;
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform[3, 2] -= ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Position.Z;
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform *= Matrix4.CreateScale(size / meshScale);
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform[3, 0] += ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Position.X;
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform[3, 1] += ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Position.Y;
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform[3, 2] += ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Position.Z;
+
+                ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].IsChanged = true;
+            }
+            else
+            {
+                var k = (trackBarSize.Value - trackBarSize.Minimum) * 1f / (trackBarSize.Maximum - trackBarSize.Minimum);
+                foreach (var mesh in ProgramCore.MainForm.ctrlRenderControl.pickingController.HairMeshes)
+                    mesh.InterpolateMesh((trackBarSize.Value - trackBarSize.Minimum) * 1f / (trackBarSize.Maximum - trackBarSize.Minimum));
+            }
         }
 
         private void btnClearProperties_Click(object sender, EventArgs e)
@@ -267,6 +267,22 @@ namespace RH.Core.Controls.Libraries
 
         #endregion
 
+        private Matrix4 tempTransform;          // matrix transformation, require for changing angle and size of selected accessory
+        private void InitTempTransform()
+        {
+            if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.Count != 1)
+                return;
+
+            tempTransform = ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].Transform;           // for accessories always only ONE item can be selected
+        }
+        private void trackBarSize_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.Count != 1 || ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].meshType != MeshType.Hair)
+                return;
+
+            InitTempTransform();
+            meshScale = ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].MeshSize;
+        }
     }
 }
 

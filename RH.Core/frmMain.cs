@@ -173,6 +173,7 @@ namespace RH.Core
                     panelMenuStage.Image = Resources.btnMenuStageNormal;
                     panelMenuFeatures.Visible = featuresTabToolStripMenuItem.Visible = true;
                     panelMenuStage.Visible = stageHelpToolStripMenuItem.Visible = false;
+                    profileTabToolStripMenuItem.Visible = stageLibraryToolStripMenuItem1.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:

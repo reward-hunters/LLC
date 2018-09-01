@@ -34,23 +34,23 @@ namespace RH.Core.Controls.Libraries
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnClearProperties = new System.Windows.Forms.Button();
-            this.btnSavePositionAndSize = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnAddNewMaterial = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnImport = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
+            this.btnSavePositionAndSize = new System.Windows.Forms.Button();
+            this.btnClearProperties = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.trackBarSize = new System.Windows.Forms.TrackBar();
             this.imageListView = new RH.ImageListView.ImageListViewEx();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.btnImport = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -66,38 +66,16 @@ namespace RH.Core.Controls.Libraries
             this.panel1.Size = new System.Drawing.Size(150, 362);
             this.panel1.TabIndex = 1;
             // 
-            // btnClearProperties
+            // groupBox2
             // 
-            this.btnClearProperties.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnClearProperties.Location = new System.Drawing.Point(71, 19);
-            this.btnClearProperties.Name = "btnClearProperties";
-            this.btnClearProperties.Size = new System.Drawing.Size(59, 29);
-            this.btnClearProperties.TabIndex = 13;
-            this.btnClearProperties.Text = "Clear";
-            this.btnClearProperties.UseVisualStyleBackColor = true;
-            this.btnClearProperties.Click += new System.EventHandler(this.btnClearProperties_Click);
-            // 
-            // btnSavePositionAndSize
-            // 
-            this.btnSavePositionAndSize.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSavePositionAndSize.Location = new System.Drawing.Point(6, 19);
-            this.btnSavePositionAndSize.Name = "btnSavePositionAndSize";
-            this.btnSavePositionAndSize.Size = new System.Drawing.Size(59, 29);
-            this.btnSavePositionAndSize.TabIndex = 12;
-            this.btnSavePositionAndSize.Text = "Save";
-            this.btnSavePositionAndSize.UseVisualStyleBackColor = true;
-            this.btnSavePositionAndSize.Click += new System.EventHandler(this.btnSavePositionAndSize_Click);
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnDelete.Location = new System.Drawing.Point(71, 19);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(59, 29);
-            this.btnDelete.TabIndex = 9;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.groupBox2.Controls.Add(this.btnAddNewMaterial);
+            this.groupBox2.Controls.Add(this.btnDelete);
+            this.groupBox2.Location = new System.Drawing.Point(8, 302);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(133, 54);
+            this.groupBox2.TabIndex = 15;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Styles";
             // 
             // btnAddNewMaterial
             // 
@@ -110,28 +88,97 @@ namespace RH.Core.Controls.Libraries
             this.btnAddNewMaterial.UseVisualStyleBackColor = true;
             this.btnAddNewMaterial.Click += new System.EventHandler(this.btnAddNewMaterial_Click);
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnDelete.Location = new System.Drawing.Point(71, 19);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(59, 29);
+            this.btnDelete.TabIndex = 9;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnImport);
+            this.groupBox1.Controls.Add(this.btnExport);
+            this.groupBox1.Controls.Add(this.btnSavePositionAndSize);
+            this.groupBox1.Controls.Add(this.btnClearProperties);
+            this.groupBox1.Location = new System.Drawing.Point(8, 207);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(133, 89);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Settings";
+            // 
+            // btnImport
+            // 
+            this.btnImport.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnImport.Location = new System.Drawing.Point(71, 54);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(59, 29);
+            this.btnImport.TabIndex = 15;
+            this.btnImport.Text = "Import";
+            this.btnImport.UseVisualStyleBackColor = true;
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnExport.Location = new System.Drawing.Point(6, 54);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(59, 29);
+            this.btnExport.TabIndex = 14;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnSavePositionAndSize
+            // 
+            this.btnSavePositionAndSize.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnSavePositionAndSize.Location = new System.Drawing.Point(6, 19);
+            this.btnSavePositionAndSize.Name = "btnSavePositionAndSize";
+            this.btnSavePositionAndSize.Size = new System.Drawing.Size(59, 29);
+            this.btnSavePositionAndSize.TabIndex = 12;
+            this.btnSavePositionAndSize.Text = "Save";
+            this.btnSavePositionAndSize.UseVisualStyleBackColor = true;
+            this.btnSavePositionAndSize.Click += new System.EventHandler(this.btnSavePositionAndSize_Click);
+            // 
+            // btnClearProperties
+            // 
+            this.btnClearProperties.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnClearProperties.Location = new System.Drawing.Point(71, 19);
+            this.btnClearProperties.Name = "btnClearProperties";
+            this.btnClearProperties.Size = new System.Drawing.Size(59, 29);
+            this.btnClearProperties.TabIndex = 13;
+            this.btnClearProperties.Text = "Clear";
+            this.btnClearProperties.UseVisualStyleBackColor = true;
+            this.btnClearProperties.Click += new System.EventHandler(this.btnClearProperties_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(30, 11);
+            this.label1.Location = new System.Drawing.Point(37, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 18);
+            this.label1.Size = new System.Drawing.Size(41, 18);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Length";
+            this.label1.Text = "Size";
             // 
             // trackBarSize
             // 
             this.trackBarSize.Location = new System.Drawing.Point(49, 31);
-            this.trackBarSize.Maximum = 20;
+            this.trackBarSize.Maximum = 100;
             this.trackBarSize.Minimum = 1;
             this.trackBarSize.Name = "trackBarSize";
             this.trackBarSize.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.trackBarSize.Size = new System.Drawing.Size(45, 170);
             this.trackBarSize.TabIndex = 0;
             this.trackBarSize.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBarSize.Value = 10;
+            this.trackBarSize.Value = 50;
             this.trackBarSize.Scroll += new System.EventHandler(this.trackBarSize_Scroll);
+            this.trackBarSize.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBarSize_MouseDown);
             // 
             // imageListView
             // 
@@ -150,52 +197,6 @@ namespace RH.Core.Controls.Libraries
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnImport);
-            this.groupBox1.Controls.Add(this.btnExport);
-            this.groupBox1.Controls.Add(this.btnSavePositionAndSize);
-            this.groupBox1.Controls.Add(this.btnClearProperties);
-            this.groupBox1.Location = new System.Drawing.Point(8, 207);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(133, 89);
-            this.groupBox1.TabIndex = 14;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Settings";
-            // 
-            // btnExport
-            // 
-            this.btnExport.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnExport.Location = new System.Drawing.Point(6, 54);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(59, 29);
-            this.btnExport.TabIndex = 14;
-            this.btnExport.Text = "Export";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnImport
-            // 
-            this.btnImport.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnImport.Location = new System.Drawing.Point(71, 54);
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(59, 29);
-            this.btnImport.TabIndex = 15;
-            this.btnImport.Text = "Import";
-            this.btnImport.UseVisualStyleBackColor = true;
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnAddNewMaterial);
-            this.groupBox2.Controls.Add(this.btnDelete);
-            this.groupBox2.Location = new System.Drawing.Point(8, 302);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(133, 54);
-            this.groupBox2.TabIndex = 15;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Styles";
             // 
             // frmStyles
             // 
@@ -217,10 +218,10 @@ namespace RH.Core.Controls.Libraries
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmStyles_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
