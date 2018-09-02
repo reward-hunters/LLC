@@ -201,11 +201,11 @@ namespace RH.Core
             if (!UserConfig.ByName("Tutorials").HasAny())
                 InitializeTutorialLinks();
 
-            PluginUvGroups.AddRange(new[] { "1_lip", "1_skinface", "lips", "face"});
+            PluginUvGroups.AddRange(new[] { "1_lip", "1_skinface", "lips", "face" });
 
             //ProgramCore.PluginMode = true;
 
-                #region активация охуенной распознавалки
+            #region активация охуенной распознавалки
 
             if (FSDK.FSDKE_OK != FSDK.ActivateLibrary("DWysHuomlBcczVM2MQfiz/3WraXb7r+fM0th71X5A9z+gsHn2kpGOgWrVh9D/9sQWlPXO00CFmGMvetl9A+VEr9Y5GVBIccyV32uaZutZjKYH5KB2k87NJAAw6NPkzK0DSQ5b5W7EO0yg2+x4HxpWzPogGyIIYcAHIYY11/YGsU="))
             {
@@ -235,7 +235,7 @@ namespace RH.Core
             {
                 if (fn.StartsWith("fs"))
                 {
-                    
+
                     ProgramCore.PluginMode = true;
                     var strs = fn.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.ToLower().Trim());
                     foreach (var str in strs)
@@ -1911,6 +1911,7 @@ namespace RH.Core
         {
             string fiName;
             var diName = string.Empty;
+            var specialExportPath = string.Empty;
             var tempScale = 5f;
             if (ProgramCore.PluginMode)
             {
@@ -1920,6 +1921,7 @@ namespace RH.Core
                 var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
                 diName = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\");
+                specialExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "My DAZ 3D Library", "Runtime", "FaceShop", "fs");      // сделано специально. т.к. для плагина ПЛАГИН утаскивает только часть файлов. Остальное - придется вручную сохранять по этому пути.
                 fiName = Path.Combine(diName, "fs3d.obj");
             }
             else
@@ -1937,34 +1939,34 @@ namespace RH.Core
 
             #region Выгрузка волос и аксессуаров
 
-            switch (ProgramCore.CurrentProgram)
+            var exportDirectory = string.IsNullOrWhiteSpace(specialExportPath) ? ProgramCore.Project.ProjectPath : specialExportPath;
+
+            var haPath = Path.GetFileNameWithoutExtension(fiName) + "hair.obj";
+            var hairPath = Path.Combine(exportDirectory, haPath);
+            var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
+
+            ObjSaver.SaveObjFile(hairPath, ctrlRenderControl.pickingController.HairMeshes, MeshType.Hair, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
+
+            if (ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes.Count > 0)            // save accessories to separate file
             {
-                case ProgramCore.ProgramMode.HeadShop_v11:
-                case ProgramCore.ProgramMode.HeadShop_Rotator:
-                    break;  // When pushing Export, only head needs to export (not the neck, hair, etc) as this will simply export back to DAZ Studio.  
-                default:
-                    {
-                        var haPath = Path.GetFileNameWithoutExtension(fiName) + "hair.obj";
-                        var hairPath = Path.Combine(ProgramCore.Project.ProjectPath, haPath);
-                        var realScale = ProgramCore.PluginMode ? 1.0f : ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.RealScale;
+                var acName = Path.GetFileNameWithoutExtension(fiName) + "_accessory.obj";
 
-                        ObjSaver.SaveObjFile(hairPath, ctrlRenderControl.pickingController.HairMeshes, MeshType.Hair, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
-
-                        if (ProgramCore.MainForm.ctrlRenderControl.pickingController.AccesoryMeshes.Count > 0)            // save accessories to separate file
-                        {
-                            var acName = Path.GetFileNameWithoutExtension(fiName) + "_accessory.obj";
-
-                            var accessoryPath = Path.Combine(ProgramCore.Project.ProjectPath, acName);
-                            ObjSaver.SaveObjFile(accessoryPath, ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
-                        }
-                    }
-                    break;
+                var accessoryPath = Path.Combine(exportDirectory, acName);
+                ObjSaver.SaveObjFile(accessoryPath, ctrlRenderControl.pickingController.AccesoryMeshes, MeshType.Accessory, realScale, ProgramCore.Project.ManType, ProgramCore.Project.ProjectName, true);
             }
+
 
             #endregion
 
 
             ctrlRenderControl.SaveHead(fiName, true);
+            if (PluginMode)
+            {
+                ProgramCore.Project.ProjectPath = specialExportPath;        //3.	Need to deposit all texture files into Users/Public/Documents/My DAZ Library/Runtime/Faceshop/fs folder, including smoothed eye, mouth and teeth. Right now only face (fs.bmp) is deposited.
+                if (ProgramCore.Project.AutodotsUsed)
+                   ctrlRenderControl.SaveBlendingTextures();
+                ctrlRenderControl.SaveSmoothedTextures();
+            }
 
             if (ProgramCore.PluginMode)
             {
