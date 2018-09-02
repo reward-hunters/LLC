@@ -20,12 +20,12 @@ map_Kd /Maps/m5phillipface01.jpg
 newmtl Lacrimals
 d 1
 Kd 1 1 1
-map_Kd /Maps/d84.png
+map_Kd /Maps/d2.png
 
 newmtl Pupils
 d 1
 Kd 1 1 1
-map_Kd /Maps/d84.png
+map_Kd /Maps/d2.png
 
 newmtl Lips
 d 1
@@ -50,7 +50,7 @@ map_D /Maps/m5phillipmoutho.jpg
 newmtl Irises
 d 1
 Kd 1 1 1
-map_Kd /Maps/d84.png
+map_Kd /Maps/d2.png
 
 newmtl Teeth
 d 1
@@ -74,7 +74,7 @@ map_Kd /Maps/m5philliplimbs01.jpg
 newmtl Sclera
 d 1
 Kd 1 1 1
-map_Kd /Maps/d84.png
+map_Kd /Maps/d2.png
 map_D /Maps/m5phillipeyeso.jpg
 
 newmtl Fingernails
@@ -147,154 +147,4 @@ newmtl InnerMouth
 d 1
 Kd 1 1 1
 map_Kd /Maps/m5phillipmouth.jpg
-
-newmtl Cornea_Male2
-d 0
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Ears_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl EyeReflection_Male2
-d 0
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 0.80000001 0.80000001 0.80000001
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Face_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
-
-newmtl Gums_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Head_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipTorso01.jpg
-
-newmtl Irises_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Lacrimals_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Lips_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipFace01.jpg
-
-newmtl Nostrils_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Pupils_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Sclera_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Tear_Male2
-d 0.1182
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 0.80000001 0.80000001 0.80000001
-Ks 1 1 1
-Km 0
-map_Kd /Maps/d2.png
-
-newmtl Teeth_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
-
-newmtl Tongue_Male2
-d 1
-Ns 1
-Ni 0
-Ka 0 0 0
-Kd 1 1 1
-Ks 1 1 1
-Km 0
-map_Kd /Maps/M5PhillipMouth.jpg
 
