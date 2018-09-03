@@ -306,7 +306,7 @@ namespace RH.Core.Render.Controllers
                                 topPoint = 11.61f;
                                 break;
                             case ManType.Child:
-                                scale = 0.85f;
+                                //scale = 0.85f;
                                 topPoint = 9.759598f;
                                 break;
                         }
