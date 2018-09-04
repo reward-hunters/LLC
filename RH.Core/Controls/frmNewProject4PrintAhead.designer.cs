@@ -316,14 +316,14 @@ namespace RH.Core.Controls
             // 
             // btnMale
             // 
-            this.btnMale.Image = global::RH.Core.Properties.Resources.btnMaleNormal;
+            this.btnMale.Image = global::RH.Core.Properties.Resources.btnMaleGray;
             this.btnMale.Location = new System.Drawing.Point(211, 29);
             this.btnMale.Name = "btnMale";
             this.btnMale.Size = new System.Drawing.Size(59, 59);
             this.btnMale.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.btnMale.TabIndex = 15;
             this.btnMale.TabStop = false;
-            this.btnMale.Tag = "1";
+            this.btnMale.Tag = "2";
             this.btnMale.Click += new System.EventHandler(this.btnMale_Click);
             // 
             // btnInfo
@@ -522,6 +522,7 @@ namespace RH.Core.Controls
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Tag = "2";
             this.Text = "Create new project";
             this.Resize += new System.EventHandler(this.frmNewProject4PrintAhead_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureTemplate)).EndInit();

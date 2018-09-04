@@ -122,8 +122,8 @@ namespace RH.Core.Controls
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     pictureExample.Visible = label1.Visible = label5.Visible = textTemplateImage.Visible = false;
-                   groupBox1.Visible= rbNewProject.Visible = rbOpenProject.Visible = groupBoxOpen.Visible = lblNewProject.Visible = textNewProjectFolder.Visible = btnNewProjectFolder.Visible =
-                        textNewProjectName.Visible = false;
+                    groupBox1.Visible = rbNewProject.Visible = rbOpenProject.Visible = groupBoxOpen.Visible = lblNewProject.Visible = textNewProjectFolder.Visible = btnNewProjectFolder.Visible =
+                         textNewProjectName.Visible = false;
 
                     labelPrintAhead11.Visible = true;
                     labelNotes.Visible = labelNotes1.Visible = false;
@@ -159,29 +159,29 @@ namespace RH.Core.Controls
         }
         private void rbImportObj_CheckedChanged(object sender, EventArgs e)
         {
-         /*   if (rbImportObj.Checked)
-            {
-                btnFemale.Tag = btnChild.Tag = btnMale.Tag = "2";
-                btnChild.Image = Resources.btnChildGray;
-                btnMale.Image = Resources.btnMaleGray;
-                btnFemale.Image = Resources.btnFemaleGray;*/
-/*
-                if (!ProgramCore.PluginMode)
-                {
-                    using (var ofd = new OpenFileDialogEx("Select obj file", "OBJ Files|*.obj"))
-                    {
-                        ofd.Multiselect = false;
-                        if (ofd.ShowDialog() != DialogResult.OK)
-                        {
-                            btnMale_Click(this, new EventArgs());
-                            return;
-                        }
+            /*   if (rbImportObj.Checked)
+               {
+                   btnFemale.Tag = btnChild.Tag = btnMale.Tag = "2";
+                   btnChild.Image = Resources.btnChildGray;
+                   btnMale.Image = Resources.btnMaleGray;
+                   btnFemale.Image = Resources.btnFemaleGray;*/
+            /*
+                            if (!ProgramCore.PluginMode)
+                            {
+                                using (var ofd = new OpenFileDialogEx("Select obj file", "OBJ Files|*.obj"))
+                                {
+                                    ofd.Multiselect = false;
+                                    if (ofd.ShowDialog() != DialogResult.OK)
+                                    {
+                                        btnMale_Click(this, new EventArgs());
+                                        return;
+                                    }
 
-                        //btnNext.Enabled = true;
-                        CustomModelPath = ofd.FileName;
-                    }
-                }*/
-       //     }
+                                    //btnNext.Enabled = true;
+                                    CustomModelPath = ofd.FileName;
+                                }
+                            }*/
+            //     }
         }
 
         private void pictureTemplate_Paint(object sender, PaintEventArgs e)
@@ -645,7 +645,7 @@ namespace RH.Core.Controls
         {
             rbNewProject.Checked = !rbOpenProject.Checked;
             groupBoxOpen.Enabled = rbOpenProject.Checked;
-            groupBox1.Enabled = pictureTemplate.Enabled =  !rbOpenProject.Checked;
+            groupBox1.Enabled = pictureTemplate.Enabled = !rbOpenProject.Checked;
         }
     }
 }

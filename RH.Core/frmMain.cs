@@ -175,6 +175,9 @@ namespace RH.Core
                     panelMenuStage.Visible = stageHelpToolStripMenuItem.Visible = false;
                     profileTabToolStripMenuItem.Visible = stageLibraryToolStripMenuItem1.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
+
+                    mirrorHelpToolStripMenuItem.Visible = freehandHelpToolStripMenuItem.Visible = profileHelpToolStripMenuItem.Visible = retouchHelpToolStripMenuItem.Visible = false;
+                    panTopcontinuousPanToolStripMenuItem.Visible = panBottomcontinuousPanToolStripMenuItem.Visible = stepToponeStepToolStripMenuItem.Visible = stepBottomoneStepToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     Text = @"HeadShop 11";
@@ -1964,7 +1967,7 @@ namespace RH.Core
             {
                 ProgramCore.Project.ProjectPath = specialExportPath;        //3.	Need to deposit all texture files into Users/Public/Documents/My DAZ Library/Runtime/Faceshop/fs folder, including smoothed eye, mouth and teeth. Right now only face (fs.bmp) is deposited.
                 if (ProgramCore.Project.AutodotsUsed)
-                   ctrlRenderControl.SaveBlendingTextures();
+                    ctrlRenderControl.SaveBlendingTextures();
                 ctrlRenderControl.SaveSmoothedTextures();
             }
 
