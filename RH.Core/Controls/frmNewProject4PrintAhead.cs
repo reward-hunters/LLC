@@ -129,6 +129,7 @@ namespace RH.Core.Controls
                     labelNotes.Visible = labelNotes1.Visible = false;
                     rbImportObj.Visible = label11.Visible = true;
                     labelHelp.Text = "Browse or drag jpg file here";
+                    label8.Visible = btnChild.Visible = false;
                     break;
                 default:
                     label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;

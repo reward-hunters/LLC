@@ -20,12 +20,12 @@ map_Kd /Maps/m5phillipface01.jpg
 newmtl Lacrimals
 d 1
 Kd 1 1 1
-map_Kd /Maps/d2.png
+map_Kd /Maps/d2.jpg
 
 newmtl Pupils
 d 1
 Kd 1 1 1
-map_Kd /Maps/d2.png
+map_Kd /Maps/d2.jpg
 
 newmtl Lips
 d 1
@@ -50,7 +50,7 @@ map_D /Maps/m5phillipmoutho.jpg
 newmtl Irises
 d 1
 Kd 1 1 1
-map_Kd /Maps/d2.png
+map_Kd /Maps/d2.jpg
 
 newmtl Teeth
 d 1
@@ -74,7 +74,7 @@ map_Kd /Maps/m5philliplimbs01.jpg
 newmtl Sclera
 d 1
 Kd 1 1 1
-map_Kd /Maps/d2.png
+map_Kd /Maps/d2.jpg
 map_D /Maps/m5phillipeyeso.jpg
 
 newmtl Fingernails
