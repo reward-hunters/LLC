@@ -291,7 +291,7 @@ namespace RH.MeshUtils.Data
             aabb.B = b;
 
             BlendingInfos.Clear();
-            var radius = Math.Abs(leye.X - reye.X) * 0.26f;
+            var radius = Math.Abs(leye.X - reye.X) * 0.2f;
             BlendingInfos.Add(new BlendingInfo
             {
                 Position = leye,
@@ -305,17 +305,17 @@ namespace RH.MeshUtils.Data
             BlendingInfos.Add(new BlendingInfo
             {
                 Position = aabb.Center.Xy,
-                Radius = (aabb.Center.Xy - aabb.B.Xy).Length * 0.7f
+                Radius = (aabb.Center.Xy - aabb.B.Xy).Length * 0.4f
             });
             BlendingInfos.Add(new BlendingInfo
             {
                 Position = lip,
-                Radius = (aabb.Center.Xy - lip).Length * 0.6f
+                Radius = (aabb.Center.Xy - lip).Length * 0.5f
             });
             BlendingInfos.Add(new BlendingInfo
             {
                 Position = (leye + reye) * 0.5f,
-                Radius = (aabb.B.Xy - face).Length * 0.6f
+                Radius = (aabb.B.Xy - face).Length * 0.4f
             });
             foreach (var part in Parts)
                 part.FillBlendingData(BlendingInfos);
