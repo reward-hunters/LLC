@@ -115,13 +115,19 @@ namespace RH.MeshUtils.Helpers
             foreach (var i in Indices)
             {
                 var v = meshPart.Vertices[i];
-
                 v.AutodotsTexCoord.X = FrontTriangle.U * v1.X + FrontTriangle.V * v2.X + FrontTriangle.W * v3.X;
                 v.AutodotsTexCoord.Y = FrontTriangle.U * v1.Y + FrontTriangle.V * v2.Y + FrontTriangle.W * v3.Y;
 
-                v.AutodotsTexCoord.Z = FrontTriangle.U * vm1.X + FrontTriangle.V * vm2.X + FrontTriangle.W * vm3.X;
-                v.AutodotsTexCoord.W = FrontTriangle.U * vm1.Y + FrontTriangle.V * vm2.Y + FrontTriangle.W * vm3.Y;
-
+                if (meshPart.IsTextureMirrored())
+                {
+                    v.AutodotsTexCoord.Z = FrontTriangle.U * vm1.X + FrontTriangle.V * vm2.X + FrontTriangle.W * vm3.X;
+                    v.AutodotsTexCoord.W = FrontTriangle.U * vm1.Y + FrontTriangle.V * vm2.Y + FrontTriangle.W * vm3.Y;
+                }
+                else
+                {
+                    v.AutodotsTexCoord.Z = v.AutodotsTexCoord.X;
+                    v.AutodotsTexCoord.W = v.AutodotsTexCoord.Y;
+                }
                 meshPart.Vertices[i] = v;
             }
         }
