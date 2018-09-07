@@ -328,13 +328,6 @@ namespace RH.Core
 
             switch (ProgramCore.CurrentProgram)
             {
-                /* case ProgramCore.ProgramMode.HeadShop:            // 31.10 - frmStages  использовалось в старой версии программы и старикан отказался от этого вроде как.
-                 case ProgramCore.ProgramMode.HeadShop_Rotator:
-                     {
-                         frmStages = new frmStages();
-                         frmStages.VisibleChanged += frmStages_VisibleChanged;
-                     }
-                     break;*/
                 default:
                     frmPrint = new frmPrint();
                     frmPrint.VisibleChanged += frmStages_VisibleChanged;
@@ -504,13 +497,12 @@ namespace RH.Core
                     break;
             }
 
+            panelFront.btnAutodots_Click(null, new EventArgs());
+            panelFront.btnAutodots_Click(null, new EventArgs());
             if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11)
             {
                 ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
             }
-
-            panelFront.btnAutodots_Click(null, new EventArgs());
-            panelFront.btnAutodots_Click(null, new EventArgs());
         }
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {

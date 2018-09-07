@@ -112,7 +112,7 @@ namespace RH.Core.Render.Obj
 
             foreach (var face in objExport.Faces)
             {
-                var index = face.TriangleIndex0 * 3;        
+                var index = face.TriangleIndex0 * 3;
 
                 for (var l = 0; l < 3; l++)
                 {
@@ -313,7 +313,7 @@ namespace RH.Core.Render.Obj
             SaveMaterial(mtlPath, materials, null, saveBrushesToTexture, isCollada, sessionId);
 #else
             }
-            SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, string.Empty);
+            SaveMaterial(mtlPath, materials, type, fi, saveBrushesToTexture, isCollada, string.Empty);
 #endif
         }
 
@@ -516,7 +516,7 @@ namespace RH.Core.Render.Obj
 
 #else
             }
-            SaveMaterial(mtlPath, materials, fi, saveBrushesToTexture, isCollada, sessionId);
+            SaveMaterial(mtlPath, materials, MeshType.Head, fi, saveBrushesToTexture, isCollada, sessionId);
 #endif
         }
 
@@ -526,7 +526,7 @@ namespace RH.Core.Render.Obj
         /// <param name="fi"></param>
         /// <param name="saveBrushesToTexture">При экспорте в ДАЗ или в колладу - нужно сохранять то что поправили кисточкой в туже текстуру </param>
         /// <param name="isCollada">Если коллада - то текстуры должны лежать в той же папке. Заказ старикана</param>
-        private static void SaveMaterial(string mtlPath, Dictionary<string, ObjMaterial> materials, FileInfo fi, bool saveBrushesToTexture, bool isCollada, string sessionId, ZipOutputStream zipStream = null)
+        private static void SaveMaterial(string mtlPath, Dictionary<string, ObjMaterial> materials, MeshType type, FileInfo fi, bool saveBrushesToTexture, bool isCollada, string sessionId, ZipOutputStream zipStream = null)
         {
 #if WEB_APP
             using (MemoryStream ms = new MemoryStream())
@@ -562,20 +562,20 @@ namespace RH.Core.Render.Obj
                                 material.Value.SpecularColor.Y.ToString(ProgramCore.Nfi) + " " +
                                 material.Value.SpecularColor.Z.ToString(ProgramCore.Nfi) + "\n";
 
-                    SetTextureMap(material.Value.AmbientTextureMap, "map_Ka", fi, ref res1, saveBrushesToTexture,
+                    SetTextureMap(material.Value.AmbientTextureMap, "map_Ka", type, fi, ref res1, saveBrushesToTexture,
                         isCollada);
-                    SetTextureMap(material.Value.DiffuseTextureMap, "map_Kd", fi, ref res1, saveBrushesToTexture,
+                    SetTextureMap(material.Value.DiffuseTextureMap, "map_Kd", type, fi, ref res1, saveBrushesToTexture,
                         isCollada);
-                    SetTextureMap(material.Value.SpecularTextureMap, "map_Ks", fi, ref res1, saveBrushesToTexture,
+                    SetTextureMap(material.Value.SpecularTextureMap, "map_Ks", type, fi, ref res1, saveBrushesToTexture,
                         isCollada);
-                    SetTextureMap(material.Value.SpecularHighlightTextureMap, "map_Ns", fi, ref res1,
+                    SetTextureMap(material.Value.SpecularHighlightTextureMap, "map_Ns", type, fi, ref res1,
                         saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.TransparentTextureMap, "map_d", fi, ref res1, saveBrushesToTexture,
+                    SetTextureMap(material.Value.TransparentTextureMap, "map_d", type, fi, ref res1, saveBrushesToTexture,
                         isCollada);
-                    SetTextureMap(material.Value.BumpMap, "map_Bump", fi, ref res1, saveBrushesToTexture, isCollada);
-                    SetTextureMap(material.Value.DisplacementMap, "disp", fi, ref res1, saveBrushesToTexture,
+                    SetTextureMap(material.Value.BumpMap, "map_Bump", type, fi, ref res1, saveBrushesToTexture, isCollada);
+                    SetTextureMap(material.Value.DisplacementMap, "disp", type, fi, ref res1, saveBrushesToTexture,
                         isCollada);
-                    SetTextureMap(material.Value.StencilDecalMap, "decal", fi, ref res1, saveBrushesToTexture,
+                    SetTextureMap(material.Value.StencilDecalMap, "decal", type, fi, ref res1, saveBrushesToTexture,
                         isCollada);
                 }
                 sw.Write(res1);
@@ -605,7 +605,7 @@ namespace RH.Core.Render.Obj
 #endif
         }
 
-        private static void SetTextureMap(string mapPath, string mapTitle, FileInfo fi, ref string res, bool saveBrushesToTexture, bool isCollada)
+        private static void SetTextureMap(string mapPath, string mapTitle, MeshType type, FileInfo fi, ref string res, bool saveBrushesToTexture, bool isCollada)
         {
             if (!string.IsNullOrEmpty(mapPath))
             {
@@ -647,53 +647,59 @@ namespace RH.Core.Render.Obj
                         case ProgramCore.ProgramMode.HeadShop_Rotator:
                         case ProgramCore.ProgramMode.HeadShop_v11:
                             {
-                                #region HeadShop rotator
-
-                                var actualTextureSize = 4096;
-                                var textureId = ProgramCore.MainForm.ctrlRenderControl.GetTexture(mapPath);
-                                if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(textureId))
+                                if (type != MeshType.Head)      // для волос и аксесуаров - не нужно скейлить текстуру.
                                 {
-                                    var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[textureId];
-                                    using (var bitmap = new Bitmap(mapPath))
-                                    {
-                                        var max = (float)Math.Max(bitmap.Width, bitmap.Height);
-                                        if (max != actualTextureSize)
-                                        {
-                                            var k = actualTextureSize / max;
-                                            var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
-
-                                            using (var grfx = Graphics.FromImage(newImg))
-                                                grfx.DrawImage(brushTexture.TextureData, 0, 0, newImg.Width, newImg.Height);
-
-                                            newImg.Save(newTextureFullPath, ImageFormat.Bmp);
-                                        }
-                                        else
-                                        {
-                                            using (var grfx = Graphics.FromImage(bitmap))
-                                                grfx.DrawImage(brushTexture.TextureData, 0, 0);
-
-                                            bitmap.Save(newTextureFullPath, ImageFormat.Bmp);
-                                        }
-                                    }
+                                    File.Copy(mapPath, newTextureFullPath, false);
                                 }
                                 else
                                 {
-                                    using (var bitmap = new Bitmap(mapPath))
+                                    #region HeadShop rotator
+
+                                    var actualTextureSize = 4096;
+                                    var textureId = ProgramCore.MainForm.ctrlRenderControl.GetTexture(mapPath);
+                                    if (ProgramCore.MainForm.ctrlRenderControl.brushTextures.ContainsKey(textureId))
                                     {
-                                        var max = (float)Math.Max(bitmap.Width, bitmap.Height);
-                                        if (max != actualTextureSize)
+                                        var brushTexture = ProgramCore.MainForm.ctrlRenderControl.brushTextures[textureId];
+                                        using (var bitmap = new Bitmap(mapPath))
                                         {
-                                            var k = actualTextureSize / max;
-                                            var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
-                                            newImg.Save(newTextureFullPath, ImageFormat.Bmp);
+                                            var max = (float)Math.Max(bitmap.Width, bitmap.Height);
+                                            if (max != actualTextureSize)
+                                            {
+                                                var k = actualTextureSize / max;
+                                                var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
+
+                                                using (var grfx = Graphics.FromImage(newImg))
+                                                    grfx.DrawImage(brushTexture.TextureData, 0, 0, newImg.Width, newImg.Height);
+
+                                                newImg.Save(newTextureFullPath, ImageFormat.Bmp);
+                                            }
+                                            else
+                                            {
+                                                using (var grfx = Graphics.FromImage(bitmap))
+                                                    grfx.DrawImage(brushTexture.TextureData, 0, 0);
+
+                                                bitmap.Save(newTextureFullPath, ImageFormat.Bmp);
+                                            }
                                         }
-                                        else
-                                            File.Copy(mapPath, newTextureFullPath, false);
                                     }
+                                    else
+                                    {
+                                        using (var bitmap = new Bitmap(mapPath))
+                                        {
+                                            var max = (float)Math.Max(bitmap.Width, bitmap.Height);
+                                            if (max != actualTextureSize)
+                                            {
+                                                var k = actualTextureSize / max;
+                                                var newImg = ImageEx.ResizeImage(bitmap, new Size((int)(bitmap.Width * k), (int)(bitmap.Height * k)));
+                                                newImg.Save(newTextureFullPath, ImageFormat.Bmp);
+                                            }
+                                            else
+                                                File.Copy(mapPath, newTextureFullPath, false);
+                                        }
+                                    }
+
+                                    #endregion
                                 }
-
-
-                                #endregion
                             }
                             break;
                         default:

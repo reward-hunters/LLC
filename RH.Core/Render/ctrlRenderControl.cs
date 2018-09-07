@@ -352,7 +352,7 @@ namespace RH.Core.Render
             additionalMorphing.Initialize(ProjectedPoints, headMorphing);
             additionalMorphing.ProcessPoints(ProjectedPoints);
 
-
+            //     ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
         }
 
         private void SetupViewport(GLControl c)
@@ -540,7 +540,7 @@ namespace RH.Core.Render
                 temp = 0;
                 var invIsOpenSmile = !ProgramCore.Project.IsOpenSmile;
                 var smileMorphingPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjPath(invIsOpenSmile));
-               // var smileMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
+                // var smileMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
                 SmileMorphing = pickingController.LoadPartsMorphInfo(smileMorphingPath, headMeshesController.RenderMesh, ref temp);
 
                 //
@@ -3602,15 +3602,28 @@ namespace RH.Core.Render
         public int GetTexture(string textureName)
         {
             var textureId = 0;
-            if (textureName != string.Empty && File.Exists(textureName))
+            if (!string.IsNullOrWhiteSpace(textureName) && File.Exists(textureName))
             {
 
                 if (textures.ContainsKey(textureName))
                     return textures[textureName].Texture;
 
                 Bitmap bitmap;
-                using (var ms = new MemoryStream(File.ReadAllBytes(textureName)))
-                    bitmap = (Bitmap)Image.FromStream(ms);
+                var bytes = File.ReadAllBytes(textureName);
+                if (bytes != null && bytes.Any())
+                    return textureId;
+
+                using (var ms = new MemoryStream(bytes))
+                {
+                    try
+                    {
+                        bitmap = (Bitmap)Image.FromStream(ms);
+                    }
+                    catch
+                    {
+                        return textureId;
+                    }
+                }
 
                 textureId = GetTexture(bitmap);
                 textures.Add(textureName, new TextureInfo
