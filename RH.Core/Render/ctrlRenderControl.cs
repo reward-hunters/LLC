@@ -39,6 +39,7 @@ namespace RH.Core.Render
         private bool shiftPressed;
         private bool dblClick;
 
+        private bool UseHeadRotation = false;
         private bool loaded;
         private bool startPress = true;
 
@@ -2807,7 +2808,7 @@ namespace RH.Core.Render
         {
             idleShader.UpdateUniform("u_LightDirection", Vector3.Normalize(camera.Position));
             //var worldMatrix =  InStageMode ? Matrix4.CreateScale(headMeshesController.RenderMesh.RealScale) : Matrix4.Identity;
-            var worldMatrix = headMeshesController.RenderMesh.RotationMatrix;
+            var worldMatrix = UseHeadRotation ? headMeshesController.RenderMesh.RotationMatrix : Matrix4.Identity;// ;
             //Иначе берем Matrix4.Identity
             idleShader.UpdateUniform("u_World", worldMatrix);
             idleShader.UpdateUniform("u_WorldView", worldMatrix * camera.ViewMatrix);

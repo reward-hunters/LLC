@@ -1085,6 +1085,11 @@ namespace RH.MeshUtils.Helpers
             return info;
         }
 
+        public bool IsTextureMirrored()
+        {
+            return Type != HeadMeshType.Eyes;
+        }
+
         public bool Create(MeshPartInfo info)
         {
             if (info.VertexPositions.Count == 0)
@@ -1097,7 +1102,7 @@ namespace RH.MeshUtils.Helpers
             TransparentTextureName = info.TransparentTextureName;
 
             Name = info.PartName;
-            if (Name.Contains("Pupil") || Name.Contains("Eye"))// || Name.Contains("Irises") || Name.Contains("Eye") || Name.Contains("Cornea") || Name.Contains("Sclera") || Name.Contains("Pulpis"))
+            if (Name.Contains("Irises") || Name.Contains("Eye") || Name.Contains("Lacrimals") || Name.Contains("Sclera") || Name.Contains("Pupils"))
                 Type = HeadMeshType.Eyes;
             else if (Name.Contains("SkinFace"))
                 Type = HeadMeshType.Face;
