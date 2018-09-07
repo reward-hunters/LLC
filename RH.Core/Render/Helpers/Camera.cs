@@ -81,14 +81,21 @@ namespace RH.Core.Render.Helpers
 
         public void SetupCamera(Vector2 dataLeft, Vector2 dataRight)
         {
-            var l = dataRight.X * dataLeft.X;
-            Scale = (float)Math.Sqrt(l * l / (WindowWidth * WindowWidth + WindowHeight * WindowHeight));
+            Scale = 0.04f;
             var h = dataLeft.Y * Scale * WindowHeight;
             var y0 = dataRight.Y - h;
             var y1 = y0 + Scale * WindowHeight;
             dy = (y0 + y1) * 0.5f;
             UpdateViewport(WindowWidth, WindowHeight);
             PutCamera();
+            /*var l = dataRight.X * dataLeft.X;
+            Scale = (float)Math.Sqrt(l * l / (WindowWidth * WindowWidth + WindowHeight * WindowHeight));
+            var h = dataLeft.Y * Scale * WindowHeight;
+            var y0 = dataRight.Y - h;
+            var y1 = y0 + Scale * WindowHeight;
+            dy = (y0 + y1) * 0.5f;
+            UpdateViewport(WindowWidth, WindowHeight);
+            PutCamera();*/
         }
 
         private float scale = 0.06772818f;

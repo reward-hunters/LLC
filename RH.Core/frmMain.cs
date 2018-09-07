@@ -737,7 +737,7 @@ namespace RH.Core
         {
             btnUnscale.Image = Resources.btnUnscaleNormal;
 
-            ctrlRenderControl.camera.ResetCamera(true);
+            ctrlRenderControl.ResetCamera();//.camera.ResetCamera(true);
             if (ProgramCore.MainForm.HeadProfile)
                 ctrlRenderControl.OrtoRight();
 
@@ -761,7 +761,8 @@ namespace RH.Core
         }
         private void fitWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ctrlRenderControl.camera.ResetCamera(true);
+            ctrlRenderControl.ResetCamera();
+            //ctrlRenderControl.camera.ResetCamera(true);
         }
 
         private void ortoBackToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2419,7 +2420,8 @@ namespace RH.Core
                 }
                 else
                 {
-                    ProgramCore.MainForm.ctrlRenderControl.camera.ResetCamera(true);
+                    ctrlRenderControl.ResetCamera();
+                    //ProgramCore.MainForm.ctrlRenderControl.camera.ResetCamera(true);
                 }
 
 

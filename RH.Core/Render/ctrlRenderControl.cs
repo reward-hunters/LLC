@@ -334,8 +334,8 @@ namespace RH.Core.Render
         public void PhotoLoaded()
         {
             //   headTextureId = TextureHelper.GetTexture(photoPath);
-
-            camera.ResetCamera(true);
+            ResetCamera();
+            //camera.ResetCamera(true);
 
             ImportPoints();
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
@@ -3315,7 +3315,8 @@ namespace RH.Core.Render
 
         public void OrtoTop()
         {
-            camera.ResetCamera(true);
+            ResetCamera();
+            //camera.ResetCamera(true);
         }
         public void OrtoBack()
         {
