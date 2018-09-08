@@ -3352,7 +3352,7 @@ namespace RH.Core.Render
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
-                    OrtoTop();
+                    UseHeadRotation = !UseHeadRotation;
                     break;
                 default:
                     workTimer.Stop();
@@ -3612,7 +3612,7 @@ namespace RH.Core.Render
 
                 Bitmap bitmap;
                 var bytes = File.ReadAllBytes(textureName);
-                if (bytes != null && bytes.Any())
+                if (bytes == null || !bytes.Any())
                     return textureId;
 
                 using (var ms = new MemoryStream(bytes))
