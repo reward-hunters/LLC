@@ -10,7 +10,7 @@ namespace RH.Core.Render.Helpers
         /// <summary> Обрезать изображение </summary>
         public static Bitmap Crop(Bitmap img, Rectangle cropArea)
         {
-            return img.Clone(cropArea, img.PixelFormat);
+            return new Bitmap(img.Clone(cropArea, img.PixelFormat));
         }
         public static Bitmap Crop(Image img, Rectangle cropArea)
         {

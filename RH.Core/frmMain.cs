@@ -1922,11 +1922,13 @@ namespace RH.Core
             }
             else
             {
+               
                 using (var ofd = new FolderDialogEx())
                 {
                     if (ofd.ShowDialog(Handle) != DialogResult.OK)
                         return;
-                    fiName = Path.Combine(ofd.SelectedFolder[0], ProgramCore.Project.ProjectName + ".obj");
+                    diName = ofd.SelectedFolder[0];
+                   fiName = Path.Combine(diName, ProgramCore.Project.ProjectName + ".obj");
                 }
             }
 
@@ -1935,7 +1937,7 @@ namespace RH.Core
 
             #region Выгрузка волос и аксессуаров
 
-            var exportDirectory = string.IsNullOrWhiteSpace(specialExportPath) ? ProgramCore.Project.ProjectPath : specialExportPath;
+            var exportDirectory = string.IsNullOrWhiteSpace(specialExportPath) ? diName : specialExportPath;
 
             var haPath = Path.GetFileNameWithoutExtension(fiName) + "hair.obj";
             var hairPath = Path.Combine(exportDirectory, haPath);
@@ -2385,11 +2387,12 @@ namespace RH.Core
 
                 frmStages?.InitializeListView();
 
-                if (ProgramCore.Project.FrontImage == null)
+                var headTexturePath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
+                if (string.IsNullOrEmpty(ProgramCore.Project.FrontImagePath))
                     ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(null);
                 else
                 {
-                    using (var bmp = new Bitmap(ProgramCore.Project.FrontImage))
+                    using (var bmp = new Bitmap(headTexturePath))
                         ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage((Bitmap)bmp.Clone(), false);
                 }
 

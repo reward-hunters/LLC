@@ -250,16 +250,14 @@ namespace RH.Core.Helpers
                 var bmpImage = new Bitmap(path);
                 FaceColor = GetFaceColor(bmpImage, pointFeature);
 
-                using (var croppedImage = ImageEx.Crop(bmpImage, faceRectangle))
-                {
-                    path = UserConfig.AppDataDir;
-                    FolderEx.CreateDirectory(path);
-                    path = Path.Combine(path, "tempHaarImage.jpg");
-                    croppedImage.Save(path, ImageFormat.Jpeg);
+                var croppedImage = ImageEx.Crop(bmpImage, faceRectangle);
+                path = UserConfig.AppDataDir;
+                FolderEx.CreateDirectory(path);
+                path = Path.Combine(path, "tempHaarImage.jpg");
+                croppedImage.Save(path, ImageFormat.Jpeg);
+                croppedImage.Dispose();
 
-                    return Recognize(ref path, false);
-
-                }
+                return Recognize(ref path, false);
             }
 
             LeftEyeCenter = new Vector2(pointFeature[0].x, pointFeature[0].y);
@@ -336,7 +334,7 @@ namespace RH.Core.Helpers
             BottomFace = new Vector2(BottomFace.X / (image.Width * 1f), BottomFace.Y / (image.Height * 1f));
 
             RightMiddleFace1 = new Vector2(RightMiddleFace1.X / (image.Width * 1f), RightMiddleFace1.Y / (image.Height * 1f));
-            RightMiddleFace2 = new Vector2(RightMiddleFace2.X / (image.Width * 1f), RightMiddleFace2.Y / (image.Height * 1f));           
+            RightMiddleFace2 = new Vector2(RightMiddleFace2.X / (image.Width * 1f), RightMiddleFace2.Y / (image.Height * 1f));
 
             FacialFeatures = new List<Vector3>();
             RealPoints = new List<Vector2>();
