@@ -12,13 +12,23 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
         public frmAccessoryTutorial()
         {
             InitializeComponent();
-            linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Accessory", "https://youtu.be/UeQljfKlNG8"];
+            linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Accessory", GetDefaultLink()];
             Text = ProgramCore.ProgramCaption;
             linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
             var filePath = FolderEx.GetTutorialImagePath("AccessoryTutorial");
             if (!string.IsNullOrEmpty(filePath))
                 pictureBox1.ImageLocation = filePath;
+        }
+        private string GetDefaultLink()
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                    return "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=545s";
+                default:
+                    return "https://youtu.be/UeQljfKlNG8";
+            }
         }
 
         private void frmAccessoryTutorial_FormClosing(object sender, FormClosingEventArgs e)
@@ -29,7 +39,7 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var link = UserConfig.ByName("Tutorials")["Links", "Accessory", "https://youtu.be/UeQljfKlNG8"];
+            var link = UserConfig.ByName("Tutorials")["Links", "Accessory", GetDefaultLink()];
             Process.Start(link);
         }
 

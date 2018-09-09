@@ -178,6 +178,8 @@ namespace RH.Core
 
                     mirrorHelpToolStripMenuItem.Visible = freehandHelpToolStripMenuItem.Visible = profileHelpToolStripMenuItem.Visible = retouchHelpToolStripMenuItem.Visible = false;
                     panTopcontinuousPanToolStripMenuItem.Visible = panBottomcontinuousPanToolStripMenuItem.Visible = stepToponeStepToolStripMenuItem.Visible = stepBottomoneStepToolStripMenuItem.Visible = false;
+
+                    openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = startHelpToolStripMenuItem.Visible= materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     Text = @"HeadShop 11";
@@ -824,14 +826,34 @@ namespace RH.Core
 
         #region Tutorials
 
-        public void ShowVideo()
+        public void ShowVideo(bool isQuickiStart = false)
         {
-            var quickStartLink = UserConfig.ByName("Tutorials")["Links", "QuickStart", "https://youtu.be/8cejdijABQY"];
+            var defaultLink = string.Empty;
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramMode.HeadShop_v11:
+                    defaultLink = isQuickiStart ? "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=63s" : "https://youtu.be/X-8Gho1YUIc";
+                    break;
+                default:
+                    defaultLink = "https://youtu.be/8cejdijABQY";
+                    break;
+            }
+            
+
+            var quickStartLink = UserConfig.ByName("Tutorials")["Links", "QuickStart", defaultLink];
             Process.Start(quickStartLink);
         }
         public void ShowTutorial()
         {
-            Process.Start("http://ep.yimg.com/ty/cdn/yhst-48396527764316/HeadShop10.2manual.pdf");
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramMode.HeadShop_v11:
+                    Process.Start("https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf");
+                    break;
+                default:
+                    Process.Start("http://ep.yimg.com/ty/cdn/yhst-48396527764316/HeadShop10.2manual.pdf");
+                    break;
+            }
         }
         public void ShowSiteInfo()
         {
@@ -848,7 +870,7 @@ namespace RH.Core
         }
         private void videoTutorialPart1CutAndShapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowVideo();
+            ShowVideo(true);
         }
         private void videoTutorialPart2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2460,6 +2482,23 @@ namespace RH.Core
 
         #endregion
 
+        private void fullTutorialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://www.youtube.com/watch?v=X-8Gho1YUIc"];
+            Process.Start(link);
+        }
+
+        private void frontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=169s"];
+            Process.Start(link);
+        }
+
+        private void advancedModellingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf"];
+            Process.Start(link);
+        }
     }
 
     #region Enum's

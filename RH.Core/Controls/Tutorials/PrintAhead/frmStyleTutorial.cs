@@ -9,16 +9,29 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
 {
     public partial class frmStyleTutorial : FormEx
     {
+        
+
         public frmStyleTutorial()
         {
             InitializeComponent();
-            linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Style", "https://www.youtube.com/watch?v=AjG09RGgHvw"];
+            linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Style", GetDefaultLink()];
             Text = ProgramCore.ProgramCaption;
             linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
             var filePath = FolderEx.GetTutorialImagePath("TutStyle");
             if (!string.IsNullOrEmpty(filePath))
                 pictureBox1.ImageLocation = filePath;
+        }
+
+        private string GetDefaultLink()
+        {
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                    return "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=504s";
+                default:
+                    return "https://www.youtube.com/watch?v=AjG09RGgHvw";
+            }
         }
 
         private void frmStartTutorial_FormClosing(object sender, FormClosingEventArgs e)
@@ -29,7 +42,7 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var link = UserConfig.ByName("Tutorials")["Links", "Style", "https://www.youtube.com/watch?v=AjG09RGgHvw"];
+            var link = UserConfig.ByName("Tutorials")["Links", "Style", GetDefaultLink()];
             Process.Start(link);
         }
 
