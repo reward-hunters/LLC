@@ -400,6 +400,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="HeadRotation\AdditionalMorphing.cs" />
+    <Compile Include="HeadRotation\CustomHeadTriangles.cs" />
     <Compile Include="HeadRotation\HeadMorphing.cs" />
     <Compile Include="HeadRotation\HeadPoints.cs" />
     <Compile Include="HeadRotation\MorphHelper.cs" />

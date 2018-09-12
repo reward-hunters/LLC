@@ -22,6 +22,7 @@ namespace RH.Core.HeadRotation
         public List<bool> IsVisible = new List<bool>();
         public Camera RenderCamera;
 
+
         #region Selection
 
         public int SelectedPoint = -1;

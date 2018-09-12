@@ -793,7 +793,7 @@ namespace RH.Core
                 case ManType.Child:
                     return isOpenSmile ? "ChildWithSmilePlugin" : "Child";
                 default:
-                    return string.Empty;
+                    return "Fem";
             }
         }
 

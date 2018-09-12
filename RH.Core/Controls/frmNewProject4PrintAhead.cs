@@ -464,8 +464,8 @@ namespace RH.Core.Controls
             }
 
             var projectName = string.IsNullOrEmpty(textNewProjectName.Text) ? "HeadShop project" : textNewProjectName.Text;
-
-            ProgramCore.Project = new Project(projectName, path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
+            //ManType
+            ProgramCore.Project = new Project(projectName, path, templateImage, ManType.Custom, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
             ProgramCore.Project.RealTemplateImage = realTemplateImage;
 
             ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;
@@ -546,6 +546,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.RotatedAngle = fcr.RotatedAngle;
 
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
+            ProgramCore.MainForm.ctrlRenderControl.ImportPoints();
             ProgramCore.MainForm.UpdateProjectControls(true, aabb);
 
             //  ProgramCore.Project.ToStream();

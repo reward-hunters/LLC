@@ -337,7 +337,7 @@ namespace RH.Core.Render
             ResetCamera();
             //camera.ResetCamera(true);
 
-            ImportPoints();
+            //ImportPoints();
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
 
 
@@ -1169,6 +1169,8 @@ namespace RH.Core.Render
             var noseBottomPoint = new Vector2(ProgramCore.Project.MouthCenter.X, ((eyesDiff.Y - ProgramCore.Project.MouthUserCenter.Y) * 0.4f) + ProgramCore.Project.MouthUserCenter.Y);
             SpecialCenterUpdate(points, headController.GetNoseBottomIndexes(), noseBottomPoint);
             SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), eyesDiff);
+
+            PhotoLoaded();
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
@@ -1424,7 +1426,7 @@ namespace RH.Core.Render
                                 if (dblClick)
                                 {
                                     RectTransformMode = false;
-                                    autodotsShapeHelper.ShapeInfo.Points.ClearSelection();
+                                    autodotsShapeHelper.ShapeInfo.Points.ClearSelection();                                    
                                 }
 
                                 #region Rectangle transform
@@ -1446,9 +1448,10 @@ namespace RH.Core.Render
 
                                 if (moveRectIndex == -1) // если таскаем не прямоугольник, а точки
                                 {
-                                    customTempPoints.Clear();
-                                    foreach (var item in autodotsShapeHelper.ShapeInfo.Points.SelectedPoints)
-                                        customTempPoints.Add(item.Clone());
+                                    /* customTempPoints.Clear();
+                                     foreach (var item in autodotsShapeHelper.ShapeInfo.Points.SelectedPoints)
+                                         customTempPoints.Add(item.Clone());*/
+                                    
                                 }
                                 else
                                 {
@@ -1967,7 +1970,8 @@ namespace RH.Core.Render
                                         }
                                     }
                                     else
-                                        autodotsShapeHelper.ShapeInfo.Points.UpdatePointSelection(mousePoint);
+                                        HeadPoints.SelectPoint(e.X, e.Y);
+                                        //autodotsShapeHelper.ShapeInfo.Points.UpdatePointSelection(mousePoint);
                                 }
                             }
                             break;
@@ -2134,6 +2138,8 @@ namespace RH.Core.Render
         #endregion
 
         #region Drawing
+
+       private CustomHeadTriangles HeadTriangles = new CustomHeadTriangles();
 
         public void Render()
         {
@@ -2302,7 +2308,8 @@ namespace RH.Core.Render
 
                     EnableTransparent();
                     GL.PointSize(5.0f);             // рисуем зеленый фон. удобнее настраивать
-                    if (autodotsShapeHelper.ShapeProfileInfo.Points != null)
+                    HeadTriangles.DrawTriangles(HeadPoints);
+                   /* if (autodotsShapeHelper.ShapeProfileInfo.Points != null)
                     {
                         GL.Begin(PrimitiveType.Triangles);
                         GL.Color4(0.0f, 1.0f, 0.0f, 0.3f);
@@ -2319,7 +2326,7 @@ namespace RH.Core.Render
                             GL.Vertex2(p.Value);
                         }
                         GL.End();
-                    }
+                    }*/
                     DisableTransparent();
 
                     break;
@@ -3117,13 +3124,16 @@ namespace RH.Core.Render
         }
         private void DrawCustomPoints()
         {
+            HeadPoints.DrawDots(false, 70);
+            return;
+
             GL.PointSize(5.0f);
             GL.Begin(PrimitiveType.Points);
-
+            
             foreach (var point in autodotsShapeHelper.ShapeInfo.Points)
             {
-                if (!point.Visible)
-                    continue;
+                 if (!point.Visible)
+                     continue;
 
                 if (point.Selected)
                     GL.Color3(1.0f, 0.0f, 0.0f);
@@ -4101,9 +4111,10 @@ namespace RH.Core.Render
                     SetTexture(smoothTex.Value, bitmap);
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                ApplySmoothedTextures();
+                
+                //ApplySmoothedTextures();
             }
         }
 

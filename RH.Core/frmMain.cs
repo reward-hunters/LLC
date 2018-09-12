@@ -499,8 +499,12 @@ namespace RH.Core
                     break;
             }
 
-            panelFront.btnAutodots_Click(null, new EventArgs());
-            panelFront.btnAutodots_Click(null, new EventArgs());
+            if(ProgramCore.Project.ManType != ManType.Custom)
+            {
+                panelFront.btnAutodots_Click(null, new EventArgs());
+                panelFront.btnAutodots_Click(null, new EventArgs());
+            }
+            
             if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11)
             {
                 ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
