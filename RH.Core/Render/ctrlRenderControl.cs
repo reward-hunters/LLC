@@ -337,7 +337,7 @@ namespace RH.Core.Render
             ResetCamera();
             //camera.ResetCamera(true);
 
-            //ImportPoints();
+            ImportPoints();
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
 
 
@@ -1170,7 +1170,7 @@ namespace RH.Core.Render
             SpecialCenterUpdate(points, headController.GetNoseBottomIndexes(), noseBottomPoint);
             SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), eyesDiff);
 
-            PhotoLoaded();
+          //  PhotoLoaded();
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
@@ -1448,9 +1448,9 @@ namespace RH.Core.Render
 
                                 if (moveRectIndex == -1) // если таскаем не прямоугольник, а точки
                                 {
-                                    /* customTempPoints.Clear();
+                                     customTempPoints.Clear();
                                      foreach (var item in autodotsShapeHelper.ShapeInfo.Points.SelectedPoints)
-                                         customTempPoints.Add(item.Clone());*/
+                                         customTempPoints.Add(item.Clone());
                                     
                                 }
                                 else
@@ -1970,8 +1970,8 @@ namespace RH.Core.Render
                                         }
                                     }
                                     else
-                                        HeadPoints.SelectPoint(e.X, e.Y);
-                                        //autodotsShapeHelper.ShapeInfo.Points.UpdatePointSelection(mousePoint);
+                                        //HeadPoints.SelectPoint(e.X, e.Y);
+                                        autodotsShapeHelper.ShapeInfo.Points.UpdatePointSelection(mousePoint);
                                 }
                             }
                             break;
@@ -2308,8 +2308,8 @@ namespace RH.Core.Render
 
                     EnableTransparent();
                     GL.PointSize(5.0f);             // рисуем зеленый фон. удобнее настраивать
-                    HeadTriangles.DrawTriangles(HeadPoints);
-                   /* if (autodotsShapeHelper.ShapeProfileInfo.Points != null)
+                  //  HeadTriangles.DrawTriangles(HeadPoints);
+                    if (autodotsShapeHelper.ShapeProfileInfo.Points != null)
                     {
                         GL.Begin(PrimitiveType.Triangles);
                         GL.Color4(0.0f, 1.0f, 0.0f, 0.3f);
@@ -2326,7 +2326,7 @@ namespace RH.Core.Render
                             GL.Vertex2(p.Value);
                         }
                         GL.End();
-                    }*/
+                    }
                     DisableTransparent();
 
                     break;
@@ -3325,8 +3325,8 @@ namespace RH.Core.Render
 
         public void OrtoTop()
         {
-            ResetCamera();
-            //camera.ResetCamera(true);
+          //  ResetCamera();
+            camera.ResetCamera(false);
         }
         public void OrtoBack()
         {

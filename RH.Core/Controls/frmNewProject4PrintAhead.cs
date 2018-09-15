@@ -127,7 +127,7 @@ namespace RH.Core.Controls
 
                     labelPrintAhead11.Visible = true;
                     labelNotes.Visible = labelNotes1.Visible = false;
-                    rbImportObj.Visible = label11.Visible = true;
+                    rbImportObj.Visible = label11.Visible = false;
                     labelHelp.Text = "Browse or drag jpg file here";
                     label8.Visible = btnChild.Visible = false;
                     break;
@@ -464,8 +464,7 @@ namespace RH.Core.Controls
             }
 
             var projectName = string.IsNullOrEmpty(textNewProjectName.Text) ? "HeadShop project" : textNewProjectName.Text;
-            //ManType
-            ProgramCore.Project = new Project(projectName, path, templateImage, ManType.Custom, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
+            ProgramCore.Project = new Project(projectName, path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
             ProgramCore.Project.RealTemplateImage = realTemplateImage;
 
             ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;
@@ -546,7 +545,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.RotatedAngle = fcr.RotatedAngle;
 
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
-            ProgramCore.MainForm.ctrlRenderControl.ImportPoints();
+       //     ProgramCore.MainForm.ctrlRenderControl.ImportPoints();
             ProgramCore.MainForm.UpdateProjectControls(true, aabb);
 
             //  ProgramCore.Project.ToStream();

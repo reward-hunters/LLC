@@ -1536,7 +1536,7 @@ namespace RH.Core
                     ctrlRenderControl.Mode = Mode.None;
 
                 ctrlTemplateImage.btnCopyProfileImg.Visible = false;
-                ctrlRenderControl.OrtoTop();            // поворачиваем морду как надо
+                ctrlRenderControl.ResetCamera();            // поворачиваем морду как надо
                 EnableRotating();
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage, false);       // возвращаем как было, после изменения профиля лица
 
