@@ -189,7 +189,7 @@ namespace RH.Core.Controls.Libraries
                     }
 
                     var title = Path.GetFileNameWithoutExtension(file.Name);
-                    var meshes = ProgramCore.MainForm.ctrlRenderControl.pickingController.AddMehes(file.FullName, meshType, false, ProgramCore.Project.ManType, false, false);
+                    var meshes = ProgramCore.MainForm.ctrlRenderControl.pickingController.AddMehes(file.FullName, meshType, false, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, false, false);
                     for (var i = 0; i < meshes.Count; i++)
                     {
                         var mesh = meshes[i];

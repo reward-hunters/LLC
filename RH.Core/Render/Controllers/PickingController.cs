@@ -221,12 +221,12 @@ namespace RH.Core.Render.Controllers
                 SelectedMeshes.Clear();
         }
 
-        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, bool needExporter, bool isOpenSmile)
+        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, GenesisType genesisType, ManType manType, bool needExporter, bool isOpenSmile)
         {
-            return AddMehes(path, type, fromDragAndDrop, manType, string.Empty, needExporter, isOpenSmile);
+            return AddMehes(path, type, fromDragAndDrop, genesisType, manType, string.Empty, needExporter, isOpenSmile);
         }
 
-        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, ManType manType, string animationPath, bool needExporter, bool isOpenSmile)
+        public List<DynamicRenderMesh> AddMehes(string path, MeshType type, bool fromDragAndDrop, GenesisType genesisType, ManType manType, string animationPath, bool needExporter, bool isOpenSmile)
         {
             var result = new List<DynamicRenderMesh>();
 
@@ -276,7 +276,7 @@ namespace RH.Core.Render.Controllers
                         int tempPluginTextureIndex = 0;
                         if (ProgramCore.PluginMode)
                         {
-                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjDirPath(isOpenSmile));
+                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", genesisType.GetGenesisPath(), manType.GetObjDirPath(isOpenSmile));
                             switch (ProgramCore.Project.ManType)
                             {
                                 case ManType.Male:
@@ -322,7 +322,7 @@ namespace RH.Core.Render.Controllers
 
                         if (ProgramCore.PluginMode && isOpenSmile)
                         {
-                            PluginMorphToSmile(meshPartInfos, manType, scale);
+                            PluginMorphToSmile(meshPartInfos, genesisType, manType, scale);
                         }
 
                         //result = LoadHairMeshes(objModel, objModelFull, fromDragAndDrop, manType, MeshType.Head);
@@ -371,10 +371,10 @@ namespace RH.Core.Render.Controllers
             return result;
         }
 
-        private void PluginMorphToSmile(List<MeshPartInfo> meshesInfo, ManType manType, float scale)
+        private void PluginMorphToSmile(List<MeshPartInfo> meshesInfo, GenesisType genesisType, ManType manType, float scale)
         {
             var lastTriangle = 0;
-            var path = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPathSmilePlugin());
+            var path = Path.Combine(Application.StartupPath, "Models", "Model", genesisType.GetGenesisPath(), manType.GetObjPathSmilePlugin());
             var objModel = ObjLoader.LoadObjFile(path, true, true);
             var smileMeshes = LoadHeadMeshes(objModel, false, manType, scale, ref lastTriangle);
 

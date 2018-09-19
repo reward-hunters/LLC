@@ -197,67 +197,18 @@ namespace RH.Core.Helpers
 
         public void LoadProject(bool newProject, RectangleAABB aabb, string headTexturePath, bool isOpenSmile)
         {
-            //var headTexturePath = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
             HeadTextureId = 0;
             if (!string.IsNullOrEmpty(headTexturePath))
             {
                 HeadTextureId = GetTexture(headTexturePath);
-
-                //if (ProgramCore.Project.FaceRectRelative == RectangleF.Empty)
-                //{
-                //    var fileName = Path.Combine(ProgramCore.Project.ProjectPath, ProgramCore.Project.FrontImagePath);
-
-                //    var faceRecognition = new OpenCvFaceRecognition();
-                //    faceRecognition.Recognize(ref fileName, false);
-
-                //    ProgramCore.Project.FaceRectRelative = faceRecognition.FaceRectRelative;
-                //    ProgramCore.Project.MouthCenter = faceRecognition.MouthCenter;
-                //    ProgramCore.Project.LeftEyeCenter = faceRecognition.LeftEyeCenter;
-                //    ProgramCore.Project.RightEyeCenter = faceRecognition.RightEyeCenter;
-                //    ProgramCore.Project.FaceColor = faceRecognition.FaceColor;
-                //}
-
             }
 
             if (newProject)
             {
                 var modelPath = ProgramCore.Project.HeadModelPath;
-                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode, isOpenSmile);
-
-                //float scale = 0;
-                //if (ProgramCore.Project.ManType == ManType.Custom)
-                //{
-                //    scale = headMeshesController.SetSize(29.3064537f); // подгонка размера для произвольной башки
-                //}
-                //else if (ProgramCore.PluginMode)
-                //{
-                //    switch (ProgramCore.Project.ManType)
-                //    {
-                //        case ManType.Male:
-                //            scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
-                //            break;
-                //        case ManType.Female:
-                //            scale = headMeshesController.SetSize(29.3064537f); // подгонка размера 
-                //            break;
-                //        case ManType.Child:
-                //            scale = headMeshesController.SetSize(25.6209984f); // подгонка размера 
-                //            break;
-                //    }
-                //}
-                //if (pickingController.ObjExport != null)
-                //    pickingController.ObjExport.Scale = scale;
+                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, ProgramCore.PluginMode, isOpenSmile);
             }
             HeadShapeController.Initialize(headMeshesController);
-            //brushTool.InitializeBrush(headMeshesController);
-
-            //if (ProgramCore.Project.ManType != ManType.Custom)
-            //{
-            //    var oldMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Old.obj"); // загружаем трансформации для старения
-            //    OldMorphing = pickingController.LoadPartsMorphInfo(oldMorphingPath, headMeshesController.RenderMesh);
-
-            //    var fatMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
-            //    FatMorphing = pickingController.LoadPartsMorphInfo(fatMorphingPath, headMeshesController.RenderMesh);
-            //}
 
             var baseDots = HeadController.GetBaseDots(ProgramCore.Project.ManType);
             headMeshesController.RenderMesh.SetBlendingInfo(baseDots[0], baseDots[1], baseDots[2], baseDots[3]);

@@ -62,7 +62,7 @@ namespace RH.Core.Render.Obj
 
                         if (ProgramCore.PluginMode)
                         {
-                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjDirPath(isOpenSmile));
+                            var folderPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.GenesisType.GetGenesisPath(), ProgramCore.Project.ManType.GetObjDirPath(isOpenSmile));
                             switch (ProgramCore.Project.ManType)
                             {
                                 case ManType.Male:

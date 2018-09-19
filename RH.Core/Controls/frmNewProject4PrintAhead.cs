@@ -34,6 +34,19 @@ namespace RH.Core.Controls
                 return ManType.Custom;
             }
         }
+        public GenesisType GenType
+        {
+            get
+            {
+                if (rbGenesis3.Checked)
+                    return GenesisType.Genesis3;
+                if (rbGenesis8.Checked)
+                    return GenesisType.Genesis8;
+
+                return GenesisType.Genesis2;
+            }
+        }
+
         public string CustomModelPath;
 
         private string templateImage;
@@ -130,6 +143,8 @@ namespace RH.Core.Controls
                     rbImportObj.Visible = label11.Visible = false;
                     labelHelp.Text = "Browse or drag jpg file here";
                     label8.Visible = btnChild.Visible = false;
+
+                    rbGenesis2.Visible = rbGenesis3.Visible = rbGenesis8.Visible = true;
                     break;
                 default:
                     label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;
@@ -464,7 +479,7 @@ namespace RH.Core.Controls
             }
 
             var projectName = string.IsNullOrEmpty(textNewProjectName.Text) ? "HeadShop project" : textNewProjectName.Text;
-            ProgramCore.Project = new Project(projectName, path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
+            ProgramCore.Project = new Project(projectName, path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile) { GenesisType = GenType };
             ProgramCore.Project.RealTemplateImage = realTemplateImage;
 
             ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;
@@ -545,7 +560,7 @@ namespace RH.Core.Controls
             ProgramCore.Project.RotatedAngle = fcr.RotatedAngle;
 
             var aabb = ProgramCore.MainForm.ctrlRenderControl.InitializeShapedotsHelper(true);         // инициализация точек головы. эта инфа тоже сохранится в проект
-       //     ProgramCore.MainForm.ctrlRenderControl.ImportPoints();
+                                                                                                       //     ProgramCore.MainForm.ctrlRenderControl.ImportPoints();
             ProgramCore.MainForm.UpdateProjectControls(true, aabb);
 
             //  ProgramCore.Project.ToStream();
@@ -647,6 +662,22 @@ namespace RH.Core.Controls
             rbNewProject.Checked = !rbOpenProject.Checked;
             groupBoxOpen.Enabled = rbOpenProject.Checked;
             groupBox1.Enabled = pictureTemplate.Enabled = !rbOpenProject.Checked;
+        }
+
+        private void rbGenesis2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbGenesis2.Checked)
+                rbGenesis3.Checked = rbGenesis8.Checked = false;
+        }
+        private void rbGenesis3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbGenesis3.Checked)
+                rbGenesis2.Checked = rbGenesis8.Checked = false;
+        }
+        private void rbGenesis8_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbGenesis8.Checked)
+                rbGenesis2.Checked = rbGenesis3.Checked = false;
         }
     }
 }

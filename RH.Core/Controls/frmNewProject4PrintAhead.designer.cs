@@ -69,6 +69,9 @@ namespace RH.Core.Controls
             this.btnOpenProject = new System.Windows.Forms.Button();
             this.textOpenProject = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.rbGenesis2 = new System.Windows.Forms.RadioButton();
+            this.rbGenesis3 = new System.Windows.Forms.RadioButton();
+            this.rbGenesis8 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureTemplate)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureExample)).BeginInit();
@@ -245,6 +248,9 @@ namespace RH.Core.Controls
             // panel1
             // 
             this.panel1.BackgroundImage = global::RH.Core.Properties.Resources.bgWizard2;
+            this.panel1.Controls.Add(this.rbGenesis8);
+            this.panel1.Controls.Add(this.rbGenesis3);
+            this.panel1.Controls.Add(this.rbGenesis2);
             this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.rbImportObj);
             this.panel1.Controls.Add(this.btnChild);
@@ -285,7 +291,6 @@ namespace RH.Core.Controls
             this.rbImportObj.Name = "rbImportObj";
             this.rbImportObj.Size = new System.Drawing.Size(14, 13);
             this.rbImportObj.TabIndex = 18;
-            this.rbImportObj.TabStop = true;
             this.rbImportObj.UseVisualStyleBackColor = false;
             this.rbImportObj.Visible = false;
             this.rbImportObj.CheckedChanged += new System.EventHandler(this.rbImportObj_CheckedChanged);
@@ -499,6 +504,50 @@ namespace RH.Core.Controls
             this.label2.TabIndex = 11;
             this.label2.Text = "Project file:";
             // 
+            // rbGenesis2
+            // 
+            this.rbGenesis2.AutoSize = true;
+            this.rbGenesis2.BackColor = System.Drawing.Color.Transparent;
+            this.rbGenesis2.Checked = true;
+            this.rbGenesis2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rbGenesis2.Location = new System.Drawing.Point(22, 12);
+            this.rbGenesis2.Name = "rbGenesis2";
+            this.rbGenesis2.Size = new System.Drawing.Size(99, 21);
+            this.rbGenesis2.TabIndex = 20;
+            this.rbGenesis2.TabStop = true;
+            this.rbGenesis2.Text = "Genesis 2";
+            this.rbGenesis2.UseVisualStyleBackColor = false;
+            this.rbGenesis2.Visible = false;
+            this.rbGenesis2.CheckedChanged += new System.EventHandler(this.rbGenesis2_CheckedChanged);
+            // 
+            // rbGenesis3
+            // 
+            this.rbGenesis3.AutoSize = true;
+            this.rbGenesis3.BackColor = System.Drawing.Color.Transparent;
+            this.rbGenesis3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rbGenesis3.Location = new System.Drawing.Point(22, 39);
+            this.rbGenesis3.Name = "rbGenesis3";
+            this.rbGenesis3.Size = new System.Drawing.Size(99, 21);
+            this.rbGenesis3.TabIndex = 21;
+            this.rbGenesis3.Text = "Genesis 3";
+            this.rbGenesis3.UseVisualStyleBackColor = false;
+            this.rbGenesis3.Visible = false;
+            this.rbGenesis3.CheckedChanged += new System.EventHandler(this.rbGenesis3_CheckedChanged);
+            // 
+            // rbGenesis8
+            // 
+            this.rbGenesis8.AutoSize = true;
+            this.rbGenesis8.BackColor = System.Drawing.Color.Transparent;
+            this.rbGenesis8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rbGenesis8.Location = new System.Drawing.Point(22, 67);
+            this.rbGenesis8.Name = "rbGenesis8";
+            this.rbGenesis8.Size = new System.Drawing.Size(99, 21);
+            this.rbGenesis8.TabIndex = 22;
+            this.rbGenesis8.Text = "Genesis 8";
+            this.rbGenesis8.UseVisualStyleBackColor = false;
+            this.rbGenesis8.Visible = false;
+            this.rbGenesis8.CheckedChanged += new System.EventHandler(this.rbGenesis8_CheckedChanged);
+            // 
             // frmNewProject4PrintAhead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -584,5 +633,8 @@ namespace RH.Core.Controls
         private Label lblNewProject;
         private TextBox textNewProjectName;
         private Label labelPrintAhead11;
+        private RadioButton rbGenesis8;
+        private RadioButton rbGenesis3;
+        private RadioButton rbGenesis2;
     }
 }

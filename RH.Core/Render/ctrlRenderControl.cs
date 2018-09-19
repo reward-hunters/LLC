@@ -489,7 +489,7 @@ namespace RH.Core.Render
             if (newProject)
             {
                 var modelPath = ProgramCore.Project.HeadModelPath;
-                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.ManType, ProgramCore.PluginMode, ProgramCore.Project.IsOpenSmile);
+                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, ProgramCore.PluginMode, ProgramCore.Project.IsOpenSmile);
 
                 //265.54415390315148338545523758907
                 float scale = 0;
@@ -531,16 +531,16 @@ namespace RH.Core.Render
             if (ProgramCore.Project.ManType != ManType.Custom)
             {
                 var temp = 0;
-                var oldMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Old.obj"); // загружаем трансформации для старения
+                var oldMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.GenesisType.GetGenesisPath(), ProgramCore.Project.ManType.GetCaption(), "Old.obj"); // загружаем трансформации для старения
                 OldMorphing = pickingController.LoadPartsMorphInfo(oldMorphingPath, headMeshesController.RenderMesh, ref temp);
 
                 temp = 0;
-                var fatMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
+                var fatMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.GenesisType.GetGenesisPath(), ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
                 FatMorphing = pickingController.LoadPartsMorphInfo(fatMorphingPath, headMeshesController.RenderMesh, ref temp);
 
                 temp = 0;
                 var invIsOpenSmile = !ProgramCore.Project.IsOpenSmile;
-                var smileMorphingPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.ManType.GetObjPath(invIsOpenSmile));
+                var smileMorphingPath = Path.Combine(Application.StartupPath, "Models", "Model", ProgramCore.Project.GenesisType.GetGenesisPath(), ProgramCore.Project.ManType.GetObjPath(invIsOpenSmile));
                 // var smileMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.ManType.GetCaption(), "Fat.obj"); // загружаем трансформации для толстения
                 SmileMorphing = pickingController.LoadPartsMorphInfo(smileMorphingPath, headMeshesController.RenderMesh, ref temp);
 
@@ -820,12 +820,12 @@ namespace RH.Core.Render
             return new Vector2((maxX + minX) * 0.5f, (maxY + minY) * 0.5f);
         }
 
-        public void LoadModel(string path, bool needClean, ManType manType, MeshType type, bool isOpenSmile)
+        public void LoadModel(string path, bool needClean, GenesisType genesisType, ManType manType, MeshType type, bool isOpenSmile)
         {
             if (needClean)
                 CleanProjectMeshes();
 
-            pickingController.AddMehes(path, type, false, manType, false, isOpenSmile);
+            pickingController.AddMehes(path, type, false, genesisType, manType, false, isOpenSmile);
         }
 
         private void UpdatePointsProportion(float scaleX, float centerX)
@@ -1004,7 +1004,7 @@ namespace RH.Core.Render
             var directoryName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "Accessory");
             var objPath = Path.Combine(directoryName, baseName + ".obj");
 
-            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false, false);
+            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, false, false);
 
 
             for (var i = 0; i < meshes.Count; i++)
@@ -2054,7 +2054,7 @@ namespace RH.Core.Render
                 return;
 
 
-            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.ManType, false, false);
+            var meshes = pickingController.AddMehes(objPath, meshType, true, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, false, false);
 
             if (float.IsNaN(meshSize) && meshes.Count > 0 && UserConfig.ByName("Parts").Contains(meshes[0].Path))
             {
@@ -4114,7 +4114,7 @@ namespace RH.Core.Render
             catch(Exception ex)
             {
                 
-                //ApplySmoothedTextures();
+                ApplySmoothedTextures();
             }
         }
 

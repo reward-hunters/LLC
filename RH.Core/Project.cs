@@ -181,6 +181,8 @@ namespace RH.Core
 
         /// <summary> Тип лица (мужское, женское, ребенок)</summary>
         public ManType ManType;
+        /// <summary> Тип модели, используемой по умолчанию </summary>
+        public GenesisType GenesisType = GenesisType.Genesis2;
 
         /// <summary> используются сглаженные текстуры </summary>
         public bool SmoothedTextures;
@@ -211,7 +213,7 @@ namespace RH.Core
                         headModelPath = "ftp://108.167.164.209/public_html/printahead.online/PrintAhead_DefaultModels/" +  manType.GetObjPath();
                         headModelPath = headModelPath.Replace(@"\", "/");
 #else
-                        headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", manType.GetObjPath(isOpenSmile));
+                        headModelPath = Path.Combine(Application.StartupPath, "Models", "Model", GenesisType.GetGenesisPath(), manType.GetObjPath(isOpenSmile));
 #endif
                     }
 
@@ -316,13 +318,13 @@ namespace RH.Core
 
 #else
             var modelPath = Path.Combine(ProjectPath, "OBJ", "hair.obj");
-            ProgramCore.MainForm.ctrlRenderControl.LoadModel(modelPath, true, ManType, MeshType.Hair, false);
+            ProgramCore.MainForm.ctrlRenderControl.LoadModel(modelPath, true, GenesisType, ManType, MeshType.Hair, false);
 
             var acDirPath = Path.GetDirectoryName(modelPath);
             var acName = Path.GetFileNameWithoutExtension(modelPath) + "_accessory.obj";
             var accessoryPath = Path.Combine(acDirPath, acName);
             if (File.Exists(accessoryPath))
-                ProgramCore.MainForm.ctrlRenderControl.LoadModel(accessoryPath, false, ManType, MeshType.Accessory, false);
+                ProgramCore.MainForm.ctrlRenderControl.LoadModel(accessoryPath, false, GenesisType, ManType, MeshType.Accessory, false);
 #endif
         }
 
@@ -441,10 +443,10 @@ namespace RH.Core
                             m.Value.Delta = 0;
                         foreach (var m in ProgramCore.MainForm.ctrlRenderControl.FatMorphing)
                             m.Value.Delta = 0;
-                   //     ProgramCore.MainForm.ctrlRenderControl.DoMorth();
+                        //     ProgramCore.MainForm.ctrlRenderControl.DoMorth();
                     }
 
-                   ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Save(rmPath);
+                    ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Save(rmPath);
 
                     if (ManType != ManType.Custom)
                     {
@@ -452,7 +454,7 @@ namespace RH.Core
                             m.Value.Delta = AgeCoefficient;
                         foreach (var m in ProgramCore.MainForm.ctrlRenderControl.FatMorphing)
                             m.Value.Delta = FatCoefficient;
-                     //   ProgramCore.MainForm.ctrlRenderControl.DoMorth();
+                        //   ProgramCore.MainForm.ctrlRenderControl.DoMorth();
                     }
 
                     #endregion
@@ -765,6 +767,14 @@ namespace RH.Core
         Custom = 3         // произвольный тип ебала
     }
 
+    /// <summary> Тип головы - Genesis </summary>
+    public enum GenesisType
+    {
+        Genesis2,   // базовая, изначально работали только с ней
+        Genesis3,
+        Genesis8
+    }
+
     public static class ManTypeEx
     {
         public static string GetCaption(this ManType manType)
@@ -827,7 +837,6 @@ namespace RH.Core
             }
         }
 
-
         public static string GetObjPathSmilePlugin(this ManType manType)
         {
             switch (manType)
@@ -840,6 +849,19 @@ namespace RH.Core
                     return Path.Combine(manType.GetObjDirPathSmilePlugin(), "Child.obj");
                 default:
                     return string.Empty;
+            }
+        }
+
+        public static string GetGenesisPath(this GenesisType genesisType)
+        {
+            switch (genesisType)
+            {
+                case GenesisType.Genesis3:
+                    return "Genesis 3";
+                case GenesisType.Genesis8:
+                    return "Genesis 8";
+                default:
+                    return "Genesis 2";
             }
         }
     }

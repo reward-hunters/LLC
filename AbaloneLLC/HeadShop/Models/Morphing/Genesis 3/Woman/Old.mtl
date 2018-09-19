@@ -1,0 +1,84 @@
+newmtl Eyelashes
+d 1
+Kd 0.047058824 0.043137256 0.035294119
+map_D /Maps/RyJeane_lashes_1006.jpg
+
+newmtl Fingernails
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_arms_1004.jpg
+
+newmtl Toenails
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_legs_1003.jpg
+
+newmtl Cornea
+d 0
+Kd 1 1 1
+
+newmtl Pupils
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_eyes01_1007.jpg
+
+newmtl Face
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_face_1001.jpg
+
+newmtl Lips
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_face_1001.jpg
+
+newmtl Teeth
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_mouth_1005.jpg
+
+newmtl Sclera
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_eyes01_1007.jpg
+
+newmtl Ears
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_face_1001.jpg
+
+newmtl Irises
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_eyes01_1007.jpg
+
+newmtl Legs
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_legs_1003.jpg
+
+newmtl Torso
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_torso_1002.jpg
+
+newmtl EyeSocket
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_face_1001.jpg
+
+newmtl EyeMoisture
+d 0.89999998
+Kd 1 1 1
+map_D /Maps/RyJeane_eyerefl01_1008.jpg
+
+newmtl Mouth
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_mouth_1005.jpg
+
+newmtl Arms
+d 1
+Kd 1 1 1
+map_Kd /Maps/RyJeane_arms_1004.jpg
+
