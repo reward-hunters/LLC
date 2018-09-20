@@ -479,7 +479,7 @@ namespace RH.Core.Controls
             }
 
             var projectName = string.IsNullOrEmpty(textNewProjectName.Text) ? "HeadShop project" : textNewProjectName.Text;
-            ProgramCore.Project = new Project(projectName, path, templateImage, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile) { GenesisType = GenType };
+            ProgramCore.Project = new Project(projectName, path, templateImage, GenType, ManType, CustomModelPath, true, SelectedSize, fcr.IsOpenSmile);
             ProgramCore.Project.RealTemplateImage = realTemplateImage;
 
             ProgramCore.Project.FacialFeatures = fcr.FacialFeatures;

@@ -194,7 +194,7 @@ namespace RH.Core
         /// <param name="manType"></param>
         /// <param name="headModelPath">Указываем путь до модели головы (в случае если выбрали import OBJ). Иначе - пустая строка</param>
         /// <param name="needCopy"></param>
-        public Project(string projectName, string projectPath, string templateImageName, ManType manType, string headModelPath, bool needCopy, int selectedSize, bool isOpenSmile)
+        public Project(string projectName, string projectPath, string templateImageName, GenesisType genesisType, ManType manType, string headModelPath, bool needCopy, int selectedSize, bool isOpenSmile)
         {
             ProjectName = projectName;
             ProjectPath = projectPath;
@@ -202,6 +202,7 @@ namespace RH.Core
 
             ManType = manType;
             IsOpenSmile = isOpenSmile;
+            GenesisType = genesisType;
             switch (manType)
             {
                 case ManType.Male:
@@ -347,6 +348,7 @@ namespace RH.Core
 
                     bw.Write(HeadModelPath);
 
+                    bw.Write((int)GenesisType);
                     bw.Write((int)ManType);
                     bw.Write((int)TextureFlip);
                     bw.Write((int)ShapeFlip);
@@ -551,6 +553,7 @@ namespace RH.Core
 
                 var headModelPath = br.ReadString();
 
+                var genesisType = (GenesisType)br.ReadInt32();
                 var manType = (ManType)br.ReadInt32();
                 var textureFlip = (FlipType)br.ReadInt32();
                 var shapeFlip = (FlipType)br.ReadInt32();
@@ -570,7 +573,7 @@ namespace RH.Core
                            break;*/
                 }
 
-                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, manType, headModelPath, false, textureSize, isOpenSmile);
+                result = new Project(projectName, projectFi.DirectoryName, templateImagePath, genesisType,  manType, headModelPath, false, textureSize, isOpenSmile);
                 result.LoadMeshes();
                 result.TextureFlip = textureFlip;
                 result.ShapeFlip = shapeFlip;

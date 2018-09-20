@@ -297,7 +297,7 @@ namespace RH.WebCore
             var templateImage = new Bitmap(ms);
 
 
-            ProgramCore.Project = new Project(sessionID, null, null, manType, null, false, 1024, false);
+            ProgramCore.Project = new Project(sessionID, null, null, GenesisType.Genesis2, manType, null, false, 1024, false);
             ProgramCore.Project.FrontImage = templateImage;
             //ProgramCore.Project.LoadMeshes();
             #endregion
