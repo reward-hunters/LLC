@@ -177,6 +177,24 @@ namespace RH.MeshUtils.Data
             AABB.B = b;
         }
 
+        public float GetDiagonal()
+        {
+            Vector2 a = new Vector2(99999.0f, 99999.0f), b = new Vector2(-99999.0f, -99999.0f);
+
+            foreach (var part in Parts)
+                foreach (var vertex in part.Vertices)
+                {
+                    a.X = Math.Min(vertex.Position.X, a.X);
+                    a.Y = Math.Min(vertex.Position.Y, a.Y);
+                    b.X = Math.Max(vertex.Position.X, b.X);
+                    b.Y = Math.Max(vertex.Position.Y, b.Y);
+                }
+
+
+            var diagonal = (b - a).Length;
+            return diagonal;
+        }
+
         public float SetSize(float diagonal)
         {
             Vector2 a = new Vector2(99999.0f, 99999.0f), b = new Vector2(-99999.0f, -99999.0f);
