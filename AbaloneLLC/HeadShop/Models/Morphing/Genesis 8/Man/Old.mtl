@@ -1,0 +1,87 @@
+newmtl Face
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseFaceMapD01_1001.jpg
+
+newmtl Lips
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseFaceMapD01_1001.jpg
+
+newmtl Teeth
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseMouthMapD_1005.jpg
+
+newmtl Torso
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseTorsoMapD_1002.jpg
+
+newmtl Ears
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseFaceMapD01_1001.jpg
+
+newmtl Legs
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseLegsMapD_1003.jpg
+
+newmtl EyeSocket
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseFaceMapD01_1001.jpg
+
+newmtl Mouth
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseMouthMapD_1005.jpg
+
+newmtl Arms
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseArmsMapD_1004.jpg
+
+newmtl Pupils
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseEyesMap02D_1007.jpg
+
+newmtl EyeMoisture
+d 0.995
+Kd 1 1 1
+
+newmtl Fingernails
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseArmsMapD_1004.jpg
+
+newmtl Cornea
+d 0.995
+Kd 1 1 1
+
+newmtl Irises
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseEyesMap02D_1007.jpg
+
+newmtl Sclera
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseEyesMap02D_1007.jpg
+
+newmtl Toenails
+d 1
+Kd 1 1 1
+map_Kd /Maps/G8MBaseLegsMapD_1003.jpg
+
+newmtl EyeMoisture_Genesis_8_Male_Eyelashes
+d 0
+Kd 1 1 1
+
+newmtl Eyelashes
+d 1
+Kd 0.27058825 0.23137255 0.1882353
+map_D /Maps/G8MBaseEyelashesMapTR_1006.jpg
+
