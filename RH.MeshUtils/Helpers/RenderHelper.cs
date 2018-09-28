@@ -1090,7 +1090,7 @@ namespace RH.MeshUtils.Helpers
             return Type != HeadMeshType.Eyes;
         }
 
-        public bool Create(MeshPartInfo info)
+        public bool Create(GenesisType genesis, MeshPartInfo info)
         {
             if (info.VertexPositions.Count == 0)
                 return false;
@@ -1104,17 +1104,43 @@ namespace RH.MeshUtils.Helpers
             Name = info.PartName;
             if (Name.Contains("Irises") || Name.Contains("Eye") || Name.Contains("Lacrimals") || Name.Contains("Sclera") || Name.Contains("Pupils"))
                 Type = HeadMeshType.Eyes;
-            else if (Name.Contains("SkinFace"))
+            else if (Name.Contains("Face"))
                 Type = HeadMeshType.Face;
             else if (Name.Contains("Lip"))
                 Type = HeadMeshType.Lip;
-            else if (Name.Contains("Torso"))
+            else if (Name.Contains("Torso") )
                 Type = HeadMeshType.Torso;
 
-            if(Name.Contains("Tongue") || Name.Contains("Tear") || Name.Contains("Cornea") || Name.Contains("EyeReflection"))
+            switch (genesis)
             {
-                IsVisible = false;
+                case GenesisType.Genesis2:
+                    {
+                        if (Name.Contains("Tongue") || Name.Contains("Tear") || Name.Contains("Cornea") || Name.Contains("EyeReflection") )
+                        {
+                            IsVisible = false;
+                        }
+                    }
+                    break;
+                case GenesisType.Genesis3:
+                    {
+                        if (Name == "Cornea" || Name == "Pupils" || Name == "Sclera" || Name == "Irises" || Name.Contains("Mouth"))
+                     //  if (/*Name != "Face" &&*/ Name != "Teeth")
+                        {
+                            IsVisible = false;
+                        }
+                    }
+                    break;
+                case GenesisType.Genesis8:
+                    {
+                        if (Name == "Cornea" || Name == "Pupils" || Name == "Sclera" || Name == "Irises" || Name.Contains("Mouth") || Name == "EyeMoisture")
+                        //  if (/*Name != "Face" &&*/ Name != "Teeth")
+                        {
+                            IsVisible = false;
+                        }
+                    }
+                    break;
             }
+            
 
             Indices.Clear();
             var positions = new List<Vector3>();

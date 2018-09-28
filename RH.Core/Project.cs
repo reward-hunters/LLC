@@ -12,6 +12,7 @@ using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
 using RH.Core.Render.Obj;
 using RH.MeshUtils.Data;
+using RH.MeshUtils;
 
 namespace RH.Core
 {
@@ -770,13 +771,7 @@ namespace RH.Core
         Custom = 3         // произвольный тип ебала
     }
 
-    /// <summary> Тип головы - Genesis </summary>
-    public enum GenesisType
-    {
-        Genesis2,   // базовая, изначально работали только с ней
-        Genesis3,
-        Genesis8
-    }
+
 
     public static class ManTypeEx
     {

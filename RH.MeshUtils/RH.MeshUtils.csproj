@@ -80,6 +80,7 @@
     <Compile Include="Data\Morphing.cs" />
     <Compile Include="Data\RenderMesh.cs" />
     <Compile Include="Data\SimpleClasses.cs" />
+    <Compile Include="GenesisType.cs" />
     <Compile Include="HeadMeshesController.cs" />
     <Compile Include="Helpers\AutodotsShapeHelper.cs" />
     <Compile Include="Helpers\BrushTool.cs" />

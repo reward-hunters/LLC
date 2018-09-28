@@ -179,6 +179,8 @@ namespace RH.Core
                     mirrorHelpToolStripMenuItem.Visible = freehandHelpToolStripMenuItem.Visible = profileHelpToolStripMenuItem.Visible = retouchHelpToolStripMenuItem.Visible = false;
                     panTopcontinuousPanToolStripMenuItem.Visible = panBottomcontinuousPanToolStripMenuItem.Visible = stepToponeStepToolStripMenuItem.Visible = stepBottomoneStepToolStripMenuItem.Visible = false;
 
+                    tutorialToolStripMenuItem.Visible = true;
+
                     openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = startHelpToolStripMenuItem.Visible= materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
@@ -2499,6 +2501,12 @@ namespace RH.Core
         }
 
         private void advancedModellingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf"];
+            Process.Start(link);
+        }
+
+        private void tutorialToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf"];
             Process.Start(link);

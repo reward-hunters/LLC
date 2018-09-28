@@ -12,7 +12,7 @@ namespace RH.Core.Controls.Tutorials
         public frmStartTutorial()
         {
             InitializeComponent();
-            linkLabel1.Text = UserConfig.ByName("Tutorials")["Links", "Start", "http://youtu.be/JC5z64YP1xA"];
+            linkLabel1.Text = "website"; //UserConfig.ByName("Tutorials")["Links", "Start", "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf "];
             Text = ProgramCore.ProgramCaption;
             linkLabel1.BackColor = Color.FromArgb(211, 211, 211);
 
@@ -29,7 +29,7 @@ namespace RH.Core.Controls.Tutorials
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var link = UserConfig.ByName("Tutorials")["Links", "Start", "http://youtu.be/JC5z64YP1xA"];
+            var link = "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf"; //UserConfig.ByName("Tutorials")["Links", "Start", "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf "];
             Process.Start(link);
         }
 

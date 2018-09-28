@@ -118,11 +118,11 @@ namespace RH.MeshUtils
                 p.Smooth();
         }
 
-        public bool CreateMeshPart(MeshPartInfo info)
+        public bool CreateMeshPart(GenesisType genesis, MeshPartInfo info)
         {
             var part = new RenderMeshPart();
 
-            if (part.Create(info))
+            if (part.Create(genesis, info))
             {
                 RenderMesh.AddPart(part);
                 return true;

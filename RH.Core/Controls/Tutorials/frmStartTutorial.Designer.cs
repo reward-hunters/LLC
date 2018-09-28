@@ -43,7 +43,7 @@ namespace RH.Core.Controls.Tutorials
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.BackColor = System.Drawing.Color.Silver;
             this.linkLabel1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkLabel1.Location = new System.Drawing.Point(358, 513);
+            this.linkLabel1.Location = new System.Drawing.Point(347, 513);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(180, 16);
             this.linkLabel1.TabIndex = 2;

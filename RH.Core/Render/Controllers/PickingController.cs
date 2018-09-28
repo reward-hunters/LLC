@@ -10,6 +10,7 @@ using RH.Core.Render.Helpers;
 using RH.Core.Render.Meshes;
 using RH.Core.Render.Obj;
 using RH.MeshUtils.Data;
+using RH.MeshUtils;
 
 namespace RH.Core.Render.Controllers
 {
@@ -350,7 +351,7 @@ namespace RH.Core.Render.Controllers
 #else
                             dv = MoveToPosition(ref meshPartInfo.VertexPositions, a, b, Vector3.Zero);
 #endif
-                            ProgramCore.Project.RenderMainHelper.headMeshesController.CreateMeshPart(meshPartInfo);
+                            ProgramCore.Project.RenderMainHelper.headMeshesController.CreateMeshPart(ProgramCore.Project.GenesisType, meshPartInfo);
                         }
 
                         ObjExport = objModel.ObjExport;

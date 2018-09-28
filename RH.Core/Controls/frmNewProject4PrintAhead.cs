@@ -12,6 +12,7 @@ using RH.Core.IO;
 using RH.Core.Properties;
 using RH.Core.Render;
 using RH.Core.Render.Helpers;
+using RH.MeshUtils;
 
 namespace RH.Core.Controls
 {
@@ -111,6 +112,7 @@ namespace RH.Core.Controls
         public frmNewProject4PrintAhead(bool atStartup)
         {
             InitializeComponent();
+            AllowDrop = true;
 
             this.atStartup = atStartup;
 
@@ -151,6 +153,79 @@ namespace RH.Core.Controls
                     labelNotes.Visible = labelNotes1.Visible = false;
                     break;
             }
+        }
+        private void ApplyNewImage(string fileName)
+        {
+            labelHelp.Visible = false;
+            textTemplateImage.Text = fileName;
+
+            templateImage = fileName;
+            fcr = new LuxandFaceRecognition();
+            if (!fcr.Recognize(ref templateImage, true))
+            {
+                textTemplateImage.Text = templateImage = string.Empty;
+                pictureTemplate.Image = null;
+                labelHelp.Visible = true;
+
+                return;                     // это ОЧЕНЬ! важно. потому что мы во время распознавания можем создать обрезанную фотку и использовать ее как основную в проекте.
+            }
+            if (fcr.IsMale)
+                btnMale_Click(null, null);
+            else btnFemale_Click(null, null);
+
+            using (var ms = new MemoryStream(File.ReadAllBytes(templateImage))) // Don't use using!!
+            {
+                var img = (Bitmap)Image.FromStream(ms);
+                pictureTemplate.Image = (Bitmap)img.Clone();
+                img.Dispose();
+            }
+
+            RecalcRealTemplateImagePosition();
+
+            Single distance;
+            if (fcr.IsMale)
+                distance = facialFeaturesTransformed[22].Y - facialFeaturesTransformed[11].Y;           // раньше использовалась 2 точка.но согласно ТЗ от 27.3.2017 используем теперь эту точку
+            else
+                distance = facialFeaturesTransformed[2].Y - facialFeaturesTransformed[11].Y;
+
+            TopEdgeTransformed.Y = facialFeaturesTransformed[16].Y + distance;          // определение высоты по алгоритму старикана
+            TopEdgeTransformed.Y = TopEdgeTransformed.Y < 0 ? 10 : TopEdgeTransformed.Y;
+
+            RenderTimer.Start();
+
+            if (ProgramCore.PluginMode)
+            {
+                var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var dazPath = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\", "fs3d.obj");
+                if (File.Exists(dazPath))
+                {
+                    if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_v11)
+                        rbImportObj.Checked = true;
+
+                    CustomModelPath = dazPath;
+                }
+                else
+                    MessageBox.Show(@"Daz model not found.", @"HeadShop", MessageBoxButtons.OK);
+            }
+
+            /*   var detectedNosePoints = new List<Vector2>();
+               detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[22].X, facialFeaturesTransformed[22].Y));
+               detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[2].X, facialFeaturesTransformed[2].Y));
+
+               var noseTop = detectedNosePoints[0];
+               var noseTip = detectedNosePoints[1];
+               var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
+               var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
+
+               angle = angle * (180d / Math.PI);
+
+              */
+
+            if (Math.Abs(fcr.RotatedAngle) > 25)
+                MessageBox.Show("The head rotated more than 20 degrees. Please select an other photo...");
+            else
+                btnApply.Enabled = true;
+
         }
 
         #region Form's event
@@ -291,77 +366,7 @@ namespace RH.Core.Controls
                     return;
                 }
 
-                labelHelp.Visible = false;
-                textTemplateImage.Text = ofd.FileName;
-
-                templateImage = ofd.FileName;
-                fcr = new LuxandFaceRecognition();
-                if (!fcr.Recognize(ref templateImage, true))
-                {
-                    textTemplateImage.Text = templateImage = string.Empty;
-                    pictureTemplate.Image = null;
-                    labelHelp.Visible = true;
-
-                    return;                     // это ОЧЕНЬ! важно. потому что мы во время распознавания можем создать обрезанную фотку и использовать ее как основную в проекте.
-                }
-                if (fcr.IsMale)
-                    btnMale_Click(null, null);
-                else btnFemale_Click(null, null);
-
-                using (var ms = new MemoryStream(File.ReadAllBytes(templateImage))) // Don't use using!!
-                {
-                    var img = (Bitmap)Image.FromStream(ms);
-                    pictureTemplate.Image = (Bitmap)img.Clone();
-                    img.Dispose();
-                }
-
-                RecalcRealTemplateImagePosition();
-
-
-
-                Single distance;
-                if (fcr.IsMale)
-                    distance = facialFeaturesTransformed[22].Y - facialFeaturesTransformed[11].Y;           // раньше использовалась 2 точка.но согласно ТЗ от 27.3.2017 используем теперь эту точку
-                else
-                    distance = facialFeaturesTransformed[2].Y - facialFeaturesTransformed[11].Y;
-
-                TopEdgeTransformed.Y = facialFeaturesTransformed[16].Y + distance;          // определение высоты по алгоритму старикана
-                TopEdgeTransformed.Y = TopEdgeTransformed.Y < 0 ? 10 : TopEdgeTransformed.Y;
-
-                RenderTimer.Start();
-
-                if (ProgramCore.PluginMode)
-                {
-                    var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    var dazPath = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\", "fs3d.obj");
-                    if (File.Exists(dazPath))
-                    {
-                        if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_v11)
-                            rbImportObj.Checked = true;
-
-                        CustomModelPath = dazPath;
-                    }
-                    else
-                        MessageBox.Show(@"Daz model not found.", @"HeadShop", MessageBoxButtons.OK);
-                }
-
-                /*   var detectedNosePoints = new List<Vector2>();
-                   detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[22].X, facialFeaturesTransformed[22].Y));
-                   detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[2].X, facialFeaturesTransformed[2].Y));
-
-                   var noseTop = detectedNosePoints[0];
-                   var noseTip = detectedNosePoints[1];
-                   var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
-                   var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
-
-                   angle = angle * (180d / Math.PI);
-
-                  */
-
-                if (Math.Abs(fcr.RotatedAngle) > 25)
-                    MessageBox.Show("The head rotated more than 20 degrees. Please select an other photo...");
-                else
-                    btnApply.Enabled = true;
+                ApplyNewImage(ofd.FileName);
             }
         }
         private void pictureTemplate_DoubleClick(object sender, EventArgs e)
@@ -678,6 +683,22 @@ namespace RH.Core.Controls
         {
             if (rbGenesis8.Checked)
                 rbGenesis2.Checked = rbGenesis3.Checked = false;
+        }
+
+        private void frmNewProject4PrintAhead_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void frmNewProject4PrintAhead_DragDrop(object sender, DragEventArgs e)
+        {
+            int x = this.PointToClient(new Point(e.X, e.Y)).X;
+            int y = this.PointToClient(new Point(e.X, e.Y)).Y;
+            if (x >= pictureTemplate.Location.X && x <= pictureTemplate.Location.X + pictureTemplate.Width && y >= pictureTemplate.Location.Y && y <= pictureTemplate.Location.Y + pictureTemplate.Height)
+            {
+                string[] FileList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                ApplyNewImage(FileList[0]);
+            }
         }
     }
 }
