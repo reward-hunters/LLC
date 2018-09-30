@@ -281,10 +281,32 @@ namespace RH.Core.Render.Controllers
                             switch (ProgramCore.Project.ManType)
                             {
                                 case ManType.Male:
-                                    tempPluginTexture = Path.Combine(folderPath, "Maps", "RyNevio_faceB.jpg");
+                                    switch (ProgramCore.Project.GenesisType)
+                                    {
+                                        case GenesisType.Genesis2:
+                                            tempPluginTexture = Path.Combine(folderPath, "Maps", "RyNevio_faceB.jpg");
+                                            break;
+                                        case GenesisType.Genesis3:
+                                            tempPluginTexture = Path.Combine(folderPath, "Maps", "RyEddie_face_1001.jpg");
+                                            break;
+                                        case GenesisType.Genesis8:
+                                            tempPluginTexture = Path.Combine(folderPath, "Maps", "G8MBaseFaceMapD01_1001.jpg");
+                                            break;
+                                    }
                                     break;
                                 case ManType.Female:
-                                    tempPluginTexture = Path.Combine(folderPath, "Maps", "V5BreeHeadM.jpg");
+                                    switch (ProgramCore.Project.GenesisType)
+                                    {
+                                        case GenesisType.Genesis2:
+                                            tempPluginTexture = Path.Combine(folderPath, "Maps", "V5BreeHeadM.jpg");
+                                            break;
+                                        case GenesisType.Genesis3:
+                                            tempPluginTexture = Path.Combine(folderPath, "Maps", "RyJeane_face_1001.jpg");
+                                            break;
+                                        case GenesisType.Genesis8:
+                                            tempPluginTexture = Path.Combine(folderPath, "Maps", "G8FBaseFaceMapD_1001.jpg");
+                                            break;
+                                    }
                                     break;
                                 case ManType.Child:
                                     tempPluginTexture = Path.Combine(folderPath, "Maps", "AC_KidsRRHBy.jpg");

@@ -1123,7 +1123,7 @@ namespace RH.MeshUtils.Helpers
                     break;
                 case GenesisType.Genesis3:
                     {
-                        if (Name == "Cornea" || Name == "Pupils" || Name == "Sclera" || Name == "Irises" || Name.Contains("Mouth"))
+                        if (Name == "Cornea" || Name == "Pupils" || Name == "Sclera" || Name == "Irises" || Name == "EyeMoisture" || Name.Contains("Mouth"))
                      //  if (/*Name != "Face" &&*/ Name != "Teeth")
                         {
                             IsVisible = false;

@@ -560,7 +560,14 @@ namespace RH.Core.Render
                     continue;
 
                 var oldTexture = GetTexture(part.DefaultTextureName);
-                if (!SmoothedTextures.ContainsKey(oldTexture))
+                var strangeThing = part.DefaultTextureName != null && ( part.DefaultTextureName.Contains("RyJeane_mouth_1005") || part.DefaultTextureName.Contains("RyEddie_torso_1002") ||   // может я и не прав, но некогда разбираться старик подгоняет.
+                                 part.DefaultTextureName.Contains("RyEddie_mouth_1005") || part.DefaultTextureName.Contains("RyEddie_torso_1002") ||        // 1-2 genesis 3
+                                  part.DefaultTextureName.Contains("G8FBaseMouthMapD_1005") || part.DefaultTextureName.Contains("G8FBaseTorsoMapD_1002") ||       // 3-4 genesis 8
+                                   part.DefaultTextureName.Contains("G8MBaseMouthMapD_1005") || part.DefaultTextureName.Contains("G8MBaseTorsoMapD_1002")); 
+                if (strangeThing)
+                    continue;
+
+                if (!SmoothedTextures.ContainsKey(oldTexture) )
                 {
                     if (part.Texture == 0 || part.IsBaseTexture || (ProgramCore.Project.ManType == ManType.Child && part.DefaultTextureName.Contains("v5breeinmouthm")))
                     {
