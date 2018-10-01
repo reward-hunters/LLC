@@ -503,16 +503,47 @@ namespace RH.Core.Render
                     switch (ProgramCore.Project.ManType)
                     {
                         case ManType.Male:
-                            scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
+                            switch (ProgramCore.Project.GenesisType)
+                            {
+                                case GenesisType.Genesis2:
+                                    scale = headMeshesController.SetSize(29.9421043f); // подгонка размера 
+                                    break;
+                                case GenesisType.Genesis3:
+                                    scale = headMeshesController.SetSize(31.1421043f);
+                                    break;
+                                case GenesisType.Genesis8:
+                                    scale = headMeshesController.SetSize(31.1421043f);
+                                    break;
+                            }
                             break;
                         case ManType.Female:
-                            /*scale = 265.544153903151483385f;
-                            headMeshesController.Resize(scale);
-                            scale = 1.0f / scale;*/
-                            if (ProgramCore.Project.IsOpenSmile)
-                                scale = headMeshesController.SetSize(29.3064537f);
-                            else
-                                scale = headMeshesController.SetSize(31.862587f);
+                            switch (ProgramCore.Project.GenesisType)
+                            {
+                                case GenesisType.Genesis2:
+                                    {
+                                        if (ProgramCore.Project.IsOpenSmile)
+                                            scale = headMeshesController.SetSize(29.3064537f);
+                                        else
+                                            scale = headMeshesController.SetSize(31.862587f);
+                                    }
+                                    break;
+                                case GenesisType.Genesis3:
+                                    {
+                                        if (ProgramCore.Project.IsOpenSmile)
+                                            scale = headMeshesController.SetSize(30.2164537f);
+                                        else
+                                            scale = headMeshesController.SetSize(30.762587f);
+                                    }
+                                    break;
+                                case GenesisType.Genesis8:
+                                    {
+                                        if (ProgramCore.Project.IsOpenSmile)
+                                            scale = headMeshesController.SetSize(30.4164537f);
+                                        else
+                                            scale = headMeshesController.SetSize(30.762587f);
+                                    }
+                                    break;
+                            }
 
                             // подгонка размера 
                             //scale = headMeshesController.SetSize(31.862587f); // подгонка размера 
@@ -560,14 +591,8 @@ namespace RH.Core.Render
                     continue;
 
                 var oldTexture = GetTexture(part.DefaultTextureName);
-                var strangeThing = part.DefaultTextureName != null && ( part.DefaultTextureName.Contains("RyJeane_mouth_1005") || part.DefaultTextureName.Contains("RyEddie_torso_1002") ||   // может я и не прав, но некогда разбираться старик подгоняет.
-                                 part.DefaultTextureName.Contains("RyEddie_mouth_1005") || part.DefaultTextureName.Contains("RyEddie_torso_1002") ||        // 1-2 genesis 3
-                                  part.DefaultTextureName.Contains("G8FBaseMouthMapD_1005") || part.DefaultTextureName.Contains("G8FBaseTorsoMapD_1002") ||       // 3-4 genesis 8
-                                   part.DefaultTextureName.Contains("G8MBaseMouthMapD_1005") || part.DefaultTextureName.Contains("G8MBaseTorsoMapD_1002")); 
-                if (strangeThing)
-                    continue;
 
-                if (!SmoothedTextures.ContainsKey(oldTexture) )
+                if (!SmoothedTextures.ContainsKey(oldTexture))
                 {
                     if (part.Texture == 0 || part.IsBaseTexture || (ProgramCore.Project.ManType == ManType.Child && part.DefaultTextureName.Contains("v5breeinmouthm")))
                     {
@@ -610,6 +635,13 @@ namespace RH.Core.Render
 
                 if (part.Texture != 0)      //все кроме отсутствующих. после первых автоточек - станет фоткой
                 {
+                    var strangeThing = part.DefaultTextureName != null && (part.DefaultTextureName.Contains("RyJeane_mouth_1005") || part.DefaultTextureName.Contains("RyJeane_torso_1002") ||   // может я и не прав, но некогда разбираться старик подгоняет.
+                 part.DefaultTextureName.Contains("RyEddie_mouth_1005") || part.DefaultTextureName.Contains("RyEddie_torso_1002") ||        // 1-2 genesis 3
+                  part.DefaultTextureName.Contains("G8FBaseMouthMapD_1005") || part.DefaultTextureName.Contains("G8FBaseTorsoMapD_1002") ||       // 3-4 genesis 8
+                   part.DefaultTextureName.Contains("G8MBaseMouthMapD_1005") || part.DefaultTextureName.Contains("G8MBaseTorsoMapD_1002"));
+                    if (strangeThing)
+                        continue;
+
                     part.Texture = SmoothedTextures[part.Texture]; // переприсваиваем текстуры на сглаженные
                     part.TextureName = GetTexturePath(part.Texture);
                 }
@@ -1177,7 +1209,7 @@ namespace RH.Core.Render
             SpecialCenterUpdate(points, headController.GetNoseBottomIndexes(), noseBottomPoint);
             SpecialCenterUpdate(points, headController.GetNoseTopIndexes(), eyesDiff);
 
-          //  PhotoLoaded();
+            //  PhotoLoaded();
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
@@ -1433,7 +1465,7 @@ namespace RH.Core.Render
                                 if (dblClick)
                                 {
                                     RectTransformMode = false;
-                                    autodotsShapeHelper.ShapeInfo.Points.ClearSelection();                                    
+                                    autodotsShapeHelper.ShapeInfo.Points.ClearSelection();
                                 }
 
                                 #region Rectangle transform
@@ -1455,10 +1487,10 @@ namespace RH.Core.Render
 
                                 if (moveRectIndex == -1) // если таскаем не прямоугольник, а точки
                                 {
-                                     customTempPoints.Clear();
-                                     foreach (var item in autodotsShapeHelper.ShapeInfo.Points.SelectedPoints)
-                                         customTempPoints.Add(item.Clone());
-                                    
+                                    customTempPoints.Clear();
+                                    foreach (var item in autodotsShapeHelper.ShapeInfo.Points.SelectedPoints)
+                                        customTempPoints.Add(item.Clone());
+
                                 }
                                 else
                                 {
@@ -2146,7 +2178,7 @@ namespace RH.Core.Render
 
         #region Drawing
 
-       private CustomHeadTriangles HeadTriangles = new CustomHeadTriangles();
+        private CustomHeadTriangles HeadTriangles = new CustomHeadTriangles();
 
         public void Render()
         {
@@ -2315,7 +2347,7 @@ namespace RH.Core.Render
 
                     EnableTransparent();
                     GL.PointSize(5.0f);             // рисуем зеленый фон. удобнее настраивать
-                  //  HeadTriangles.DrawTriangles(HeadPoints);
+                                                    //  HeadTriangles.DrawTriangles(HeadPoints);
                     if (autodotsShapeHelper.ShapeProfileInfo.Points != null)
                     {
                         GL.Begin(PrimitiveType.Triangles);
@@ -3136,11 +3168,11 @@ namespace RH.Core.Render
 
             GL.PointSize(5.0f);
             GL.Begin(PrimitiveType.Points);
-            
+
             foreach (var point in autodotsShapeHelper.ShapeInfo.Points)
             {
-                 if (!point.Visible)
-                     continue;
+                if (!point.Visible)
+                    continue;
 
                 if (point.Selected)
                     GL.Color3(1.0f, 0.0f, 0.0f);
@@ -3332,7 +3364,7 @@ namespace RH.Core.Render
 
         public void OrtoTop()
         {
-          //  ResetCamera();
+            //  ResetCamera();
             camera.ResetCamera(false);
         }
         public void OrtoBack()
@@ -4118,9 +4150,9 @@ namespace RH.Core.Render
                     SetTexture(smoothTex.Value, bitmap);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+
                 ApplySmoothedTextures();
             }
         }

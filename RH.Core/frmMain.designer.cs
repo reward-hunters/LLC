@@ -149,6 +149,7 @@ namespace RH.Core
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.showManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutHeadShopProToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.panelRender.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -1033,16 +1034,13 @@ namespace RH.Core
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tutorialToolStripMenuItem,
-            this.fullTutorialToolStripMenuItem,
             this.toolStripMenuItem5,
             this.frontToolStripMenuItem,
-            this.videoTutorialPart1CutAndShapeToolStripMenuItem,
             this.autodotsHelpToolStripMenuItem,
             this.accessoriesHelpToolStripMenuItem,
             this.styleHelpToolStripMenuItem,
             this.accessoriesHelpToolStripMenuItem1,
             this.colorHelpToolStripMenuItem,
-            this.advancedModellingToolStripMenuItem,
             this.startHelpToolStripMenuItem,
             this.mirrorHelpToolStripMenuItem,
             this.freehandHelpToolStripMenuItem,
@@ -1052,6 +1050,10 @@ namespace RH.Core
             this.retouchHelpToolStripMenuItem,
             this.stageHelpToolStripMenuItem,
             this.videoTutorialPart2ToolStripMenuItem,
+            this.toolStripMenuItem7,
+            this.videoTutorialPart1CutAndShapeToolStripMenuItem,
+            this.advancedModellingToolStripMenuItem,
+            this.fullTutorialToolStripMenuItem,
             this.toolStripMenuItem4,
             this.showManualToolStripMenuItem,
             this.aboutHeadShopProToolStripMenuItem});
@@ -1071,7 +1073,7 @@ namespace RH.Core
             // 
             this.fullTutorialToolStripMenuItem.Name = "fullTutorialToolStripMenuItem";
             this.fullTutorialToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.fullTutorialToolStripMenuItem.Text = "Full tutorial";
+            this.fullTutorialToolStripMenuItem.Text = "Full video";
             this.fullTutorialToolStripMenuItem.Click += new System.EventHandler(this.fullTutorialToolStripMenuItem_Click);
             // 
             // toolStripMenuItem5
@@ -1216,6 +1218,11 @@ namespace RH.Core
             this.aboutHeadShopProToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.aboutHeadShopProToolStripMenuItem.Text = "About PrintAhead";
             this.aboutHeadShopProToolStripMenuItem.Click += new System.EventHandler(this.aboutHeadShopProToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(216, 6);
             // 
             // frmMain
             // 
@@ -1381,6 +1388,7 @@ namespace RH.Core
         private ToolStripMenuItem frontToolStripMenuItem;
         private ToolStripMenuItem advancedModellingToolStripMenuItem;
         private ToolStripMenuItem tutorialToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem7;
     }
 }
 
