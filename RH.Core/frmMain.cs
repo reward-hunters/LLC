@@ -181,7 +181,9 @@ namespace RH.Core
 
                     tutorialToolStripMenuItem.Visible = true;
 
-                    openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = startHelpToolStripMenuItem.Visible= materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
+                    frontToolStripMenuItem.Visible =  openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = startHelpToolStripMenuItem.Visible= materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
+                    undoToolStripMenuItem5.Visible = undoToolStripMenuItem3.Visible = stageLibraryToolStripMenuItem.Visible = undoToolStripMenuItem.Visible = false;
+
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     Text = @"HeadShop 11";
@@ -1990,8 +1992,8 @@ namespace RH.Core
             {
                 ProgramCore.Project.ProjectPath = specialExportPath;        //3.	Need to deposit all texture files into Users/Public/Documents/My DAZ Library/Runtime/Faceshop/fs folder, including smoothed eye, mouth and teeth. Right now only face (fs.bmp) is deposited.
                 if (ProgramCore.Project.AutodotsUsed)
-                    ctrlRenderControl.SaveBlendingTextures();
-                ctrlRenderControl.SaveSmoothedTextures();
+                    ctrlRenderControl.SaveBlendingTextures(true);
+                ctrlRenderControl.SaveSmoothedTextures(true);
             }
 
             if (ProgramCore.PluginMode)
@@ -2007,9 +2009,10 @@ namespace RH.Core
 
                 var iTexture = -1;
 
+                var hasBlas = false;
                 foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 {
-                    if (ProgramCore.MainForm.PluginUvGroups.Contains(part.Name.ToLower().Trim()))
+                    if (ProgramCore.MainForm.PluginUvGroups.Contains(part.Name.ToLower().Trim()) && !hasBlas)
                     {
                         var smoothTexs = ctrlRenderControl.SmoothedTextures.Where(s => s.Key != 0 && s.Value == part.Texture);
                         if (smoothTexs.Any())

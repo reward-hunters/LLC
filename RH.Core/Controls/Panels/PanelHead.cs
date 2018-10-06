@@ -48,6 +48,9 @@ namespace RH.Core.Controls.Panels
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnShapeTool.Visible = btnPolyLine.Visible = false;
 
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11)
+                btnUndo.Visible = false;
+
             if (ProgramCore.Project != null)
                 ResetButtons();
 
