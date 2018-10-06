@@ -1155,7 +1155,7 @@ namespace RH.MeshUtils.Helpers
             {
                 var vertexInfo = new VertexInfo
                 {
-                    Position = isMouth ? Vector3.Zero : info.VertexPositions[i],
+                    Position = info.VertexPositions[i], //isMouth ? Vector3.Zero : 
                     TexCoords = info.TextureCoords[i]
                 };
                 if (!positionsDict.ContainsKey(vertexInfo))
