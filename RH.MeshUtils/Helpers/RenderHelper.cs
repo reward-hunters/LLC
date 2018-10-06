@@ -1150,11 +1150,12 @@ namespace RH.MeshUtils.Helpers
             var pointnsDict = new Dictionary<Vector3, int>(new VectorEqualityComparer());
             var pointsIndicesDict = new Dictionary<int, int>();
             Points.Clear();
+            bool isMouth = Name.Contains("Mouth");
             for (var i = 0; i < info.VertexPositions.Count; i++)
             {
                 var vertexInfo = new VertexInfo
                 {
-                    Position = info.VertexPositions[i],
+                    Position = isMouth ? Vector3.Zero : info.VertexPositions[i],
                     TexCoords = info.TextureCoords[i]
                 };
                 if (!positionsDict.ContainsKey(vertexInfo))
