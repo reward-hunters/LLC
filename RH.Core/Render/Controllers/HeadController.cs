@@ -1144,7 +1144,8 @@ namespace RH.Core.Render.Controllers
             }
             ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints.Initialize(p, ProgramCore.Project.TopPoint);
             //ProgramCore.MainForm.ctrlRenderControl.headMorphing.Initialize(ProgramCore.MainForm.ctrlRenderControl.HeadPoints, p);
-            ProgramCore.MainForm.ctrlRenderControl.morphHelper.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints, ProgramCore.MainForm.ctrlRenderControl.HeadPoints);
+            if (!ProgramCore.UseDefaultDots)
+                ProgramCore.MainForm.ctrlRenderControl.morphHelper.ProcessPoints(ProgramCore.MainForm.ctrlRenderControl.ProjectedPoints, ProgramCore.MainForm.ctrlRenderControl.HeadPoints);
             ProgramCore.MainForm.ctrlRenderControl.headMorphing.Morph();
 
             ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures(); // Для автоматического текстурирования раскомментить эту строку. А так - подвесил на кнопку.
