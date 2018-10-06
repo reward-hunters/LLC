@@ -339,7 +339,8 @@ namespace RH.Core.Render
 
             ImportPoints();
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
-
+            if(ProgramCore.UseDefaultDots)
+                return;
 
             ProjectedPoints.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures, ProgramCore.Project.TopPoint);
             headMorphing.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures);
@@ -2400,11 +2401,43 @@ namespace RH.Core.Render
                 DrawSlice();
 
             if (drawPoints)
+            {
                 HeadPoints.DrawDots();
+                DrawBasePointsWithBlend();
+            }
 
             glControl.SwapBuffers();
         }
 
+        void DrawBasePointsWithBlend()
+        {
+            GL.DepthMask(false);
+            const float numSegments = 36;
+            const float theta = (float)(2 * 3.1415926 / numSegments);
+            var c = (float)Math.Cos(theta);//precalculate the sine and cosine
+            var s = (float)Math.Sin(theta);
+                        
+            float y = 0;
+          
+            foreach (var blendingInfo in headMeshesController.RenderMesh.BlendingInfos)
+            {
+                var x = blendingInfo.Radius + blendingInfo.HalfRadius;//we start at angle = 0 
+                GL.Begin(PrimitiveType.LineLoop);
+                GL.Color3(Color.Red);
+
+                for (var ii = 0; ii < numSegments; ii++)            // num_segments
+                {
+                    GL.Vertex2(x + blendingInfo.Position.X, y + blendingInfo.Position.Y);//output vertex 
+
+                    //apply the rotation matrix
+                    var t = x;
+                    x = c * x - s * y;
+                    y = s * t + c * y;
+                }
+                GL.End();
+            }
+            GL.DepthMask(true);
+        }
 
         private bool isFullPointsInfo = true;
         private bool showInfo = true;

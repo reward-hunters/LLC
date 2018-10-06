@@ -294,7 +294,7 @@ namespace RH.MeshUtils.Data
             AABB.B = new Vector3((AABB.B.X - centerX) * scaleX + centerX, AABB.B.Y, AABB.B.Z);
             return scaleX;
         }
-
+        
         public void SetBlendingInfo(Vector2 leye, Vector2 reye, Vector2 lip, Vector2 face)
         {
             var aabb = new RectangleAABB();
