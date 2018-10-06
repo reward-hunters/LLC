@@ -181,7 +181,9 @@ namespace RH.Core
 
                     tutorialToolStripMenuItem.Visible = true;
 
-                    openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = startHelpToolStripMenuItem.Visible= materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
+                    frontToolStripMenuItem.Visible =  openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = startHelpToolStripMenuItem.Visible= materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
+                    undoToolStripMenuItem5.Visible = undoToolStripMenuItem3.Visible = stageLibraryToolStripMenuItem.Visible = undoToolStripMenuItem.Visible = false;
+
                     break;
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     Text = @"HeadShop 11";
