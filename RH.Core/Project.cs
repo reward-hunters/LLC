@@ -337,7 +337,7 @@ namespace RH.Core
             {
                 if (ProgramCore.Project.AutodotsUsed)
                 {
-                    ProgramCore.MainForm.ctrlRenderControl.SaveSmoothedTextures();
+                    ProgramCore.MainForm.ctrlRenderControl.SaveSmoothedTextures(false);
                     ProgramCore.MainForm.ctrlRenderControl.SaveBrushTextures();
                 }
 

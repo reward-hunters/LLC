@@ -3906,7 +3906,7 @@ namespace RH.Core.Render
             try
             {
                 if (ProgramCore.Project.AutodotsUsed)
-                    SaveBlendingTextures();
+                    SaveBlendingTextures(false);
 
                 ObjSaver.SaveObjFile(path, headMeshesController.RenderMesh, MeshType.Hair, pickingController.ObjExport, ProgramCore.Project.ProjectName, saveBrushesToTexture);
 
@@ -3933,7 +3933,7 @@ namespace RH.Core.Render
             }
             finally
             {
-                SaveSmoothedTextures();
+                SaveSmoothedTextures(false);
             }
             #endregion
         }
@@ -4157,7 +4157,7 @@ namespace RH.Core.Render
             }
         }
 
-        public void SaveBlendingTextures()
+        public void SaveBlendingTextures(bool savetoPluginFolder)
         {
             var newFolderPath = Path.Combine(ProgramCore.Project.ProjectPath, "SmoothedModelTextures");
             var di = new DirectoryInfo(newFolderPath);
@@ -4167,6 +4167,15 @@ namespace RH.Core.Render
             foreach (var smoothTex in SmoothedTextures.Where(s => s.Key != 0))
             {
                 var oldTexturePath = GetTexturePath(smoothTex.Key);
+
+                var strangeThing = oldTexturePath != null && (oldTexturePath.Contains("RyJeane_mouth_1005") || oldTexturePath.Contains("RyJeane_torso_1002") ||   // может я и не прав, но некогда разбираться старик подгоняет.
+                                  oldTexturePath.Contains("RyEddie_mouth_1005") || oldTexturePath.Contains("RyEddie_torso_1002") ||        // 1-2 genesis 3
+                                  oldTexturePath.Contains("G8FBaseMouthMapD_1005") || oldTexturePath.Contains("G8FBaseTorsoMapD_1002") ||       // 3-4 genesis 8
+                                  oldTexturePath.Contains("G8MBaseMouthMapD_1005") || oldTexturePath.Contains("G8MBaseTorsoMapD_1002"));
+                if (ProgramCore.Project.GenesisType == GenesisType.Genesis3 && !savetoPluginFolder && strangeThing)
+                    continue;
+
+
                 var newImagePath = Path.Combine(newFolderPath, Path.GetFileNameWithoutExtension(oldTexturePath) + "_smoothed" + Path.GetExtension(oldTexturePath));
                 var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value);
 
@@ -4179,7 +4188,10 @@ namespace RH.Core.Render
                     }
                 }
 
-                bitmap.Save(newImagePath, ImageFormat.Jpeg);
+                if (ProgramCore.Project.GenesisType == GenesisType.Genesis3 && savetoPluginFolder && strangeThing)
+                    new Bitmap(oldTexturePath).Save(newImagePath, ImageFormat.Jpeg);
+                else
+                    bitmap.Save(newImagePath, ImageFormat.Jpeg);
             }
         }
 
@@ -4201,7 +4213,7 @@ namespace RH.Core.Render
             }
         }
 
-        public void SaveSmoothedTextures()
+        public void SaveSmoothedTextures(bool savetoPluginFolder)
         {
             var newFolderPath = Path.Combine(ProgramCore.Project.ProjectPath, "SmoothedModelTextures");
             var di = new DirectoryInfo(newFolderPath);
@@ -4211,7 +4223,25 @@ namespace RH.Core.Render
             foreach (var smoothTex in SmoothedTextures.Where(s => s.Key != 0))
             {
                 var oldTexturePath = GetTexturePath(smoothTex.Key);
+
+                var strangeThing = oldTexturePath != null && (oldTexturePath.Contains("RyJeane_mouth_1005") || oldTexturePath.Contains("RyJeane_torso_1002") ||   // может я и не прав, но некогда разбираться старик подгоняет.
+                                oldTexturePath.Contains("RyEddie_mouth_1005") || oldTexturePath.Contains("RyEddie_torso_1002") ||        // 1-2 genesis 3
+                                oldTexturePath.Contains("G8FBaseMouthMapD_1005") || oldTexturePath.Contains("G8FBaseTorsoMapD_1002") ||       // 3-4 genesis 8
+                                oldTexturePath.Contains("G8MBaseMouthMapD_1005") || oldTexturePath.Contains("G8MBaseTorsoMapD_1002"));
+
                 var newImagePath = Path.Combine(newFolderPath, Path.GetFileNameWithoutExtension(oldTexturePath) + "_smoothed" + Path.GetExtension(oldTexturePath));
+                if (ProgramCore.Project.GenesisType == GenesisType.Genesis3 && strangeThing)
+                {
+                    if (!savetoPluginFolder)
+                        continue;
+                    else
+                    {
+                        new Bitmap(oldTexturePath).Save(newImagePath, ImageFormat.Jpeg);
+                        continue;
+                    }
+                }
+
+                
                 using (var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value))
                 {
                     var needSave = true;
@@ -4243,7 +4273,9 @@ namespace RH.Core.Render
                     }
 
                     if (needSave)
-                        bitmap.Save(newImagePath, ImageFormat.Jpeg);
+                    {
+                            bitmap.Save(newImagePath, ImageFormat.Jpeg);
+                    }
                 }
             }
         }
