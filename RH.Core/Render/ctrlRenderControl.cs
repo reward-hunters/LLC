@@ -533,7 +533,7 @@ namespace RH.Core.Render
                                         if (ProgramCore.Project.IsOpenSmile)
                                             scale = headMeshesController.SetSize(30.2164537f);
                                         else
-                                            scale = headMeshesController.SetSize(30.762587f);
+                                            scale = headMeshesController.SetSize(30.862587f);
                                     }
                                     break;
                                 case GenesisType.Genesis8:
@@ -541,7 +541,7 @@ namespace RH.Core.Render
                                         if (ProgramCore.Project.IsOpenSmile)
                                             scale = headMeshesController.SetSize(30.4164537f);
                                         else
-                                            scale = headMeshesController.SetSize(30.762587f);
+                                            scale = headMeshesController.SetSize(30.862587f);
                                     }
                                     break;
                             }
