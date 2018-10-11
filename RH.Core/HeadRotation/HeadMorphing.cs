@@ -41,6 +41,7 @@ namespace RH.Core.HeadRotation
             var headMesh = ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh;
             var a = headMesh.AABB.A;
             var b = headMesh.AABB.B;
+            b.Z += 0.15f;
             var b1 = new Vector3(a.X, b.Y, b.Z);
             var b2 = new Vector3(a.X, a.Y, b.Z);
             var b3 = new Vector3(b.X, a.Y, b.Z);
@@ -55,6 +56,10 @@ namespace RH.Core.HeadRotation
             {
                 AutodotsTexCords.Add(point.Xy);
             }
+
+            var NoseDot = headPoints.Points[2];
+            NoseDot.Z = b.Z;
+            headPoints.Points[2] = NoseDot;
 
             headPoints.Points.Add(b); //70
             AutodotsTexCords.Add(new Vector2(1f, 0f));
