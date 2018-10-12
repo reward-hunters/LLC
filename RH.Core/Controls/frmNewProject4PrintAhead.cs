@@ -399,7 +399,16 @@ namespace RH.Core.Controls
         }
         private void btnInfo_MouseUp(object sender, MouseEventArgs e)
         {
-            ProgramCore.MainForm.ShowSiteInfo();
+            switch (ProgramCore.CurrentProgram)
+            {
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                    ProgramCore.Splash.ShowDialog(this);
+                    break;
+                default:
+                    ProgramCore.MainForm.ShowSiteInfo();
+                    break;
+            }
+
             btnInfo.Image = Resources.btnInfoNormal;
         }
 
@@ -700,5 +709,7 @@ namespace RH.Core.Controls
                 ApplyNewImage(FileList[0]);
             }
         }
+
+
     }
 }

@@ -179,9 +179,9 @@ namespace RH.Core
                     mirrorHelpToolStripMenuItem.Visible = freehandHelpToolStripMenuItem.Visible = profileHelpToolStripMenuItem.Visible = retouchHelpToolStripMenuItem.Visible = false;
                     panTopcontinuousPanToolStripMenuItem.Visible = panBottomcontinuousPanToolStripMenuItem.Visible = stepToponeStepToolStripMenuItem.Visible = stepBottomoneStepToolStripMenuItem.Visible = false;
 
-                    tutorialToolStripMenuItem.Visible = true;
+                    startHelpToolStripMenuItem.Visible = tutorialToolStripMenuItem.Visible = true;
 
-                    frontToolStripMenuItem.Visible =  openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = startHelpToolStripMenuItem.Visible= materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
+                    frontToolStripMenuItem.Visible =  openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
                     undoToolStripMenuItem5.Visible = undoToolStripMenuItem3.Visible = stageLibraryToolStripMenuItem.Visible = undoToolStripMenuItem.Visible = false;
 
                     break;
@@ -2499,13 +2499,13 @@ namespace RH.Core
 
         private void frontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=169s"];
+            var link = UserConfig.ByName("Tutorials")["Links", "FrontTutorial", "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=169s"];
             Process.Start(link);
         }
 
         private void advancedModellingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf"];
+            var link = UserConfig.ByName("Tutorials")["Links", "AdvancedModelling", "https://www.youtube.com/watch?v=X-8Gho1YUIc&amp;t=676s"];
             Process.Start(link);
         }
 
