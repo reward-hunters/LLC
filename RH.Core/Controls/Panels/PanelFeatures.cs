@@ -24,11 +24,34 @@ namespace RH.Core.Controls.Panels
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     btnSave.Visible = false;
                     break;
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                    btnSave.Visible = true;
+                    InitializeToolTips();
+                    break;
                 default:
                     btnSave.Visible = true;
                     break;
             }
         }
+
+        private void InitializeToolTips()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 100;
+            toolTip1.ReshowDelay = 50;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(trackAge, "Adds age to 3D head");
+            toolTip1.SetToolTip(trackFat, "Adds/reduces weight");
+            toolTip1.SetToolTip(trackBarSmile, "Adds/reduces smile");
+        }
+
 
         #region Form's event
 

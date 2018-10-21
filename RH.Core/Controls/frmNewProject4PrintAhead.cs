@@ -73,6 +73,7 @@ namespace RH.Core.Controls
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                         return 2048;
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                         int videoCardSize;
                         GL.GetInteger(GetPName.MaxTextureSize, out videoCardSize);
@@ -135,6 +136,7 @@ namespace RH.Core.Controls
                     label11.Visible = rbImportObj.Visible = ProgramCore.PluginMode;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     pictureExample.Visible = label1.Visible = label5.Visible = textTemplateImage.Visible = false;
                     groupBox1.Visible = rbNewProject.Visible = rbOpenProject.Visible = groupBoxOpen.Visible = lblNewProject.Visible = textNewProjectFolder.Visible = btnNewProjectFolder.Visible =
@@ -199,7 +201,7 @@ namespace RH.Core.Controls
                 var dazPath = Path.Combine(appDataPath, @"DAZ 3D\Studio4\temp\FaceShop\", "fs3d.obj");
                 if (File.Exists(dazPath))
                 {
-                    if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_v11)
+                    if (ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_v11 && ProgramCore.CurrentProgram != ProgramCore.ProgramMode.HeadShop_OneClick_v2)
                         rbImportObj.Checked = true;
 
                     CustomModelPath = dazPath;
@@ -402,6 +404,7 @@ namespace RH.Core.Controls
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     ProgramCore.Splash.ShowDialog(this);
                     break;
                 default:

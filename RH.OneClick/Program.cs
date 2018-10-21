@@ -22,7 +22,7 @@ namespace RH.HeadShop
                 var currentDomain = AppDomain.CurrentDomain;
                 currentDomain.AssemblyResolve += LoadSubLibs;
 
-                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.HeadShop_v11;
+                ProgramCore.CurrentProgram = ProgramCore.ProgramMode.HeadShop_OneClick_v2;
                 ProgramCore.MainForm = new frmMain(args.Length == 0 ? string.Empty : args[0]);
                 Application.Run(ProgramCore.MainForm);
             }

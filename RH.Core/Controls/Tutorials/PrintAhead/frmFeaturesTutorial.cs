@@ -25,6 +25,7 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     return "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=465s";
                 default:
                     return "https://youtu.be/_hADE739X9w";

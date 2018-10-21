@@ -39,6 +39,10 @@ namespace RH.Core.Controls.Panels
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     btnSave.Visible = false;
                     break;
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                    btnSave.Visible = true;
+                    InitializeToolTips();
+                    break;
                 default:
                     btnSave.Visible = true;
                     break;
@@ -48,13 +52,34 @@ namespace RH.Core.Controls.Panels
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnShapeTool.Visible = btnPolyLine.Visible = false;
 
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11)
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2)
                 btnUndo.Visible = false;
 
             if (ProgramCore.Project != null)
                 ResetButtons();
 
             ReInitializeControl(frontTab);
+        }
+
+        private void InitializeToolTips()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 100;
+            toolTip1.ReshowDelay = 50;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(btnFlipLeft, "Mirrors texture");
+            toolTip1.SetToolTip(btnFlipRight, "Mirrors texture");
+            toolTip1.SetToolTip(trackBarSmooth, "Smooths 3D head");
+
+            toolTip1.SetToolTip(btnAutodots, "Use to modify shape of 3D head");
+            toolTip1.SetToolTip(btnLasso, "Use to select multiple dots together");
         }
 
         private void ReInitializeControl(bool isFrontTab)
@@ -111,7 +136,7 @@ namespace RH.Core.Controls.Panels
                 /*         btnFlipLeft.Enabled = false;
                          btnFlipRight.Enabled = false;*/
 
-                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11)
+                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2)
                 {
                     btnProfile.Visible = false;
                     btnPolyLine.Visible = false;
@@ -448,6 +473,7 @@ namespace RH.Core.Controls.Panels
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.PrintAhead:
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:

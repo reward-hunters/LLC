@@ -161,7 +161,7 @@ namespace RH.Core.Controls.Libraries
         private float meshScale;
         private void trackBarSize_Scroll(object sender, EventArgs e)
         {
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11)
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2)
             {
                 if (ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes.Count != 1 || ProgramCore.MainForm.ctrlRenderControl.pickingController.SelectedMeshes[0].meshType != MeshType.Hair)
                     return;

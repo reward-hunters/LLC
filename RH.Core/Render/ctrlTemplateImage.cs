@@ -1704,6 +1704,7 @@ namespace RH.Core.Render
                                             {
                                                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                                                 case ProgramCore.ProgramMode.HeadShop_v11:
+                                                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                                                     if (ProgramCore.Project.MirrorUsed)
                                                     {
                                                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.HeadAngle > 0.0f, 0.0f);

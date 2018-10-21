@@ -54,9 +54,10 @@ namespace RH.Core
             PrintAhead_PayPal,          // PrintAhead с интеграцией PayPal. Нет возможности сохранения, экспорта. Только печать за деньги
             PrintAhead_Online,          // Онлайн версия (незначительные изменение с paypal версией: загружается ряд аксессуаров по дефолту, добавлены АПИ вызовы для сайта)
             HeadShop_v10_2,             // HeadShop 10.2
-            HeadShop_v11,               // HeadShop 11 (ТЗ PRD2.5.18)
+            HeadShop_v11,               // HeadShop 11 (РАБОЧАЯ версия с повернутами головами)
             HeadShop_OneClick,          // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
-            HeadShop_Rotator            // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях. (Версия НЕ РАБОЧАЯ! Делали в качестве эксперимента, результат не понравился старику)
+            HeadShop_Rotator,            // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях. (Версия НЕ РАБОЧАЯ! Делали в качестве эксперимента, результат не понравился старику)
+            HeadShop_OneClick_v2                 // Урезаная версия HeadShop 11
         }
         public static string ProgramCaption
         {
@@ -68,6 +69,8 @@ namespace RH.Core
                         return "HeadShop 10.2";
                     case ProgramMode.HeadShop_v11:
                         return "HeadShop 11";
+                    case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                        return "HeadShop OneClick 2";
                     case ProgramMode.HeadShop_Rotator:
                         return "HeadShop 11";
                     case ProgramMode.PrintAhead:
@@ -90,6 +93,7 @@ namespace RH.Core
                 {
                     case ProgramMode.HeadShop_v10_2:
                     case ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramMode.HeadShop_Rotator:
                     case ProgramMode.HeadShop_OneClick:
                         return "HeadShop";

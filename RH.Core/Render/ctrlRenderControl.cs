@@ -254,7 +254,9 @@ namespace RH.Core.Render
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     panelStop.BackgroundImage = Properties.Resources.panelZero;
+                    InitializeToolTips();
                     break;
             }
         }
@@ -269,6 +271,22 @@ namespace RH.Core.Render
         }
 
         #region Initializing
+
+        private void InitializeToolTips()
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 50;
+            toolTip1.ReshowDelay = 0;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(panelStop, "Toggles to original photo angle");
+        }
 
         #region Graphic's
 
@@ -3434,6 +3452,7 @@ namespace RH.Core.Render
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     UseHeadRotation = !UseHeadRotation;
                     break;
                 default:
@@ -4282,6 +4301,7 @@ namespace RH.Core.Render
                     {
                         case ProgramCore.ProgramMode.HeadShop_Rotator:
                         case ProgramCore.ProgramMode.HeadShop_v11:          // Новый стандарт Daz Studio. Текстуры должны быть в разрешение 4096.
+                        case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                             {
                                 var actualTextureSize = 4096;
                                 var max = (float)Math.Max(bitmap.Width, bitmap.Height);

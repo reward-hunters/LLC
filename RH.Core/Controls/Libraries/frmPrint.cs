@@ -91,6 +91,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
@@ -111,6 +112,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
