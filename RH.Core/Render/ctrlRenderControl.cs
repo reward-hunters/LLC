@@ -3951,6 +3951,8 @@ namespace RH.Core.Render
                     return;
 
                 SaveHead(sfd.FileName);
+                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2)
+                    MessageBox.Show("OneClick2 successfully saved file", "Done", MessageBoxButtons.OK);
             }
         }
         public void SaveHead(string path, bool saveBrushesToTexture = false)

@@ -193,13 +193,16 @@ namespace RH.Core
                     panelMenuStage.Visible = stageHelpToolStripMenuItem.Visible = false;
                     profileTabToolStripMenuItem.Visible = stageLibraryToolStripMenuItem1.Visible = false;
                     panelMenuStyle.Visible = panelMenuAccessories.Visible = panelMenuMaterials.Visible = styleTabToolStripMenuItem.Visible = accessoryTabToolStripMenuItem.Visible = materialtabToolStripMenuItem.Visible = false;
-                    navigateToolStripMenuItem.Visible = helpToolStripMenuItem.Visible = false;
+                    navigateToolStripMenuItem.Visible = false;
                     childHelpToolStripMenuItem.Visible = false;
 
                     mirrorHelpToolStripMenuItem.Visible = freehandHelpToolStripMenuItem.Visible = profileHelpToolStripMenuItem.Visible = retouchHelpToolStripMenuItem.Visible = false;
                     panTopcontinuousPanToolStripMenuItem.Visible = panBottomcontinuousPanToolStripMenuItem.Visible = stepToponeStepToolStripMenuItem.Visible = stepBottomoneStepToolStripMenuItem.Visible = false;
 
                     startHelpToolStripMenuItem.Visible = tutorialToolStripMenuItem.Visible = true;
+
+                    styleHelpToolStripMenuItem.Visible = accessoriesHelpToolStripMenuItem1.Visible = colorHelpToolStripMenuItem.Visible = false;
+                    styleLibraryToolStripMenuItem.Visible = accessoryLibraryToolStripMenuItem.Visible = materialLibraryToolStripMenuItem.Visible = false;
 
                     frontToolStripMenuItem.Visible = openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = materialHelpToolStripMenuItem.Visible = videoTutorialPart2ToolStripMenuItem.Visible = showManualToolStripMenuItem.Visible = false;
                     undoToolStripMenuItem5.Visible = undoToolStripMenuItem3.Visible = stageLibraryToolStripMenuItem.Visible = undoToolStripMenuItem.Visible = false;

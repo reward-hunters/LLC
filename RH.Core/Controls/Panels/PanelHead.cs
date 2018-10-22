@@ -41,6 +41,7 @@ namespace RH.Core.Controls.Panels
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     btnSave.Visible = true;
+                    btnDelete.Visible = false;
                     InitializeToolTips();
                     break;
                 default:
@@ -262,43 +263,6 @@ namespace RH.Core.Controls.Panels
             foreach (var part in ProgramCore.Project.RenderMainHelper.headMeshesController.RenderMesh.Parts)
                 part.UpdateNormals();
         }
-
-        /* private void UpdateFlipEnable(FlipType flip)
-         {
-             switch (flip)
-             {
-                 case FlipType.LeftToRight:
-                     EnableFlipLeftToRight();
-                     break;
-                 case FlipType.RightToLeft:
-                     EnableFlipRightToLeft();
-                     break;
-             }
-         }*/
-        /*    private void EnableFlipLeftToRight()
-            {
-                btnFlipLeft.Tag = "1";
-                btnFlipRight.Tag = "2";
-
-                btnFlipLeft.Image = Properties.Resources.btnToRightPressed;
-                btnFlipRight.Image = Properties.Resources.btnToRightNormal;
-            }
-            private void EnableFlipRightToLeft()
-            {
-                btnFlipRight.Tag = "1";
-                btnFlipLeft.Tag = "2";
-
-                btnFlipRight.Image = Properties.Resources.btnToLeftPressed;
-                btnFlipLeft.Image = Properties.Resources.btnToRightNormal;
-            }
-            private void DisableFlip()
-            {
-                btnFlipRight.Tag = "2";
-                btnFlipLeft.Tag = "2";
-
-                btnFlipRight.Image = Properties.Resources.btnToLeftNormal;
-                btnFlipLeft.Image = Properties.Resources.btnToRightNormal;
-            }*/
 
         public void UpdateProfileSmoothing(bool isSmoothing)
         {
@@ -963,6 +927,11 @@ namespace RH.Core.Controls.Panels
         {
             var value = trackBarSmooth.Value / 100f;
             ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(value);
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -26,6 +26,7 @@ namespace RH.Core.Controls.Panels
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     btnSave.Visible = true;
+                    btnDelete.Visible = btnUndo.Visible = false;
                     InitializeToolTips();
                     break;
                 default:
