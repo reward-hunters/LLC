@@ -49,15 +49,14 @@ namespace RH.Core.Render.Obj
             set
             {
                 _delta = value;
-                _delta.Y -= 0.005f;
+                _delta.Y += 0.0060975609f;
             }
         }
         private Vector3 _delta = Vector3.Zero;
 
         public void SetData(Vector3 v, Vector2 vt, Vector3 vn, ObjExportFace face, int l)
         {
-            const float FakeScale = 1.025f;
-            Vertices[face.FaceVertices[l].VertexIndex - 1] = v * Scale * FakeScale + Delta;
+            Vertices[face.FaceVertices[l].VertexIndex - 1] = v * Scale + Delta;
             if (Normals.Count > 0)
                 Normals[face.FaceVertices[l].NormalIndex - 1] = vn;
             if (TexCoords.Count > 0)
