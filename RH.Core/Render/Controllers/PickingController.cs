@@ -403,22 +403,18 @@ namespace RH.Core.Render.Controllers
 
             /*var a0 = new Vector3(99999.0f, 99999.0f, 99999.0f);
             var b0 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
-
             foreach (var meshPartInfo in meshesInfo)
             {
                 GetAABB(ref a0, ref b0, meshPartInfo.VertexPositions);
             }
-
             var a1 = new Vector3(99999.0f, 99999.0f, 99999.0f);
             var b1 = new Vector3(-99999.0f, -99999.0f, -99999.0f);
             foreach (var meshPartInfo in smileMeshes)
             {
                 GetAABB(ref a1, ref b1, meshPartInfo.VertexPositions);
             }
-
             var dist0 = (b0 - a0).Length;
             var dist1 = (b1 - a1).Length;
-
             var center0 = (b0 + a0) * 0.5f;
             var center1 = (b1 + a1) * 0.5f;*/
 
@@ -427,39 +423,14 @@ namespace RH.Core.Render.Controllers
 
             float MaxY0 = -99999.0f;
             float MaxY1 = -99999.0f;
-            float MaxY2 = -99999.0f;
-
-            float MinY0 = 99999.0f;
-            float MinY1 = 99999.0f;
 
             foreach (var meshInfo in meshesInfo)
-            {
-                var mesh = smileMeshes.FirstOrDefault(m => m.PartName == meshInfo.PartName);
-                if (mesh.VertexPositions.Count == meshInfo.VertexPositions.Count)
-                {
-                    for (int i = 0; i < mesh.VertexPositions.Count; ++i)
-                    {
-                        float Y0 = meshInfo.VertexPositions[i].Y;
-                        float Y1 = mesh.VertexPositions[i].Y;
-
-                        MaxY0 = Math.Max(MaxY0, Y0);
-                        MaxY1 = Math.Max(MaxY1, Y1);
-
-                        MinY0 = Math.Min(MinY0, Y0);
-                        MinY1 = Math.Min(MinY1, Y1);
-                    }
-                }
-            }
-
-            k = (MaxY0 - MinY0) / (MaxY1 - MinY1);
-
-           /* foreach (var meshInfo in meshesInfo)
             {
                 for (int i = 0; i < meshInfo.VertexPositions.Count; ++i)
                 {
                     MaxY0 = Math.Max(MaxY0, meshInfo.VertexPositions[i].Y);
                 }
-            }*/
+            }
 
             foreach (var meshInfo in meshesInfo)
             {
@@ -469,8 +440,8 @@ namespace RH.Core.Render.Controllers
                     for (int i = 0; i < mesh.VertexPositions.Count; ++i)
                     {
                         //meshInfo.VertexPositions[i] = center0 + (mesh.VertexPositions[i] - center1) * k;
-                        meshInfo.VertexPositions[i] = mesh.VertexPositions[i] * k;
-                        MaxY2 = Math.Max(MaxY2, meshInfo.VertexPositions[i].Y);
+                        meshInfo.VertexPositions[i] = mesh.VertexPositions[i] / k;
+                        MaxY1 = Math.Max(MaxY1, meshInfo.VertexPositions[i].Y);
                     }
                 }
             }
@@ -480,7 +451,7 @@ namespace RH.Core.Render.Controllers
                 for (int i = 0; i < meshInfo.VertexPositions.Count; ++i)
                 {
                     Vector3 v = meshInfo.VertexPositions[i];
-                    v.Y += (MaxY0 - MaxY2);
+                    v.Y += (MaxY0 - MaxY1);
                     meshInfo.VertexPositions[i] = v;
                 }
             }
