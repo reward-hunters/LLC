@@ -74,6 +74,14 @@ namespace RH.Core.Render.Obj
             var normals = new List<Vector3>();
             var texCoords = new List<Vector2>();
 
+            Vector3 A = new Vector3(99999.0f, 99999.0f, 99999.0f);
+            Vector3 B = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+            foreach (var meshPartInfo in meshInfos)
+            {
+                PickingController.GetAABB(ref A, ref B, meshPartInfo.Positions);
+            }
+            objExport.SetObjectAABB(A, B);
+
             foreach (var meshInfo in meshInfos) // faces should write differently
             {
                 if (meshInfo.IndicesNormals.Count == 0)

@@ -342,6 +342,18 @@ namespace RH.Core.Render.Controllers
                             objModelFull = null;
 
                         var meshPartInfos = LoadHeadMeshes(objModel, fromDragAndDrop, manType, scale, ref lastTriangle);
+                        ObjExport = objModel.ObjExport;
+
+                        if (ProgramCore.PluginMode)
+                        {
+                            ObjExport.DefaultA = new Vector3(99999.0f, 99999.0f, 99999.0f);
+                            ObjExport.DefaultB = new Vector3(-99999.0f, -99999.0f, -99999.0f);
+
+                            foreach (var meshPartInfo in meshPartInfos)
+                            {
+                                GetAABB(ref ObjExport.DefaultA, ref ObjExport.DefaultB, meshPartInfo.VertexPositions);
+                            }   
+                        }
 
                         if (ProgramCore.PluginMode && isOpenSmile)
                         {
@@ -376,7 +388,6 @@ namespace RH.Core.Render.Controllers
                             ProgramCore.Project.RenderMainHelper.headMeshesController.CreateMeshPart(ProgramCore.Project.GenesisType, meshPartInfo);
                         }
 
-                        ObjExport = objModel.ObjExport;
                         if (ObjExport != null)
                             ObjExport.Delta = -dv;
                         ProgramCore.Project.RenderMainHelper.headMeshesController.FinishCreating();
@@ -708,7 +719,7 @@ namespace RH.Core.Render.Controllers
             return result;
         }
 
-        private void GetAABB(ref Vector3 a, ref Vector3 b, IEnumerable<Vector3> points)
+        public static void GetAABB(ref Vector3 a, ref Vector3 b, IEnumerable<Vector3> points)
         {
             foreach (var p in points)
             {

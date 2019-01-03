@@ -54,6 +54,24 @@ namespace RH.Core.Render.Obj
         }
         private Vector3 _delta = Vector3.Zero;
 
+        public Vector3 DefaultA = Vector3.Zero;
+        public Vector3 DefaultB = Vector3.Zero;
+
+        public void SetObjectAABB(Vector3 A, Vector3 B)
+        {
+            ProgramCore.EchoToLog("_delta: " + _delta.ToString(), IO.EchoMessageType.Information);
+
+            Scale = (DefaultB.Y - DefaultA.Y) / (B.Y - A.Y);
+
+           // Vector3 DefaultCenter = (DefaultA + DefaultB) * 0.5f;
+            //Vector3 Center = (A + B) * 0.5f;
+
+            float MinY = A.Y * Scale;
+            _delta.Y = DefaultA.Y - MinY;
+
+            ProgramCore.EchoToLog("_delta: " + _delta.ToString(), IO.EchoMessageType.Information);
+        }
+
         public void SetData(Vector3 v, Vector2 vt, Vector3 vn, ObjExportFace face, int l)
         {
             Vertices[face.FaceVertices[l].VertexIndex - 1] = v * Scale + Delta;

@@ -41,7 +41,7 @@ namespace RH.Core
 
         public const bool UseDefaultDots = false;
         public const bool Debug = false;
-        public static bool PluginMode = false;      // запускаем ли прогу из DAZ или просто
+        public static bool PluginMode = true;      // запускаем ли прогу из DAZ или просто
 
         public static bool DefaultIsSmile = true;
 
