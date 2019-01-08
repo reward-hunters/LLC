@@ -79,6 +79,7 @@ namespace RH.Core.Render
         private ShaderController idleShader;
         private ShaderController blendShader;
         private ShaderController brushShader;
+        private ShaderController backgroundShader;
 
         public bool IsShapeChanged = false;
         public ShapeController shapeController = new ShapeController();
@@ -313,10 +314,9 @@ namespace RH.Core.Render
             idleShader.SetUniformLocation("u_ViewProjection");
             idleShader.SetUniformLocation("u_LightDirection");
 
-            /* blendShader = new ShaderController(ProgramCore.PluginMode ? "blendingPl.vs" : "blending.vs", "blending.fs");
-             blendShader.SetUniformLocation("u_Texture");
-             blendShader.SetUniformLocation("u_BlendStartDepth");
-             blendShader.SetUniformLocation("u_BlendDepth");*/
+            backgroundShader = new ShaderController("backgroung.vs", "backgroung.fs");
+            backgroundShader.SetUniformLocation("u_Scale");
+            backgroundShader.SetUniformLocation("u_AspectRatio");
 
             blendShader = new ShaderController("blending.vs", "blending.fs");
             blendShader.SetUniformLocation("u_Texture");
@@ -1103,6 +1103,9 @@ namespace RH.Core.Render
             shiftPressed = e.Shift;
             switch (e.KeyData)
             {
+                case Keys.G:
+                    SaveToPng("D:\\elance\\github\\test\\screen.png");
+                    break;
                 case Keys.X:
                     ProgramCore.MainForm.ExportDAE();
                     break;
@@ -2198,15 +2201,17 @@ namespace RH.Core.Render
         #region Drawing
 
         private CustomHeadTriangles HeadTriangles = new CustomHeadTriangles();
+        private Color BackgroundColor = Color.LightGray;
+        private bool CheckeredBackground = true;
 
         public void Render()
         {
             if (!loaded)  // whlie context not create
                 return;
-            GL.ClearColor(Color.LightGray);
+            GL.ClearColor(BackgroundColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            DrawBackground();
+            DrawBackground(CheckeredBackground);
             camera.PutCamera();
 
             GL.PushMatrix();
@@ -3343,9 +3348,10 @@ namespace RH.Core.Render
                 backgroundTexture = GetTexture(bTexture);
             }
         }
-        private void DrawBackground()
+
+        private void DrawBackground(bool drawCheckeredBackground)
         {
-            if (backgroundTexture != 0)
+            if (backgroundTexture != 0 || drawCheckeredBackground)
             {
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.PushMatrix();
@@ -3353,9 +3359,19 @@ namespace RH.Core.Render
                 GL.MatrixMode(MatrixMode.Modelview);
                 GL.LoadIdentity();
 
-                GL.Enable(EnableCap.Texture2D);
                 GL.DepthMask(false);
-                GL.BindTexture(TextureTarget.Texture2D, backgroundTexture);
+                if (backgroundTexture != 0)
+                {
+                    GL.Enable(EnableCap.Texture2D);
+                    GL.BindTexture(TextureTarget.Texture2D, backgroundTexture);
+                }
+                if(drawCheckeredBackground)
+                {
+                    const float backgroundScale = 30.0f;
+                    backgroundShader.Begin();
+                    backgroundShader.UpdateUniform("u_Scale", backgroundScale);
+                    backgroundShader.UpdateUniform("u_AspectRatio", (float)glControl.Width / (float)glControl.Height);
+                }
                 GL.Color4(1.0f, 1.0f, 1.0f, 1.0f);
                 GL.Begin(PrimitiveType.Quads);
 
@@ -3369,6 +3385,11 @@ namespace RH.Core.Render
                 GL.Vertex2(-1.0f, 1.0f);
 
                 GL.End();
+
+                if (drawCheckeredBackground)
+                {
+                   backgroundShader.End();
+                }
 
                 GL.DepthMask(true);
                 GL.BindTexture(TextureTarget.Texture2D, 0);
@@ -3943,6 +3964,30 @@ namespace RH.Core.Render
                 ProgramCore.MainForm.frmParts.UpdateList();
             }
         }
+
+        void SaveToPng(string FileName, int textureWidth = 512, int textureHeight = 512)
+        {
+            BackgroundColor = Color.Transparent;
+            bool tempCheckeredBackground = CheckeredBackground;
+            CheckeredBackground = false;
+
+            graphicsContext.MakeCurrent(windowInfo);
+            renderPanel.Size = new Size(textureWidth, textureHeight);            
+            camera.UpdateViewport(512, 512);
+
+            Render();
+            BackgroundColor = Color.LightGray;
+
+            var result = GrabScreenshot(string.Empty, textureWidth, textureHeight, true);
+            glControl.Context.MakeCurrent(glControl.WindowInfo);
+            SetupViewport(glControl);
+
+            result.Save(FileName, ImageFormat.Png);
+
+            SetupViewport(glControl);
+            CheckeredBackground = tempCheckeredBackground;
+        }
+
         internal void SaveHeadToFile()
         {
             using (var sfd = new SaveFileDialogEx("Save part", "OBJ files|*.obj"))          // не думаю, что стоит добавлять голову в библиотеку. смысл?
