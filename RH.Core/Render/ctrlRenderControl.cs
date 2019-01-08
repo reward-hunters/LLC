@@ -3970,10 +3970,15 @@ namespace RH.Core.Render
             BackgroundColor = Color.Transparent;
             bool tempCheckeredBackground = CheckeredBackground;
             CheckeredBackground = false;
+            float cameraScale = camera.Scale;
+
+            float k = Math.Max((float)glControl.Width / textureWidth, (float)glControl.Height / textureHeight);
+            camera.Scale *= k;
 
             graphicsContext.MakeCurrent(windowInfo);
-            renderPanel.Size = new Size(textureWidth, textureHeight);            
-            camera.UpdateViewport(512, 512);
+            renderPanel.Size = new Size(textureWidth, textureHeight);
+            
+            camera.UpdateViewport(textureWidth, textureHeight);
 
             Render();
             BackgroundColor = Color.LightGray;
@@ -3984,8 +3989,9 @@ namespace RH.Core.Render
 
             result.Save(FileName, ImageFormat.Png);
 
+            camera.Scale = cameraScale;
             SetupViewport(glControl);
-            CheckeredBackground = tempCheckeredBackground;
+            CheckeredBackground = tempCheckeredBackground;            
         }
 
         internal void SaveHeadToFile()
