@@ -29,6 +29,7 @@ namespace RH.Core.Controls.Tutorials.PrintAhead
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     return "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=504s";
                 default:
                     return "https://www.youtube.com/watch?v=AjG09RGgHvw";

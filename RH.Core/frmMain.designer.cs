@@ -126,13 +126,13 @@ namespace RH.Core
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tutorialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.startHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autodotsHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accessoriesHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.styleHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accessoriesHelpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.colorHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.startHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mirrorHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.freehandHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.profileHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1052,6 +1052,13 @@ namespace RH.Core
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
             this.toolStripMenuItem5.Size = new System.Drawing.Size(216, 6);
             // 
+            // startHelpToolStripMenuItem
+            // 
+            this.startHelpToolStripMenuItem.Name = "startHelpToolStripMenuItem";
+            this.startHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.startHelpToolStripMenuItem.Text = "Start";
+            this.startHelpToolStripMenuItem.Click += new System.EventHandler(this.startHelpToolStripMenuItem_Click);
+            // 
             // frontToolStripMenuItem
             // 
             this.frontToolStripMenuItem.Name = "frontToolStripMenuItem";
@@ -1093,13 +1100,6 @@ namespace RH.Core
             this.colorHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.colorHelpToolStripMenuItem.Text = "Color";
             this.colorHelpToolStripMenuItem.Click += new System.EventHandler(this.colorHelpToolStripMenuItem_Click);
-            // 
-            // startHelpToolStripMenuItem
-            // 
-            this.startHelpToolStripMenuItem.Name = "startHelpToolStripMenuItem";
-            this.startHelpToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.startHelpToolStripMenuItem.Text = "Start";
-            this.startHelpToolStripMenuItem.Click += new System.EventHandler(this.startHelpToolStripMenuItem_Click);
             // 
             // mirrorHelpToolStripMenuItem
             // 
@@ -1223,6 +1223,7 @@ namespace RH.Core
             this.ctrlRenderControl.Size = new System.Drawing.Size(668, 563);
             this.ctrlRenderControl.TabIndex = 0;
             this.ctrlRenderControl.ToolMirrored = false;
+            this.ctrlRenderControl.Load += new System.EventHandler(this.ctrlRenderControl_Load);
             // 
             // frmMain
             // 

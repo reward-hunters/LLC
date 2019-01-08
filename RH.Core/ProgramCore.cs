@@ -36,6 +36,9 @@ namespace RH.Core
             set;
         }
 
+        /// <summary> Требуется ли показывать инструкции пользователю </summary>
+        public static bool IsTutorialVisible = true;
+
         public static NumberFormatInfo Nfi;
         public static string RegistryPath = "Software\\RH\\HeadShop";       // Registry path to keep persistent data
 
@@ -56,8 +59,9 @@ namespace RH.Core
             HeadShop_v10_2,             // HeadShop 10.2
             HeadShop_v11,               // HeadShop 11 (РАБОЧАЯ версия с повернутами головами)
             HeadShop_OneClick,          // урезанная версия HeadShop. Без возможности сохранения и с одной активной вкладкой Front
-            HeadShop_Rotator,            // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях. (Версия НЕ РАБОЧАЯ! Делали в качестве эксперимента, результат не понравился старику)
-            HeadShop_OneClick_v2                 // Урезаная версия HeadShop 11
+            HeadShop_Rotator,           // Версия HeadShop.11 в которой возможно работа с повернутыми головами на фотографиях. (Версия НЕ РАБОЧАЯ! Делали в качестве эксперимента, результат не понравился старику)
+            HeadShop_OneClick_v2,        // Урезаная версия HeadShop 11
+            FaceAge2_Partial            // Неполноценная версия FaceAge, предназначен для работы с photoshop. В данном варианте НЕ работает как плагин, а просто как прога с
         }
         public static string ProgramCaption
         {
@@ -81,6 +85,8 @@ namespace RH.Core
                         return "PrintAhead Online";
                     case ProgramMode.HeadShop_OneClick:
                         return "HeadShop OneClick";
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
+                        return "FaceAge 2";
                 }
                 return "Abalone LLC";
             }
@@ -101,7 +107,8 @@ namespace RH.Core
                     case ProgramMode.PrintAhead_PayPal:
                     case ProgramMode.PrintAhead_Online:
                         return "PrintAhead";
-
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
+                        return "FaceAge";
                 }
                 return "Abalone LLC";
             }

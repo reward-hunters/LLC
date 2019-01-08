@@ -251,11 +251,13 @@ namespace RH.Core.Render
         {
             InitializeComponent();
             glControl.PreviewKeyDown += glControl_PreviewKeyDown;
+            checkeredBackground = ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial;
 
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     panelStop.BackgroundImage = Properties.Resources.panelZero;
                     InitializeToolTips();
                     break;
@@ -357,7 +359,7 @@ namespace RH.Core.Render
 
             ImportPoints();
             headMeshesController.RenderMesh.DetectFaceRotationEmgu(ProgramCore.Project.RealTemplateImage, new Bitmap(ProgramCore.Project.RealTemplateImage), ProgramCore.Project.ImageRealPoints, HeadPoints.Points);
-            if(ProgramCore.UseDefaultDots)
+            if (ProgramCore.UseDefaultDots)
                 return;
 
             ProjectedPoints.Initialize(HeadPoints, ProgramCore.Project.FacialFeatures, ProgramCore.Project.TopPoint);
@@ -2202,7 +2204,7 @@ namespace RH.Core.Render
 
         private CustomHeadTriangles HeadTriangles = new CustomHeadTriangles();
         private Color BackgroundColor = Color.LightGray;
-        private bool CheckeredBackground = true;
+        private bool checkeredBackground = false;
 
         public void Render()
         {
@@ -2211,7 +2213,7 @@ namespace RH.Core.Render
             GL.ClearColor(BackgroundColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            DrawBackground(CheckeredBackground);
+            DrawBackground(checkeredBackground);
             camera.PutCamera();
 
             GL.PushMatrix();
@@ -2439,9 +2441,9 @@ namespace RH.Core.Render
             const float theta = (float)(2 * 3.1415926 / numSegments);
             var c = (float)Math.Cos(theta);//precalculate the sine and cosine
             var s = (float)Math.Sin(theta);
-                        
+
             float y = 0;
-          
+
             foreach (var blendingInfo in headMeshesController.RenderMesh.BlendingInfos)
             {
                 var x = blendingInfo.Radius + blendingInfo.HalfRadius;//we start at angle = 0 
@@ -3365,7 +3367,7 @@ namespace RH.Core.Render
                     GL.Enable(EnableCap.Texture2D);
                     GL.BindTexture(TextureTarget.Texture2D, backgroundTexture);
                 }
-                if(drawCheckeredBackground)
+                if (drawCheckeredBackground)
                 {
                     const float backgroundScale = 30.0f;
                     backgroundShader.Begin();
@@ -3388,7 +3390,7 @@ namespace RH.Core.Render
 
                 if (drawCheckeredBackground)
                 {
-                   backgroundShader.End();
+                    backgroundShader.End();
                 }
 
                 GL.DepthMask(true);
@@ -3474,6 +3476,7 @@ namespace RH.Core.Render
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     UseHeadRotation = !UseHeadRotation;
                     break;
                 default:
@@ -3965,11 +3968,11 @@ namespace RH.Core.Render
             }
         }
 
-        void SaveToPng(string FileName, int textureWidth = 512, int textureHeight = 512)
+        public void SaveToPng(string FileName, int textureWidth = 512, int textureHeight = 512)
         {
             BackgroundColor = Color.Transparent;
-            bool tempCheckeredBackground = CheckeredBackground;
-            CheckeredBackground = false;
+            bool tempCheckeredBackground = checkeredBackground;
+            checkeredBackground = false;
             float cameraScale = camera.Scale;
 
             float k = Math.Max((float)glControl.Width / textureWidth, (float)glControl.Height / textureHeight);
@@ -3977,7 +3980,7 @@ namespace RH.Core.Render
 
             graphicsContext.MakeCurrent(windowInfo);
             renderPanel.Size = new Size(textureWidth, textureHeight);
-            
+
             camera.UpdateViewport(textureWidth, textureHeight);
 
             Render();
@@ -3991,7 +3994,7 @@ namespace RH.Core.Render
 
             camera.Scale = cameraScale;
             SetupViewport(glControl);
-            CheckeredBackground = tempCheckeredBackground;            
+            checkeredBackground = tempCheckeredBackground;
         }
 
         internal void SaveHeadToFile()
@@ -4346,7 +4349,7 @@ namespace RH.Core.Render
                     }
                 }
 
-                
+
                 using (var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value))
                 {
                     var needSave = true;
@@ -4355,6 +4358,7 @@ namespace RH.Core.Render
                         case ProgramCore.ProgramMode.HeadShop_Rotator:
                         case ProgramCore.ProgramMode.HeadShop_v11:          // Новый стандарт Daz Studio. Текстуры должны быть в разрешение 4096.
                         case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                        case ProgramCore.ProgramMode.FaceAge2_Partial:
                             {
                                 var actualTextureSize = 4096;
                                 var max = (float)Math.Max(bitmap.Width, bitmap.Height);
@@ -4380,7 +4384,7 @@ namespace RH.Core.Render
 
                     if (needSave)
                     {
-                            bitmap.Save(newImagePath, ImageFormat.Jpeg);
+                        bitmap.Save(newImagePath, ImageFormat.Jpeg);
                     }
                 }
             }
@@ -4476,6 +4480,12 @@ namespace RH.Core.Render
             return new Vector2((maxX + minX) * 0.5f, (maxY + minY) * 0.5f);
         }
 
+        public void ChangeNavigationVisible(bool isVisible)
+        {
+            panelOrtoBottom.Visible = panelOrtoLeft.Visible = panelOrtoRight.Visible = panelOrtoTop.Visible = isVisible;
+            panelBlackWhiteMode.Visible = panelStop.Visible = btnColorMode.Visible = isVisible;
+        }
+
 
         #region Отражение
 
@@ -4518,7 +4528,7 @@ namespace RH.Core.Render
             SetTexture(HeadTextureId, flip ? reflectedLeft : headTexture);
             ApplySmoothedTextures();
         }
-
+        
         /// <summary> Отражение справа налево </summary>
         /// <param name="trackPos">Положение бегунка</param>
         public void FlipRight(bool flip)
@@ -4556,15 +4566,12 @@ namespace RH.Core.Render
         TimerZoomIn,
         TimerZoomOut,
         HeadLine,
-        //HeadShapedots,
         HeadShapeFirstTime,
         HeadShape,
         HeadAutodots,
         HeadAutodotsFirstTime,
         HeadAutodotsLassoStart,
         HeadAutodotsLassoActive,
-        // HeadShapedotsLassoStart,
-        //  HeadShapedotsLassoActive,
         HeadFlipLeft,           // отражение слева направо
         HeadFlipRight,
         SetCustomControlPoints,     // произвольная модель. этап 1. расставить 4 главные опорные точки

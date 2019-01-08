@@ -172,6 +172,12 @@
     <Compile Include="Controls\Libraries\frmAccessories.Designer.cs">
       <DependentUpon>frmAccessories.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Libraries\frmFaceAge.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Libraries\frmFaceAge.Designer.cs">
+      <DependentUpon>frmFaceAge.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Libraries\frmFreeHand.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -508,6 +514,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Libraries\frmAccessories.resx">
       <DependentUpon>frmAccessories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Libraries\frmFaceAge.resx">
+      <DependentUpon>frmFaceAge.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Libraries\frmFreeHand.resx">
       <DependentUpon>frmFreeHand.cs</DependentUpon>

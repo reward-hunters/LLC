@@ -43,6 +43,7 @@ namespace RH.Core
         public frmParts frmParts;
         public frmStyles frmStyles;
         public frmFreeHand frmFreeHand;
+        public frmFaceAge frmFaceAge;
 
         private PanelCut panelCut;
         private PanelShape panelShape;
@@ -167,6 +168,7 @@ namespace RH.Core
                     childHelpToolStripMenuItem.Visible = false;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_v11:
+
                     Text = @"HeadShop 11";
                     aboutHeadShopProToolStripMenuItem.Text = @"About HeadShop 11";
                     panelMenuStage.Image = Resources.btnMenuStageNormal;
@@ -180,9 +182,26 @@ namespace RH.Core
 
                     startHelpToolStripMenuItem.Visible = tutorialToolStripMenuItem.Visible = true;
 
-                    frontToolStripMenuItem.Visible =  openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = materialHelpToolStripMenuItem.Visible= videoTutorialPart2ToolStripMenuItem.Visible= showManualToolStripMenuItem.Visible= false;
+                    frontToolStripMenuItem.Visible = openToolStripMenuItem.Visible = saveAsToolStripMenuItem.Visible = saveToolStripMenuItem.Visible = materialHelpToolStripMenuItem.Visible = videoTutorialPart2ToolStripMenuItem.Visible = showManualToolStripMenuItem.Visible = false;
                     undoToolStripMenuItem5.Visible = undoToolStripMenuItem3.Visible = stageLibraryToolStripMenuItem.Visible = undoToolStripMenuItem.Visible = false;
 
+                    break;
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
+                    {
+                        Text = @"FaceAge 2";
+                        ctrlTemplateImage.Visible = false;
+                        ctrlRenderControl.ChangeNavigationVisible(false);
+
+                        panelMenuItems.Visible = panelMenu.Visible = false;
+                        menuStrip1.Visible = false;
+                        splitContainer.SplitterDistance = 0;
+                        splitContainer.Panel1Collapsed = true;
+                        splitContainer.Panel1.Hide();
+                        FormBorderStyle = FormBorderStyle.None;
+                        Size = new Size(717, 717);
+
+                        frmFaceAge = new frmFaceAge();
+                    }
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     Text = @"HeadShop OneClick 2";
@@ -234,8 +253,6 @@ namespace RH.Core
 
             PluginUvGroups.AddRange(new[] { "1_lip", "1_skinface", "lips", "face" });
 
-            //ProgramCore.PluginMode = true;
-
             #region активация охуенной распознавалки
 
             if (FSDK.FSDKE_OK != FSDK.ActivateLibrary("DWysHuomlBcczVM2MQfiz/3WraXb7r+fM0th71X5A9z+gsHn2kpGOgWrVh9D/9sQWlPXO00CFmGMvetl9A+VEr9Y5GVBIccyV32uaZutZjKYH5KB2k87NJAAw6NPkzK0DSQ5b5W7EO0yg2+x4HxpWzPogGyIIYcAHIYY11/YGsU="))
@@ -261,7 +278,6 @@ namespace RH.Core
                     ProgramCore.EchoToLog(ex);
                 }
 
-            //  ProgramCore.PluginMode = true;
             if (!string.IsNullOrEmpty(fn))
             {
                 if (fn.StartsWith("fs"))
@@ -287,19 +303,26 @@ namespace RH.Core
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            ProgramCore.Splash.ShowDialog();
+
 
             switch (ProgramCore.CurrentProgram)
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
-                    if (UserConfig.ByName("Options")["Tutorials", "Start", "1"] == "1")
-                        frmTutStart.ShowDialog(this);
+                    {
+                        ProgramCore.Splash.ShowDialog();
+                        if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Start", "1"] == "1")
+                            frmTutStart.ShowDialog(this);
+                    }
+                    break;
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
+                    // Ничего не делаем. Ни сплэша, ни туториалов.
                     break;
             }
 
@@ -322,7 +345,7 @@ namespace RH.Core
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
                     case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
-                    case ProgramCore.ProgramMode.HeadShop_Rotator:          // вроде для этой версии не нужно открывать загруженные проекты. Поэтому лучше использовать этот диалог, он уже с новой распознавалкой.
+                    case ProgramCore.ProgramMode.HeadShop_Rotator:
                         {
                             #region проект для PrintAhead
 
@@ -341,6 +364,42 @@ namespace RH.Core
                                 OpenProject(newProjectDlg.OpenProjectPath);
 
                             #endregion
+                        }
+                        break;
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
+                        {
+                            var exitFlag = false;
+                            while (!Clipboard.ContainsImage() && !exitFlag)
+                            {
+                                var result = MessageBox.Show("Please copy image to Clipboard!", "FaceAge", MessageBoxButtons.OKCancel);
+                                exitFlag = result == DialogResult.Cancel;
+                            }
+
+                            if (exitFlag)
+                            {
+                                Application.Exit();
+                                return;
+                            }
+
+                            var templateImage = UserConfig.AppDataDir;
+                            FolderEx.CreateDirectory(templateImage);
+
+                            var img = Clipboard.GetImage();
+                            ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
+                            System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+                            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+                            myEncoderParameters.Param[0] = myEncoderParameter;
+
+                            templateImage = Path.Combine(templateImage, "faceAgeTempImage.jpg");
+                            img.Save(templateImage, jgpEncoder, myEncoderParameters);
+
+                            var newProjectDlg = new frmNewProject4PrintAhead(true);
+                            newProjectDlg.GenType = MeshUtils.GenesisType.Genesis2;
+                            newProjectDlg.ApplyNewImage(templateImage);
+                            newProjectDlg.CreateProject();
+
+                            frmFaceAge.Show();
                         }
                         break;
                 }
@@ -493,6 +552,7 @@ namespace RH.Core
                 case ProgramCore.ProgramMode.PrintAhead_Online:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     {
@@ -519,25 +579,35 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
-                    if (ProgramCore.Project.ManType == ManType.Custom && UserConfig.ByName("Options")["Tutorials", "CustomHeads", "1"] == "1")
+                    if (ProgramCore.Project.ManType == ManType.Custom && ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "CustomHeads", "1"] == "1")
                         frmTutCustomHeads.ShowDialog(this);
                     break;
             }
 
-            if(ProgramCore.Project.ManType != ManType.Custom)
+            if (ProgramCore.Project.ManType != ManType.Custom)
             {
                 panelFront.btnAutodots_Click(null, new EventArgs());
                 panelFront.btnAutodots_Click(null, new EventArgs());
             }
-            
-            if (ProgramCore.CurrentProgram == ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramMode.HeadShop_OneClick_v2)
+
+            switch (ProgramCore.CurrentProgram)
             {
-                ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
+                case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
+                    break;
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
+                    ctrlRenderControl.camera.dy = 0;
+                    ctrlRenderControl.camera.Scale = 0.04f;
+                    ctrlRenderControl.camera.PutCamera();
+                    ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
+                    break;
             }
         }
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -592,10 +662,11 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
-                    if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
+                    if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;
             }
@@ -868,13 +939,14 @@ namespace RH.Core
             {
                 case ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     defaultLink = isQuickiStart ? "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=63s" : "https://youtu.be/X-8Gho1YUIc";
                     break;
                 default:
                     defaultLink = "https://youtu.be/8cejdijABQY";
                     break;
             }
-            
+
 
             var quickStartLink = UserConfig.ByName("Tutorials")["Links", "QuickStart", defaultLink];
             Process.Start(quickStartLink);
@@ -885,6 +957,7 @@ namespace RH.Core
             {
                 case ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     Process.Start("https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf");
                     break;
                 default:
@@ -921,6 +994,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -936,6 +1010,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -951,6 +1026,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -966,6 +1042,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -981,6 +1058,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -1001,6 +1079,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -1016,6 +1095,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -1036,6 +1116,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -1051,6 +1132,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
@@ -1217,6 +1299,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1243,7 +1326,7 @@ namespace RH.Core
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
                 ResetModeTools();
 
-                if (UserConfig.ByName("Options")["Tutorials", "Cut", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Cut", "1"] == "1")
                     frmTutCut.ShowDialog(this);
             }
         }
@@ -1269,6 +1352,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1295,7 +1379,7 @@ namespace RH.Core
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
                 ResetModeTools();
 
-                if (UserConfig.ByName("Options")["Tutorials", "Shape", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Shape", "1"] == "1")
                     frmTutShape.ShowDialog(this);
             }
         }
@@ -1321,6 +1405,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1346,7 +1431,7 @@ namespace RH.Core
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
 
-                if (UserConfig.ByName("Options")["Tutorials", "Accessory", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Accessory", "1"] == "1")
                     frmTutAccessory.ShowDialog(this);
             }
         }
@@ -1372,6 +1457,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1397,7 +1483,7 @@ namespace RH.Core
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
                 HeadMode = HeadFront = HeadProfile = HeadFeature = false;
 
-                if (UserConfig.ByName("Options")["Tutorials", "Material", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Material", "1"] == "1")
                     frmTutMaterial.ShowDialog(this);
             }
         }
@@ -1414,6 +1500,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1466,7 +1553,7 @@ namespace RH.Core
                             ProgramCore.MainForm.ctrlRenderControl.BackgroundTexture = backPath;
                         break;
                 }
-                if (UserConfig.ByName("Options")["Tutorials", "Stage", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Stage", "1"] == "1")
                     frmTutStage.ShowDialog(this);
             }
         }
@@ -1494,6 +1581,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1523,7 +1611,7 @@ namespace RH.Core
                 //             if (frmStyles != null && !frmStyles.Visible)
                 //                 styleLibraryOnOpen_Click(null, EventArgs.Empty);
 
-                if (UserConfig.ByName("Options")["Tutorials", "Style", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Style", "1"] == "1")
                     frmTutStyle.ShowDialog(this);
             }
         }
@@ -1551,6 +1639,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1579,7 +1668,7 @@ namespace RH.Core
                 EnableRotating();
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage, false);       // возвращаем как было, после изменения профиля лица
 
-                //         if (UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")            // хз зачем тут. есть же кнопка автодотс. устаревшее похоже
+                //         if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")            // хз зачем тут. есть же кнопка автодотс. устаревшее похоже
                 //             frmTutAutodots.ShowDialog(this);
             }
         }
@@ -1616,6 +1705,7 @@ namespace RH.Core
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -1642,7 +1732,7 @@ namespace RH.Core
                 EnableRotating();
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
 
-                if (UserConfig.ByName("Options")["Tutorials", "Features", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Features", "1"] == "1")
                     frmTutFeatures.ShowDialog(this);
             }
         }
@@ -1652,6 +1742,20 @@ namespace RH.Core
         #endregion
 
         #region Supported void's
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
 
         private void InitRecentItems()
         {
@@ -1718,6 +1822,7 @@ namespace RH.Core
                     break;
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
@@ -1989,13 +2094,13 @@ namespace RH.Core
             }
             else
             {
-               
+
                 using (var ofd = new FolderDialogEx())
                 {
                     if (ofd.ShowDialog(Handle) != DialogResult.OK)
                         return;
                     diName = ofd.SelectedFolder[0];
-                   fiName = Path.Combine(diName, ProgramCore.Project.ProjectName + ".obj");
+                    fiName = Path.Combine(diName, ProgramCore.Project.ProjectName + ".obj");
                 }
             }
 
@@ -2311,6 +2416,7 @@ namespace RH.Core
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.HeadShop_OneClick:
@@ -2551,6 +2657,11 @@ namespace RH.Core
         {
             var link = UserConfig.ByName("Tutorials")["Links", "FullTutorial", "https://printahead.net/wp-content/uploads/2018/09/HeadShop11manual.pdf"];
             Process.Start(link);
+        }
+
+        private void ctrlRenderControl_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
