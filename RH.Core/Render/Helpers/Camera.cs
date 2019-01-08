@@ -38,6 +38,7 @@ namespace RH.Core.Render.Helpers
 
         public double Radius;
         public double beta;
+        public float alpha = 0.0f;
 
         #endregion
 
@@ -135,9 +136,13 @@ namespace RH.Core.Render.Helpers
         }
         public void PutCamera()
         {
-            Position = new Vector3((float)(Radius * Math.Cos(beta)), 0, (float)(Radius * Math.Sin(beta)));
-            var lookat = Matrix4.LookAt(Position.X, Position.Y + dy, Position.Z, 0, dy, 0,
-                                           (float)(Math.Cos(m_pi / 2) * Math.Cos(beta + m_pi)), (float)(Math.Sin(m_pi * 0.5f)), (float)(Math.Cos(m_pi * 0.5f) * Math.Sin(beta + m_pi)));
+            Matrix4 RotationY = Matrix4.CreateRotationY(((float)m_pi * 1.5f) - (float)beta);
+            Matrix4 RotationZ = Matrix4.CreateRotationX(alpha);
+            Vector3 Pos = Vector3.Transform(new Vector3(0.0f, 0.0f, -(float)Radius), RotationZ * RotationY);
+            //Pos = Vector3.Transform(Pos, RotationZ);
+            Position = Pos;// new Vector3((float)(Radius * Math.Cos(beta)), 0, (float)(Radius * Math.Sin(beta)));
+            var lookat = Matrix4.LookAt(Position.X, Position.Y + dy, Position.Z, 0, dy, 0, 0, 1, 0);
+                                           //(float)(Math.Cos(m_pi / 2) * Math.Cos(beta + m_pi)), (float)(Math.Sin(m_pi * 0.5f)), (float)(Math.Cos(m_pi * 0.5f) * Math.Sin(beta + m_pi)));
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
@@ -155,6 +160,13 @@ namespace RH.Core.Render.Helpers
             {
                 beta -= m_pi * 2.0;
             }
+        }
+
+        public void TopDown(double delta)
+        {
+            alpha += (float)delta;
+            alpha = Math.Min(alpha, 1.5f);
+            alpha = Math.Max(alpha, -1.5f);
         }
 
         public void Wheel(float delta1)

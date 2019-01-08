@@ -38,6 +38,7 @@ namespace RH.Core.Render
         private bool leftMousePressed;
         private bool shiftPressed;
         private bool dblClick;
+        private bool useTopDownRotation = true;
 
         private bool UseHeadRotation = false;
         private bool loaded;
@@ -1600,6 +1601,10 @@ namespace RH.Core.Render
                 {
                     case ScaleMode.Rotate:
                         camera.LeftRight((e.Location.X - mX) * 1.0f / 150.0f);
+                        if(useTopDownRotation)
+                        {
+                            camera.TopDown((e.Location.Y - mY) * 1.0f / 150.0f);
+                        }
                         break;
                     case ScaleMode.Move:
                         camera.dy -= (e.Location.Y - mY) * camera.Scale;
@@ -4167,7 +4172,7 @@ namespace RH.Core.Render
 
         public void ResetCamera()
         {
-            const int indexA = 22;
+            /*const int indexA = 22;
             const int indexB = 11;
 
             var pA = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexA];
@@ -4182,7 +4187,9 @@ namespace RH.Core.Render
 
             var worldPointB = camera.GetWorldPoint((int)pointB1.X, (int)pB.Y, 0.0f);
             var worldPointB1 = HeadPoints.Points[indexB];
-            camera.dy = (worldPointB1.Y - worldPointB.Y);
+            camera.dy = (worldPointB1.Y - worldPointB.Y);*/
+            camera.Scale = 0.04f;
+            camera.dy = 0.0f;
             camera.PutCamera();
         }
 
