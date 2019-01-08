@@ -53,7 +53,7 @@ namespace RH.Core.Controls.Panels
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick)
                 btnShapeTool.Visible = btnPolyLine.Visible = false;
 
-            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2)
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
                 btnUndo.Visible = false;
 
             if (ProgramCore.Project != null)
@@ -137,7 +137,7 @@ namespace RH.Core.Controls.Panels
                 /*         btnFlipLeft.Enabled = false;
                          btnFlipRight.Enabled = false;*/
 
-                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2)
+                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_v11 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.HeadShop_OneClick_v2 || ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
                 {
                     btnProfile.Visible = false;
                     btnPolyLine.Visible = false;
@@ -437,12 +437,13 @@ namespace RH.Core.Controls.Panels
                 {
                     case ProgramCore.ProgramMode.HeadShop_v10_2:
                     case ProgramCore.ProgramMode.HeadShop_v11:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
                     case ProgramCore.ProgramMode.PrintAhead:
                     case ProgramCore.ProgramMode.PrintAhead_PayPal:
                     case ProgramCore.ProgramMode.PrintAhead_Online:
-                        if (frontTab && UserConfig.ByName("Options")["Tutorials", "Freehand", "1"] == "1")
+                        if (frontTab && ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Freehand", "1"] == "1")
                             ProgramCore.MainForm.frmTutFreehand.ShowDialog(this);
                         break;
                 }
@@ -499,14 +500,10 @@ namespace RH.Core.Controls.Panels
 
                 }
                 ProgramCore.MainForm.ctrlTemplateImage.UpdateUserCenterPositions(false, true);
-
-
-                //         btnFlipLeft.Visible = true;
-                //       btnFlipRight.Visible = true;
-                //     UpdateFlipEnable(ProgramCore.Project.TextureFlip);
+                
                 SetPanelLogic();
 
-                if (frontTab && UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")
+                if (frontTab && ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")
                     ProgramCore.MainForm.frmTutAutodots.ShowDialog(this);
             }
             else
@@ -556,36 +553,6 @@ namespace RH.Core.Controls.Panels
         }
         private void btnDots_Click(object sender, EventArgs e)
         {
-            /*        if (btnDots.Tag.ToString() == "2")
-                    {
-                        btnDots.Tag = "1";
-                        btnPolyLine.Tag = btnShapeTool.Tag = "2";
-
-                        btnDots.Image = Properties.Resources.btnDotsPressed;
-                        btnPolyLine.Image = Properties.Resources.btnPolyLineNormal;
-                        btnShapeTool.Image = Properties.Resources.btnHandNormal1;
-
-                        ProgramCore.MainForm.ctrlRenderControl.Mode = Mode.HeadShapedots;
-                        ProgramCore.MainForm.ctrlTemplateImage.UpdateUserCenterPositions(false, true);
-                        ProgramCore.MainForm.DisableRotating();
-
-                        UpdateFlipEnable(ProgramCore.Project.ShapeFlip);
-                        SetPanelLogic();
-
-                        if (frontTab && UserConfig.ByName("Options")["Tutorials", "Shapedots", "1"] == "1")
-                            ProgramCore.MainForm.frmTutShapedots.ShowDialog(this);
-                    }
-                    else
-                    {
-                        btnDots.Tag = "2";
-                        btnDots.Image = Properties.Resources.btnDotsNormal;
-                        UpdateNormals();
-
-                        ProgramCore.MainForm.ctrlRenderControl.Mode = Mode.None;
-                        ProgramCore.MainForm.EnableRotating();
-                        DisableFlip();
-                        SetPanelLogic();
-                    }*/
         }
 
         public readonly frmLineToolTutorial frmTutLineTool = new frmLineToolTutorial();
@@ -599,7 +566,7 @@ namespace RH.Core.Controls.Panels
                     return; // значит загрузили картинку, но не назначили ей опорные точки. нельзя ниче делатЬ!
                 }
 
-                if (UserConfig.ByName("Options")["Tutorials", "LineTool", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "LineTool", "1"] == "1")
                     frmTutLineTool.ShowDialog(this);
 
                 ++ProgramCore.MainForm.ctrlRenderControl.historyController.currentGroup;
@@ -706,7 +673,6 @@ namespace RH.Core.Controls.Panels
                 switch (ProgramCore.MainForm.ctrlRenderControl.Mode)
                 {
                     case Mode.HeadLine:
-                        //    case Mode.HeadShapedots:
                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);
                         ProgramCore.Project.ShapeFlip = FlipType.LeftToRight;
 
@@ -714,17 +680,6 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
-                    /* case Mode.HeadAutodotsFirstTime:
-                     case Mode.HeadAutodots:
-                         ProgramCore.MainForm.ctrlRenderControl.FlipLeft(true);
-                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(true, 0);                // добавлено после слияниея с shapedots!
-
-                         ProgramCore.Project.TextureFlip = FlipType.LeftToRight;
-
-                         ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();            // добавлено после слияниея с shapedots!
-                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
-                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
-                         break;*/
                     case Mode.None:
                         ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = true;
                         ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
@@ -733,7 +688,7 @@ namespace RH.Core.Controls.Panels
 
                 SetPanelLogic();
 
-                if (frontTab && UserConfig.ByName("Options")["Tutorials", "Mirror", "1"] == "1")
+                if (frontTab && ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Mirror", "1"] == "1")
                     ProgramCore.MainForm.frmTutMirror.ShowDialog(this);
             }
             else
@@ -744,16 +699,9 @@ namespace RH.Core.Controls.Panels
                 switch (ProgramCore.MainForm.ctrlRenderControl.Mode)
                 {
                     case Mode.HeadLine:
-                        //     case Mode.HeadShapedots:
                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();
                         ProgramCore.Project.ShapeFlip = FlipType.None;
                         break;
-                    /* case Mode.HeadAutodotsFirstTime:
-                     case Mode.HeadAutodots:
-                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();     // после слияние с ShapeDots. Проверить!
-                         ProgramCore.MainForm.ctrlRenderControl.FlipLeft(false);
-                         ProgramCore.Project.TextureFlip = FlipType.None;
-                         break;*/
                     case Mode.None:
                         ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = null;
                         ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
@@ -774,7 +722,6 @@ namespace RH.Core.Controls.Panels
                 switch (ProgramCore.MainForm.ctrlRenderControl.Mode)
                 {
                     case Mode.HeadLine:
-                        //       case Mode.HeadShapedots:
                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);
                         ProgramCore.Project.ShapeFlip = FlipType.RightToLeft;
 
@@ -782,24 +729,13 @@ namespace RH.Core.Controls.Panels
                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
                         break;
-                    /* case Mode.HeadAutodotsFirstTime:
-                     case Mode.HeadAutodots:
-                         ProgramCore.Project.RenderMainHelper.headMeshesController.Mirror(false, 0);       // после слияние с ShapeDots. Проверить!
-
-                         ProgramCore.MainForm.ctrlRenderControl.FlipRight(true);
-                         ProgramCore.Project.TextureFlip = FlipType.RightToLeft;
-
-                         ProgramCore.Project.RenderMainHelper.headController.AutoDotsv2.ClearSelection();        // после слияние с ShapeDots. Проверить!
-                         ProgramCore.Project.RenderMainHelper.headController.ShapeDots.ClearSelection();
-                         ProgramCore.MainForm.ctrlTemplateImage.RectTransformMode = false;
-                         break;*/
                     case Mode.None:
                         ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = false;
                         ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
                         break;
                 }
 
-                if (frontTab && UserConfig.ByName("Options")["Tutorials", "Mirror", "1"] == "1")
+                if (frontTab && ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Mirror", "1"] == "1")
                     ProgramCore.MainForm.frmTutMirror.ShowDialog(this);
             }
             else
@@ -810,16 +746,10 @@ namespace RH.Core.Controls.Panels
                 switch (ProgramCore.MainForm.ctrlRenderControl.Mode)
                 {
                     case Mode.HeadLine:
-                        //    case Mode.HeadShapedots:
                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();
                         ProgramCore.Project.ShapeFlip = FlipType.None;
                         break;
-                    /* case Mode.HeadAutodotsFirstTime:
-                     case Mode.HeadAutodots:
-                         ProgramCore.Project.RenderMainHelper.headMeshesController.UndoMirror();           // после слияние с ShapeDots. Проверить!
-                         ProgramCore.MainForm.ctrlRenderControl.FlipRight(false);
-                         ProgramCore.Project.TextureFlip = FlipType.None;
-                         break;*/
+                 
                     case Mode.None:
                         ProgramCore.MainForm.ctrlRenderControl.LeftToRightReflection = null;
                         ProgramCore.MainForm.ctrlRenderControl.ApplySmoothedTextures();
@@ -883,7 +813,7 @@ namespace RH.Core.Controls.Panels
 
                 ProgramCore.MainForm.ctrlTemplateImage.UpdateProfileLocation();
 
-                if (UserConfig.ByName("Options")["Tutorials", "Profile", "1"] == "1")
+                if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Profile", "1"] == "1")
                     ProgramCore.MainForm.frmTutProfile.ShowDialog(this);
             }
             else
@@ -909,9 +839,7 @@ namespace RH.Core.Controls.Panels
                 ProgramCore.MainForm.ctrlRenderControl.OrtoTop();            // поворачиваем морду как надо
                 ProgramCore.MainForm.EnableRotating();
                 ProgramCore.MainForm.ctrlTemplateImage.SetTemplateImage(ProgramCore.Project.FrontImage);       // возвращаем как было, после изменения профиля лица
-
-                //      if (UserConfig.ByName("Options")["Tutorials", "Autodots", "1"] == "1")
-                //            ProgramCore.MainForm.frmTutAutodots.ShowDialog(this);
+                
             }
 
             ReInitializeControl(frontTab);

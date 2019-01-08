@@ -30,6 +30,7 @@ namespace RH.Core.Controls
                     image = Resources.logo_HeadShop;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     image = Resources.logo_HeadShop11;
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:

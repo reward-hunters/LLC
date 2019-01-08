@@ -190,7 +190,7 @@ namespace RH.Core.Controls.Panels
         public readonly frmLineToolTutorial frmTutLineTool = new frmLineToolTutorial();
         public void btnPolyLine_Click(object sender, EventArgs e)
         {
-            if (UserConfig.ByName("Options")["Tutorials", "LineTool", "1"] == "1")
+            if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "LineTool", "1"] == "1")
                 frmTutLineTool.ShowDialog(this);
 
             if (btnPolyLine.Tag.ToString() == "2")

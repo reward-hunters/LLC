@@ -367,7 +367,7 @@ namespace RH.Core.Controls.Libraries
 
         private void btnUseAsBackgroundColor_Click(object sender, EventArgs e)
         {
-            if (UserConfig.ByName("Options")["Tutorials", "Retouch", "1"] == "1")
+            if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Retouch", "1"] == "1")
                 ProgramCore.MainForm.frmTutRetouch.ShowDialog(this);
 
             ProgramCore.Project.FaceColor = new Vector4(panelColor.BackColor.R / 255f, panelColor.BackColor.G / 255f, panelColor.BackColor.B / 255f, StringConverter.ToFloat(teAlpha.Text, 255) / 255f);

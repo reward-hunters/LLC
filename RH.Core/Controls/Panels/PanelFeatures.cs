@@ -95,28 +95,36 @@ namespace RH.Core.Controls.Panels
             OnUndo?.Invoke(this, EventArgs.Empty);
         }
 
-        private void trackAge_MouseUp(object sender, MouseEventArgs e)
+        public static void UpdateAge(float delta)
         {
-            var delta = trackAge.Value == trackAge.Minimum ? 0 : trackAge.Value / (trackAge.Maximum * 1f);
             foreach (var m in ProgramCore.MainForm.ctrlRenderControl.OldMorphing)
                 m.Value.Delta = delta;
 
             ProgramCore.Project.AgeCoefficient = delta;
             ProgramCore.MainForm.ctrlRenderControl.DoMorth();
         }
-        private void trackWeight_MouseUp(object sender, MouseEventArgs e)
+        private void trackAge_MouseUp(object sender, MouseEventArgs e)
         {
-            var delta = trackFat.Value == 0 ? 0 : trackFat.Value / (trackFat.Maximum * 1f);
+            var delta = trackAge.Value == trackAge.Minimum ? 0 : trackAge.Value / (trackAge.Maximum * 1f);
+            UpdateAge(delta);
+        }
+
+        public static void UpdateWeight(float delta)
+        {
             foreach (var m in ProgramCore.MainForm.ctrlRenderControl.FatMorphing)
                 m.Value.Delta = delta;
 
             ProgramCore.Project.FatCoefficient = delta;
             ProgramCore.MainForm.ctrlRenderControl.DoMorth();
         }
-
-        private void trackBarSmile_MouseUp(object sender, MouseEventArgs e)
+        private void trackWeight_MouseUp(object sender, MouseEventArgs e)
         {
-            var delta = trackBarSmile.Value == 0 ? 0 : trackBarSmile.Value / (trackBarSmile.Maximum * 1f);
+            var delta = trackFat.Value == 0 ? 0 : trackFat.Value / (trackFat.Maximum * 1f);
+            UpdateWeight(delta);
+        }
+
+        public static void UpdateSmile(float delta)
+        {
             delta = ProgramCore.Project.IsOpenSmile ? 1 - delta : delta;
             if (ProgramCore.MainForm.ctrlRenderControl.SmileMorphing == null)
                 return;
@@ -126,6 +134,11 @@ namespace RH.Core.Controls.Panels
 
             ProgramCore.Project.SmileCoefficient = delta;
             ProgramCore.MainForm.ctrlRenderControl.DoMorth();
+        }
+        private void trackBarSmile_MouseUp(object sender, MouseEventArgs e)
+        {
+            var delta = trackBarSmile.Value == 0 ? 0 : trackBarSmile.Value / (trackBarSmile.Maximum * 1f);
+            UpdateSmile(delta);
         }
 
         #endregion
@@ -142,6 +155,6 @@ namespace RH.Core.Controls.Panels
         {
             trackBarSmile.Value = isSmile ? 100 : 0;
         }
-
+        
     }
 }

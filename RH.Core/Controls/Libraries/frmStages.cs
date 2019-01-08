@@ -28,6 +28,7 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:              // HeadShop 10-11, отключить возможность 3д print.
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                     btnColor3DPrint.Visible = false;
@@ -351,12 +352,13 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
-                    if (UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
+                    if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "3DPrinting", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;
             }
@@ -369,12 +371,13 @@ namespace RH.Core.Controls.Libraries
             {
                 case ProgramCore.ProgramMode.HeadShop_v10_2:
                 case ProgramCore.ProgramMode.HeadShop_v11:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
                 case ProgramCore.ProgramMode.PrintAhead:
                 case ProgramCore.ProgramMode.PrintAhead_PayPal:
                 case ProgramCore.ProgramMode.PrintAhead_Online:
-                    if (UserConfig.ByName("Options")["Tutorials", "Export", "1"] == "1")
+                    if (ProgramCore.IsTutorialVisible && UserConfig.ByName("Options")["Tutorials", "Export", "1"] == "1")
                         ProgramCore.MainForm.frmTut3dPrint.ShowDialog(this);
                     break;
             }

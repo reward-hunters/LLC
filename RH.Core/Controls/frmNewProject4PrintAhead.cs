@@ -46,18 +46,27 @@ namespace RH.Core.Controls
 
                 return GenesisType.Genesis2;
             }
+            set
+            {
+                switch (value)
+                {
+                    case GenesisType.Genesis3:
+                        rbGenesis3.Checked = true;
+                        break;
+                    case GenesisType.Genesis8:
+                        rbGenesis8.Checked = true;
+                        break;
+                    default:
+                        rbGenesis2.Checked = true;
+                        break;
+                }
+            }
         }
 
         public string CustomModelPath;
 
         private string templateImage;
-        public string TemplateImage
-        {
-            get
-            {
-                return textTemplateImage.Text;
-            }
-        }
+
 
         public DialogResult dialogResult = DialogResult.Cancel;
         private readonly bool atStartup;
@@ -75,6 +84,7 @@ namespace RH.Core.Controls
                     case ProgramCore.ProgramMode.HeadShop_v11:
                     case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                     case ProgramCore.ProgramMode.HeadShop_Rotator:
+                    case ProgramCore.ProgramMode.FaceAge2_Partial:
                         int videoCardSize;
                         GL.GetInteger(GetPName.MaxTextureSize, out videoCardSize);
                         //   return videoCardSize > 2048 ? 4096 : 2048;
@@ -138,6 +148,7 @@ namespace RH.Core.Controls
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
                 case ProgramCore.ProgramMode.HeadShop_Rotator:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     pictureExample.Visible = label1.Visible = label5.Visible = textTemplateImage.Visible = false;
                     groupBox1.Visible = rbNewProject.Visible = rbOpenProject.Visible = groupBoxOpen.Visible = lblNewProject.Visible = textNewProjectFolder.Visible = btnNewProjectFolder.Visible =
                          textNewProjectName.Visible = false;
@@ -156,7 +167,7 @@ namespace RH.Core.Controls
                     break;
             }
         }
-        private void ApplyNewImage(string fileName)
+        public void ApplyNewImage(string fileName)
         {
             labelHelp.Visible = false;
             textTemplateImage.Text = fileName;
@@ -209,19 +220,6 @@ namespace RH.Core.Controls
                 else
                     MessageBox.Show(@"Daz model not found.", @"HeadShop", MessageBoxButtons.OK);
             }
-
-            /*   var detectedNosePoints = new List<Vector2>();
-               detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[22].X, facialFeaturesTransformed[22].Y));
-               detectedNosePoints.Add(new Vector2(facialFeaturesTransformed[2].X, facialFeaturesTransformed[2].Y));
-
-               var noseTop = detectedNosePoints[0];
-               var noseTip = detectedNosePoints[1];
-               var noseLength = (noseTop.Y - noseTip.Y) * (float)Math.Tan(35.0 * Math.PI / 180.0);
-               var angle = Math.Asin(Math.Abs(noseTip.X - noseTop.X) / noseLength);
-
-               angle = angle * (180d / Math.PI);
-
-              */
 
             if (Math.Abs(fcr.RotatedAngle) > 25)
                 MessageBox.Show("The head rotated more than 20 degrees. Please select an other photo...");
@@ -405,6 +403,7 @@ namespace RH.Core.Controls
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     ProgramCore.Splash.ShowDialog(this);
                     break;
                 default:

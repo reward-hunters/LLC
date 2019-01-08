@@ -38,6 +38,7 @@ namespace RH.Core.Controls.Tutorials.OneClick
             {
                 case ProgramCore.ProgramMode.HeadShop_v11:
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
+                case ProgramCore.ProgramMode.FaceAge2_Partial:
                     return "https://www.youtube.com/watch?v=X-8Gho1YUIc&t=345s";
                 default:
                     return "http://youtu.be/JC5z64YP1xA";
