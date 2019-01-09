@@ -60,8 +60,7 @@ namespace RH.Core.Controls.Libraries
                 }
             }
         }
-
-        private void btnFlipRight_Click(object sender, EventArgs e)
+                private void btnFlipRight_Click(object sender, EventArgs e)
         {
             if (btnFlipRight.Tag.ToString() == "2")
             {
@@ -124,13 +123,11 @@ namespace RH.Core.Controls.Libraries
             var delta = trackAge.Value == trackAge.Minimum ? 0 : trackAge.Value / (trackAge.Maximum * 1f);
             PanelFeatures.UpdateAge(delta);
         }
-
         private void trackFat_MouseUp(object sender, MouseEventArgs e)
         {
             var delta = trackFat.Value == 0 ? 0 : trackFat.Value / (trackFat.Maximum * 1f);
             PanelFeatures.UpdateWeight(delta);
         }
-
         private void trackBarSmile_MouseUp(object sender, MouseEventArgs e)
         {
             var delta = trackBarSmile.Value == 0 ? 0 : trackBarSmile.Value / (trackBarSmile.Maximum * 1f);
@@ -150,6 +147,19 @@ namespace RH.Core.Controls.Libraries
             ProgramCore.MainForm.ctrlRenderControl.SaveToPng(fileName, bmp.Width, bmp.Height);
             MessageBox.Show(@"Image successfully exported!", @"Done", MessageBoxButtons.OK);
             Application.Exit();
+        }
+
+        public void SetAge(float delta)
+        {
+            trackAge.Value = (int)(trackAge.Maximum * delta);
+        }
+        public void Setfat(float delta)
+        {
+            trackFat.Value = (int)(trackFat.Maximum * delta);
+        }
+        public void SetSmile()
+        {
+            trackBarSmile.Value = 50;
         }
     }
 }

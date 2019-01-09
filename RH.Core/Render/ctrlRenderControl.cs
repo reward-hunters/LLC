@@ -38,7 +38,7 @@ namespace RH.Core.Render
         private bool leftMousePressed;
         private bool shiftPressed;
         private bool dblClick;
-        private bool useTopDownRotation = true;
+        public bool useTopDownRotation = false;
 
         private bool UseHeadRotation = false;
         private bool loaded;
@@ -584,7 +584,7 @@ namespace RH.Core.Render
             if (ProgramCore.Project.ManType != ManType.Custom)
             {
                 var temp = 0;
-                var oldMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.GenesisType.GetGenesisPath(), ProgramCore.Project.ManType.GetCaption(), "Old.obj"); // загружаем трансформации для старения
+                var oldMorphingPath = Path.Combine(Application.StartupPath, "Models\\Morphing", ProgramCore.Project.GenesisType.GetGenesisPath(),  ProgramCore.Project.ManType.GetCaption(), "Old.obj"); // загружаем трансформации для старения
                 OldMorphing = pickingController.LoadPartsMorphInfo(oldMorphingPath, headMeshesController.RenderMesh, ref temp);
 
                 temp = 0;
@@ -1603,7 +1603,7 @@ namespace RH.Core.Render
                 {
                     case ScaleMode.Rotate:
                         camera.LeftRight((e.Location.X - mX) * 1.0f / 150.0f);
-                        if(useTopDownRotation)
+                        if (useTopDownRotation)
                         {
                             camera.TopDown((e.Location.Y - mY) * 1.0f / 150.0f);
                         }
@@ -4252,6 +4252,7 @@ namespace RH.Core.Render
             ProfileFaceRect = new RectangleF(center.X - width * 0.5f, center.Y - height * 0.5f, width, height);
         }
 
+        private int deepDeeper = 0;
         public void ApplySmoothedTextures()
         {
             try
@@ -4264,10 +4265,13 @@ namespace RH.Core.Render
                     var bitmap = RenderToTexture(smoothTex.Key, smoothTex.Value);
                     SetTexture(smoothTex.Value, bitmap);
                 }
+                deepDeeper = 0;
             }
             catch (Exception ex)
             {
-
+                if (deepDeeper == 2)
+                    return;
+                deepDeeper++;
                 ApplySmoothedTextures();
             }
         }
@@ -4535,7 +4539,7 @@ namespace RH.Core.Render
             SetTexture(HeadTextureId, flip ? reflectedLeft : headTexture);
             ApplySmoothedTextures();
         }
-        
+
         /// <summary> Отражение справа налево </summary>
         /// <param name="trackPos">Положение бегунка</param>
         public void FlipRight(bool flip)
