@@ -38,7 +38,7 @@ namespace RH.Core.Render
         private bool leftMousePressed;
         private bool shiftPressed;
         private bool dblClick;
-        private bool useTopDownRotation = true;
+        private bool useTopDownRotation = false;
 
         private bool UseHeadRotation = false;
         private bool loaded;
@@ -252,7 +252,13 @@ namespace RH.Core.Render
         {
             InitializeComponent();
             glControl.PreviewKeyDown += glControl_PreviewKeyDown;
-            checkeredBackground = ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial;
+            if(ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
+            {
+                checkeredBackground = true;
+                BackgroundColor = Color.Transparent;
+                useTopDownRotation = true;
+            }
+            //checkeredBackground = ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial;
 
             switch (ProgramCore.CurrentProgram)
             {
