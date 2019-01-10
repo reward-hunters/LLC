@@ -200,6 +200,8 @@ namespace RH.Core
                         FormBorderStyle = FormBorderStyle.None;
                         Size = new Size(717, 717);
 
+                        ctrlRenderControl.ScaleMode = ScaleMode.Rotate;
+                        ctrlRenderControl.useTopDownRotation = true;
                         frmFaceAge = new frmFaceAge();
                     }
                     break;
@@ -398,8 +400,6 @@ namespace RH.Core
                             newProjectDlg.GenType = MeshUtils.GenesisType.Genesis2;
                             newProjectDlg.ApplyNewImage(templateImage);
                             newProjectDlg.CreateProject();
-
-                            frmFaceAge.Show();
                         }
                         break;
                 }
@@ -607,6 +607,12 @@ namespace RH.Core
                     ctrlRenderControl.camera.Scale = 0.04f;
                     ctrlRenderControl.camera.PutCamera();
                     ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
+
+                    frmFaceAge.SetAge(ProgramCore.Project.AgeCoefficient);
+                    frmFaceAge.Setfat(ProgramCore.Project.FatCoefficient);
+                    frmFaceAge.SetSmile();
+                    PanelFeatures.UpdateAge(0.5f);
+                    frmFaceAge.Show();
                     break;
             }
         }
