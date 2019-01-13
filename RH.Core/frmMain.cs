@@ -611,9 +611,6 @@ namespace RH.Core
                     ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
                     break;
                 case ProgramCore.ProgramMode.FaceAge2_Partial:
-                    ctrlRenderControl.camera.dy = 0;
-                    ctrlRenderControl.camera.Scale = 0.04f;
-                    ctrlRenderControl.camera.PutCamera();
                     ProgramCore.MainForm.ctrlRenderControl.headMeshesController.RenderMesh.SetMorphPercent(0.5f);
 
                     frmFaceAge.SetAge(ProgramCore.Project.AgeCoefficient);

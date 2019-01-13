@@ -13,7 +13,7 @@ namespace RH.MeshUtils.Data
 {
     public class RenderMesh
     {
-        public delegate void BeforePartDrawHandler(RenderMeshPart part);
+        public delegate void BeforePartDrawHandler(RenderMeshPart part, ref bool needDraw);
         public event BeforePartDrawHandler OnBeforePartDraw;
         public List<BlendingInfo> BlendingInfos = new List<BlendingInfo>();
 
@@ -735,8 +735,12 @@ namespace RH.MeshUtils.Data
                 if (!part.IsVisible)  // прозрачный материал, не нужно рисовать. сделано для этих материалов: "Tear""Cornea"  "EyeReflection"))
                     continue;
 
+                bool needDraw = true;
                 if (OnBeforePartDraw != null)
-                    OnBeforePartDraw(part);
+                    OnBeforePartDraw(part, ref needDraw);
+
+                if (!needDraw)
+                    continue;
 
                 GL.BindBuffer(BufferTarget.ArrayBuffer, part.VertexBuffer);
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, part.IndexBuffer);

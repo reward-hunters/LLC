@@ -59,6 +59,7 @@ namespace RH.Core.Render
         private readonly Panel renderPanel = new Panel();
         private GraphicsContext graphicsContext;
         private IWindowInfo windowInfo;
+        private IWindowInfo currentWindowInfo;
 
         public readonly Dictionary<string, DynamicRenderMeshes> PartsLibraryMeshes = new Dictionary<string, DynamicRenderMeshes>();         // потому что можем выбрать несколько мешей и запихать их как один в партс-лайбрари
 
@@ -252,12 +253,16 @@ namespace RH.Core.Render
         public ctrlRenderControl()
         {
             InitializeComponent();
+
             glControl.PreviewKeyDown += glControl_PreviewKeyDown;
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
             {
-                checkeredBackground = true;
                 BackgroundColor = Color.Transparent;
                 useTopDownRotation = true;
+            }
+            else
+            {
+                pictureBox1.Visible = false;
             }
 
             switch (ProgramCore.CurrentProgram)
@@ -344,7 +349,13 @@ namespace RH.Core.Render
             windowInfo = Utilities.CreateWindowsWindowInfo(renderPanel.Handle);
             graphicsContext = new GraphicsContext(GraphicsMode.Default, windowInfo);
             renderPanel.Resize += (sender, args) => graphicsContext.Update(windowInfo);
-            glControl.Context.MakeCurrent(glControl.WindowInfo);
+
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
+                currentWindowInfo = windowInfo;               
+            else
+                currentWindowInfo = glControl.WindowInfo;
+
+            glControl.Context.MakeCurrent(currentWindowInfo);
 
             InitializeProfileSprites();
             InitializeCustomBaseSprites();
@@ -2215,7 +2226,6 @@ namespace RH.Core.Render
 
         private CustomHeadTriangles HeadTriangles = new CustomHeadTriangles();
         private Color BackgroundColor = Color.LightGray;
-        private bool checkeredBackground = false;
 
         public void Render()
         {
@@ -2224,7 +2234,7 @@ namespace RH.Core.Render
             GL.ClearColor(BackgroundColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            DrawBackground(checkeredBackground);
+            DrawBackground();
             camera.PutCamera();
 
             GL.PushMatrix();
@@ -2258,6 +2268,7 @@ namespace RH.Core.Render
             DrawMeshes(pickingController.HairMeshes, ref shader, true);
             DrawMeshes(pickingController.AccesoryMeshes, ref shader, true);
             DisableTransparent();
+
             idleShader.End();
             GL.PopMatrix();
 
@@ -2443,7 +2454,26 @@ namespace RH.Core.Render
             }
 
             glControl.SwapBuffers();
+
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
+            {
+                if (Buffer == null)
+                {
+                    Buffer = new Bitmap(glControl.Width, glControl.Height);
+                }
+
+                var rect = new Rectangle(0, 0, glControl.Width, glControl.Height);
+                var data = Buffer.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                GL.ReadPixels(0, 0, glControl.Width, glControl.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                GL.Finish();
+                Buffer.UnlockBits(data);
+                Buffer.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+                pictureBox1.Image = Buffer;
+            }
         }
+
+        Bitmap Buffer = null;
 
         void DrawBasePointsWithBlend()
         {
@@ -2932,11 +2962,18 @@ namespace RH.Core.Render
             headMeshesController.Draw(ProgramCore.Debug);
         }
 
-        private void RenderMesh_OnBeforePartDraw(RenderMeshPart part)
+        private void RenderMesh_OnBeforePartDraw(RenderMeshPart part, ref bool needDraw)
         {
             var transparent = UseTexture ? part.TransparentTexture : 0.0f;
             if (transparent > 0.0f)
+            {
+                if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
+                {
+                    needDraw = false;
+                    return;
+                }
                 EnableTransparent();
+            }                
             else
                 DisableTransparent();
 
@@ -3362,9 +3399,9 @@ namespace RH.Core.Render
             }
         }
 
-        private void DrawBackground(bool drawCheckeredBackground)
+        private void DrawBackground()
         {
-            if (backgroundTexture != 0 || drawCheckeredBackground)
+            if (backgroundTexture != 0 )
             {
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.PushMatrix();
@@ -3378,13 +3415,7 @@ namespace RH.Core.Render
                     GL.Enable(EnableCap.Texture2D);
                     GL.BindTexture(TextureTarget.Texture2D, backgroundTexture);
                 }
-                if (drawCheckeredBackground)
-                {
-                    const float backgroundScale = 30.0f;
-                    backgroundShader.Begin();
-                    backgroundShader.UpdateUniform("u_Scale", backgroundScale);
-                    backgroundShader.UpdateUniform("u_AspectRatio", (float)glControl.Width / (float)glControl.Height);
-                }
+               
                 GL.Color4(1.0f, 1.0f, 1.0f, 1.0f);
                 GL.Begin(PrimitiveType.Quads);
 
@@ -3398,11 +3429,6 @@ namespace RH.Core.Render
                 GL.Vertex2(-1.0f, 1.0f);
 
                 GL.End();
-
-                if (drawCheckeredBackground)
-                {
-                    backgroundShader.End();
-                }
 
                 GL.DepthMask(true);
                 GL.BindTexture(TextureTarget.Texture2D, 0);
@@ -3706,7 +3732,7 @@ namespace RH.Core.Render
             GL.PopMatrix();
 
             var result = GrabScreenshot(string.Empty, textureWidth, textureHeight, useAlpha);
-            glControl.Context.MakeCurrent(glControl.WindowInfo);
+            glControl.Context.MakeCurrent(currentWindowInfo);
             SetupViewport(glControl);
             return result;
         }
@@ -3982,8 +4008,6 @@ namespace RH.Core.Render
         public void SaveToPng(string FileName, int textureWidth = 512, int textureHeight = 512)
         {
             BackgroundColor = Color.Transparent;
-            bool tempCheckeredBackground = checkeredBackground;
-            checkeredBackground = false;
             float cameraScale = camera.Scale;
 
             float k = Math.Max((float)glControl.Width / textureWidth, (float)glControl.Height / textureHeight);
@@ -3998,14 +4022,13 @@ namespace RH.Core.Render
             BackgroundColor = Color.LightGray;
 
             var result = GrabScreenshot(string.Empty, textureWidth, textureHeight, true);
-            glControl.Context.MakeCurrent(glControl.WindowInfo);
+            glControl.Context.MakeCurrent(currentWindowInfo);
             SetupViewport(glControl);
 
             result.Save(FileName, ImageFormat.Png);
 
             camera.Scale = cameraScale;
             SetupViewport(glControl);
-            checkeredBackground = tempCheckeredBackground;
         }
 
         internal void SaveHeadToFile()
@@ -4197,30 +4220,24 @@ namespace RH.Core.Render
             var worldPointB = camera.GetWorldPoint((int)pointB1.X, (int)pB.Y, 0.0f);
             var worldPointB1 = HeadPoints.Points[indexB];
             camera.dy = (worldPointB1.Y - worldPointB.Y);*/
-
-            const int indexA = 22;
-            const int indexB = 11;
-
-            float yA = frmFaceAge.Recognizer.RealPoints[indexA].Y;
-            float yB = frmFaceAge.Recognizer.RealPoints[indexB].Y;
-
-            /*var pA = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexA];
-            var pB = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexB];
-
-            var pointA = new Vector2(pA.X, pA.Y);
-            var pointB = new Vector2(pB.X, pB.Y);*/
-
-            var pointA1 = HeadPoints.Points[indexA];
-            var pointB1 = HeadPoints.Points[indexB];
-
-            if(pointA1.Y != pointB1.Y)
+            camera.Scale = 0.04f;
+            if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
             {
-                camera.Scale = (pointA1.Y - pointB1.Y) / (yB - yA);
+                const int indexA = 22;
+                const int indexB = 11;
+
+                float yA = frmFaceAge.Recognizer.RealPoints[indexA].Y;
+                float yB = frmFaceAge.Recognizer.RealPoints[indexB].Y;
+
+                var pointA1 = HeadPoints.Points[indexA];
+                var pointB1 = HeadPoints.Points[indexB];
+
+                if (pointA1.Y != pointB1.Y)
+                {
+                    camera.Scale = (pointA1.Y - pointB1.Y) / (yB - yA);
+                }
             }
-            else
-            {
-                camera.Scale = 0.04f;
-            }            
+                   
             camera.dy = 0.0f;
             camera.PutCamera();
         }
@@ -4567,6 +4584,11 @@ namespace RH.Core.Render
         {
             SetTexture(HeadTextureId, flip ? reflectedLeft : headTexture);
             ApplySmoothedTextures();
+        }
+
+        private void glControl_Paint(object sender, PaintEventArgs e)
+        {            
+            e.Graphics.Clear(Color.Transparent);
         }
 
         /// <summary> Отражение справа налево </summary>

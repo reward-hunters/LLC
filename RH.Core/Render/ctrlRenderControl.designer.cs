@@ -44,6 +44,8 @@ namespace RH.Core.Render
             this.panelOrtoLeft = new System.Windows.Forms.Panel();
             this.panelStop = new System.Windows.Forms.Panel();
             this.panelOrtoTop = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // RenderTimer
@@ -158,6 +160,21 @@ namespace RH.Core.Render
             this.panelOrtoTop.TabIndex = 4;
             this.panelOrtoTop.Click += new System.EventHandler(this.panelOrtoTop_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(728, 493);
+            this.pictureBox1.TabIndex = 8;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
+            this.pictureBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.glControl_PreviewKeyDown);
+            // 
             // ctrlRenderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -169,9 +186,11 @@ namespace RH.Core.Render
             this.Controls.Add(this.panelOrtoLeft);
             this.Controls.Add(this.panelStop);
             this.Controls.Add(this.panelOrtoTop);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.glControl);
             this.Name = "ctrlRenderControl";
             this.Size = new System.Drawing.Size(728, 493);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -189,5 +208,6 @@ namespace RH.Core.Render
         public Panel panelOrtoRight;
         private Panel btnColorMode;
         private Panel panelBlackWhiteMode;
+        private PictureBox pictureBox1;
     }
 }
