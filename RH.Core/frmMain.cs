@@ -203,6 +203,9 @@ namespace RH.Core
                         ctrlRenderControl.ScaleMode = ScaleMode.Rotate;
                         ctrlRenderControl.useTopDownRotation = true;
                         frmFaceAge = new frmFaceAge();
+
+                        BackColor = Color.Lime;
+                        TransparencyKey = Color.Lime;
                     }
                     break;
                 case ProgramCore.ProgramMode.HeadShop_OneClick_v2:
@@ -395,6 +398,11 @@ namespace RH.Core
 
                             templateImage = Path.Combine(templateImage, "faceAgeTempImage.jpg");
                             img.Save(templateImage, jgpEncoder, myEncoderParameters);
+
+                            frmFaceAge.ImageWidth = img.Width;
+                            frmFaceAge.ImageHeight = img.Height;
+                            frmFaceAge.InitializeFaceAgeImage(templateImage);
+
 
                             var newProjectDlg = new frmNewProject4PrintAhead(true);
                             newProjectDlg.GenType = MeshUtils.GenesisType.Genesis2;

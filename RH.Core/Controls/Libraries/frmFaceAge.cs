@@ -9,8 +9,21 @@ using System.Drawing;
 
 namespace RH.Core.Controls.Libraries
 {
+    /// <summary> Контрол управления для работы с Photoshop </summary>
     public partial class frmFaceAge : FormEx
     {
+        /// <summary> Исходные размеры изображения из буфера обмена </summary>
+        public static int ImageWidth;
+        public static int ImageHeight;
+        public static LuxandFaceRecognition Recognizer;
+
+        public static void InitializeFaceAgeImage(string path)
+        {
+            var fcr = new LuxandFaceRecognition();
+            fcr.Recognize(ref path, false, false);
+            Recognizer = fcr;
+        }
+
         public frmFaceAge()
         {
             InitializeComponent();
@@ -60,7 +73,7 @@ namespace RH.Core.Controls.Libraries
                 }
             }
         }
-                private void btnFlipRight_Click(object sender, EventArgs e)
+        private void btnFlipRight_Click(object sender, EventArgs e)
         {
             if (btnFlipRight.Tag.ToString() == "2")
             {

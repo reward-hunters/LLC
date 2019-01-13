@@ -194,7 +194,7 @@ namespace RH.Core.Helpers
             return new Vector4((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, 1.0f);
         }
 
-        public bool Recognize(ref string path, bool needCrop)
+        public bool Recognize(ref string path, bool needCrop, bool needRotation = true)
         {
             FaceRectRelative = RectangleF.Empty;
             LeftEyeCenter = RightEyeCenter = LeftMouth = LeftNose = RightNose = RightMouth = Vector2.Zero;
@@ -279,31 +279,34 @@ namespace RH.Core.Helpers
 
             #region Поворот фотки по глазам!
 
-            var v = new Vector2(LeftEyeCenter.X - RightEyeCenter.X, LeftEyeCenter.Y - RightEyeCenter.Y);
-            v.Normalize();      // ПД !
-            var xVector = new Vector2(1, 0);
-
-            var xDiff = xVector.X - v.X;
-            var yDiff = xVector.Y - v.Y;
-            var angle = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
-
-            if (Math.Abs(angle) > 1 && angleCount <= 5)                // поворачиваем наклоненные головы
+            if (needRotation)
             {
-                ++angleCount;
+                var v = new Vector2(LeftEyeCenter.X - RightEyeCenter.X, LeftEyeCenter.Y - RightEyeCenter.Y);
+                v.Normalize();      // ПД !
+                var xVector = new Vector2(1, 0);
 
-                using (var ms = new MemoryStream(File.ReadAllBytes(path))) // Don't use using!!
+                var xDiff = xVector.X - v.X;
+                var yDiff = xVector.Y - v.Y;
+                var angle = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
+
+                if (Math.Abs(angle) > 1 && angleCount <= 5)                // поворачиваем наклоненные головы
                 {
-                    var originalImg = (Bitmap)Image.FromStream(ms);
+                    ++angleCount;
 
-                    path = UserConfig.AppDataDir;
-                    FolderEx.CreateDirectory(path);
-                    path = Path.Combine(path, "tempHaarImage.jpg");
+                    using (var ms = new MemoryStream(File.ReadAllBytes(path))) // Don't use using!!
+                    {
+                        var originalImg = (Bitmap)Image.FromStream(ms);
 
-                    using (var ii = ImageEx.RotateImage(new Bitmap(originalImg), (float)-angle))
-                        ii.Save(path, ImageFormat.Jpeg);
+                        path = UserConfig.AppDataDir;
+                        FolderEx.CreateDirectory(path);
+                        path = Path.Combine(path, "tempHaarImage.jpg");
+
+                        using (var ii = ImageEx.RotateImage(new Bitmap(originalImg), (float)-angle))
+                            ii.Save(path, ImageFormat.Jpeg);
+                    }
+
+                    return Recognize(ref path, false);
                 }
-
-                return Recognize(ref path, false);
             }
 
             #endregion
