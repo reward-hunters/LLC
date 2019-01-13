@@ -57,8 +57,11 @@ namespace RH.Core.Render
         public HeadPoints HeadPoints = new HeadPoints();
 
         private readonly Panel renderPanel = new Panel();
+        private readonly Panel tempRenderPanel = new Panel();
         private GraphicsContext graphicsContext;
+        private GraphicsContext tempGraphicsContext;
         private IWindowInfo windowInfo;
+        private IWindowInfo tempWindowInfo;
         private IWindowInfo currentWindowInfo;
 
         public readonly Dictionary<string, DynamicRenderMeshes> PartsLibraryMeshes = new Dictionary<string, DynamicRenderMeshes>();         // потому что можем выбрать несколько мешей и запихать их как один в партс-лайбрари
@@ -306,6 +309,7 @@ namespace RH.Core.Render
         #region Graphic's
 
         public const int HeadPointsCount = 70;
+        
         /// <summary> Initialize control and setup GL settings </summary>
         public void Initialize()
         {
@@ -351,7 +355,13 @@ namespace RH.Core.Render
             renderPanel.Resize += (sender, args) => graphicsContext.Update(windowInfo);
 
             if (ProgramCore.CurrentProgram == ProgramCore.ProgramMode.FaceAge2_Partial)
-                currentWindowInfo = windowInfo;               
+            {
+                tempWindowInfo = Utilities.CreateWindowsWindowInfo(tempRenderPanel.Handle);
+                tempGraphicsContext = new GraphicsContext(GraphicsMode.Default, tempWindowInfo);
+                tempRenderPanel.Resize += (sender, args) => tempGraphicsContext.Update(tempWindowInfo);
+                tempRenderPanel.Size = pictureBox1.Size;
+                currentWindowInfo = tempWindowInfo;
+            }
             else
                 currentWindowInfo = glControl.WindowInfo;
 
@@ -2226,9 +2236,13 @@ namespace RH.Core.Render
 
         private CustomHeadTriangles HeadTriangles = new CustomHeadTriangles();
         private Color BackgroundColor = Color.LightGray;
+        bool renderPaused = false;
 
         public void Render()
         {
+            /*if (renderPaused)
+                return;*/
+
             if (!loaded)  // whlie context not create
                 return;
             GL.ClearColor(BackgroundColor);
@@ -4007,11 +4021,12 @@ namespace RH.Core.Render
 
         public void SaveToPng(string FileName, int textureWidth = 512, int textureHeight = 512)
         {
-            BackgroundColor = Color.Transparent;
+            renderPaused = true;
+
             float cameraScale = camera.Scale;
 
-            float k = Math.Max((float)glControl.Width / textureWidth, (float)glControl.Height / textureHeight);
-            camera.Scale *= k;
+            //float k = Math.Max((float)glControl.Width / textureWidth, (float)glControl.Height / textureHeight);
+            //camera.Scale *= k;
 
             graphicsContext.MakeCurrent(windowInfo);
             renderPanel.Size = new Size(textureWidth, textureHeight);
@@ -4019,7 +4034,6 @@ namespace RH.Core.Render
             camera.UpdateViewport(textureWidth, textureHeight);
 
             Render();
-            BackgroundColor = Color.LightGray;
 
             var result = GrabScreenshot(string.Empty, textureWidth, textureHeight, true);
             glControl.Context.MakeCurrent(currentWindowInfo);
@@ -4029,6 +4043,8 @@ namespace RH.Core.Render
 
             camera.Scale = cameraScale;
             SetupViewport(glControl);
+
+            renderPaused = false;
         }
 
         internal void SaveHeadToFile()
