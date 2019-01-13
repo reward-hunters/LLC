@@ -25,6 +25,7 @@ using RH.MeshUtils.Helpers;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using StringConverter = RH.Core.Helpers.StringConverter;
 using RH.Core.HeadRotation;
+using RH.Core.Controls.Libraries;
 
 namespace RH.Core.Render
 {
@@ -4196,7 +4197,30 @@ namespace RH.Core.Render
             var worldPointB = camera.GetWorldPoint((int)pointB1.X, (int)pB.Y, 0.0f);
             var worldPointB1 = HeadPoints.Points[indexB];
             camera.dy = (worldPointB1.Y - worldPointB.Y);*/
-            camera.Scale = 0.04f;
+
+            const int indexA = 22;
+            const int indexB = 11;
+
+            float yA = frmFaceAge.Recognizer.RealPoints[indexA].Y;
+            float yB = frmFaceAge.Recognizer.RealPoints[indexB].Y;
+
+            /*var pA = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexA];
+            var pB = ProgramCore.MainForm.ctrlTemplateImage.facialFeaturesTransformed[indexB];
+
+            var pointA = new Vector2(pA.X, pA.Y);
+            var pointB = new Vector2(pB.X, pB.Y);*/
+
+            var pointA1 = HeadPoints.Points[indexA];
+            var pointB1 = HeadPoints.Points[indexB];
+
+            if(pointA1.Y != pointB1.Y)
+            {
+                camera.Scale = (pointA1.Y - pointB1.Y) / (yB - yA);
+            }
+            else
+            {
+                camera.Scale = 0.04f;
+            }            
             camera.dy = 0.0f;
             camera.PutCamera();
         }

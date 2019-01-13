@@ -20,7 +20,7 @@ namespace RH.Core.Controls.Libraries
         public static void InitializeFaceAgeImage(string path)
         {
             var fcr = new LuxandFaceRecognition();
-            fcr.Recognize(ref path, false, false);
+            fcr.Recognize(ref path, false, true);
             Recognizer = fcr;
         }
 
