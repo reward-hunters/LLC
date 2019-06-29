@@ -206,7 +206,8 @@ namespace RH.Core.Helpers
             if (newProject)
             {
                 var modelPath = ProgramCore.Project.HeadModelPath;
-                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, ProgramCore.PluginMode, isOpenSmile);
+                //ProgramCore.PluginMode
+                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, true, isOpenSmile);
             }
             HeadShapeController.Initialize(headMeshesController);
 

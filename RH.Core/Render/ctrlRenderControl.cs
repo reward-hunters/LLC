@@ -538,7 +538,8 @@ namespace RH.Core.Render
             if (newProject)
             {
                 var modelPath = ProgramCore.Project.HeadModelPath;
-                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, ProgramCore.PluginMode, ProgramCore.Project.IsOpenSmile);
+                //ProgramCore.PluginMode
+                pickingController.AddMehes(modelPath, MeshType.Head, false, ProgramCore.Project.GenesisType, ProgramCore.Project.ManType, true, ProgramCore.Project.IsOpenSmile);
 
                 //265.54415390315148338545523758907
                 float scale = 0;

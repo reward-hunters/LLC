@@ -204,7 +204,7 @@ namespace RH.Core.Render.Obj
                     }
                 }
             }
-            // SaveMaterial(mtlPath, materials, fi);
+            SaveMaterial(mtlPath, materials, type, fi, saveBrushesToTexture, isCollada, string.Empty);
         }
 
         public static void SaveObjFile(string filePath, List<MeshInfo> meshInfos, MeshType type, bool saveBrushesToTexture, bool isCollada, string sessionId)

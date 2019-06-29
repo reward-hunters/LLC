@@ -344,7 +344,7 @@ namespace RH.Core.Render.Controllers
                         var meshPartInfos = LoadHeadMeshes(objModel, fromDragAndDrop, manType, scale, ref lastTriangle);
                         ObjExport = objModel.ObjExport;
 
-                        if (ProgramCore.PluginMode)
+                        //if (ProgramCore.PluginMode)
                         {
                             ObjExport.DefaultA = new Vector3(99999.0f, 99999.0f, 99999.0f);
                             ObjExport.DefaultB = new Vector3(-99999.0f, -99999.0f, -99999.0f);
